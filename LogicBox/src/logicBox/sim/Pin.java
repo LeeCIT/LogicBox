@@ -5,7 +5,13 @@ package logicBox.sim;
 
 
 
-public class Pin
+/**
+ * A pin represents the attachment points on a component.
+ * @author Lee Coakley
+ */
+public class Pin extends Component
 {
-	
+	protected Component partOf;
+	protected Component connectedTo;
+	protected boolean   isInput;
 }
