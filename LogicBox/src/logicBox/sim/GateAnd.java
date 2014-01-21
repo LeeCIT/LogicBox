@@ -2,7 +2,6 @@
 
 
 package logicBox.sim;
-import java.util.ArrayList;
 
 
 
@@ -12,11 +11,13 @@ import java.util.ArrayList;
  */
 public class GateAnd extends Gate
 {
-	public boolean update() {
+	public boolean eval() {
+		boolean state = true;
+		
 		for (Pin pin: pinInputs)
-			if (pin == null || !pin.evaluate())
-				return false;
+			if (pin != null)
+				state &= pin.getState();
 			
-		return true;
+		return state;
 	}
 }

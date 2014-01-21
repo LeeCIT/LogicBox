@@ -6,7 +6,7 @@ package logicBox.sim;
 
 
 /**
- * A fixed source.
+ * A fixed logic-level source.
  * @author Lee Coakley
  */
 public class Source extends Component
