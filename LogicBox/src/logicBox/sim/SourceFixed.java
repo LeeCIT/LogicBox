@@ -9,25 +9,20 @@ package logicBox.sim;
  * A fixed logic-level source.
  * @author Lee Coakley
  */
-public class Source extends Component
+public class SourceFixed extends Component
 {
-	private boolean state;
+	protected Pin pinOut;
 	
 	
 	
-	public Source( boolean state ) {
+	public SourceFixed( boolean state ) {
+		pinOut = new Pin( this );
 		setState( state );
 	}
 	
 	
 	
-	public boolean getState() {
-		return state;
-	}
-	
-	
-	
 	public void setState( boolean state ) {
-		this.state = state;
+		pinOut.setState( state );
 	}
 }

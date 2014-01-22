@@ -11,13 +11,25 @@ package logicBox.sim;
  */
 public class GateAnd extends Gate
 {
-	public boolean eval() {
+	public GateAnd() {
+		super();
+	}
+	
+	
+	
+	public GateAnd( int inputPinCount ) {
+		super( inputPinCount );
+	}
+	
+	
+	
+	public void update() {
 		boolean state = true;
 		
 		for (Pin pin: pinInputs)
 			if (pin != null)
 				state &= pin.getState();
 			
-		return state;
+		pinOut.setState( state );
 	}
 }

@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * A logic gate.
  * @author Lee Coakley
  */
-public abstract class Gate
+public abstract class Gate extends Component
 {
 	protected ArrayList<Pin> pinInputs;
 	protected Pin            pinOut;
@@ -19,7 +19,7 @@ public abstract class Gate
 	
 	public Gate() {
 		pinInputs = new ArrayList<>();
-		pinOut    = new Pin();
+		pinOut    = new Pin( this );
 	}
 	
 	
@@ -28,10 +28,22 @@ public abstract class Gate
 		this();
 		
 		for (int i=0; i<inputPinCount; i++)
-			pinInputs.add( new Pin() );
+			pinInputs.add( new Pin( this ) );
 	}
 	
 	
 	
-	public abstract boolean update();
+	public ArrayList<Pin> getPinInputs() {
+		return pinInputs;
+	}
+
+
+
+	public Pin getPinOut() {
+		return pinOut;
+	}
+
+
+
+	public abstract void update();
 }

@@ -12,5 +12,11 @@ import java.util.ArrayList;
  */
 public class Solder extends Component
 {
-	private ArrayList<Trace> traces;
+	protected ArrayList<Trace> traces;
+	
+	
+	
+	public Solder() {
+		this.traces = new ArrayList<>();
+	}
 }

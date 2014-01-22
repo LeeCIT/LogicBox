@@ -2,28 +2,47 @@
 
 
 package logicBox.sim;
-import java.util.ArrayList;
 
 
 
 /**
- * A pin represents an attachment point for traces on a component.
+ * A pin is an attachment point for traces on a component.
  * @author Lee Coakley
  */
 public class Pin extends Component
 {
 	protected Component internal; // Component this is attached to.
-	protected Component external; // Component this is connected to.
+	protected Component external;
 	protected boolean   isInput;
+	protected boolean   state;
 	
 	
 	
-	/**
-	 * Get the external components at the other end of the connected trace.
-	 * There may be many components.
-	 * @return A terminating component, or null if none is connected.
-	 */
-	public ArrayList<Component> getTerminatingComponents() {
-		
+	public Pin( Component attachTo ) {
+		this.internal = attachTo;
+	}
+	
+	
+	
+	public boolean isInput() {
+		return this.isInput;
+	}
+	
+	
+	
+	public boolean isOutput() {
+		return ! isInput();
+	}
+	
+	
+	
+	public boolean getState() {
+		return state;
+	}
+	
+	
+	
+	public void setState( boolean state ) {
+		this.state = state;
 	}
 }
