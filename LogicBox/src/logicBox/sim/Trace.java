@@ -2,12 +2,14 @@
 
 
 package logicBox.sim;
-import java.util.ArrayList;
 
 
 
 /**
  * Traces connect components together via pins.
+ * TODO: Traces have a directionality.  Needs to be taken into account.
+ * TODO: Add solder attachment
+ * TODO: Do solder joins need to be ordered?  Probably.
  * @author Lee Coakley
  * @see    Pin
  */
@@ -17,12 +19,15 @@ public class Trace extends Component
 	
 	
 	
-	/**
-	 * Get the external components at the other end of the connected trace.
-	 * @return A list of terminating components.  Empty if none are connected.
-	 */
-	public ArrayList<Pin> getTerminatingPins( Pin from ) {
-		return null; // TODO
+	public Trace() {
+		// Do nothing
+	}
+	
+	
+	
+	public Trace( Pin a, Pin b ) {
+		this.a = a;
+		this.b = b;
 	}
 	
 	

@@ -6,7 +6,7 @@ package logicBox.sim;
 
 
 /**
- * A switchable logic-level source.
+ * A user-switchable logic-level source.
  * @author Lee Coakley
  */
 public class SourceToggle extends SourceFixed

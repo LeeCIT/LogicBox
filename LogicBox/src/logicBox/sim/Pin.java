@@ -18,8 +18,14 @@ public class Pin extends Component
 	
 	
 	
-	public Pin( Component attachTo ) {
+	public Pin( Component attachTo, boolean isInput ) {
 		this.internal = attachTo;
+	}
+	
+	
+	
+	public void connectPin( Component com ) {
+		external = com;
 	}
 	
 	

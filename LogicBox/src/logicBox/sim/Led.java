@@ -3,18 +3,26 @@
 
 package logicBox.sim;
 
+import java.util.List;
+
 
 
 /**
  * LED light.  Shows output state.
  * @author Lee Coakley
  */
-public class Led
+public class Led extends Component implements PinIn
 {
 	protected Pin pinInput;
 	
 	
 	
+	public Led() {
+		this.pinInput = new Pin( this, true );
+	}
+
+
+
 	public boolean getState() {
 		return pinInput.getState();
 	}
@@ -23,5 +31,11 @@ public class Led
 	
 	public Pin getPinInput() {
 		return pinInput;
+	}
+	
+	
+	
+	public List<Pin> getPinInputs() {
+		return Util.wrapInList( pinInput );
 	}
 }

@@ -6,7 +6,7 @@ package logicBox.sim;
 
 
 /**
- * A circuit component.  Gates, blackboxes, pins, etc.
+ * A circuit component.  Gates, pins, traces, LEDs, etc.
  * @author Lee Coakley
  */
 public abstract class Component

@@ -3,6 +3,7 @@
 
 package logicBox.sim;
 import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
  * A logic gate.
  * @author Lee Coakley
  */
-public abstract class Gate extends Component
+public abstract class Gate extends Component implements PinIn, PinOut
 {
 	protected ArrayList<Pin> pinInputs;
 	protected Pin            pinOut;
@@ -19,7 +20,7 @@ public abstract class Gate extends Component
 	
 	public Gate() {
 		pinInputs = new ArrayList<>();
-		pinOut    = new Pin( this );
+		pinOut    = new Pin( this, false );
 	}
 	
 	
@@ -28,19 +29,19 @@ public abstract class Gate extends Component
 		this();
 		
 		for (int i=0; i<inputPinCount; i++)
-			pinInputs.add( new Pin( this ) );
+			pinInputs.add( new Pin( this, true ) );
 	}
 	
 	
 	
-	public ArrayList<Pin> getPinInputs() {
+	public List<Pin> getPinInputs() {
 		return pinInputs;
 	}
-
-
-
-	public Pin getPinOut() {
-		return pinOut;
+	
+	
+	
+	public List<Pin> getPinOutputs() {
+		return Util.wrapInList( pinOut );
 	}
 
 

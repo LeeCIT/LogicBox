@@ -4,6 +4,7 @@
 package logicBox.sim;
 
 
+
 public class HalfAdder
 {
 	public static void main( String[] args ) {
@@ -18,5 +19,17 @@ public class HalfAdder
 		
 		Led sum   = new Led();
 		Led carry = new Led();
+		
+		Trace aToXor = connectPins( a.pinOut, xor.pinInputs.get(0) );
+		Trace bToXor = connectPins( a.pinOut, xor.pinInputs.get(1) );
+	}
+	
+	
+	
+	public static Trace connectPins( Pin a, Pin b ) {
+		Trace trace = new Trace( a, b );
+		a.connectPin( trace );
+		b.connectPin( trace );
+		return trace;
 	}
 }
