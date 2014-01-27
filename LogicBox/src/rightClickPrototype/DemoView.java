@@ -29,7 +29,7 @@ public class DemoView extends JFrame{
 		
 		//Setup
 		popup    = new JPopupMenu();
-		demoGate = new JLabel("pins = " + pins);
+		demoGate = new JLabel("And gate pins = " + pins);
 		
 		//Make the popup menu item
 		addPin = new JMenuItem("Add Pin");
@@ -85,7 +85,7 @@ public class DemoView extends JFrame{
 	
 	// I know, this is awful, but I want a small demo to be working
 	private void resetLabel() {
-		demoGate.setText("Pins = " + pins);
+		demoGate.setText("And gate pins = " + pins);
 	}
 	
 	
