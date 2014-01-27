@@ -11,7 +11,7 @@ import java.util.List;
  * A logic gate.
  * @author Lee Coakley
  */
-public abstract class Gate extends Component implements PinIn, PinOut
+public abstract class Gate extends Component implements PinIn, PinOut, Updateable
 {
 	protected ArrayList<Pin> pinInputs;
 	protected Pin            pinOut;

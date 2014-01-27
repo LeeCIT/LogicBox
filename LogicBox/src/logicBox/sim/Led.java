@@ -8,7 +8,7 @@ import java.util.List;
 
 
 /**
- * LED light.  Shows output state.
+ * LED light.  Shows state of input pin.
  * @author Lee Coakley
  */
 public class Led extends Component implements PinIn
@@ -20,9 +20,9 @@ public class Led extends Component implements PinIn
 	public Led() {
 		this.pinInput = new Pin( this, true );
 	}
-
-
-
+	
+	
+	
 	public boolean getState() {
 		return pinInput.getState();
 	}

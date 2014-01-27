@@ -11,21 +11,34 @@ package logicBox.sim;
  */
 public class Pin extends Component
 {
-	protected Component internal; // Component this is attached to.
-	protected Component external;
+	protected Component component; // Component this is physically attached to.
+	protected Trace     trace;
 	protected boolean   isInput;
 	protected boolean   state;
 	
 	
 	
 	public Pin( Component attachTo, boolean isInput ) {
-		this.internal = attachTo;
+		this.component = attachTo;
 	}
 	
 	
 	
-	public void connectPin( Component com ) {
-		external = com;
+	/**
+	 * Connect a trace to this pin.
+	 * Any existing connection is lost.
+	 */
+	public void connectTrace( Trace trace ) {
+		this.trace = trace;
+	}
+	
+	
+	
+	/**
+	 * Get the component this pin is physically attached to.
+	 */
+	public Component getAttachedComponent() {
+		return component;
 	}
 	
 	

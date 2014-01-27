@@ -16,13 +16,4 @@ public class TestGate
 		
 		System.out.println( xor.getPinOutputs().get(0).getState() );
 	}
-	
-	
-	
-	public static Trace connectPins( Pin a, Pin b ) {
-		Trace trace = new Trace( a, b );
-		a.connectPin( trace );
-		b.connectPin( trace );
-		return trace;
-	}
 }

@@ -15,7 +15,7 @@ package logicBox.sim;
  */
 public class Trace extends Component
 {
-	protected Pin a, b;
+	protected Pin source, dest;
 	
 	
 	
@@ -25,17 +25,21 @@ public class Trace extends Component
 	
 	
 	
-	public Trace( Pin a, Pin b ) {
-		this.a = a;
-		this.b = b;
+	public Trace( Pin source, Pin dest ) {
+		this();
+		this.source = source;
+		this.dest   = dest;
 	}
 	
 	
 	
-	/**
-	 * Given one of the two connected pins, get the one at the opposite end.
-	 */
-	public Pin getOpposite( Pin c ) {
-		return (c==a) ? b : a;
+	public Pin getPinSource() {
+		return source;
+	}
+	
+	
+	
+	public Pin getPinDest() {
+		return dest;
 	}
 }
