@@ -23,19 +23,12 @@ public class DemoView extends JFrame{
 	int pins = 2;
 
 	public DemoView() {
+		
 		//Set the native look and feel, IT will be in a different class when finished
-		try 
-		{
-	        //Set System L&F
-			UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
-	    } 
-		catch (Exception e) {
-				e.printStackTrace();		
-		}
-	
+		setNativeLookAndFeel();
 		
 		//Setup
-		popup = new JPopupMenu();
+		popup    = new JPopupMenu();
 		demoGate = new JLabel("pins = " + pins);
 		
 		//Make the popup menu item
@@ -56,26 +49,7 @@ public class DemoView extends JFrame{
 		add(demoGate);
 		
 		//Add some crappy actionLister
-		addPin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				pins++;
-				resetLabel();
-			}
-		});
-		
-		//Get rid of a pin
-		removePin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if ( pins<=2 ) {
-					//Do nothing
-					System.out.println("Must have atleast two pins");
-				}
-				else {
-					pins--;
-					resetLabel();
-				}
-			}
-		});
+		crappyActionListeners();
 		
 
 		
@@ -108,9 +82,53 @@ public class DemoView extends JFrame{
 	}
 	
 	
+	
 	// I know, this is awful, but I want a small demo to be working
 	private void resetLabel() {
 		demoGate.setText("Pins = " + pins);
 	}
+	
+	
+	
+	
+	//Set native look and feel
+	private void setNativeLookAndFeel() {
+		try 
+		{
+	        //Set System L&F
+			UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
+	    } 
+		catch (Exception e) {
+				e.printStackTrace();		
+		}
+	}
+	
+	
+	
+	//Make the crappy action listeners
+	private void crappyActionListeners() {
+		//Add pins
+		addPin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pins++;
+				resetLabel();
+			}
+		});
+		
+		//Get rid of a pin
+		removePin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if ( pins<=2 ) {
+					//Do nothing
+					System.out.println("Must have atleast two pins");
+				}
+				else {
+					pins--;
+					resetLabel();
+				}
+			}
+		});
+	}
+	
 }
 
