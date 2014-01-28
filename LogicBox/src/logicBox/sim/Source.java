@@ -7,7 +7,7 @@ import java.util.List;
 
 
 
-public abstract class Source extends Component implements PinOut
+public abstract class Source extends Component implements PinOut, Updateable
 {
 	protected Pin pinOut;
 	

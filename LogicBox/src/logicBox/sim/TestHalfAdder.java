@@ -8,11 +8,11 @@ package logicBox.sim;
 public class TestHalfAdder
 {
 	public static void main( String[] args ) {
-		SourceToggle sourceA = new SourceToggle( false );
-		SourceToggle sourceB = new SourceToggle( false );
+		Source sourceA = new SourceFixed( false );
+		Source sourceB = new SourceFixed( true  );
 		
-		GateXor gateXor = new GateXor();
-		GateAnd gateAnd = new GateAnd( 2 );
+		Gate gateXor = new GateXor();
+		Gate gateAnd = new GateAnd( 2 );
 		
 		Led ledSum   = new Led();
 		Led ledCarry = new Led();
@@ -28,7 +28,13 @@ public class TestHalfAdder
 		Trace bToAnd   = connect( icB, gateAnd, 1 );
 		Trace andToLed = connect( gateXor, 0, ledCarry, 0 );
 		
-		System.out.println( "Okay" );
+		Simulation sim = new Simulation();
+		sim.addSource( sourceA );
+		sim.addSource( sourceB );
+		sim.run();
+		
+		System.out.println( "Sum:   " + ledSum  .getState() );
+		System.out.println( "Carry: " + ledCarry.getState() );
 	}
 	
 	
@@ -36,26 +42,23 @@ public class TestHalfAdder
 	public static Trace connect( PinOut outComp, int outPinIndex, PinIn inComp, int inPinIndex ) {
 		Pin pinOut = outComp.getPinOutputs().get( outPinIndex );
 		Pin pinIn  = inComp .getPinInputs() .get( inPinIndex  );
+		return connectPins( pinOut, pinIn );
+	}
 
-		Trace trace = new Trace( pinOut, pinIn );
-		
-		pinOut.connectTrace( trace );
-		pinIn .connectTrace( trace );
-		
-		return trace; 
+
+
+	public static Trace connect( Interconnect outIc, PinIn inComp, int inPinIndex ) {
+		Pin pinOut = outIc.createPin();
+		Pin pinIn  = inComp.getPinInputs().get( inPinIndex );
+		return connectPins( pinOut, pinIn );
 	}
 	
 	
 	
-	public static Trace connect( Interconnect outIc, PinIn inComp, int inPinIndex ) {
-		Pin pinOut = outIc.createPin();
-		Pin pinIn  = inComp.getPinInputs().get( inPinIndex );
-
+	public static Trace connectPins( Pin pinOut, Pin pinIn ) {
 		Trace trace = new Trace( pinOut, pinIn );
-		
 		pinOut.connectTrace( trace );
 		pinIn .connectTrace( trace );
-		
-		return trace; 
+		return trace;
 	}
 }

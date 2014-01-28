@@ -15,4 +15,10 @@ public class SourceFixed extends Source
 		super( state );
 		setState( state );
 	}
+	
+	
+	
+	public void update() {
+		// Do nothing
+	}
 }
