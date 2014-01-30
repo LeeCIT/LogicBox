@@ -10,7 +10,6 @@ public class rightClickProto extends JFrame
 	
 	public static void main(String[] args) {
 		new DemoView();	
-		//Demo comment
 	}
 }
 	
