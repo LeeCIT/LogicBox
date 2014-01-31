@@ -36,11 +36,11 @@ public class Simulation
 	
 	
 	/**
-	 * Insert an interconnect into a trace.
+	 * Insert a junction into a trace.
 	 * Two new traces are created and connected in place of the former one.
 	 */
-	public static Interconnect insertInterconnect( Trace trace ) {
-		Interconnect ic = new Interconnect();
+	public static Junction insertJunction( Trace trace ) {
+		Junction ic = new Junction();
 		
 		Pin sourcePin = trace.getPinSource();
 		Pin destPin   = trace.getPinDest();

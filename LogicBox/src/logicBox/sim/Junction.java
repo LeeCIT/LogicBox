@@ -10,13 +10,13 @@ import java.util.ArrayList;
  * Joins traces together.  Used to be called 'Solder'.
  * @author Lee Coakley
  */
-public class Interconnect extends Component implements Updateable
+public class Junction extends Component implements Updateable
 {
 	protected ArrayList<Pin> pins;	
 	
 	
 	
-	public Interconnect() {
+	public Junction() {
 		pins = new ArrayList<>();
 	}
 	
