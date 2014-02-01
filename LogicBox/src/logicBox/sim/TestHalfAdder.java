@@ -21,11 +21,11 @@ public class TestHalfAdder
 		Trace bToXor   = connect( sourceB, 0, gateXor, 1 );
 		Trace xorToLed = connect( gateXor, 0, ledSum,  0 );
 		
-		Junction icA = Simulation.insertJunction( aToXor );
-		Junction icB = Simulation.insertJunction( bToXor );
+		Junction juncA = Simulation.insertJunction( aToXor );
+		Junction juncB = Simulation.insertJunction( bToXor );
 		
-		Trace aToAnd   = connect( icA, gateAnd, 0 );
-		Trace bToAnd   = connect( icB, gateAnd, 1 );
+		Trace aToAnd   = connect( juncA, gateAnd, 0 );
+		Trace bToAnd   = connect( juncB, gateAnd, 1 );
 		Trace andToLed = connect( gateXor, 0, ledCarry, 0 );
 		
 		Simulation sim = new Simulation();
@@ -47,8 +47,8 @@ public class TestHalfAdder
 
 
 
-	public static Trace connect( Junction outIc, PinIn inComp, int inPinIndex ) {
-		Pin pinOut = outIc.createPin();
+	public static Trace connect( Junction outJunc, PinIn inComp, int inPinIndex ) {
+		Pin pinOut = outJunc.createPin();
 		Pin pinIn  = inComp.getPinInputs().get( inPinIndex );
 		return connectPins( pinOut, pinIn );
 	}
