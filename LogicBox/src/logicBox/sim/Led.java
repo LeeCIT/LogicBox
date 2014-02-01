@@ -18,6 +18,7 @@ public class Led extends Component implements PinIn
 	
 	
 	public Led() {
+		super();
 		this.pinInput = new Pin( this, true );
 	}
 	

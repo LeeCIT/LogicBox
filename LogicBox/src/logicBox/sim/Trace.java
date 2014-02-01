@@ -17,7 +17,7 @@ public class Trace extends Component
 	
 	
 	public Trace() {
-		// Do nothing
+		super();
 	}
 	
 	

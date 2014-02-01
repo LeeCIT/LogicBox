@@ -17,6 +17,7 @@ public class Junction extends Component implements Updateable
 	
 	
 	public Junction() {
+		super();
 		pins = new ArrayList<>();
 	}
 	
