@@ -9,7 +9,7 @@ package logicBox.sim;
  * A pin is an attachment point for traces on a component.
  * @author Lee Coakley
  */
-public class Pin extends Component
+public class Pin extends Component implements Stateful
 {
 	protected Component component; // Component this is physically attached to.
 	protected Trace     trace;

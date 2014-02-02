@@ -35,14 +35,7 @@ public class Simulation
 	public void run() {
 		++simStep;
 		
-		// TODO
-	}
-	
-	
-	
-	public void propogateSignal( PinOut out ) {
-		for (Pin pin: out.getPinOutputs())
-			pin.trace.setState( true );
+		
 	}
 	
 	
@@ -51,7 +44,13 @@ public class Simulation
 		public Set<Junction> junctions      = new HashSet<>();
 		public Set<Trace>    traces         = new HashSet<>();
 		public Set<Pin>      pins           = new HashSet<>();
-		public Set<Pin>      pinTerminators = new HashSet<>();
+		public Set<Pin>      pinTerminators = new HashSet<>(); // Subset of pins
+		
+		public void setState( boolean state ) {
+			for (Stateful s: junctions)	s.setState( state );
+			for (Stateful s: traces)	s.setState( state );
+			for (Stateful s: pins)		s.setState( state );
+		}
 	}
 	
 	
@@ -80,6 +79,7 @@ public class Simulation
 		set.pins  .add( otherPin );
 		
 		Component com = otherPin.getAttachedComponent();
+		
 		if (com instanceof Junction)
 			traverseJunction( com, set, otherPin );
 		

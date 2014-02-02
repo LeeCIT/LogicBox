@@ -10,7 +10,7 @@ package logicBox.sim;
  * @author Lee Coakley
  * @see    Pin
  */
-public class Trace extends Component
+public class Trace extends Component implements Stateful
 {
 	protected Pin     source, dest;
 	protected boolean state;
