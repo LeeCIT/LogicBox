@@ -9,7 +9,7 @@ import java.util.List;
 
 
 /**
- * Utility methods.
+ * Utility methods for the simulator.
  * @author Lee Coakley
  */
 public class Util

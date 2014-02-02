@@ -2,7 +2,6 @@
 
 
 package logicBox.sim;
-import java.util.List;
 
 
 
@@ -10,26 +9,16 @@ import java.util.List;
  * A fixed logic-level source.
  * @author Lee Coakley
  */
-public class SourceFixed extends Component implements PinOut
+public class SourceFixed extends Source
 {
-	protected Pin pinOut;
-	
-	
-	
 	public SourceFixed( boolean state ) {
-		pinOut = new Pin( this, false );
+		super( state );
 		setState( state );
 	}
 	
 	
 	
-	public void setState( boolean state ) {
-		pinOut.setState( state );
-	}
-	
-	
-	
-	public List<Pin> getPinOutputs() {
-		return Util.wrapInList( pinOut );
+	public void update() {
+		// Do nothing
 	}
 }

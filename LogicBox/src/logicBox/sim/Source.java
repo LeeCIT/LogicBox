@@ -1,0 +1,33 @@
+
+
+
+package logicBox.sim;
+
+import java.util.List;
+
+
+
+public abstract class Source extends Component implements PinOut, Updateable
+{
+	protected Pin pinOut;
+	
+	
+	
+	public Source( boolean state ) {
+		super();
+		pinOut = new Pin( this, false );
+		setState( state );
+	}
+	
+	
+	
+	public void setState( boolean state ) {
+		pinOut.setState( state );
+	}
+	
+	
+	
+	public List<Pin> getPinOutputs() {
+		return Util.wrapInList( pinOut );
+	}
+}

@@ -19,6 +19,7 @@ public class Pin extends Component
 	
 	
 	public Pin( Component attachTo, boolean isInput ) {
+		super();
 		this.component = attachTo;
 	}
 	

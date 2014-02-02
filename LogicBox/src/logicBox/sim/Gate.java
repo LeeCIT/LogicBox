@@ -19,6 +19,7 @@ public abstract class Gate extends Component implements PinIn, PinOut, Updateabl
 	
 	
 	public Gate() {
+		super();
 		pinInputs = new ArrayList<>();
 		pinOut    = new Pin( this, false );
 	}
