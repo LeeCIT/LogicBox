@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Joins traces together.  Used to be called 'Solder'.
  * @author Lee Coakley
  */
-public class Junction extends Component implements Updateable, Stateful
+public class Junction extends Component implements Stateful
 {
 	protected ArrayList<Pin> pins;
 	protected boolean        state;
@@ -46,12 +46,6 @@ public class Junction extends Component implements Updateable, Stateful
 		Pin pin = new Pin( this, false );
 		pins.add( pin );
 		return pin;
-	}
-	
-	
-	
-	public void update() {
-		// TODO
 	}
 
 
