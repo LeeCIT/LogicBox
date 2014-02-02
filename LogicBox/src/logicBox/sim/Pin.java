@@ -41,6 +41,12 @@ public class Pin extends Component
 	
 	
 	
+	public boolean hasTrace() {
+		return trace != null;
+	}
+	
+	
+	
 	/**
 	 * Get the component this pin is physically attached to.
 	 */

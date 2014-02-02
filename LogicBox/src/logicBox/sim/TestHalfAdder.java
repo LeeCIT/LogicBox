@@ -31,7 +31,14 @@ public class TestHalfAdder
 		Simulation sim = new Simulation();
 		sim.addSource( sourceA );
 		sim.addSource( sourceB );
-		sim.run();
+		Simulation.AffectedComponentSet set = sim.getAffectedComponents( sourceA.getPinOutputs().get(0) );
+		
+		System.out.println(
+			"Junctions: " + set.junctions     .size() + "\n" +
+			"Pins:      " + set.pins          .size() + "\n" +
+			"PinTerms:  " + set.pinTerminators.size() + "\n" + 
+			"Traces:    " + set.traces        .size()
+		);
 		
 		System.out.println( "Sum:   " + ledSum  .getState() );
 		System.out.println( "Carry: " + ledCarry.getState() );

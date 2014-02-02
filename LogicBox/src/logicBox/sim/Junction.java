@@ -2,6 +2,7 @@
 
 
 package logicBox.sim;
+import java.util.List;
 import java.util.ArrayList;
 
 
@@ -23,8 +24,16 @@ public class Junction extends Component implements Updateable
 	
 	
 	
-	public ArrayList<Pin> getPins() {
+	public List<Pin> getPins() {
 		return pins;
+	}
+	
+	
+	
+	public List<Pin> getPinsExcept( Pin pin ) {
+		List<Pin> pinsCopy = new ArrayList<>( pins );
+		pinsCopy.remove( pin );
+		return pinsCopy;
 	}
 	
 	
@@ -37,10 +46,10 @@ public class Junction extends Component implements Updateable
 		pins.add( pin );
 		return pin;
 	}
-
-
-
+	
+	
+	
 	public void update() {
-		
+		// TODO
 	}
 }

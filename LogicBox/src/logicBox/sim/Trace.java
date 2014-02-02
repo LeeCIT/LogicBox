@@ -44,9 +44,6 @@ public class Trace extends Component
 	
 	
 	public Pin getPinOtherSide( Pin pin ) {
-		if (pin != source && pin != dest)
-			throw new RuntimeException( "Pin must be the source or destination of the trace." );
-		
 		return (pin == dest) ? source : dest;
 	}
 	
