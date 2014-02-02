@@ -130,4 +130,29 @@ public class Simulation
 		
 		return junc;
 	}
+	
+	
+	
+	public static Trace connect( PinOut outComp, int outPinIndex, PinIn inComp, int inPinIndex ) {
+		Pin pinOut = outComp.getPinOutputs().get( outPinIndex );
+		Pin pinIn  = inComp .getPinInputs() .get( inPinIndex  );
+		return connectPins( pinOut, pinIn );
+	}
+
+
+
+	public static Trace connect( Junction outJunc, PinIn inComp, int inPinIndex ) {
+		Pin pinOut = outJunc.createPin();
+		Pin pinIn  = inComp.getPinInputs().get( inPinIndex );
+		return connectPins( pinOut, pinIn );
+	}
+	
+	
+	
+	public static Trace connectPins( Pin pinOut, Pin pinIn ) {
+		Trace trace = new Trace( pinOut, pinIn );
+		pinOut.connectTrace( trace );
+		pinIn .connectTrace( trace );
+		return trace;
+	}
 }
