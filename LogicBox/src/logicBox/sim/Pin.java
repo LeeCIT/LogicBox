@@ -68,6 +68,16 @@ public class Pin extends Component
 	
 	
 	
+	/**
+	 * Check whether this pin has Input/Output status.
+	 * If not, the isInput() and isOutput() functions are meaningless and the pins are bidirectional.
+	 */
+	public boolean hasIoState() {
+		return ! (component instanceof Junction);
+	}
+	
+	
+	
 	public boolean getState() {
 		return state;
 	}
