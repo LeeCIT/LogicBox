@@ -13,7 +13,7 @@ public class GateAnd extends Gate
 {
 	public GateAnd() {
 		super();
-		dsfhdfkhdfhdsfjk
+		
 	}
 	
 	
