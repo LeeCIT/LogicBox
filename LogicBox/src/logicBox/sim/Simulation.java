@@ -35,18 +35,31 @@ public class Simulation
 	public void run() {
 		++simStep;
 		
+		List<Component> propogators = new ArrayList<>();
+		propogators.addAll( sources );
 		
+		while ( ! propogators.isEmpty()) {
+			Component com = propogators.remove( 0 );
+			
+			if (com instanceof Updateable) {
+				Updateable updateable = ((Updateable) com);
+				updateable.update();
+			}
+			
+			if (com instanceof PinOut)
+				propogators.add( com );
+		}
 	}
 	
 	
 	
-	public class AffectedComponentSet {
+	public class AffectedPathSet {
 		public Set<Junction> junctions      = new HashSet<>();
 		public Set<Trace>    traces         = new HashSet<>();
 		public Set<Pin>      pins           = new HashSet<>();
 		public Set<Pin>      pinTerminators = new HashSet<>(); // Subset of pins
 		
-		public void setState( boolean state ) {
+		public void setStates( boolean state ) {
 			for (Stateful s: junctions)	s.setState( state );
 			for (Stateful s: traces)	s.setState( state );
 			for (Stateful s: pins)		s.setState( state );
@@ -59,15 +72,15 @@ public class Simulation
 	 * Find all pins, junctions and traces connected to the given pin.
 	 * These are all the components which have their level set by the pin.
 	 */
-	public AffectedComponentSet getAffectedComponents( Pin pin ) {
-		AffectedComponentSet set = new AffectedComponentSet();
-		getAffectedComponents( pin, set );
+	public AffectedPathSet getAffectedPath( Pin pin ) {
+		AffectedPathSet set = new AffectedPathSet();
+		getAffectedPath( pin, set );
 		return set;
 	}
 	
 	
 	
-	private void getAffectedComponents( Pin pin, AffectedComponentSet set ) {
+	private void getAffectedPath( Pin pin, AffectedPathSet set ) {
 		if ( ! pin.hasTrace())
 			return;
 		
@@ -83,24 +96,24 @@ public class Simulation
 		if (com instanceof Junction)
 			traverseJunction( com, set, otherPin );
 		
-		if ( ! isTransport( com ))
+		if ( ! isConnection( com ))
 			set.pinTerminators.add( otherPin );
 	}
 	
 	
 	
-	private void traverseJunction( Component com, AffectedComponentSet set, Pin sourcePin ) {
+	private void traverseJunction( Component com, AffectedPathSet set, Pin sourcePin ) {
 		Junction junction = (Junction) com;
 		
 		set.junctions.add( junction );
 		
 		for (Pin pin: junction.getPinsExcept( sourcePin ))
-			getAffectedComponents( pin, set );
+			getAffectedPath( pin, set );
 	}
 	
 	
 	
-	private boolean isTransport( Component com ) {
+	private boolean isConnection( Component com ) {
 		return com instanceof Junction 
 			|| com instanceof Trace;
 	}

@@ -31,7 +31,7 @@ public class TestHalfAdder
 		Simulation sim = new Simulation();
 		sim.addSource( sourceA );
 		sim.addSource( sourceB );
-		Simulation.AffectedComponentSet set = sim.getAffectedComponents( sourceA.getPinOutputs().get(0) );
+		Simulation.AffectedPathSet set = sim.getAffectedPath( sourceA.getPinOutputs().get(0) );
 		
 		System.out.println(
 			"Junctions: " + set.junctions     .size() + "\n" +
