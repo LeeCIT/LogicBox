@@ -13,14 +13,15 @@ public class Pin extends Component implements Stateful
 {
 	protected Component component; // Component this is physically attached to.
 	protected Trace     trace;
-	protected boolean   isInput;
+	protected IoMode    mode;
 	protected boolean   state;
 	
 	
 	
-	public Pin( Component attachTo, boolean isInput ) {
+	public Pin( Component attachTo, IoMode mode ) {
 		super();
 		this.component = attachTo;
+		this.mode      = mode;
 	}
 	
 	
@@ -57,23 +58,19 @@ public class Pin extends Component implements Stateful
 	
 	
 	public boolean isInput() {
-		return this.isInput;
+		return mode == IoMode.input;
 	}
 	
 	
 	
 	public boolean isOutput() {
-		return ! isInput();
+		return mode == IoMode.output;
 	}
 	
 	
 	
-	/**
-	 * Check whether this pin has Input/Output status.
-	 * If not, the isInput() and isOutput() functions are meaningless and the pins are bidirectional.
-	 */
-	public boolean hasIoState() {
-		return ! (component instanceof Junction);
+	public boolean isBidirectional() {
+		return mode == IoMode.bidi;
 	}
 	
 	

@@ -71,6 +71,7 @@ public class Simulation
 	/**
 	 * Find all pins, junctions and traces connected to the given pin.
 	 * These are all the components which have their level set by the pin.
+	 * This includes the pin given as input.
 	 */
 	public AffectedPathSet getAffectedPath( Pin pin ) {
 		AffectedPathSet set = new AffectedPathSet();
