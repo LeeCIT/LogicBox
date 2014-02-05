@@ -9,7 +9,7 @@ public class TestHalfAdder
 {
 	public static void main( String[] args ) {
 		Source sourceA = new SourceFixed( false );
-		Source sourceB = new SourceFixed( true  );
+		Source sourceB = new SourceFixed( false );
 		
 		Gate gateXor = new GateXor();
 		Gate gateAnd = new GateAnd( 2 );
@@ -26,19 +26,12 @@ public class TestHalfAdder
 		
 		Trace aToAnd   = Simulation.connect( juncA, gateAnd, 0 );
 		Trace bToAnd   = Simulation.connect( juncB, gateAnd, 1 );
-		Trace andToLed = Simulation.connect( gateXor, 0, ledCarry, 0 );
+		Trace andToLed = Simulation.connect( gateAnd, 0, ledCarry, 0 );
 		
 		Simulation sim = new Simulation();
 		sim.addSource( sourceA );
 		sim.addSource( sourceB );
-		Simulation.AffectedPathSet set = sim.getAffectedPath( sourceA.getPinOutputs().get(0) );
-		
-		System.out.println(
-			"Junctions: " + set.junctions     .size() + "\n" +
-			"Pins:      " + set.pins          .size() + "\n" +
-			"PinTerms:  " + set.pinTerminators.size() + "\n" + 
-			"Traces:    " + set.traces        .size()
-		);
+		sim.run();
 		
 		System.out.println( "Sum:   " + ledSum  .getState() );
 		System.out.println( "Carry: " + ledCarry.getState() );
