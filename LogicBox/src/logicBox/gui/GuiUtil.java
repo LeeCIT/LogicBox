@@ -3,7 +3,8 @@ package logicBox.gui;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-import FrameShareDemo.MainFrame;
+import frameShareProto.MainFrame;
+
 
 
 /**
