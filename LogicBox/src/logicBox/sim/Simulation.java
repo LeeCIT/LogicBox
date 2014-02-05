@@ -32,7 +32,7 @@ public class Simulation
 	
 	
 	
-	public void run() {
+	public void doSimStep() {
 		++simStep;
 		
 		List<Component> propogators = new ArrayList<>();
@@ -49,6 +49,19 @@ public class Simulation
 			if (com instanceof PinOut)
 				propogators.add( com );
 		}
+		
+		
+		/**
+		 * Algorithm:
+		 * 	Start at sources (if there are none, the simulation can't change anyway)
+		 * 	Update current propogators
+		 * 	Propogate through traces and junctions to find termination pins
+		 * 	Update termination pins
+		 *  Each component connected to a termination pin is set as a propogator
+		 *  Repeat until there are no more propogators
+		 *  
+		 *  Need to find out how to handle loops (like in a flip-flop).
+		 */
 	}
 	
 	
@@ -71,7 +84,7 @@ public class Simulation
 	/**
 	 * Find all pins, junctions and traces connected to the given pin.
 	 * These are all the components which have their level set by the pin.
-	 * This includes the pin given as input.
+	 * The result includes the pin given as input.
 	 */
 	public AffectedPathSet getAffectedPath( Pin pin ) {
 		AffectedPathSet set = new AffectedPathSet();
