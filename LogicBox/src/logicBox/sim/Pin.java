@@ -57,6 +57,12 @@ public class Pin extends Component implements Stateful
 	
 	
 	
+	public IoMode getIoMode() {
+		return mode;
+	}
+	
+	
+	
 	public boolean isInput() {
 		return mode == IoMode.input;
 	}
