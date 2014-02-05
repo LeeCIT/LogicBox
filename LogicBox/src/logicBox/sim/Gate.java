@@ -44,8 +44,4 @@ public abstract class Gate extends Component implements PinIn, PinOut, Updateabl
 	public List<Pin> getPinOutputs() {
 		return Util.wrapInList( pinOut );
 	}
-
-
-
-	public abstract void update();
 }
