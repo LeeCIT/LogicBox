@@ -6,6 +6,10 @@ import java.util.List;
 
 
 
+/**
+ * A logic-level source.
+ * @author Lee Coakley
+ */
 public abstract class Source extends Component implements PinOut, Updateable
 {
 	protected Pin pinOut;

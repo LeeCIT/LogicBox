@@ -40,7 +40,7 @@ public class Junction extends Component implements Stateful
 	
 	
 	/**
-	 * Create a new pin and add it to the junction.
+	 * Create a new pin, add it to the junction and return it.
 	 */
 	public Pin createPin() {
 		Pin pin = new Pin( this, IoMode.bidi );
