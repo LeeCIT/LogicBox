@@ -21,7 +21,7 @@ public abstract class Gate extends Component implements PinIn, PinOut, Updateabl
 	public Gate() {
 		super();
 		pinInputs = new ArrayList<>();
-		pinOut    = new Pin( this, false );
+		pinOut    = new Pin( this, IoMode.output );
 	}
 	
 	
@@ -30,7 +30,7 @@ public abstract class Gate extends Component implements PinIn, PinOut, Updateabl
 		this();
 		
 		for (int i=0; i<inputPinCount; i++)
-			pinInputs.add( new Pin( this, true ) );
+			pinInputs.add( new Pin( this, IoMode.input ) );
 	}
 	
 	
@@ -44,8 +44,4 @@ public abstract class Gate extends Component implements PinIn, PinOut, Updateabl
 	public List<Pin> getPinOutputs() {
 		return Util.wrapInList( pinOut );
 	}
-
-
-
-	public abstract void update();
 }

@@ -262,9 +262,9 @@ public class Geo
 	 * Math.round() uses banker's rounding which gives undesirable results sometimes (in graphics for example).
 	 */
 	public static double roundArith( double x ) {
-		return (x >= 0.0)                   ?
-				Math.floor( 	  x + 0.5 ) :
-				Math.floor( 1.0 + x - 0.5 ) ; 
+		if (x >= 0.0)
+		     return Math.floor(       x + 0.5 );
+		else return Math.floor( 1.0 + x - 0.5 );
 	}
 	
 	
