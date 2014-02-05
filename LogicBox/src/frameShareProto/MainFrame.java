@@ -1,17 +1,21 @@
 package frameShareProto;
 
+import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import logicBox.gui.GUI;
+import frameShareProto.ToolSelectionEnum.ToolSelection;
 import logicBox.gui.GuiUtil;
 
 public class MainFrame extends JFrame{
 	
 	public static MainFrame currentInstance;
+	private String toolSeletion = "Nothing here";
+	int mouseXPos = 0;
+	int mouseYPos = 0;
 	
 	
 	
@@ -36,10 +40,19 @@ public class MainFrame extends JFrame{
 			public void mousePressed(MouseEvent evt){
 				if (SwingUtilities.isLeftMouseButton(evt)) {
 					//Work for left click goes here
-					ToolBar.currentInstance.getSelectedToolBarItem();
-					
+					//I know nasty things are going on here
+					ToolSelection sel = ToolBar.selection;
+					toolSeletion = GetToolBarSelectionAsString.getToolbarselectionAsString(sel);
+					mouseXPos = evt.getX();
+					mouseYPos = evt.getY();
+					repaint();
 				}
 			}
 		});
+	}
+		
+	
+	public void paint(Graphics g) {
+		g.drawString(toolSeletion, mouseXPos, mouseYPos);
 	}
 }

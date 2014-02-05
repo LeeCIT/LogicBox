@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class ToolBar extends JFrame{
 	
-	public static ToolBar currentInstance;
+	public static ToolBar currentInstanceTool;
 	
 	//Add some buttons
 	private JButton andGate;
@@ -20,7 +20,7 @@ public class ToolBar extends JFrame{
 	private JPanel buttonHolder;
 	
 	//The current Selection
-	private ToolSelection selection;
+	public static ToolSelection selection;
 	
 	public ToolBar() {
 		
@@ -55,19 +55,19 @@ public class ToolBar extends JFrame{
 	/**
 	 * Returns the selected item on the toolbar
 	 */
-	public ToolSelection getSelectedToolBarItem() {
+	public ToolSelection getSelectedToolBarItem() { 
 		return selection;
 	}
 	
 	
 	
 	/**
-	 * Assigns selection dependin on button pressed
+	 * Assigns selection depending on button pressed
 	 */
 	private void setupButtonActions() {
 		
 		andGate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {System.out.println(selection);
 				selection = ToolSelection.AND_GATE;		
 			}
 		});
