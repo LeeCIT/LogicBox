@@ -4,6 +4,7 @@
 package logicBox.sim;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -15,13 +16,15 @@ import java.util.Set;
  */
 public class Simulation
 {
-	private List<Source> sources;
-	private long         simStep;
+	private List<Source>    sources;
+	private List<Component> propos;
+	private long            simStep;
 	
 	
 	
 	public Simulation() {
 		sources = new ArrayList<>();
+		propos  = new ArrayList<>();
 	}
 	
 	
@@ -32,51 +35,58 @@ public class Simulation
 	
 	
 	
-	public void doSimStep() {
+	public void run() {
 		++simStep;
 		
-		List<Component> propogators = new ArrayList<>();
-		propogators.addAll( sources );
+		prime();
 		
-		while ( ! propogators.isEmpty()) {
-			Component com = propogators.remove( 0 );
-			
-			if (com instanceof Updateable) {
-				Updateable updateable = ((Updateable) com);
-				updateable.update();
-			}
-			
-			if (com instanceof PinOut)
-				propogators.add( com );
-		}
-		
-		
-		/**
-		 * Algorithm:
-		 * 	Start at sources (if there are none, the simulation can't change anyway)
-		 * 	Update current propogators
-		 * 	Propogate through traces and junctions to find termination pins
-		 * 	Update termination pins
-		 *  Each component connected to a termination pin is set as a propogator
-		 *  Repeat until there are no more propogators
-		 *  
-		 *  Need to find out how to handle loops (like in a flip-flop).
-		 */
+		while ( ! propos.isEmpty())
+			iterate();
 	}
 	
 	
 	
-	public class AffectedPathSet {
-		public Set<Junction> junctions      = new HashSet<>();
-		public Set<Trace>    traces         = new HashSet<>();
-		public Set<Pin>      pins           = new HashSet<>();
-		public Set<Pin>      pinTerminators = new HashSet<>(); // Subset of pins
+	private void prime() {
+		propos = new ArrayList<>();
+		propos.addAll( sources );
+	}
+	
+	
+	
+	private void iterate() {
+		System.out.println( "Iteration beginning..." );
+		List<Component> nextPropos = new ArrayList<>();
 		
-		public void setStates( boolean state ) {
-			for (Stateful s: junctions)	s.setState( state );
-			for (Stateful s: traces)	s.setState( state );
-			for (Stateful s: pins)		s.setState( state );
+		while ( ! propos.isEmpty()) {
+			Component com = propos.remove( 0 );
+			System.out.println( "\tPropogating through: " + com );
+			
+			if (com instanceof Updateable) {
+				Updateable updateable = ((Updateable) com);
+				updateable.update();
+				System.out.println( "\tUpdated " + com );
+			}
+			
+			if (com instanceof PinOut) {
+				PinOut out = ((PinOut) com);
+				
+				for (Pin pin: out.getPinOutputs()) {
+					if (pin.getState()) {
+						AffectedPathSet set = getAffectedPath( pin );
+						set.setStates( true );
+						
+						for (Pin term: set.pinTerminators)
+							nextPropos.add( term.getAttachedComponent() );
+					}
+				}
+			}
 		}
+		
+		propos.addAll( nextPropos );
+		
+		System.out.println( "\tNext propogators: " );
+		for (Component c: nextPropos)
+			System.out.println( "\t\t" + c );
 	}
 	
 	
@@ -110,7 +120,7 @@ public class Simulation
 		if (com instanceof Junction)
 			traverseJunction( com, set, otherPin );
 		
-		if ( ! isConnection( com ))
+		if ( ! isConnection(com) && otherPin.isInput())
 			set.pinTerminators.add( otherPin );
 	}
 	
