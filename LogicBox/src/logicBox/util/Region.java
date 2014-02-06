@@ -38,6 +38,30 @@ public class Region
 	
 	
 	
+	public double getLeft() {
+		return tl.x;
+	}
+	
+	
+	
+	public double getRight() {
+		return br.x;
+	}
+	
+	
+	
+	public double getTop() {
+		return tl.y;
+	}
+	
+	
+	
+	public double getBottom() {
+		return br.y;
+	}
+	
+	
+	
 	public Vec2 getSize() {
 		return new Vec2( br.x - tl.x,
 						 br.y - tl.y );						 
