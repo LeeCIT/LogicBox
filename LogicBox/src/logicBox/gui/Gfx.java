@@ -51,7 +51,7 @@ public class Gfx
 			return;
 		}
 		
-		Vec2   centre = Geo.getCentre   ( a, b );
+		Vec2   centre = Geo.centre      ( a, b );
 		double dist   = Geo.distance    ( a, b );
 		double angle  = Geo.angleBetween( a, b );
 		Vec2   size   = new Vec2( dist, thickness );
