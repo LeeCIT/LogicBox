@@ -122,8 +122,17 @@ public class Geo
 	/**
 	 * Get the average of two points, IE the middle of them.
 	 */
-	public static Vec2 getCentre( Vec2 a, Vec2 b ) {
+	public static Vec2 centre( Vec2 a, Vec2 b ) {
 		return lerp( a, b, 0.5 );
+	}
+	
+	
+	
+	/**
+	 * Get the euclidean distance squared between two points.
+	 */
+	public static double distanceSqr( Vec2 a, Vec2 b ) {
+		return sqr(b.x-a.x) + sqr(b.y-a.y);
 	}
 	
 	
@@ -132,7 +141,7 @@ public class Geo
 	 * Get the euclidean distance between two points.
 	 */
 	public static double distance( Vec2 a, Vec2 b ) {
-		return Math.sqrt( sqr(b.x-a.x) + sqr(b.y-a.y) );
+		return Math.sqrt( distanceSqr(a,b) );
 	}
 	
 	
@@ -142,6 +151,16 @@ public class Geo
 	 */
 	public static double sqr( double x ) {
 		return x * x;
+	}
+	
+	
+	
+	/**
+	 * Get the dot product of A,B.
+	 */
+	public static double dot( Vec2 a, Vec2 b ) {
+		return (a.x * b.x) 
+		     + (b.x * b.y);
 	}
 	
 	
