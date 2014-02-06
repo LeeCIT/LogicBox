@@ -3,6 +3,7 @@
 
 package logicBox.gui;
 import logicBox.util.Geo;
+import logicBox.util.Region;
 import logicBox.util.Vec2;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -121,6 +122,21 @@ public class Gfx
 			Vec2 lce = Geo.lerp( c1,  b,   tAcc );
 				 cur = Geo.lerp( lsc, lce, tAcc );
 		}
+	}
+	
+	
+	
+	public static void drawGrid( Graphics g, Region region, Vec2 spacing, double thickness ) {
+		double left   = region.getLeft();
+		double right  = region.getRight();
+		double top    = region.getTop();
+		double bottom = region.getBottom();
+		
+		for (double x=left; x<right; x+=spacing.x)
+			Gfx.drawThickLine( g, new Vec2(x,top), new Vec2(x,bottom), thickness, true );
+		
+		for (double y=top; y<bottom; y+=spacing.y)
+			Gfx.drawThickLine( g, new Vec2(left,y), new Vec2(right,y), thickness, true );
 	}
 	
 	
