@@ -1,7 +1,10 @@
 package snappingProto;
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.*;
+
 import javax.swing.*;
 
 
@@ -33,7 +36,7 @@ public class SnappingPrototype extends ComponentAdapter {
 
 
 		//Get the position of the component
-		Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+		Rectangle size =  GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		int compPosX = evt.getComponent().getX();
 		int compPosY = evt.getComponent().getY();
 
