@@ -1,12 +1,19 @@
 package rightClickPrototype;
 
 import java.awt.event.*;
+import java.util.Hashtable;
+
 import javax.swing.*;
+
+import logicBox.util.Callback;
 
 public class RightClick extends MouseAdapter{
 
 	JPopupMenu popup;
 	JMenuItem menuItem;
+	
+	static Hashtable<String, JMenuItem> menuHolder = new Hashtable<String, JMenuItem>();
+
 
 	public RightClick() {}
 
@@ -25,6 +32,7 @@ public class RightClick extends MouseAdapter{
 	}
 
 
+
 	/**
 	 * When the mouse is pressed a popup contextual menu is shown
 	 */
@@ -33,6 +41,17 @@ public class RightClick extends MouseAdapter{
 			popup.show(evt.getComponent(),
 					evt.getX(), evt.getY());
 		}
+	}
+	
+	
+	/**
+	 * Add a callback to the rightClick event
+	 * @param menuName	The name of the click event
+	 * @param callback	The action of the click
+	 */
+	public static void addCallbackToClickEvent(String menuName, Callback callback) {
+		JMenuItem menuItem = menuHolder.get(menuName);
+		//TODO add callback to menuItem
 	}
 
 
