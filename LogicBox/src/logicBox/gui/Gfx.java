@@ -24,25 +24,15 @@ public class Gfx
 	
 	
 	
-	public static void drawCircle( Graphics2D g, Vec2 pos, double radius, boolean filled ) {
-		GeneralPath poly     = new GeneralPath();
-		double      vertices = 8 + 60 * Geo.boxStep( radius, 0, 64 );
-		double      inc      = 360.0 / vertices;
-		
-		Vec2 start = Geo.lenDir(radius,0).add( pos );
-		poly.moveTo( start.x, start.y );
-		
-		for (double degs=inc; degs<360.0; degs+=inc) {
-			Vec2 offset = Geo.lenDir( radius, degs );
-			Vec2 vertex = pos.add( offset );
-			poly.lineTo( vertex.x, vertex.y );
-		}
-		
-		poly.closePath();
+	public static void drawCircle( Graphics2D g, Vec2 pos, double radius, boolean filled ) {		
+		Vec2 tl   = pos.substract( radius );
+		int  tlx  = (int) Geo.roundArith( tl.x );
+		int  tly  = (int) Geo.roundArith( tl.y );
+		int  size = (int) (radius * 2.0);
 		
 		if (filled)
-			 g.fill( poly );
-		else g.draw( poly );
+			 g.fillOval( tlx, tly, size, size );
+		else g.drawOval( tlx, tly, size, size );
 	}
 	
 	
