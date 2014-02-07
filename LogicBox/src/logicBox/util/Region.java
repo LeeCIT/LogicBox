@@ -101,6 +101,12 @@ public class Region
 			Geo.unlerp( pos.y, getTop(),  getBottom() )
 		);
 	}
+	
+	
+	
+	public String toString() {
+		return "" + tl + " -> " + br;
+	}
 }
 
 
