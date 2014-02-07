@@ -142,11 +142,22 @@ public class Gfx
 		double top    = region.getTop()    + offset.y;
 		double bottom = region.getBottom() + offset.y;
 		
-		for (double x=left; x<right; x+=cellSize.x)
-			Gfx.drawThickLine( g, new Vec2(x,top), new Vec2(x,bottom), thickness, true );
+		Vec2 xt = new Vec2( 0,     top    );
+		Vec2 xb = new Vec2( 0,     bottom );
+		Vec2 ly = new Vec2( left,  0      );
+		Vec2 ry = new Vec2( right, 0      );
 		
-		for (double y=top; y<bottom; y+=cellSize.y)
-			Gfx.drawThickLine( g, new Vec2(left,y), new Vec2(right,y), thickness, true );
+		for (double x=left; x<right; x+=cellSize.x) {
+			xt.x = x;
+			xb.x = x;
+			Gfx.drawThickLine( g, xt, xb, thickness, true );
+		}
+		
+		for (double y=top; y<bottom; y+=cellSize.y) {
+			ly.y = y;
+			ry.y = y;
+			Gfx.drawThickLine( g, ly, ry, thickness, true );
+		}
 	}
 	
 	
