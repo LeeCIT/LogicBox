@@ -40,7 +40,7 @@ public class DemoView extends JFrame{
 		demoGate = new JLabel("And gate pins = " + pins);
 
 		//Add the listener to the gate
-		demoGate.addMouseListener(new RightClick(contextItems));
+		demoGate.addMouseListener(new ContextMenu(contextItems));
 
 		//Add Label to the frame
 		add(demoGate);
