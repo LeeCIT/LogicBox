@@ -28,6 +28,7 @@ public class RightClick extends MouseAdapter{
 		for (int i=0; i<menuItems.length; i++) {
 			menuItem = new JMenuItem(menuItems[i]);
 			popup.add(menuItem);
+			menuHolder.put(menuItems[i], menuItem);
 		}
 	}
 
