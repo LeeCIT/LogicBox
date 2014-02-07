@@ -18,7 +18,9 @@ import java.util.Stack;
  */
 public class Gfx
 {
-	private static Stack<Color> colorStack = new Stack<Color>();
+	private static Stack<Color>           colorStack  = new Stack<Color>();
+	private static Stack<Object>          aaStack     = new Stack<Object>();
+	private static Stack<AffineTransform> matrixStack = new Stack<AffineTransform>();
 	
 	
 	
@@ -152,12 +154,11 @@ public class Gfx
 	/**
 	 * Set the identity transform and return whatever it was before.
 	 */
-	public static AffineTransform setIdentity( Graphics g ) {
-		Graphics2D g2d = (Graphics2D) g;
-		AffineTransform lastMatrix = g2d.getTransform();
+	public static AffineTransform setIdentity( Graphics2D g ) {
+		AffineTransform lastMatrix = g.getTransform();
 		AffineTransform identity   = new AffineTransform();
 		
-		g2d.setTransform( identity );
+		g.setTransform( identity );
 		return lastMatrix;
 	}
 	
@@ -166,10 +167,8 @@ public class Gfx
 	/**
 	 * Enable/disable sub-pixel precision when rendering.
 	 */
-	public static void setAntialiasingState( Graphics g, boolean state ) {
-		Graphics2D g2d = (Graphics2D) g;
-		
-		g2d.setRenderingHint(
+	public static void setAntialiasingState( Graphics2D g, boolean state ) {
+		g.setRenderingHint(
 			RenderingHints.KEY_ANTIALIASING,
 			state ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF
 		);
@@ -177,14 +176,27 @@ public class Gfx
 	
 	
 	
-	public static void pushColorAndSet( Graphics g, Color col ) {
+	public static void pushAntialiasingStateAndSet( Graphics2D g, boolean state ) {
+		aaStack.push( g.getRenderingHint( RenderingHints.KEY_ANTIALIASING ) );
+		setAntialiasingState( g, state );
+	}
+	
+	
+	
+	public static void popAntialiasingState( Graphics2D g ) {
+		g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, aaStack.pop() );
+	}
+	
+	
+	
+	public static void pushColorAndSet( Graphics2D g, Color col ) {
 		colorStack.push( g.getColor() );
 		g.setColor( col );
 	}
 	
 	
 	
-	public static void popColor( Graphics g ) {
+	public static void popColor( Graphics2D g ) {
 		g.setColor( colorStack.pop() );
 	}
 }
