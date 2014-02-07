@@ -168,10 +168,10 @@ public class EditorPanel extends JPanel
 		super.paintComponent( gx );
 		
 		Graphics2D g = (Graphics2D) gx;
-		
-		//Gfx.setAntialiasingState( g, true );
-		
 		fillBackground( g );
+		
+		Gfx.setAntialiasingState( g, true );
+		
 		updateTransform( g );
 		drawGrid( g );
 		
@@ -198,15 +198,24 @@ public class EditorPanel extends JPanel
 		worldRegion.br = worldRegion.br.add     ( cellSize );
 		
 		double  thickThresh = 1.0 / 3.0;
-		boolean fakeThin    = zoom >= thickThresh;
-		double  thickness   = (fakeThin) ? 3.0 : 1.0;
-		double  thinness    = 1.0 - Geo.boxStep( zoom, 0, thickThresh );
+		boolean fakeThin    = zoom <= thickThresh;
+		boolean disableAA   = fakeThin || (zoom > 2); 
+		double  thickness   = fakeThin ? 1.0 : 3.0;
+		double  thinness    = 1.0 - Geo.boxStep( zoom, zoomMin, thickThresh );
+		double  thinSoften  = 0.8;
+		double  colFactor   = thinness * thinSoften;
 		
-		Color col = Geo.lerp( EditorColours.grid, EditorColours.background, thinness );
-				
+		Color col = Geo.lerp( EditorColours.grid, EditorColours.background, colFactor );
+		
+		if (disableAA)
+			Gfx.pushAntialiasingStateAndSet( g, false );
+		
 		Gfx.pushColorAndSet( g, col );
 		Gfx.drawGrid( g, worldRegion, offset, cellSize, thickness );
 		Gfx.popColor( g );
+		
+		if (disableAA)
+			Gfx.popAntialiasingState( g );
 	}
 
 
@@ -221,6 +230,7 @@ public class EditorPanel extends JPanel
 		matrix.scale( zoom, zoom );
 		matrix.translate( -half.x, -half.y );
 		matrix.translate( pan.x, pan.y );
+		matrix.translate( 0.5, 0.5 );
 		g2d.setTransform( matrix );
 	}
 
