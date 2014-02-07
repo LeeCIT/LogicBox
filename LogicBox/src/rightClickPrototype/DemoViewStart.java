@@ -18,7 +18,7 @@ import frameShareProto.GetToolBarSelectionAsString;
 import frameShareProto.ToolBar;
 import frameShareProto.ToolSelectionEnum.ToolSelection;
 
-public class DemoView extends JFrame{
+public class DemoViewStart extends JFrame{
 
 	JPopupMenu popup;
 	JMenuItem addPin;
@@ -27,7 +27,7 @@ public class DemoView extends JFrame{
 	
 	int pins = 2;
 
-	public DemoView() {
+	public DemoViewStart() {
 		
 		//Set the native look and feel, IT will be in a different class when finished
 		setNativeLookAndFeel();
