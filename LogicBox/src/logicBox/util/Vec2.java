@@ -73,6 +73,27 @@ public class Vec2 extends Point2D implements Serializable
 	
 	
 	
+	public Vec2 add( double v ) {
+		return new Vec2( x + v,
+						 y + v );
+	}
+	
+	
+	
+	public Vec2 substract( double v ) {
+		return new Vec2( x - v,
+						 y - v );
+	}
+	
+	
+	
+	public Vec2 multiply( double v ) {
+		return new Vec2( x * v,
+						 y * v );
+	}
+	
+	
+	
 	public Vec2 negate() {
 		return new Vec2( -x, -y );
 	}
