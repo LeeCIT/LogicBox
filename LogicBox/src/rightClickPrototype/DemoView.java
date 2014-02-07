@@ -11,7 +11,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
+import frameShareProto.GetToolBarSelectionAsString;
+import frameShareProto.ToolBar;
+import frameShareProto.ToolSelectionEnum.ToolSelection;
 
 public class DemoView extends JFrame{
 
@@ -64,21 +69,12 @@ public class DemoView extends JFrame{
 
 	//This will all be fixed up later. I just wanted to get it working.
 	class PopupListener extends MouseAdapter {
-		public void mousePressed(MouseEvent e) {
-			maybeShowPopup(e);
-		}
-
-		public void mouseReleased(MouseEvent e) {
-			maybeShowPopup(e);
-		}
-
-		private void maybeShowPopup(MouseEvent e) {
-			if (e.isPopupTrigger()) {
-				popup.show(e.getComponent(),
-						e.getX(), e.getY());
+		public void mousePressed(MouseEvent evt) {
+			if (SwingUtilities.isRightMouseButton(evt)) {
+				popup.show(evt.getComponent(),
+						evt.getX(), evt.getY());
 			}
 		}
-
 	}
 	
 	
