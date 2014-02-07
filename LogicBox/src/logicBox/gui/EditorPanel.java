@@ -7,6 +7,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -28,7 +30,7 @@ import logicBox.util.Vec2;
  */
 public class EditorPanel extends JPanel
 {
-	private double zoomRate  = 1.25;
+	private double zoomRate  = 1.3333;
 	private double zoomRange = 8.0;
 	private double zoomMin   = Math.pow( 1.0/zoomRate, zoomRange );
 	private double zoomMax   = Math.pow(     zoomRate, zoomRange );
@@ -55,7 +57,7 @@ public class EditorPanel extends JPanel
 	private void setupActions() {
 		addMouseWheelListener( new MouseWheelListener() {
 			public void mouseWheelMoved( MouseWheelEvent ev ) {
-				focus = evPos( ev );
+				focus = absMousePos();
 				doLogarithmicZoom( ev.getPreciseWheelRotation() );
 				repaint();
 				System.out.println( "Focused on " + focus );
@@ -67,7 +69,8 @@ public class EditorPanel extends JPanel
 			public void mousePressed( MouseEvent ev ) {
 				if (SwingUtilities.isMiddleMouseButton( ev )) {
 					panningActive = true;
-					panningOrigin = evPos(ev).subtract( pan );
+					Vec2 scale = new Vec2( zoom );
+					panningOrigin = absMousePos().subtract( pan.multiply( scale ) );
 					setCursor( new Cursor(Cursor.HAND_CURSOR) );
 					repaint();
 					System.out.println( "Panning from " + panningOrigin );
@@ -79,7 +82,7 @@ public class EditorPanel extends JPanel
 					panningActive = false;
 					setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
 					repaint();
-					System.out.println( "Panning stopped at " + evPos(ev) );
+					System.out.println( "Panning stopped at " + absMousePos() );
 				}
 			}
 		});
@@ -89,9 +92,9 @@ public class EditorPanel extends JPanel
 			public void mouseDragged( MouseEvent ev ) {
 				if (SwingUtilities.isMiddleMouseButton( ev )) {
 					if (panningActive) {
-						Vec2 scale = new Vec2( 1.0 / zoom );
-						Vec2 pos   = evPos( ev );
+						Vec2 pos   = absMousePos();
 						Vec2 delta = panningOrigin.subtract( pos );
+						Vec2 scale = new Vec2( 1.0 / zoom );
 						pan = delta.multiply( scale ).negate();
 						repaint();
 						//System.out.println(  );
@@ -103,8 +106,9 @@ public class EditorPanel extends JPanel
 	
 	
 	
-	private Vec2 evPos( MouseEvent ev ) {
-		return new Vec2( ev.getX(), ev.getY() );
+	private Vec2 absMousePos() {
+		Point pos = MouseInfo.getPointerInfo().getLocation();
+		return new Vec2( pos.x, pos.y );
 	}
 
 
@@ -142,7 +146,7 @@ public class EditorPanel extends JPanel
 		mat.translate( half.x, half.y );
 		mat.scale( zoom, zoom );
 		mat.translate( -half.x, -half.y );
-		mat.translate( pan.x, pan.y );
+		mat.translate( pan.x, pan.y );	
 		g2d.setTransform( mat );
 		
 		Gfx.pushColorAndSet( g, EditorColours.grid );
