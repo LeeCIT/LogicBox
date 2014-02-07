@@ -11,6 +11,9 @@ import java.awt.Color;
 
 /**
  * Provides advanced geometric and mathematical utility functions.
+ * Coordinate system used works as follows:
+ * Top left at [0,0], increases east and south
+ * East is 0 degrees, increases anticlockwise
  * @author Lee Coakley
  */
 public class Geo
