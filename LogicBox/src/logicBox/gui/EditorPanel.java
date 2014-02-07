@@ -38,7 +38,7 @@ public class EditorPanel extends JPanel
 	private Vec2    panningOrigin;
 	private Vec2    pan;
 	
-	private Vec2    focus; // TODO zoom onto cursor instead of inward
+	private Vec2 focus; // TODO zoom onto cursor instead of inward
 	
 	
 	
@@ -112,8 +112,7 @@ public class EditorPanel extends JPanel
 	protected void doLogarithmicZoom( double wheelInput ) {
 		double  delta = -wheelInput;
 		boolean in    = delta > 0.0;
-		double  rate  = 1.25;
-		double  mod   = rate * Math.abs( delta );
+		double  mod   = zoomRate * Math.abs( delta );
 		
 		if ( ! in)
 			 mod = 1.0 / mod;
