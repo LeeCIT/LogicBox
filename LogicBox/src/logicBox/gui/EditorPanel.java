@@ -8,7 +8,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -16,7 +15,6 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
-import java.awt.geom.Point2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -74,8 +72,7 @@ public class EditorPanel extends JPanel
 			public void mousePressed( MouseEvent ev ) {
 				if (SwingUtilities.isMiddleMouseButton( ev )) {
 					panningActive = true;
-					Vec2 scale = new Vec2( zoom );
-					panningOrigin = getMousePosScreen().subtract( pan.multiply( scale ) );
+					panningOrigin = getMousePosScreen().subtract( pan.multiply( zoom ) );
 					setCursor( new Cursor(Cursor.HAND_CURSOR) );
 					repaint();
 				}
@@ -95,12 +92,11 @@ public class EditorPanel extends JPanel
 			public void mouseDragged( MouseEvent ev ) {
 				if (SwingUtilities.isMiddleMouseButton( ev )) {
 					if (panningActive) {
-						Vec2 pos   = getMousePosScreen();
-						Vec2 delta = panningOrigin.subtract( pos );
-						Vec2 scale = new Vec2( 1.0 / zoom );
-						pan = delta.multiply( scale ).negate();
+						Vec2   pos     = getMousePosScreen();
+						Vec2   delta   = panningOrigin.subtract( pos );
+						double rcpZoom = 1.0 / zoom;
+						pan = delta.multiply( rcpZoom ).negate();
 						repaint();
-						//System.out.println(  );
 					}
 				}
 			}
@@ -110,20 +106,23 @@ public class EditorPanel extends JPanel
 	
 	
 	private Vec2 getMousePosScreen() {
-		Point pos = MouseInfo.getPointerInfo().getLocation();
-		return new Vec2( pos.x, pos.y );
+		return new Vec2( MouseInfo.getPointerInfo().getLocation() );
 	}
 	
 	
 	
 	private Vec2 getMousePosWorld() {
-		Point cpos = getLocationOnScreen();
-		Point mpos = MouseInfo.getPointerInfo().getLocation();
-		Point pos  = new Point();
-		pos.x = mpos.x - cpos.x;
-		pos.y = mpos.y - cpos.y;
+		Vec2 comPos   = new Vec2( getLocationOnScreen() );
+		Vec2 mousePos = getMousePosScreen();
+		Vec2 pos      = mousePos.subtract( comPos );
 		
-		Point out = new Point();
+		return screenToWorldSpace( pos );
+	}
+	
+	
+	
+	private Vec2 screenToWorldSpace( Vec2 pos ) {
+		Vec2 out = new Vec2();
 		
 		try {
 			AffineTransform inv = matrix.createInverse();
@@ -133,12 +132,12 @@ public class EditorPanel extends JPanel
 			ex.printStackTrace();
 		}
 		
-		return new Vec2( out.x, out.y );
+		return out;
 	}
-
-
-
-	protected void doLogarithmicZoom( double wheelInput ) {
+	
+	
+	
+	private void doLogarithmicZoom( double wheelInput ) {
 		double  delta = -wheelInput;
 		boolean in    = delta > 0.0;
 		double  mod   = zoomRate * Math.abs( delta );
@@ -152,19 +151,59 @@ public class EditorPanel extends JPanel
 		if (Geo.absDiff( zoom, 1.0 ) < roundingSnapThresh)
 			zoom = 1.0;
 	}
-
-
-
+	
+	
+	
+	private Region getWorldRegion() {
+		Region r = new Region( this );
+		r.tl = screenToWorldSpace( r.tl );
+		r.br = screenToWorldSpace( r.br );
+		return r;
+	}
+	
+	
+	
 	protected void paintComponent( Graphics g ) {
 		super.paintComponent( g );
 		
-		Region region = new Region( this );
-		Vec2   half   = region.getSize().multiply( new Vec2(0.5) );
-		
 		Gfx.setAntialiasingState( g, true );
 		
-		g.setColor( EditorColours.background );
+		fillBackground( g );
+		updateTransform( g );
+		drawGrid( g );
+		
+		Gfx.drawCircle( g, new Vec2(0),        16, Color.yellow, false );
+		Gfx.drawCircle( g, getMousePosWorld(),  3, Color.red,    true  );
+	}
+	
+	
+	
+	private void fillBackground( Graphics g ) {
+		Gfx.pushColorAndSet( g, EditorColours.background );
 		g.fillRect( getX(), getY(), getWidth(), getHeight() );
+		Gfx.popColor( g );
+	}
+	
+	
+	
+	private void drawGrid( Graphics g ) {
+		Region worldRegion = getWorldRegion();
+		Vec2   cellSize    = new Vec2( 64 );
+		Vec2   offset      = worldRegion.tl.modulo( cellSize ).negate();
+		
+		worldRegion.tl = worldRegion.tl.subtract( cellSize );
+		worldRegion.br = worldRegion.br.add     ( cellSize );
+				
+		Gfx.pushColorAndSet( g, EditorColours.grid );
+		Gfx.drawGrid( g, worldRegion, offset, cellSize, 3 );
+		Gfx.popColor( g );
+	}
+
+
+
+	private void updateTransform( Graphics g ) {
+		Region region = new Region( this );
+		Vec2   half   = region.getSize().multiply( 0.5 );
 		
 		Graphics2D g2d = (Graphics2D) g;
 		matrix = new AffineTransform();
@@ -173,17 +212,10 @@ public class EditorPanel extends JPanel
 		matrix.translate( -half.x, -half.y );
 		matrix.translate( pan.x, pan.y );
 		g2d.setTransform( matrix );
-		
-		Gfx.pushColorAndSet( g, EditorColours.grid );
-		Gfx.drawGrid( g, region, new Vec2(64), 3 );
-		Gfx.popColor( g );
-		
-		Gfx.drawCircle( g2d, new Vec2(0), 16, Color.yellow, false );
-		Gfx.drawCircle( g2d, getMousePosWorld(),  3, Color.red,    false );
 	}
-	
-	
-	
+
+
+
 	public static void main( String[] args ) {
 		EditorFrame frame = new EditorFrame();
 		EditorPanel panel = new EditorPanel();
