@@ -164,6 +164,18 @@ public class Gfx
 	
 	
 	
+	public static void pushMatrix( Graphics2D g, AffineTransform mat ) {
+		matrixStack.push( g.getTransform() );
+	}
+	
+	
+	
+	public static AffineTransform popMatrix( Graphics2D g ) {
+		return matrixStack.pop();
+	}
+	
+	
+	
 	/**
 	 * Enable/disable sub-pixel precision when rendering.
 	 */
