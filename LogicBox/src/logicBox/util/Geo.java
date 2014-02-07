@@ -68,16 +68,6 @@ public class Geo
 	
 	
 	/**
-	 * Linear interpolate from A to B by fraction F.
-	 * Interpolant is biased towards the end of the range, so it's slower at the beginning and sharp at the end.
-	 */
-	public static double sqerp( double a, double b, double f ) {
-		return a + (b-a) * sqr(f);
-	}
-	
-	
-	
-	/**
 	 * Normalise given current value and min/max.
 	 */
 	public static double unlerp( double v, double minv, double maxv ) {
