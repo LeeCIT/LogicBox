@@ -51,9 +51,7 @@ return array(
 	*/
 
 	'groups' => array(
-
-		'web' => array('production')
-
+        'web' => array('production')
 	),
 
 );
