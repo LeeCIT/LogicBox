@@ -84,7 +84,7 @@ public class Vec2 implements Serializable
 	
 	
 	public String toString() {
-		return "Vec2 [" + x + ", " + y + "]";
+		return "[" + x + ", " + y + "]";
 	}
 }
 
