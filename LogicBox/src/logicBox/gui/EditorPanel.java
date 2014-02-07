@@ -163,8 +163,10 @@ public class EditorPanel extends JPanel
 	
 	
 	
-	protected void paintComponent( Graphics g ) {
-		super.paintComponent( g );
+	protected void paintComponent( Graphics gx ) {
+		super.paintComponent( gx );
+		
+		Graphics2D g = (Graphics2D) gx;
 		
 		Gfx.setAntialiasingState( g, true );
 		
@@ -178,7 +180,7 @@ public class EditorPanel extends JPanel
 	
 	
 	
-	private void fillBackground( Graphics g ) {
+	private void fillBackground( Graphics2D g ) {
 		Gfx.pushColorAndSet( g, EditorColours.background );
 		g.fillRect( getX(), getY(), getWidth(), getHeight() );
 		Gfx.popColor( g );
@@ -186,7 +188,7 @@ public class EditorPanel extends JPanel
 	
 	
 	
-	private void drawGrid( Graphics g ) {
+	private void drawGrid( Graphics2D g ) {
 		Region worldRegion = getWorldRegion();
 		Vec2   cellSize    = new Vec2( 64 );
 		Vec2   offset      = worldRegion.tl.modulo( cellSize ).negate();
@@ -201,7 +203,7 @@ public class EditorPanel extends JPanel
 
 
 
-	private void updateTransform( Graphics g ) {
+	private void updateTransform( Graphics2D g ) {
 		Region region = new Region( this );
 		Vec2   half   = region.getSize().multiply( 0.5 );
 		

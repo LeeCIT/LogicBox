@@ -7,6 +7,7 @@ import logicBox.util.Region;
 import logicBox.util.Vec2;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.GeneralPath;
 import java.util.Stack;
 
 
@@ -21,24 +22,30 @@ public class Gfx
 	
 	
 	
-	public static void drawCircle( Graphics g, Vec2 pos, double radius, boolean filled ) {
-		Polygon poly     = new Polygon();
-		double  vertices = 60.0;
+	public static void drawCircle( Graphics2D g, Vec2 pos, double radius, boolean filled ) {
+		GeneralPath poly     = new GeneralPath();
+		double      vertices = 8 + 60 * Geo.boxStep( radius, 0, 64 );
+		double      inc      = 360.0 / vertices;
 		
-		for (double degs=0; degs<360.0; degs+=360.0/vertices) {
+		Vec2 start = Geo.lenDir(radius,0).add( pos );
+		poly.moveTo( start.x, start.y );
+		
+		for (double degs=inc; degs<360.0; degs+=inc) {
 			Vec2 offset = Geo.lenDir( radius, degs );
-			Vec2 vertex = pos.add( offset );			
-			poly.addPoint( (int) vertex.x, (int) vertex.y );
+			Vec2 vertex = pos.add( offset );
+			poly.lineTo( vertex.x, vertex.y );
 		}
 		
+		poly.closePath();
+		
 		if (filled)
-			 g.fillPolygon( poly );
-		else g.drawPolygon( poly );
+			 g.fill( poly );
+		else g.draw( poly );
 	}
 	
 	
 	
-	public static void drawCircle( Graphics g, Vec2 pos, double radius, Color col, boolean filled ) {
+	public static void drawCircle( Graphics2D g, Vec2 pos, double radius, Color col, boolean filled ) {
 		pushColorAndSet( g, col );
 		drawCircle( g, pos, radius, filled );
 		popColor( g );
@@ -46,7 +53,7 @@ public class Gfx
 	
 	
 	
-	public static void drawThickLine( Graphics g, Vec2 a, Vec2 b, double thickness, boolean filled ) {
+	public static void drawThickLine( Graphics2D g, Vec2 a, Vec2 b, double thickness, boolean filled ) {
 		if (thickness < 2.0) {
 			g.drawLine( (int) a.x, (int) a.y, (int) b.x, (int) b.y );
 			return;
@@ -62,7 +69,7 @@ public class Gfx
 	
 	
 	
-	public static void drawThickRoundedLine( Graphics g, Vec2 a, Vec2 b, double thickness, boolean filled ) {
+	public static void drawThickRoundedLine( Graphics2D g, Vec2 a, Vec2 b, double thickness, boolean filled ) {
 		double radius = thickness * 0.5;
 		
 		drawThickLine( g, a, b, thickness, filled );
@@ -72,23 +79,24 @@ public class Gfx
 	
 	
 	
-	public static void drawOrientedRect( Graphics g, Vec2 centre, Vec2 size, double angle, boolean filled ) {
-		Polygon poly = new Polygon();
-		Vec2    offH = Geo.lenDir( size.x*0.5, angle    );
-		Vec2    offV = Geo.lenDir( size.y*0.5, angle+90 );
-		Vec2    a    = centre.add( offH         .add(offV         ) );
-		Vec2    b    = centre.add( offH         .add(offV.negate()) );
-		Vec2    c    = centre.add( offH.negate().add(offV.negate()) );
-		Vec2    d    = centre.add( offH.negate().add(offV         ) );
+	public static void drawOrientedRect( Graphics2D g, Vec2 centre, Vec2 size, double angle, boolean filled ) {
+		GeneralPath poly = new GeneralPath();
+		Vec2        offH = Geo.lenDir( size.x*0.5, angle    );
+		Vec2        offV = Geo.lenDir( size.y*0.5, angle+90 );
+		Vec2        a    = centre.add( offH         .add(offV         ) );
+		Vec2        b    = centre.add( offH         .add(offV.negate()) );
+		Vec2        c    = centre.add( offH.negate().add(offV.negate()) );
+		Vec2        d    = centre.add( offH.negate().add(offV         ) );
 		
-		poly.addPoint( (int) a.x, (int) a.y );
-		poly.addPoint( (int) b.x, (int) b.y );
-		poly.addPoint( (int) c.x, (int) c.y );
-		poly.addPoint( (int) d.x, (int) d.y );
+		poly.moveTo( a.x, a.y );
+		poly.lineTo( b.x, b.y );
+		poly.lineTo( c.x, c.y );
+		poly.lineTo( d.x, d.y );
+		poly.closePath();
 		
 		if (filled)
-			 g.fillPolygon( poly );
-		else g.drawPolygon( poly );
+			 g.fill( poly );
+		else g.draw( poly );
 	}
 	
 	
@@ -96,7 +104,7 @@ public class Gfx
 	/**
 	 * Draw a bezier curve with two control points.
 	 */
-	public static void drawBezierCubic( Graphics g, Vec2 a, Vec2 b, Vec2 c1, Vec2 c2, double thickness ) {
+	public static void drawBezierCubic( Graphics2D g, Vec2 a, Vec2 b, Vec2 c1, Vec2 c2, double thickness ) {
 		int    precision = 64;
 		Vec2   t         = new Vec2( 1.0 / (double)(precision-1) );
 		double tAcc      = 0.0;
@@ -126,7 +134,7 @@ public class Gfx
 	
 	
 	
-	public static void drawGrid( Graphics g, Region region, Vec2 offset, Vec2 cellSize, double thickness ) {
+	public static void drawGrid( Graphics2D g, Region region, Vec2 offset, Vec2 cellSize, double thickness ) {
 		double left   = region.getLeft()   + offset.x;
 		double right  = region.getRight()  + offset.x;
 		double top    = region.getTop()    + offset.y;
