@@ -11,7 +11,7 @@ public class RightClick extends MouseAdapter{
 
 	JPopupMenu popup;
 	JMenuItem menuItem;
-	
+
 	static Hashtable<String, JMenuItem> menuHolder = new Hashtable<String, JMenuItem>();
 
 
@@ -22,7 +22,6 @@ public class RightClick extends MouseAdapter{
 	 * @param menuItems	What to display in the context menu
 	 */
 	public RightClick(String[] menuItems) {
-
 		popup = new JPopupMenu();
 
 		for (int i=0; i<menuItems.length; i++) {
@@ -43,8 +42,8 @@ public class RightClick extends MouseAdapter{
 					evt.getX(), evt.getY());
 		}
 	}
-	
-	
+
+
 	/**
 	 * Add a callback to the rightClick event
 	 * @param menuName	The name of the click event
@@ -52,7 +51,7 @@ public class RightClick extends MouseAdapter{
 	 */
 	public static void addCallbackToClickEvent(String menuName, Callback callback) {
 		JMenuItem menuItem = menuHolder.get(menuName);
-		//TODO add callback to menuItem
+		// TODO add callback to menuItem
 	}
 
 
