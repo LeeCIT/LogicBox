@@ -63,8 +63,10 @@ public class Region
 	
 	
 	public Vec2 getSize() {
-		return new Vec2( br.x - tl.x,
-						 br.y - tl.y );						 
+		return new Vec2(
+			br.x - tl.x,
+			br.y - tl.y
+		);						 
 	}
 	
 	
@@ -89,6 +91,15 @@ public class Region
 	
 	public double getBiggest() {
 		return getSize().getBiggest();
+	}
+	
+	
+	
+	public Vec2 getNormalisedCoord( Vec2 pos ) {
+		return new Vec2(
+			Geo.unlerp( pos.x, getLeft(), getRight()  ),
+			Geo.unlerp( pos.y, getTop(),  getBottom() )
+		);
 	}
 }
 
