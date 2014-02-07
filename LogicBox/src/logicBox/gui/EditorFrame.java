@@ -7,6 +7,10 @@ import net.miginfocom.swing.MigLayout;
 
 
 
+/**
+ * Contains the main editor interface.
+ * @author Lee Coakley
+ */
 public class EditorFrame extends JFrame
 {
 	public EditorFrame() {

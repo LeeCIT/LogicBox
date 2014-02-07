@@ -6,6 +6,10 @@ import java.awt.Color;
 
 
 
+/**
+ * Defines the colour palette used by the editor.
+ * @author Lee Coakley
+ */
 public class EditorColours
 {
 	public static Color background      = new Color(  55,  37,  37 );
