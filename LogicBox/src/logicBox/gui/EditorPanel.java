@@ -2,6 +2,7 @@
 
 
 package logicBox.gui;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -21,6 +22,10 @@ import logicBox.util.Vec2;
 
 
 
+/**
+ * The main simulation editor interface.
+ * @author Lee Coakley
+ */
 public class EditorPanel extends JPanel
 {
 	private double zoomRate  = 1.25;
@@ -29,16 +34,18 @@ public class EditorPanel extends JPanel
 	private double zoomMax   = Math.pow(     zoomRate, zoomRange );
 	private double zoom;
 	
-	
-	private boolean panningState;
+	private boolean panningActive;
 	private Vec2    panningOrigin;
 	private Vec2    pan;
+	
+	private Vec2    focus; // TODO zoom onto cursor instead of inward
 	
 	
 	
 	public EditorPanel() {
-		zoom = 1;
-		pan  = new Vec2( 0 );
+		zoom  = 1;
+		pan   = new Vec2( 0 );
+		focus = new Vec2( 0 );
 		
 		setupActions();
 	}
@@ -48,8 +55,10 @@ public class EditorPanel extends JPanel
 	private void setupActions() {
 		addMouseWheelListener( new MouseWheelListener() {
 			public void mouseWheelMoved( MouseWheelEvent ev ) {
-				doLogarithmicZoom( ev.getPreciseWheelRotation() );				
+				focus = evPos( ev );
+				doLogarithmicZoom( ev.getPreciseWheelRotation() );
 				repaint();
+				System.out.println( "Focused on " + focus );
 			}
 		});
 		
@@ -57,18 +66,20 @@ public class EditorPanel extends JPanel
 		addMouseListener( new MouseAdapter() {
 			public void mousePressed( MouseEvent ev ) {
 				if (SwingUtilities.isMiddleMouseButton( ev )) {
-					panningState  = true;
-					panningOrigin = new Vec2( ev.getX(), ev.getY() ).subtract( pan );
+					panningActive = true;
+					panningOrigin = evPos(ev).subtract( pan );
 					setCursor( new Cursor(Cursor.HAND_CURSOR) );
 					repaint();
+					System.out.println( "Panning from " + panningOrigin );
 				}
 			}
 			
 			public void mouseReleased( MouseEvent ev ) {
 				if (SwingUtilities.isMiddleMouseButton( ev )) {
-					panningState = false;
+					panningActive = false;
 					setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
 					repaint();
+					System.out.println( "Panning stopped at " + evPos(ev) );
 				}
 			}
 		});
@@ -77,11 +88,13 @@ public class EditorPanel extends JPanel
 		addMouseMotionListener( new MouseMotionAdapter() {
 			public void mouseDragged( MouseEvent ev ) {
 				if (SwingUtilities.isMiddleMouseButton( ev )) {
-					if (panningState) {
-						Vec2 pos   = new Vec2( ev.getX(), ev.getY() );
+					if (panningActive) {
+						Vec2 scale = new Vec2( 1.0 / zoom );
+						Vec2 pos   = evPos( ev );
 						Vec2 delta = panningOrigin.subtract( pos );
-						pan = delta.negate();
+						pan = delta.multiply( scale ).negate();
 						repaint();
+						//System.out.println(  );
 					}
 				}
 			}
@@ -90,6 +103,12 @@ public class EditorPanel extends JPanel
 	
 	
 	
+	private Vec2 evPos( MouseEvent ev ) {
+		return new Vec2( ev.getX(), ev.getY() );
+	}
+
+
+
 	protected void doLogarithmicZoom( double wheelInput ) {
 		double  delta = -wheelInput;
 		boolean in    = delta > 0.0;
@@ -111,6 +130,9 @@ public class EditorPanel extends JPanel
 	protected void paintComponent( Graphics g ) {
 		super.paintComponent( g );
 		
+		Region region = new Region( this );
+		Vec2   half   = region.getSize().multiply( new Vec2(0.5) );
+		
 		Gfx.setAntialiasingState( g, true );
 		
 		g.setColor( EditorColours.background );
@@ -118,13 +140,17 @@ public class EditorPanel extends JPanel
 		
 		Graphics2D g2d = (Graphics2D) g;
 		AffineTransform mat = new AffineTransform();
+		mat.translate( half.x, half.y );
 		mat.scale( zoom, zoom );
+		mat.translate( -half.x, -half.y );
 		mat.translate( pan.x, pan.y );
 		g2d.setTransform( mat );
 		
 		Gfx.pushColorAndSet( g, EditorColours.grid );
-		Gfx.drawGrid( g, new Region(this), new Vec2(64), 3 );
+		Gfx.drawGrid( g, region, new Vec2(64), 3 );
 		Gfx.popColor( g );
+		
+		Gfx.drawCircle( g2d, new Vec2(0), 16, Color.yellow, false );
 	}
 	
 	
