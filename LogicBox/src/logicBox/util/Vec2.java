@@ -80,6 +80,12 @@ public class Vec2 implements Serializable
 	public Vec2 copy() {
 		return new Vec2( x, y );
 	}
+	
+	
+	
+	public String toString() {
+		return "Vec2 [" + x + ", " + y + "]";
+	}
 }
 
 
