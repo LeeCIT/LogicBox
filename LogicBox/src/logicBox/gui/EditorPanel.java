@@ -146,6 +146,7 @@ public class EditorPanel extends JPanel
 			 mod = 1.0 / mod;
 		
 		zoom = Geo.clamp( zoom * mod, zoomMin, zoomMax );
+		System.out.println( zoom );
 		
 		double roundingSnapThresh = 1.0 / 32.0;
 		if (Geo.absDiff( zoom, 1.0 ) < roundingSnapThresh)
@@ -168,7 +169,7 @@ public class EditorPanel extends JPanel
 		
 		Graphics2D g = (Graphics2D) gx;
 		
-		Gfx.setAntialiasingState( g, true );
+		//Gfx.setAntialiasingState( g, true );
 		
 		fillBackground( g );
 		updateTransform( g );
@@ -195,9 +196,16 @@ public class EditorPanel extends JPanel
 		
 		worldRegion.tl = worldRegion.tl.subtract( cellSize );
 		worldRegion.br = worldRegion.br.add     ( cellSize );
+		
+		double  thickThresh = 1.0 / 3.0;
+		boolean fakeThin    = zoom >= thickThresh;
+		double  thickness   = (fakeThin) ? 3.0 : 1.0;
+		double  thinness    = 1.0 - Geo.boxStep( zoom, 0, thickThresh );
+		
+		Color col = Geo.lerp( EditorColours.grid, EditorColours.background, thinness );
 				
-		Gfx.pushColorAndSet( g, EditorColours.grid );
-		Gfx.drawGrid( g, worldRegion, offset, cellSize, 3 );
+		Gfx.pushColorAndSet( g, col );
+		Gfx.drawGrid( g, worldRegion, offset, cellSize, thickness );
 		Gfx.popColor( g );
 	}
 
