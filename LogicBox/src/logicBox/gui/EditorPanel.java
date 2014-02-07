@@ -15,6 +15,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -42,12 +44,15 @@ public class EditorPanel extends JPanel
 	
 	private Vec2 focus; // TODO zoom onto cursor instead of inward
 	
+	private AffineTransform matrix;
+	
 	
 	
 	public EditorPanel() {
-		zoom  = 1;
-		pan   = new Vec2( 0 );
-		focus = new Vec2( 0 );
+		zoom   = 1;
+		pan    = new Vec2( 0 );
+		focus  = new Vec2( 0 );
+		matrix = new AffineTransform();
 		
 		setupActions();
 	}
@@ -57,7 +62,7 @@ public class EditorPanel extends JPanel
 	private void setupActions() {
 		addMouseWheelListener( new MouseWheelListener() {
 			public void mouseWheelMoved( MouseWheelEvent ev ) {
-				focus = absMousePos();
+				focus = getMousePosScreen();
 				doLogarithmicZoom( ev.getPreciseWheelRotation() );
 				repaint();
 				System.out.println( "Focused on " + focus );
@@ -70,10 +75,9 @@ public class EditorPanel extends JPanel
 				if (SwingUtilities.isMiddleMouseButton( ev )) {
 					panningActive = true;
 					Vec2 scale = new Vec2( zoom );
-					panningOrigin = absMousePos().subtract( pan.multiply( scale ) );
+					panningOrigin = getMousePosScreen().subtract( pan.multiply( scale ) );
 					setCursor( new Cursor(Cursor.HAND_CURSOR) );
 					repaint();
-					System.out.println( "Panning from " + panningOrigin );
 				}
 			}
 			
@@ -82,7 +86,6 @@ public class EditorPanel extends JPanel
 					panningActive = false;
 					setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
 					repaint();
-					System.out.println( "Panning stopped at " + absMousePos() );
 				}
 			}
 		});
@@ -92,7 +95,7 @@ public class EditorPanel extends JPanel
 			public void mouseDragged( MouseEvent ev ) {
 				if (SwingUtilities.isMiddleMouseButton( ev )) {
 					if (panningActive) {
-						Vec2 pos   = absMousePos();
+						Vec2 pos   = getMousePosScreen();
 						Vec2 delta = panningOrigin.subtract( pos );
 						Vec2 scale = new Vec2( 1.0 / zoom );
 						pan = delta.multiply( scale ).negate();
@@ -106,9 +109,31 @@ public class EditorPanel extends JPanel
 	
 	
 	
-	private Vec2 absMousePos() {
+	private Vec2 getMousePosScreen() {
 		Point pos = MouseInfo.getPointerInfo().getLocation();
 		return new Vec2( pos.x, pos.y );
+	}
+	
+	
+	
+	private Vec2 getMousePosWorld() {
+		Point cpos = getLocationOnScreen();
+		Point mpos = MouseInfo.getPointerInfo().getLocation();
+		Point pos  = new Point();
+		pos.x = mpos.x - cpos.x;
+		pos.y = mpos.y - cpos.y;
+		
+		Point out = new Point();
+		
+		try {
+			AffineTransform inv = matrix.createInverse();
+			inv.transform( pos, out );
+		}
+		catch (NoninvertibleTransformException ex) {
+			ex.printStackTrace();
+		}
+		
+		return new Vec2( out.x, out.y );
 	}
 
 
@@ -142,18 +167,19 @@ public class EditorPanel extends JPanel
 		g.fillRect( getX(), getY(), getWidth(), getHeight() );
 		
 		Graphics2D g2d = (Graphics2D) g;
-		AffineTransform mat = new AffineTransform();
-		mat.translate( half.x, half.y );
-		mat.scale( zoom, zoom );
-		mat.translate( -half.x, -half.y );
-		mat.translate( pan.x, pan.y );	
-		g2d.setTransform( mat );
+		matrix = new AffineTransform();
+		matrix.translate( half.x, half.y );
+		matrix.scale( zoom, zoom );
+		matrix.translate( -half.x, -half.y );
+		matrix.translate( pan.x, pan.y );
+		g2d.setTransform( matrix );
 		
 		Gfx.pushColorAndSet( g, EditorColours.grid );
 		Gfx.drawGrid( g, region, new Vec2(64), 3 );
 		Gfx.popColor( g );
 		
 		Gfx.drawCircle( g2d, new Vec2(0), 16, Color.yellow, false );
+		Gfx.drawCircle( g2d, getMousePosWorld(),  3, Color.red,    false );
 	}
 	
 	
