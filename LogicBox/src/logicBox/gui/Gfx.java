@@ -126,16 +126,16 @@ public class Gfx
 	
 	
 	
-	public static void drawGrid( Graphics g, Region region, Vec2 spacing, double thickness ) {
-		double left   = region.getLeft();
-		double right  = region.getRight();
-		double top    = region.getTop();
-		double bottom = region.getBottom();
+	public static void drawGrid( Graphics g, Region region, Vec2 offset, Vec2 cellSize, double thickness ) {
+		double left   = region.getLeft()   + offset.x;
+		double right  = region.getRight()  + offset.x;
+		double top    = region.getTop()    + offset.y;
+		double bottom = region.getBottom() + offset.y;
 		
-		for (double x=left; x<right; x+=spacing.x)
+		for (double x=left; x<right; x+=cellSize.x)
 			Gfx.drawThickLine( g, new Vec2(x,top), new Vec2(x,bottom), thickness, true );
 		
-		for (double y=top; y<bottom; y+=spacing.y)
+		for (double y=top; y<bottom; y+=cellSize.y)
 			Gfx.drawThickLine( g, new Vec2(left,y), new Vec2(right,y), thickness, true );
 	}
 	
