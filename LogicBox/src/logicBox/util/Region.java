@@ -91,6 +91,54 @@ public class Region
 	
 	public double getBiggest() {
 		return getSize().getBiggest();
+	}	
+	
+	
+	
+	public Vec2 getTopLeft() {
+		return tl.copy();
+	}
+	
+	
+	
+	public Vec2 getTopMiddle() {
+		return new Vec2( getCentre().x, tl.y );
+	}
+	
+	
+	
+	public Vec2 getTopRight() {
+		return new Vec2( br.x, tl.y );
+	}
+	
+	
+	
+	public Vec2 getLeftMiddle() {
+		return new Vec2( tl.x, getCentre().y );
+	}
+	
+	
+	
+	public Vec2 getRightMiddle() {
+		return new Vec2( br.x, getCentre().y );
+	}
+	
+	
+	
+	public Vec2 getBottomLeft() {
+		return new Vec2( tl.x, br.y );
+	}
+	
+	
+	
+	public Vec2 getBottomMiddle() {
+		return new Vec2( getCentre().x, br.y );
+	}
+	
+	
+	
+	public Vec2 getBottomRight() {
+		return br.copy();
 	}
 	
 	
