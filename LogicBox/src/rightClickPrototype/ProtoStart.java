@@ -4,7 +4,7 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-public class rightClickProto extends JFrame
+public class ProtoStart extends JFrame
 {
 	
 	
