@@ -1,8 +1,7 @@
-package snappingProto;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.awt.event.*;
+package prototypes.snappingProto;
 
+import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 
