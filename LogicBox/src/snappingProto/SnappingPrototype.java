@@ -37,7 +37,7 @@ public class SnappingPrototype extends ComponentAdapter {
 
 
 	/**
-	 * Will snap to the window edge and the Fran refernce passed in with
+	 * Will snap to the window edge and the Frame reference passed in with
 	 * a default snapping distance of 10
 	 * @param frame		The frame to snap to
 	 */
