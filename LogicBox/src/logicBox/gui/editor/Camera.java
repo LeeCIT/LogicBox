@@ -6,10 +6,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import logicBox.gui.Gfx;
+import logicBox.util.Callback;
 import logicBox.util.CallbackParam;
 import logicBox.util.Geo;
 import logicBox.util.Region;
@@ -36,13 +34,15 @@ public class Camera
 	private Vec2    pan;
 	
 	private AffineTransform matrix;
-	private CallbackParam<AffineTransform> onTransformChange;
+	private Callback       onTransform;
 	
 	
 	
 	
 	
-	public Camera( Component attachTo, CallbackParam<AffineTransform> onTransformChange ) {
+	public Camera( Component attachTo, Callback onTransformChange ) {
+		component = attachTo;
+		
 		zoomRate  = 1.0 + (1.0 / 3.0);
 		zoomRange = 8.0;
 		zoomMin   = 1.0 / zoomRange;
@@ -51,8 +51,8 @@ public class Camera
 		
 		pan       = new Vec2( 0 );
 		matrix    = new AffineTransform();
-		component = attachTo;
-		this.onTransformChange = onTransformChange;
+		
+		onTransform = onTransformChange;
 		
 		setupActions();
 	}
@@ -171,7 +171,7 @@ public class Camera
 		matrix.translate(  pan.x,   pan.y  );
 		matrix.translate(  0.5,     0.5    );
 		
-		onTransformChange.execute( matrix );
+		onTransform.execute();
 	}
 	
 	
