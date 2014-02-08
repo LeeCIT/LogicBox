@@ -14,6 +14,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import logicBox.gui.ContextMenu;
 import frameShareProto.GetToolBarSelectionAsString;
 import frameShareProto.ToolBar;
 import frameShareProto.ToolSelectionEnum.ToolSelection;
@@ -27,7 +28,7 @@ public class DemoView extends JFrame{
 	
 	int pins = 2;
 
-	String [] contextItems = {"Add pin", "Remove pin"};
+	String [] contextItems = {"Add pin", "Remove pin #-#", "crap"};
 	
 	
 	public DemoView() {
