@@ -16,7 +16,7 @@ import logicBox.util.Vec2;
  * Generates graphical representation for components.
  * @author Lee Coakley
  */
-public class ComGraphics
+public class SchematicGenerator
 {
 	private static final double flatFrac   = 0.5;
 	private static final double pinLenFrac = 0.5;

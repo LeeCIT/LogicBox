@@ -12,6 +12,11 @@ import logicBox.util.Vec2;
 
 
 
+/**
+ * Performs component drawing for gates.
+ * Essentially it just caches the computations from ComGraphics.
+ * @author Lee Coakley
+ */
 public class GateGraphic implements Drawable
 {
 	private VecPath polyBody;
@@ -76,7 +81,7 @@ public class GateGraphic implements Drawable
 	
 	
 	/**
-	 * Get the component's untransformed pin positions relative to [0,0]
+	 * Get the component's untransformed pin endpoints relative to [0,0]
 	 * These are where traces connect.
 	 */
 	public List<Vec2> getPinConnectors() {

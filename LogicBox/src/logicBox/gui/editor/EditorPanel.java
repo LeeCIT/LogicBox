@@ -175,7 +175,7 @@ public class EditorPanel extends JPanel
 			Gfx.drawArc( g, new Vec2(0), 12, 45, 180 );
 		Gfx.popColor( g );
 		
-		ComGraphics.generateNandGate( 3 ).draw( g, new Vec2(256), Math.random() * 360 );
+		SchematicGenerator.generateNandGate( 3 ).draw( g, new Vec2(256), Math.random() * 360 );
 	}
 	
 	
