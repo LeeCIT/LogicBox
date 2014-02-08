@@ -108,20 +108,20 @@ public class SnappingPrototype extends ComponentAdapter {
 			// Debugging Need to add algorithm to snap to the main frame
 			// System.out.println("MainFrame pos x" + mainFramePosX + " CompPos x" + compPosX);
 			// System.out.println("MainFrame pos y" + mainFramePosY + " CompPos y" + compPosY);
-			
+
 			if (isComponentOnXAxisOfFrame(mainFramePosX, compPosX)) {
 				// Snap to top of the main frame
 				if (checkTopOfFrame(mainFramePosY, compPosY))  {
 					compPosY = mainFramePosY - evt.getComponent().getHeight();
 				}
-				
+
 				// Snap to bottom of the main frame
 				if (checkBottomOfFrame(mainFramePosY, compPosY)) {
 					compPosY = mainFramePosY + mainFrame.getHeight();
 				}
-				
+
 			}
-			
+
 			if (isComponentOnYaxisOfFrame(mainFramePosY, compPosY)) {
 				// Snap to the left of the main frame
 				if (checkLeftside(mainFramePosX, compPosX)) {
@@ -132,9 +132,8 @@ public class SnappingPrototype extends ComponentAdapter {
 			}			
 		}
 
-			// When snapping is done it generates other events
-			// To avoid infinite loops lock the component, set the location and unlock
-		 
+		// When snapping is done it generates other events
+		// To avoid infinite loops lock the component, set the location and unlock
 		locked = true;
 		evt.getComponent().setLocation(compPosX, compPosY);
 		locked = false;
@@ -150,7 +149,7 @@ public class SnappingPrototype extends ComponentAdapter {
 	 */
 	private boolean checkLeftside(int mainFramePosx, int compPosX) {
 		int difference = mainFramePosx - compPosX;
-		
+
 		if(difference >= 0 && difference <= snappingDistance) {
 			return true;
 		}
@@ -161,41 +160,41 @@ public class SnappingPrototype extends ComponentAdapter {
 
 	private boolean checkTopOfFrame(int mainFramePosY, int compPosY) {
 		int yDifference = mainFramePosY - compPosY;
-		
-		if(yDifference >= 0 && yDifference <= snappingDistance) {
-			return true;
-		}
-		return false;
-	}
-	
-	
-	
-	private boolean checkBottomOfFrame(int mainFramePosY, int compPosY) {
-		int mainFrameBottomPos = mainFramePosY + mainFrame.getHeight();
-		int yDifference 	   = mainFrameBottomPos - compPosY;
 
 		if(yDifference >= 0 && yDifference <= snappingDistance) {
 			return true;
 		}
 		return false;
 	}
-	
-	
-	
+
+
+	// To check the snapping distance must be minus as it going from - to + to check
+	private boolean checkBottomOfFrame(int mainFramePosY, int compPosY) {
+		int mainFrameBottomPos = mainFramePosY + mainFrame.getHeight();
+		int yDifference 	   = mainFrameBottomPos - compPosY;
+
+		if(yDifference <= 0 && yDifference >= -snappingDistance) {
+			return true;
+		}
+		return false;
+	}
+
+
+
 	private boolean isComponentOnXAxisOfFrame(int mainFramePosX, int compPosX) {
 		int mainFrameXLength = mainFramePosX + mainFrame.getWidth();
-		
+
 		if(compPosX >= mainFramePosX && compPosX <= mainFrameXLength) {
 			return true;
 		}
 		return false;
 	}
-	
-	
-	
+
+
+
 	private boolean isComponentOnYaxisOfFrame(int mainFramePosY, int compPosY) {
 		int mainFrameYLength = mainFramePosY + mainFrame.getHeight();
-		
+
 		if(compPosY >= mainFramePosY && compPosY <= mainFrameYLength) {
 			return true;
 		}
@@ -203,9 +202,9 @@ public class SnappingPrototype extends ComponentAdapter {
 	}
 
 
-	
-	
-	
+
+
+
 
 
 	//Demo main, just to test the functionality
@@ -224,12 +223,14 @@ public class SnappingPrototype extends ComponentAdapter {
 		frame.addComponentListener(new SnappingPrototype());
 		frame.setSize(400, 400); //Just simulating demo size
 		frame.setVisible(true);
+		frame.setLocationRelativeTo(null);
 
 		//Second frame
 		secondDemo.getContentPane().add(secondLab);
 		secondDemo.addComponentListener(new SnappingPrototype(frame));
 		secondDemo.setSize(150, 300);
 		secondDemo.setVisible(true);
+		secondDemo.setLocationRelativeTo(null);
 	}
 }
 
