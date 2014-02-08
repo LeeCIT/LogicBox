@@ -2,10 +2,8 @@ package prototypes.snappingProto;
 
 import java.awt.*;
 import java.awt.event.*;
-
 import javax.swing.*;
 
-import prototypes.frameShareProto.MainFrame;
 
 
 public class SnappingPrototype extends ComponentAdapter {
