@@ -2,7 +2,10 @@ package prototypes.snappingProto;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
+
+import prototypes.frameShareProto.MainFrame;
 
 
 public class SnappingPrototype extends ComponentAdapter {
@@ -103,16 +106,15 @@ public class SnappingPrototype extends ComponentAdapter {
 			mainFramePosY = mainFrame.getY();
 
 			//Debugging Need to add algorithm to snap to the main frame
-			System.out.println("MainFrame pos x" + mainFramePosX + " CompPos x" + compPosX);
+			//System.out.println("MainFrame pos x" + mainFramePosX + " CompPos x" + compPosX);
 			//System.out.println("MainFrame pos y" + mainFramePosY + " CompPos y" + compPosY);
-			System.out.println(mainFramePosX - compPosX);
 
 			//Snap to bottom of the main frame
 
 			//Snap to top of the main frame
 
 			//Snap to the left of the main frame
-			if (mainFramePosX - compPosX <= snappingDistance && mainFramePosX - compPosX >= snappingDistance) {
+			if (checkLeftside(mainFramePosX, compPosX)) {
 				compPosX = mainFramePosX - evt.getComponent().getWidth();
 			}
 
@@ -130,7 +132,17 @@ public class SnappingPrototype extends ComponentAdapter {
 
 
 
-
+	
+	private boolean checkLeftside(int mainFramePosx, int compPosX) {
+		int differnce = mainFramePosx - compPosX;
+		
+		if(differnce >= 0 && differnce <= snappingDistance) {
+			System.out.println(differnce);
+			return true;
+		}
+		
+		return false;
+	}
 
 
 
