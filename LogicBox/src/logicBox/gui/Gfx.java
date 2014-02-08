@@ -45,6 +45,18 @@ public class Gfx
 	
 	
 	
+	public static void drawArc( Graphics2D g, Vec2 pos, double radius, double angleA, double angleB ) {		
+		Vec2 tl        = pos.substract( radius );
+		int  tlx       = (int) tl.x;
+		int  tly       = (int) tl.y;
+		int  size      = (int) (radius * 2.0);
+		int  angleDiff = (int) Geo.angleDiff( angleB, angleA );
+		
+		g.drawArc( tlx, tly, size, size, (int) angleA, angleDiff );
+	}
+	
+	
+	
 	public static void drawRegion( Graphics2D g, Region r, boolean filled ) {
 		drawOrientedRect( g, r.getCentre(), r.getSize(), 0, filled );
 	}
@@ -109,6 +121,7 @@ public class Gfx
 	
 	/**
 	 * Draw a bezier curve with two control points.
+	 * TODO update to newer drawing method
 	 */
 	public static void drawBezierCubic( Graphics2D g, Vec2 a, Vec2 b, Vec2 c1, Vec2 c2, double thickness ) {
 		int    precision = 64;
