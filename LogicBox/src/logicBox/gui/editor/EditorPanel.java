@@ -69,8 +69,8 @@ public class EditorPanel extends JPanel
 		Vec2   cellSizeHalf = cellSize.multiply( 0.5 );
 		Vec2   offset       = worldRegion.tl.modulo( cellSize ).negate().subtract( cellSizeHalf );
 		
-		worldRegion.tl = worldRegion.tl.subtract( cellSize );
-		worldRegion.br = worldRegion.br.add     ( cellSize );
+		worldRegion.tl = worldRegion.tl.subtract( cellSize 				 );
+		worldRegion.br = worldRegion.br.add     ( cellSize.multiply( 2 ) );
 
 		double  zoom        = cam.getZoom();
 		double  zoomMin     = cam.getZoomMin();
