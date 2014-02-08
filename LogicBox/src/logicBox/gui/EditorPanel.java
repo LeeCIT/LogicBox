@@ -2,19 +2,12 @@
 
 
 package logicBox.gui;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.MouseInfo;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -129,7 +122,7 @@ public class EditorPanel extends JPanel
 			inv.transform( pos, out );
 		}
 		catch (NoninvertibleTransformException ex) {
-			ex.printStackTrace();
+			ex.printStackTrace(); // Can't happen in this trivial zoom/pan situation
 		}
 		
 		return out;
@@ -146,7 +139,6 @@ public class EditorPanel extends JPanel
 			 mod = 1.0 / mod;
 		
 		zoom = Geo.clamp( zoom * mod, zoomMin, zoomMax );
-		System.out.println( zoom );
 		
 		double roundingSnapThresh = 1.0 / 32.0;
 		if (Geo.absDiff( zoom, 1.0 ) < roundingSnapThresh)
@@ -164,9 +156,7 @@ public class EditorPanel extends JPanel
 	
 	
 	
-	protected void paintComponent( Graphics gx ) {
-		super.paintComponent( gx );
-		
+	protected void paintComponent( Graphics gx ) {	
 		Graphics2D g = (Graphics2D) gx;
 		fillBackground( g );
 		
@@ -175,8 +165,27 @@ public class EditorPanel extends JPanel
 		updateTransform( g );
 		drawGrid( g );
 		
-		Gfx.drawCircle( g, new Vec2(0),        16, Color.yellow, false );
-		Gfx.drawCircle( g, getMousePosWorld(),  3, Color.red,    true  );
+		Gfx.drawCircle( g, new Vec2(0),       16, Color.yellow, false );
+		Gfx.drawCircle( g, getMousePosWorld(), 3, Color.red,    true  );
+		
+		Region drawIn = new Region( new Vec2(256), new Vec2(320,320) );
+		drawAndGate( g, drawIn );
+	}
+	
+	
+	
+	private void updateTransform( Graphics2D g ) {
+		Region region = new Region( this );
+		Vec2   half   = region.getSize().multiply( 0.5 );
+		
+		Graphics2D g2d = (Graphics2D) g;
+		matrix = new AffineTransform();
+		matrix.translate( half.x, half.y );
+		matrix.scale( zoom, zoom );
+		matrix.translate( -half.x, -half.y );
+		matrix.translate( pan.x, pan.y );
+		matrix.translate( 0.5, 0.5 );
+		g2d.setTransform( matrix );
 	}
 	
 	
@@ -217,25 +226,79 @@ public class EditorPanel extends JPanel
 		if (disableAA)
 			Gfx.popAntialiasingState( g );
 	}
-
-
-
-	private void updateTransform( Graphics2D g ) {
-		Region region = new Region( this );
-		Vec2   half   = region.getSize().multiply( 0.5 );
+	
+	
+	
+	private void drawAndGate( Graphics2D g, Region r ) {
+		double flatFrac   = 0.5;
+		double pinLenFrac = 0.25;
+		int    pinCount   = 3;
+		double pinLength  = r.getSize().x * pinLenFrac;
 		
-		Graphics2D g2d = (Graphics2D) g;
-		matrix = new AffineTransform();
-		matrix.translate( half.x, half.y );
-		matrix.scale( zoom, zoom );
-		matrix.translate( -half.x, -half.y );
-		matrix.translate( pan.x, pan.y );
-		matrix.translate( 0.5, 0.5 );
-		g2d.setTransform( matrix );
+		Vec2 bezRefTr   = r.getTopRight();
+		Vec2 bezRefBr   = r.getBottomRight();
+		
+		Vec2 pinOutPos  = r.getRightMiddle();
+		
+		Vec2 topLeft    = r.getTopLeft();
+		Vec2 topFlatEnd = Geo.lerp( topLeft,    bezRefTr,  flatFrac );
+		Vec2 topBezC1   = Geo.lerp( topFlatEnd, bezRefTr,  0.5      );
+		Vec2 topBezC2   = Geo.lerp( bezRefTr,   pinOutPos, 0.5      );
+		
+		Vec2 botLeft    = r.getBottomLeft();
+		Vec2 botFlatEnd = Geo.lerp( botLeft,    bezRefBr,  flatFrac );
+		Vec2 botBezC1   = Geo.lerp( botFlatEnd, bezRefBr,  0.5      );
+		Vec2 botBezC2   = Geo.lerp( bezRefBr,   pinOutPos, 0.5      );
+		
+		Vec2 pinOutEnd = new Vec2( pinOutPos.x + pinLength, pinOutPos.y );
+		
+		List<Vec2> pinPos = new ArrayList<>();
+		pinPos.add( pinOutPos );
+		pinPos.add( pinOutEnd );
+		
+		double height   = r.getSize().y;
+		double pinSpace = height / (1 + pinCount);
+		double yPos     = topLeft.y + pinSpace;
+		for (int i=0; i<pinCount; i++) {
+			pinPos.add( new Vec2( topLeft.x,           yPos ) );
+			pinPos.add( new Vec2( topLeft.x-pinLength, yPos ) );
+			yPos += pinSpace;
+		}
+		
+		VecPath poly = new VecPath();
+		poly.moveTo( topLeft );
+		poly.lineTo( topFlatEnd );
+		poly.curveTo( topBezC1, topBezC2, pinOutPos );
+		poly.curveTo( botBezC2, botBezC1, botFlatEnd );
+		poly.lineTo( botFlatEnd );
+		poly.lineTo( botLeft );
+		poly.closePath();
+			
+		Gfx.pushColorAndSet( g, EditorColours.componentFill );
+			Gfx.pushAntialiasingStateAndSet( g, false );
+				g.fill( poly );
+			Gfx.popAntialiasingState( g );
+			
+			Gfx.pushColorAndSet( g, EditorColours.componentStroke );
+				Gfx.pushStrokeAndSet( g, new BasicStroke( 5 ) );
+					g.draw( poly );
+				Gfx.popStroke( g );
+				
+				Gfx.pushStrokeAndSet( g, new BasicStroke( 5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
+				poly = new VecPath();
+				for (int i=0; i<pinPos.size(); i+=2) {
+					poly.moveTo( pinPos.get(i)   );
+					poly.lineTo( pinPos.get(i+1) );
+					g.draw( poly );
+				}
+				Gfx.popStroke( g );
+			
+			Gfx.popColor( g );
+		Gfx.popColor( g );
 	}
-
-
-
+	
+	
+	
 	public static void main( String[] args ) {
 		EditorFrame frame = new EditorFrame();
 		EditorPanel panel = new EditorPanel();
