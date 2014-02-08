@@ -32,6 +32,13 @@ public class Region
 	
 	
 	
+	public void applyOffset( Vec2 offs ) {
+		tl = tl.add( offs );
+		br = br.add( offs );
+	}
+	
+	
+	
 	public Vec2 getCentre() {
 		return Geo.centre( tl, br );
 	}
