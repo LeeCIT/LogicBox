@@ -12,7 +12,7 @@ import java.util.Stack;
 
 
 /**
- * Provides advanced drawing functions.
+ * Provides convenient drawing functions.
  * @author Lee Coakley
  */
 public class Gfx
@@ -26,8 +26,8 @@ public class Gfx
 	
 	public static void drawCircle( Graphics2D g, Vec2 pos, double radius, boolean filled ) {		
 		Vec2 tl   = pos.substract( radius );
-		int  tlx  = (int) Geo.roundArith( tl.x );
-		int  tly  = (int) Geo.roundArith( tl.y );
+		int  tlx  = (int) tl.x;
+		int  tly  = (int) tl.y;
 		int  size = (int) (radius * 2.0);
 		
 		if (filled)
@@ -45,28 +45,42 @@ public class Gfx
 	
 	
 	
-	public static void drawThickLine( Graphics2D g, Vec2 a, Vec2 b, double thickness, boolean filled ) {
+	public static void drawRegion( Graphics2D g, Region r, boolean filled ) {
+		drawOrientedRect( g, r.getCentre(), r.getSize(), 0, filled );
+	}
+	
+	
+	
+	private static void drawThickLineImpl( Graphics2D g, Vec2 a, Vec2 b, double thickness, boolean rounded ) {
 		if (thickness < 2.0) {
 			g.drawLine( (int) a.x, (int) a.y, (int) b.x, (int) b.y );
 			return;
 		}
 		
-		Vec2   centre = Geo.centre      ( a, b );
-		double dist   = Geo.distance    ( a, b );
-		double angle  = Geo.angleBetween( a, b );
-		Vec2   size   = new Vec2( dist, thickness );
+		Stroke stroke;
 		
-		drawOrientedRect( g, centre, size, angle, filled );
+		if ( ! rounded)
+			 stroke = new BasicStroke( (float) thickness );
+		else stroke = new BasicStroke( (float) thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+		
+		pushStrokeAndSet( g, stroke );
+			VecPath poly = new VecPath();
+			poly.moveTo( a );
+			poly.lineTo( b );
+			g.draw( poly );
+		popStroke( g );
 	}
 	
 	
 	
-	public static void drawThickRoundedLine( Graphics2D g, Vec2 a, Vec2 b, double thickness, boolean filled ) {
-		double radius = thickness * 0.5;
-		
-		drawThickLine( g, a, b, thickness, filled );
-		drawCircle( g, a, radius, filled );
-		drawCircle( g, b, radius, filled );
+	public static void drawThickLine( Graphics2D g, Vec2 a, Vec2 b, double thickness ) {
+		drawThickLineImpl( g, a, b, thickness, false );
+	}
+	
+	
+	
+	public static void drawThickRoundedLine( Graphics2D g, Vec2 a, Vec2 b, double thickness ) {
+		drawThickLineImpl( g, a, b, thickness, true );
 	}
 	
 	
@@ -108,7 +122,7 @@ public class Gfx
 		Vec2 last    = cur.copy();
 	    
 		for (int i=0; i<precision; i++) {
-			drawThickRoundedLine( g, last, cur, thickness, true );
+			drawThickRoundedLine( g, last, cur, thickness );
 			
 			tAcc += t.x;
 			
@@ -140,13 +154,13 @@ public class Gfx
 		for (double x=left; x<right; x+=cellSize.x) {
 			xt.x = x;
 			xb.x = x;
-			Gfx.drawThickLine( g, xt, xb, thickness, true );
+			Gfx.drawThickLine( g, xt, xb, thickness );
 		}
 		
 		for (double y=top; y<bottom; y+=cellSize.y) {
 			ly.y = y;
 			ry.y = y;
-			Gfx.drawThickLine( g, ly, ry, thickness, true );
+			Gfx.drawThickLine( g, ly, ry, thickness );
 		}
 	}
 	
@@ -158,14 +172,13 @@ public class Gfx
 	public static AffineTransform setIdentity( Graphics2D g ) {
 		AffineTransform lastMatrix = g.getTransform();
 		AffineTransform identity   = new AffineTransform();
-		
 		g.setTransform( identity );
 		return lastMatrix;
 	}
 	
 	
 	
-	public static void pushMatrix( Graphics2D g, AffineTransform mat ) {
+	public static void pushMatrix( Graphics2D g ) {
 		matrixStack.push( g.getTransform() );
 	}
 	
