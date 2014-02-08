@@ -7,7 +7,6 @@ import logicBox.util.Region;
 import logicBox.util.Vec2;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.GeneralPath;
 import java.util.Stack;
 
 
@@ -21,6 +20,7 @@ public class Gfx
 	private static Stack<Color>           colorStack  = new Stack<Color>();
 	private static Stack<Object>          aaStack     = new Stack<Object>();
 	private static Stack<AffineTransform> matrixStack = new Stack<AffineTransform>();
+	private static Stack<Stroke>          strokeStack = new Stack<Stroke>();
 	
 	
 	
@@ -72,18 +72,18 @@ public class Gfx
 	
 	
 	public static void drawOrientedRect( Graphics2D g, Vec2 centre, Vec2 size, double angle, boolean filled ) {
-		GeneralPath poly = new GeneralPath();
-		Vec2        offH = Geo.lenDir( size.x*0.5, angle    );
-		Vec2        offV = Geo.lenDir( size.y*0.5, angle+90 );
-		Vec2        a    = centre.add( offH         .add(offV         ) );
-		Vec2        b    = centre.add( offH         .add(offV.negate()) );
-		Vec2        c    = centre.add( offH.negate().add(offV.negate()) );
-		Vec2        d    = centre.add( offH.negate().add(offV         ) );
+		VecPath poly = new VecPath();
+		Vec2    offH = Geo.lenDir( size.x*0.5, angle    );
+		Vec2    offV = Geo.lenDir( size.y*0.5, angle+90 );
+		Vec2    a    = centre.add( offH         .add(offV         ) );
+		Vec2    b    = centre.add( offH         .add(offV.negate()) );
+		Vec2    c    = centre.add( offH.negate().add(offV.negate()) );
+		Vec2    d    = centre.add( offH.negate().add(offV         ) );
 		
-		poly.moveTo( a.x, a.y );
-		poly.lineTo( b.x, b.y );
-		poly.lineTo( c.x, c.y );
-		poly.lineTo( d.x, d.y );
+		poly.moveTo( a );
+		poly.lineTo( b );
+		poly.lineTo( c );
+		poly.lineTo( d );
 		poly.closePath();
 		
 		if (filled)
@@ -211,6 +211,19 @@ public class Gfx
 	
 	public static void popColor( Graphics2D g ) {
 		g.setColor( colorStack.pop() );
+	}
+	
+	
+	
+	public static void pushStrokeAndSet( Graphics2D g, Stroke s ) {
+		strokeStack.push( g.getStroke() );
+		g.setStroke( s );
+	}
+	
+	
+	
+	public static void popStroke( Graphics2D g ) {
+		g.setStroke( strokeStack.pop() );
 	}
 }
 
