@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui;
+package logicBox.gui.editor;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
@@ -11,6 +11,8 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import logicBox.gui.Gfx;
+import logicBox.gui.VecPath;
 import logicBox.util.Geo;
 import logicBox.util.Region;
 import logicBox.util.Vec2;
@@ -158,21 +160,25 @@ public class EditorPanel extends JPanel
 	
 	protected void paintComponent( Graphics gx ) {	
 		Graphics2D g = (Graphics2D) gx;
+		
+		Gfx.setAntialiasingState( g, false );
 		fillBackground( g );
 		
-		Gfx.setAntialiasingState( g, true );
-		
 		updateTransform( g );
+		
+		Gfx.setAntialiasingState( g, true );
 		drawGrid( g );
 		
 		Gfx.pushColorAndSet( g, Color.yellow );
-		Gfx.drawCircle( g, new Vec2(0),       16, false );
-		Gfx.drawCircle( g, getMousePosWorld(), 3, true  );
-		Gfx.drawArc( g, new Vec2(0), 12, 45, 180 );
+			Gfx.drawCircle( g, new Vec2(0),       16, false );
+			Gfx.drawCircle( g, getMousePosWorld(), 3, true  );
+			Gfx.drawArc( g, new Vec2(0), 12, 45, 180 );
 		Gfx.popColor( g );
 		
-		Region drawIn = new Region( new Vec2(256), new Vec2(320,320) );
-		drawAndGate( g, drawIn );
+		//Region drawIn = new Region( new Vec2(256), new Vec2(320) );
+		//drawAndGate( g, drawIn );
+		
+		ComGraphics.generateNandGate( 32 ).draw( g, new Vec2(256), 0 );
 	}
 	
 	
@@ -201,9 +207,10 @@ public class EditorPanel extends JPanel
 	
 	
 	private void drawGrid( Graphics2D g ) {
-		Region worldRegion = getWorldRegion();
-		Vec2   cellSize    = new Vec2( 64 );
-		Vec2   offset      = worldRegion.tl.modulo( cellSize ).negate();
+		Region worldRegion  = getWorldRegion();
+		Vec2   cellSize     = new Vec2( 64 );
+		Vec2   cellSizeHalf = cellSize.multiply( 0.5 );
+		Vec2   offset       = worldRegion.tl.modulo( cellSize ).negate().subtract( cellSizeHalf );
 		
 		worldRegion.tl = worldRegion.tl.subtract( cellSize );
 		worldRegion.br = worldRegion.br.add     ( cellSize );
@@ -227,84 +234,6 @@ public class EditorPanel extends JPanel
 		
 		if (disableAA)
 			Gfx.popAntialiasingState( g );
-	}
-	
-	
-	
-	// TODO separate into stored coords offset from [0,0] for easy transforming
-	// TODO split into compute-once path storage + draw method
-	private void drawAndGate( Graphics2D g, Region r ) {
-		double flatFrac   = 0.5;
-		double pinLenFrac = 0.25;
-		float  thickness  = 5.0f;
-		int    pinCount   = 2;
-		double pinLength  = r.getSize().x * pinLenFrac;
-		
-		if (pinCount > 2)
-			r.br.y += r.getSize().y * 0.125 * (pinCount-2);
-		
-		Vec2 bezRefTr = r.getTopRight();
-		Vec2 bezRefBr = r.getBottomRight();
-		
-		Vec2 pinOutPos = r.getRightMiddle();
-		Vec2 pinOutEnd = new Vec2( pinOutPos.x + pinLength, pinOutPos.y );
-		
-		Vec2 topLeft    = r.getTopLeft();
-		Vec2 topFlatEnd = Geo.lerp( topLeft,    bezRefTr,  flatFrac );
-		Vec2 topBezC1   = Geo.lerp( topFlatEnd, bezRefTr,  0.5      );
-		Vec2 topBezC2   = Geo.lerp( bezRefTr,   pinOutPos, 0.5      );
-		
-		Vec2 botLeft    = r.getBottomLeft();
-		Vec2 botFlatEnd = Geo.lerp( botLeft,    bezRefBr,  flatFrac );
-		Vec2 botBezC1   = Geo.lerp( botFlatEnd, bezRefBr,  0.5      );
-		Vec2 botBezC2   = Geo.lerp( bezRefBr,   pinOutPos, 0.5      );
-		
-		List<Vec2> pinPos = new ArrayList<>();
-		pinPos.add( pinOutPos );
-		pinPos.add( pinOutEnd );
-		
-		double height   = r.getSize().y;
-		double pinSpace = height / (1 + pinCount);
-		double yPos     = topLeft.y + pinSpace;
-		for (int i=0; i<pinCount; i++) {
-			pinPos.add( new Vec2( topLeft.x,             yPos ) );
-			pinPos.add( new Vec2( topLeft.x - pinLength, yPos ) );
-			yPos += pinSpace;
-		}
-		
-		VecPath polyBody = new VecPath();
-		polyBody.moveTo( topLeft );
-		polyBody.lineTo( topFlatEnd );
-		polyBody.curveTo( topBezC1, topBezC2, pinOutPos );
-		polyBody.curveTo( botBezC2, botBezC1, botFlatEnd );
-		polyBody.lineTo( botFlatEnd );
-		polyBody.lineTo( botLeft );
-		polyBody.closePath();
-		
-		VecPath polyPins = new VecPath();
-		for (int i=0; i<pinPos.size(); i+=2) {
-			polyPins.moveTo( pinPos.get(i)   );
-			polyPins.lineTo( pinPos.get(i+1) );
-		}
-		
-		Stroke strokeBody = new BasicStroke( thickness );
-		Stroke strokePin  = new BasicStroke( thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
-		
-		Gfx.pushColorAndSet( g, EditorColours.componentStroke );
-			Gfx.pushStrokeAndSet( g, strokePin );
-				g.draw( polyPins );
-			Gfx.popStroke( g );
-				
-			Gfx.pushColorAndSet( g, EditorColours.componentFill );
-			Gfx.pushAntialiasingStateAndSet( g, false );
-				g.fill( polyBody );
-			Gfx.popAntialiasingState( g );
-			Gfx.popColor( g );
-			
-			Gfx.pushStrokeAndSet( g, strokeBody );
-				g.draw( polyBody );
-			Gfx.popStroke( g );
-		Gfx.popColor( g );
 	}
 	
 	

@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui;
+package logicBox.gui.editor;
 import java.awt.Color;
 
 

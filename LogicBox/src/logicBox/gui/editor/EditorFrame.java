@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui;
+package logicBox.gui.editor;
 import javax.swing.JFrame;
 import net.miginfocom.swing.MigLayout;
 
