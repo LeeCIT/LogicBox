@@ -17,28 +17,36 @@ import logicBox.util.Vec2;
 
 
 
+/**
+ * Generates graphical representation for components.
+ * @author Lee Coakley
+ */
 public class ComGraphics
 {
-	private static Region r          = new Region( new Vec2(-32), new Vec2(32) );
-	private static double flatFrac   = 0.5;
-	private static double pinLenFrac = 0.5;
-	private static double bubbleFrac = 0.1;
-	private static float  thickness  = 5.0f;
+	private static final double flatFrac   = 0.5;
+	private static final double pinLenFrac = 0.5;
+	private static final double bubbleFrac = 0.1;
+	private static final float  thickness  = 5.0f;
 	
-	private static Stroke strokeBody   = new BasicStroke( thickness );
-	private static Stroke strokePin    = new BasicStroke( thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
-	private static Stroke strokeBubble = new BasicStroke( thickness * 0.5f );
-	
+	private static final Stroke strokeBody   = new BasicStroke( thickness );
+	private static final Stroke strokePin    = new BasicStroke( thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+	private static final Stroke strokeBubble = new BasicStroke( thickness * 0.5f );
 	
 	
+	
+	
+	private static Region getBaseRegion() {
+		return new Region( new Vec2(-32), new Vec2(32) );
+	}
 	
 	
 	public static Drawable generateNandGate( int pinCount ) {
+		final Region r            = getBaseRegion();
 		final double pinLength    = r.getSize().x * pinLenFrac;
 		final double bubbleRadius = r.getSize().x * bubbleFrac;
 		
-		if (pinCount > 2)
-			r.br.y += r.getSize().y * 0.125 * (pinCount-2);
+		if (pinCount > 4)
+			r.br.y += r.getSize().y * 0.125 * (pinCount-4);
 		
 		final Vec2 bezRefTr = r.getTopRight();
 		final Vec2 bezRefBr = r.getBottomRight();
