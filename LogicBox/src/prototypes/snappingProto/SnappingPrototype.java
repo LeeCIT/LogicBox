@@ -11,6 +11,7 @@ import prototypes.frameShareProto.MainFrame;
 public class SnappingPrototype extends ComponentAdapter {
 	private boolean locked = false;
 	private int snappingDistance;
+	private int defaultSnap = 10;
 
 	JFrame mainFrame;
 	int mainFramePosX;
@@ -23,7 +24,7 @@ public class SnappingPrototype extends ComponentAdapter {
 	 * The snap will only snap to the screen edges
 	 */
 	public SnappingPrototype() {
-		snappingDistance = 10;
+		snappingDistance = defaultSnap;
 	}
 
 
@@ -45,7 +46,7 @@ public class SnappingPrototype extends ComponentAdapter {
 	 */
 	public SnappingPrototype(JFrame frame) {
 		mainFrame = frame;
-		snappingDistance = 10;
+		snappingDistance = defaultSnap;
 	}
 
 
