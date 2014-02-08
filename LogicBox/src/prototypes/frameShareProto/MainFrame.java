@@ -1,4 +1,4 @@
-package frameShareProto;
+package prototypes.frameShareProto;
 
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
@@ -7,7 +7,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import frameShareProto.ToolSelectionEnum.ToolSelection;
+import prototypes.frameShareProto.ToolSelectionEnum.ToolSelection;
 import logicBox.gui.GuiUtil;
 
 public class MainFrame extends JFrame{
