@@ -3,13 +3,8 @@
 
 package logicBox.gui.editor;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
-import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.util.Geo;
 import logicBox.util.Region;
@@ -28,11 +23,6 @@ public class ComGraphics
 	private static final double bubbleFrac = 0.1;
 	private static final float  thickness  = 5.0f;
 	
-	private static final Stroke strokeBody   = new BasicStroke( thickness );
-	private static final Stroke strokePin    = new BasicStroke( thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
-	private static final Stroke strokeBubble = new BasicStroke( thickness * 0.5f );
-	
-	
 	
 	
 	private static Region getBaseRegion() {
@@ -40,7 +30,8 @@ public class ComGraphics
 	}
 	
 	
-	public static Drawable generateNandGate( int pinCount ) {
+	
+	public static GateGraphic generateNandGate( int pinCount ) {
 		final Region r            = getBaseRegion();
 		final double pinLength    = r.getSize().x * pinLenFrac;
 		final double bubbleRadius = r.getSize().x * bubbleFrac;
@@ -90,40 +81,14 @@ public class ComGraphics
 			polyPins.lineTo( pinPos.get(i+1) );
 		}
 		
-		Drawable drawable = new Drawable() {
-			public void draw( Graphics2D g, Vec2 pos, double angle ) {
-				Gfx.pushMatrix( g );
-				
-					g.transform( AffineTransform.getTranslateInstance( pos.x, pos.y ) );
-					g.transform( AffineTransform.getRotateInstance   ( Math.toRadians( angle ) ) );
-				
-					Gfx.pushColorAndSet( g, EditorColours.componentStroke );
-						Gfx.pushStrokeAndSet( g, strokePin );
-							g.draw( polyPins );
-						Gfx.popStroke( g );
-							
-						Gfx.pushColorAndSet( g, EditorColours.componentFill );
-						Gfx.pushAntialiasingStateAndSet( g, false );
-							g.fill( polyBody );
-							Gfx.drawCircle( g, bubblePos, bubbleRadius, true );
-						Gfx.popAntialiasingState( g );
-						Gfx.popColor( g );
-						
-						Gfx.pushStrokeAndSet( g, strokeBody );
-							g.draw( polyBody );
-						Gfx.popStroke( g );
-						
-						Gfx.pushStrokeAndSet( g, strokeBubble );
-						Gfx.drawCircle( g, bubblePos, bubbleRadius, false );
-						Gfx.popStroke( g );
-						
-					Gfx.popColor( g );
-				
-				Gfx.popMatrix( g );
-			}
-		};
+		List<Vec2> pinConnects = new ArrayList<>();
+		pinConnects.add( pinOutEnd );
+		for (int i=1; i<pinPos.size(); i+=2)
+			pinConnects.add( pinPos.get(i) );
 		
-		return drawable;
+		GateGraphic gate = new GateGraphic( polyBody, polyPins, pinConnects );
+		gate.enableBubble( bubblePos, bubbleRadius );
+		return gate;
 	}
 	
 	
