@@ -232,13 +232,19 @@ public class EditorPanel extends JPanel
 	private void drawAndGate( Graphics2D g, Region r ) {
 		double flatFrac   = 0.5;
 		double pinLenFrac = 0.25;
-		int    pinCount   = 3;
+		float  thickness  = 5.0f;
+		double pinOffs    = thickness * 0.5;
+		int    pinCount   = 2;
 		double pinLength  = r.getSize().x * pinLenFrac;
 		
-		Vec2 bezRefTr   = r.getTopRight();
-		Vec2 bezRefBr   = r.getBottomRight();
+		if (pinCount > 2)
+			r.br.y += r.getSize().y * 0.125 * (pinCount-2);
 		
-		Vec2 pinOutPos  = r.getRightMiddle();
+		Vec2 bezRefTr = r.getTopRight();
+		Vec2 bezRefBr = r.getBottomRight();
+		
+		Vec2 pinOutPos = r.getRightMiddle();
+		Vec2 pinOutEnd = new Vec2( pinOutPos.x + pinLength, pinOutPos.y );
 		
 		Vec2 topLeft    = r.getTopLeft();
 		Vec2 topFlatEnd = Geo.lerp( topLeft,    bezRefTr,  flatFrac );
@@ -250,18 +256,16 @@ public class EditorPanel extends JPanel
 		Vec2 botBezC1   = Geo.lerp( botFlatEnd, bezRefBr,  0.5      );
 		Vec2 botBezC2   = Geo.lerp( bezRefBr,   pinOutPos, 0.5      );
 		
-		Vec2 pinOutEnd = new Vec2( pinOutPos.x + pinLength, pinOutPos.y );
-		
 		List<Vec2> pinPos = new ArrayList<>();
-		pinPos.add( pinOutPos );
+		pinPos.add( pinOutPos.add( new Vec2(pinOffs,0) ) );
 		pinPos.add( pinOutEnd );
 		
 		double height   = r.getSize().y;
 		double pinSpace = height / (1 + pinCount);
 		double yPos     = topLeft.y + pinSpace;
 		for (int i=0; i<pinCount; i++) {
-			pinPos.add( new Vec2( topLeft.x,           yPos ) );
-			pinPos.add( new Vec2( topLeft.x-pinLength, yPos ) );
+			pinPos.add( new Vec2( topLeft.x - pinOffs,             yPos ) );
+			pinPos.add( new Vec2( topLeft.x - pinOffs - pinLength, yPos ) );
 			yPos += pinSpace;
 		}
 		
@@ -273,27 +277,28 @@ public class EditorPanel extends JPanel
 		poly.lineTo( botFlatEnd );
 		poly.lineTo( botLeft );
 		poly.closePath();
+		
+		Stroke strokeBody = new BasicStroke( thickness );
+		Stroke strokePin  = new BasicStroke( thickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
 			
 		Gfx.pushColorAndSet( g, EditorColours.componentFill );
 			Gfx.pushAntialiasingStateAndSet( g, false );
 				g.fill( poly );
 			Gfx.popAntialiasingState( g );
 			
-			Gfx.pushColorAndSet( g, EditorColours.componentStroke );
-				Gfx.pushStrokeAndSet( g, new BasicStroke( 5 ) );
-					g.draw( poly );
-				Gfx.popStroke( g );
-				
-				Gfx.pushStrokeAndSet( g, new BasicStroke( 5, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND ) );
+			g.setColor( EditorColours.componentStroke );
+			Gfx.pushStrokeAndSet( g, strokeBody );
+				g.draw( poly );
+			Gfx.popStroke( g );
+			
+			Gfx.pushStrokeAndSet( g, strokePin );
 				poly = new VecPath();
 				for (int i=0; i<pinPos.size(); i+=2) {
 					poly.moveTo( pinPos.get(i)   );
 					poly.lineTo( pinPos.get(i+1) );
-					g.draw( poly );
 				}
-				Gfx.popStroke( g );
-			
-			Gfx.popColor( g );
+				g.draw( poly );
+			Gfx.popStroke( g );
 		Gfx.popColor( g );
 	}
 	
