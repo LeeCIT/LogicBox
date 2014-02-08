@@ -305,6 +305,15 @@ public class Geo
 			 return rounded;
 		else return x;
 	}
+	
+	
+	
+	/**
+	 * Round to nearest multiple.
+	 */
+	public static double roundToMultiple( double x, double mult ) {
+		return roundArith( x / mult ) * mult;
+	}
 }
 
 
