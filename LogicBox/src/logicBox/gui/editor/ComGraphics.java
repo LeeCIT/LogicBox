@@ -21,7 +21,6 @@ public class ComGraphics
 	private static final double flatFrac   = 0.5;
 	private static final double pinLenFrac = 0.5;
 	private static final double bubbleFrac = 0.1;
-	private static final float  thickness  = 5.0f;
 	
 	
 	
@@ -35,6 +34,7 @@ public class ComGraphics
 		final Region r            = getBaseRegion();
 		final double pinLength    = r.getSize().x * pinLenFrac;
 		final double bubbleRadius = r.getSize().x * bubbleFrac;
+		final double thickness    = EditorStyle.compThickness;
 		
 		if (pinCount > 4)
 			r.br.y += r.getSize().y * 0.125 * (pinCount-4);
