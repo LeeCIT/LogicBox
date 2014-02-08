@@ -13,31 +13,36 @@ import logicBox.util.Vec2;
 
 
 /**
- * Generates graphical representation for components.
+ * Generates graphical representations for components and metadata that allows them to be 
+ * interfaced with other program functionality.
  * @author Lee Coakley
  */
 public class SchematicGenerator
 {
-	private static final double flatFrac   = 0.5;
-	private static final double pinLenFrac = 0.5;
-	private static final double bubbleFrac = 0.1;
+	private static final double baseSize        = 64;
+	private static final double flatFrac        = 0.5;
+	private static final double pinLenFrac      = 0.5;
+	private static final double bubbleFrac      = 0.1;
+	private static final int    pinGrowthThresh = 4;
 	
 	
 	
 	private static Region getBaseRegion() {
-		return new Region( new Vec2(-32), new Vec2(32) );
+		double half = baseSize * 0.5;
+		return new Region( new Vec2(-half), new Vec2(half) );
 	}
 	
 	
 	
-	public static GateGraphic generateNandGate( int pinCount ) {
+	public static GateGraphic generateAndGate( int pinCount, boolean invert ) {
 		final Region r            = getBaseRegion();
-		final double pinLength    = r.getSize().x * pinLenFrac;
-		final double bubbleRadius = r.getSize().x * bubbleFrac;
+		final Vec2   size         = r.getSize();
+		final double pinLength    = size.x * pinLenFrac;
+		final double bubbleRadius = size.x * bubbleFrac;
 		final double thickness    = EditorStyle.compThickness;
 		
-		if (pinCount > 4)
-			r.br.y += r.getSize().y * 0.125 * (pinCount-4);
+		if (pinCount > pinGrowthThresh)
+			r.br.y += getPinSpacingGrowth() * (pinCount-pinGrowthThresh);
 		
 		final Vec2 bezRefTr = r.getTopRight();
 		final Vec2 bezRefBr = r.getBottomRight();
@@ -56,13 +61,13 @@ public class SchematicGenerator
 		final Vec2 botBezC1   = Geo.lerp( botFlatEnd, bezRefBr,  0.5      );
 		final Vec2 botBezC2   = Geo.lerp( bezRefBr,   pinOutPos, 0.5      );
 		
-		List<Vec2> pinPos = new ArrayList<>();
+		final List<Vec2> pinPos = new ArrayList<>();
 		pinPos.add( pinOutPos );
 		pinPos.add( pinOutEnd );
 		
-		List<Vec2> pinDistrib = distributePins( topLeft, botLeft, pinCount );
+		final List<Vec2> pinDistrib = distributePins( topLeft, botLeft, pinCount );
 		for (Vec2 pos: pinDistrib) {
-			pinPos.add( pos                              );
+			pinPos.add( pos );
 			pinPos.add( new Vec2(pos.x-pinLength, pos.y) );
 		}
 		
@@ -81,7 +86,7 @@ public class SchematicGenerator
 			polyPins.lineTo( pinPos.get(i+1) );
 		}
 		
-		List<Vec2> pinConnects = new ArrayList<>();
+		final List<Vec2> pinConnects = new ArrayList<>();
 		pinConnects.add( pinOutEnd );
 		for (int i=1; i<pinPos.size(); i+=2)
 			pinConnects.add( pinPos.get(i) );
@@ -107,6 +112,12 @@ public class SchematicGenerator
 		}
 		
 		return list;
+	}
+	
+	
+	
+	private static double getPinSpacingGrowth() {
+		return getBaseRegion().getSize().y * 0.25;
 	}
 }
 

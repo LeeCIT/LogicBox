@@ -9,6 +9,7 @@ import logicBox.gui.Gfx;
 import logicBox.util.Callback;
 import logicBox.util.Geo;
 import logicBox.util.Region;
+import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
@@ -47,9 +48,8 @@ public class EditorPanel extends JPanel
 				Gfx.drawArc( g, new Vec2(0), 12, 45, 180 );
 			Gfx.popColor( g );
 			
-			GateGraphic graphic = SchematicGenerator.generateAndGate( 3, false );
-			graphic.draw( g, new Vec2(256),     0 );
-			graphic.draw( g, new Vec2(384,256), 0 );
+			GateGraphic graphic = SchematicGenerator.generateAndGate( Util.randomIntRange( 1, 8 ), false );
+			graphic.draw( g, new Vec2(256), 0 );
 		Gfx.popMatrix( g );
 	}
 	
