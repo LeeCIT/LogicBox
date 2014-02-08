@@ -112,7 +112,10 @@ public class SnappingPrototype extends ComponentAdapter {
 			//Snap to bottom of the main frame
 
 			//Snap to top of the main frame
-
+			if (checkTopOfFrame(mainFramePosY, compPosY, mainFramePosX, compPosX))  {
+				compPosY = mainFramePosY - evt.getComponent().getHeight();
+			}
+			
 			//Snap to the left of the main frame
 			if (checkLeftside(mainFramePosX, compPosX)) {
 				compPosX = mainFramePosX - evt.getComponent().getWidth();
@@ -132,23 +135,47 @@ public class SnappingPrototype extends ComponentAdapter {
 
 
 
-	
+	/**
+	 * Check the left hand side of the of the frame
+	 * @param mainFramePosx
+	 * @param compPosX
+	 * @return
+	 */
 	private boolean checkLeftside(int mainFramePosx, int compPosX) {
-		int differnce = mainFramePosx - compPosX;
+		int difference = mainFramePosx - compPosX;
 		
-		if(differnce >= 0 && differnce <= snappingDistance) {
-			System.out.println(differnce);
+		if(difference >= 0 && difference <= snappingDistance) {
 			return true;
 		}
-		
 		return false;
 	}
 
 
 
+	private boolean checkTopOfFrame(int mainFramePosY, int compPosY, int mainFramePosX, int compPosX) {
+		int yDifference = mainFramePosY - compPosY;
+		
+		if(yDifference >= 0 && yDifference <= snappingDistance && isComponentOnXAxisOfFrame(mainFramePosX, compPosX)) {
+			return true;
+		}
+		return false;
+	}
+	
+	
+	
+	private boolean isComponentOnXAxisOfFrame(int mainFramePosX, int compPosX) {
+		int mainFrameXLength = mainFramePosX + mainFrame.getWidth();
+		
+		if(compPosX >= mainFramePosX && compPosX <= mainFrameXLength) {
+			return true;
+		}
+		return false;
+	}
 
 
-
+	
+	
+	
 
 
 	//Demo main, just to test the functionality
