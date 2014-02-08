@@ -149,7 +149,7 @@ public class Geo
 	
 	
 	/**
-	 * Get the dot product of A,B.
+	 * Get A dot B.
 	 */
 	public static double dot( Vec2 a, Vec2 b ) {
 		return (a.x * b.x) 
@@ -176,6 +176,19 @@ public class Geo
 		double rads = Math.atan2( d.y, -d.x );
 		double degs = Math.toDegrees( rads );
 		return (degs + 180.0) % 360.0;
+	}
+	
+	
+	
+	/**
+	 * Normalised angular difference in range (-180,+180).
+	 * Result is negative if B is anticlockwise with respect to A.
+	 * Order of comparison affects the sign, but the absolute value is the same either way.
+	 */
+	public static double angleDiff( double a, double b ) {
+	    double diff   = a - b;
+	    double mod360 = diff % 360;
+	    return ((mod360 + 540.0) % 360.0) - 180.0;
 	}
 	
 	
