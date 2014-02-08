@@ -175,10 +175,7 @@ public class EditorPanel extends JPanel
 			Gfx.drawArc( g, new Vec2(0), 12, 45, 180 );
 		Gfx.popColor( g );
 		
-		//Region drawIn = new Region( new Vec2(256), new Vec2(320) );
-		//drawAndGate( g, drawIn );
-		
-		ComGraphics.generateNandGate( 32 ).draw( g, new Vec2(256), 0 );
+		ComGraphics.generateNandGate( 3 ).draw( g, new Vec2(256), Math.random() * 360 );
 	}
 	
 	
@@ -199,7 +196,7 @@ public class EditorPanel extends JPanel
 	
 	
 	private void fillBackground( Graphics2D g ) {
-		Gfx.pushColorAndSet( g, EditorColours.background );
+		Gfx.pushColorAndSet( g, EditorStyle.background );
 		g.fillRect( getX(), getY(), getWidth(), getHeight() );
 		Gfx.popColor( g );
 	}
@@ -223,7 +220,7 @@ public class EditorPanel extends JPanel
 		double  thinSoften  = 0.8;
 		double  colFactor   = thinness * thinSoften;
 		
-		Color col = Geo.lerp( EditorColours.grid, EditorColours.background, colFactor );
+		Color col = Geo.lerp( EditorStyle.grid, EditorStyle.background, colFactor );
 		
 		if (disableAA)
 			Gfx.pushAntialiasingStateAndSet( g, false );
@@ -235,6 +232,8 @@ public class EditorPanel extends JPanel
 		if (disableAA)
 			Gfx.popAntialiasingState( g );
 	}
+	
+	
 	
 	
 	
