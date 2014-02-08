@@ -23,7 +23,7 @@ import logicBox.util.Vec2;
  */
 public class EditorPanel extends JPanel
 {
-	private double zoomRate  = 1.3333;
+	private double zoomRate  = 1.0 + (1.0 / 3.0);
 	private double zoomRange = 8.0;
 	private double zoomMin   = Math.pow( 1.0/zoomRate, zoomRange );
 	private double zoomMax   = Math.pow(     zoomRate, zoomRange );
@@ -181,14 +181,13 @@ public class EditorPanel extends JPanel
 		Region region = new Region( this );
 		Vec2   half   = region.getSize().multiply( 0.5 );
 		
-		Graphics2D g2d = (Graphics2D) g;
 		matrix = new AffineTransform();
 		matrix.translate( half.x, half.y );
 		matrix.scale( zoom, zoom );
 		matrix.translate( -half.x, -half.y );
 		matrix.translate( pan.x, pan.y );
 		matrix.translate( 0.5, 0.5 );
-		g2d.setTransform( matrix );
+		g.setTransform( matrix );
 	}
 	
 	
