@@ -24,7 +24,8 @@ public class EditorStyle
 	public static Color  componentFill   = new Color( 112,  18,  58 );
 	public static double highlightFrac   = 0.25;
 	
-	public static float compThickness = 5.0f;
+	public static double gridThickness = 3.0;
+	public static float  compThickness = 5.0f;
 	public static Stroke strokeBody   = new BasicStroke( compThickness );
 	public static Stroke strokePin    = new BasicStroke( compThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
 	public static Stroke strokeBubble = new BasicStroke( compThickness * 0.5f );
