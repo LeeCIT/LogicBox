@@ -29,7 +29,7 @@ public class Gfx
 		int  size = (int) (radius * 2.0);
 		
 		Gfx.pushMatrix( g );
-			g.transform( AffineTransform.getTranslateInstance(pos.x,pos.y) );
+			Gfx.translate( g, pos );
 			
 			if (filled)
 				 g.fillOval( tl, tl, size, size );
