@@ -106,10 +106,6 @@ public class SnappingPrototype extends ComponentAdapter {
 			mainFramePosX = mainFrame.getX();
 			mainFramePosY = mainFrame.getY();
 
-			// Debugging Need to add algorithm to snap to the main frame
-			// System.out.println("MainFrame pos x" + mainFramePosX + " CompPos x" + compPosX);
-			// System.out.println("MainFrame pos y" + mainFramePosY + " CompPos y" + compPosY);
-
 			if (isComponentOnXAxisOfFrame(mainFramePosX, compPosX)) {
 				// Snap to top of the main frame
 				if (checkTopOfFrame(mainFramePosY, compPosY))  {
@@ -165,6 +161,7 @@ public class SnappingPrototype extends ComponentAdapter {
 	private boolean checkRightSide(int mainFramePosX, int compPosX) {
 		int mainFrameRightSidePos 	= mainFramePosX + mainFrame.getWidth();
 		int difference 				= mainFrameRightSidePos - compPosX;
+
 		System.out.println(difference);
 		if (difference <= 0 && difference >= -snappingDistance) {
 			return true;
