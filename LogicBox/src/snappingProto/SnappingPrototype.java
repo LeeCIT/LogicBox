@@ -1,8 +1,6 @@
 package snappingProto;
-import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.*;
 
 import javax.swing.*;
@@ -10,19 +8,56 @@ import javax.swing.*;
 
 public class SnappingPrototype extends ComponentAdapter {
 	private boolean locked = false;
-	private int snappingDistance = 30;
+	private int snappingDistance;
 
 	JFrame mainFrame;
 	int mainFramePosX;
 	int mainFramePosY;
 
-	//Default constructor
-	public SnappingPrototype() {}
 
-	//Allow the main frame to be used
+
+	/**
+	 * Default constructor. The default snapping distance is 10
+	 * The snap will only snap to the screen edges
+	 */
+	public SnappingPrototype() {
+		snappingDistance = 10;
+	}
+
+
+
+	/**
+	 * Adds window edge snapping at the specified snapping distance
+	 * @param snappingDistance		Snapping distance
+	 */
+	public SnappingPrototype(int snappingDistance) {
+		this.snappingDistance = snappingDistance;
+	}
+
+
+
+	/**
+	 * Will snap to the window edge and the Fran refernce passed in with
+	 * a default snapping distance of 10
+	 * @param frame		The frame to snap to
+	 */
 	public SnappingPrototype(JFrame frame) {
 		mainFrame = frame;
+		snappingDistance = 10;
 	}
+	
+	
+	
+	/**
+	 * Will snap to the frame passed in and the window at the specified snapping distance
+	 * @param frame		The frame to snap to
+	 * @param snappingDistance		The distance to snap
+	 */
+	public SnappingPrototype(JFrame frame, int snappingDistance) {
+		mainFrame 				= frame;
+		this.snappingDistance 	= snappingDistance;
+	}
+
 
 
 	/**
@@ -74,11 +109,9 @@ public class SnappingPrototype extends ComponentAdapter {
 			System.out.println(mainFramePosX - compPosX);
 			
 			//Snap to bottom of the main frame
-			
-			
+						
 			//Snap to top of the main frame
-			
-			
+						
 			//Snap to the left of the main frame
 			if (mainFramePosX - compPosX <= snappingDistance && compPosX - mainFramePosX <= snappingDistance) {
 				compPosX = mainFramePosX - evt.getComponent().getWidth();
@@ -97,6 +130,20 @@ public class SnappingPrototype extends ComponentAdapter {
 		}
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 		//Demo main, just to test the functionality
 		public static void main(String[] args) 
 		{
