@@ -34,6 +34,7 @@ public class SchematicGenerator
 	
 	
 	
+	// TODO: map pins by index top-down, position, IoMode
 	public static GateGraphic generateAndGate( int pinCount, boolean invert ) {
 		final Region r            = getBaseRegion();
 		final Vec2   size         = r.getSize();
