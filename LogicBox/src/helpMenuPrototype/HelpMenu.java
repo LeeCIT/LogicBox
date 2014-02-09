@@ -21,7 +21,8 @@ public class HelpMenu extends JFrame
 	 */
 	public void callMenu( JFrame mainFrame )
 	{
-		mainFrame.addKeyListener( new functionListener() );
+		mainFrame.addKeyListener( new functionListener() ); //Set keylistener to the main frame.
+		mainFrame.setFocusable(true); //Put the main frame into focus.
 	}
 	
 	/**
