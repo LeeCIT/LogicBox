@@ -11,6 +11,9 @@ import java.awt.Color;
 
 /**
  * Provides advanced geometric and mathematical utility functions.
+ * Coordinate system used works as follows:
+ * Top left at [0,0], increases east and south
+ * East is 0 degrees, increases anticlockwise
  * @author Lee Coakley
  */
 public class Geo
@@ -63,16 +66,6 @@ public class Geo
 	 */
 	public static double herp( double a, double b, double f ) {
 		return lerp( a, b, hermite(f) );
-	}
-	
-	
-	
-	/**
-	 * Linear interpolate from A to B by fraction F.
-	 * Interpolant is biased towards the end of the range, so it's slower at the beginning and sharp at the end.
-	 */
-	public static double sqerp( double a, double b, double f ) {
-		return a + (b-a) * sqr(f);
 	}
 	
 	
@@ -156,7 +149,7 @@ public class Geo
 	
 	
 	/**
-	 * Get the dot product of A,B.
+	 * Get A dot B.
 	 */
 	public static double dot( Vec2 a, Vec2 b ) {
 		return (a.x * b.x) 
@@ -183,6 +176,19 @@ public class Geo
 		double rads = Math.atan2( d.y, -d.x );
 		double degs = Math.toDegrees( rads );
 		return (degs + 180.0) % 360.0;
+	}
+	
+	
+	
+	/**
+	 * Normalised angular difference in range (-180,+180).
+	 * Result is negative if B is anticlockwise with respect to A.
+	 * Order of comparison affects the sign, but the absolute value is the same either way.
+	 */
+	public static double angleDiff( double a, double b ) {
+	    double diff   = a - b;
+	    double mod360 = diff % 360;
+	    return ((mod360 + 540.0) % 360.0) - 180.0;
 	}
 	
 	
@@ -298,6 +304,15 @@ public class Geo
 		if (diff <= thresh)
 			 return rounded;
 		else return x;
+	}
+	
+	
+	
+	/**
+	 * Round to nearest multiple.
+	 */
+	public static double roundToMultiple( double x, double mult ) {
+		return roundArith( x / mult ) * mult;
 	}
 }
 

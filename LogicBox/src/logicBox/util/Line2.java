@@ -3,14 +3,17 @@
 
 package logicBox.util;
 
+import java.io.Serializable;
+
 
 
 /**
  * Represents a 2D line segment.
  * @author Lee Coakley
  */
-public class Line2
+public class Line2 implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	public Vec2 a,b;
 	
 	
@@ -51,7 +54,7 @@ public class Line2
 	/**
 	 * Find the intersection point on another line, if any.
 	 */
-	IntersectResult intersect( Line2 other ) {
+	public IntersectResult intersect( Line2 other ) {
 		IntersectResult result = new IntersectResult();
 		
 	    Vec2   aDelta = this .delta();
