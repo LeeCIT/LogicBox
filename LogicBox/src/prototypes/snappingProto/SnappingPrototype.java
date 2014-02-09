@@ -106,7 +106,7 @@ public class SnappingPrototype extends ComponentAdapter {
 			mainFramePosX = mainFrame.getX();
 			mainFramePosY = mainFrame.getY();
 
-			if (isComponentOnXAxisOfFrame(mainFramePosX, compPosX)) {
+			if (isComponentOnXAxisOfFrame(mainFramePosX, comp)) {
 				// Snap to top of the main frame
 				if (checkTopOfFrame(mainFramePosY, comp))  {
 					compPosY = mainFramePosY - comp.getHeight();
@@ -119,7 +119,7 @@ public class SnappingPrototype extends ComponentAdapter {
 
 			}
 
-			if (isComponentOnYaxisOfFrame(mainFramePosY, compPosY)) {
+			if (isComponentOnYaxisOfFrame(mainFramePosY, comp)) {
 				// Snap to the left of the main frame
 				if (checkLeftside(mainFramePosX, comp)) {
 					compPosX = mainFramePosX - comp.getWidth();
@@ -212,10 +212,12 @@ public class SnappingPrototype extends ComponentAdapter {
 	 * @param compPosX
 	 * @return
 	 */
-	private boolean isComponentOnXAxisOfFrame(int mainFramePosX, int compPosX) {
+	private boolean isComponentOnXAxisOfFrame(int mainFramePosX, Component comp) {
 		int mainFrameXLength = mainFramePosX + mainFrame.getWidth();
+		int compX = comp.getX();
+		int compLength = compX + comp.getWidth();
 
-		if (compPosX >= mainFramePosX && compPosX <= mainFrameXLength) {
+		if ( (compX >= mainFramePosX && compX <= mainFrameXLength) || (compLength >= mainFramePosX && compLength <= mainFrameXLength) ) {
 			return true;
 		}
 		return false;
@@ -229,10 +231,12 @@ public class SnappingPrototype extends ComponentAdapter {
 	 * @param compPosY
 	 * @return
 	 */
-	private boolean isComponentOnYaxisOfFrame(int mainFramePosY, int compPosY) {
+	private boolean isComponentOnYaxisOfFrame(int mainFramePosY, Component comp) {
 		int mainFrameYLength = mainFramePosY + mainFrame.getHeight();
+		int compY = comp.getY();
+		int compLength = compY + comp.getHeight();
 
-		if (compPosY >= mainFramePosY && compPosY <= mainFrameYLength) {
+		if ( (compY >= mainFramePosY && compY <= mainFrameYLength) || (compLength >= mainFramePosY && compLength <= mainFrameYLength) ) {
 			return true;
 		}
 		return false;
