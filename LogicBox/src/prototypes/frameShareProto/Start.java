@@ -1,4 +1,4 @@
-package frameShareProto;
+package prototypes.frameShareProto;
 
 import logicBox.gui.GuiUtil;
 
