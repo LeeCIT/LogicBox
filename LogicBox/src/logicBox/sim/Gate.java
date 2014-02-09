@@ -50,4 +50,8 @@ public abstract class Gate extends Component implements PinIn, PinOut, Updateabl
 	public boolean hasVariableInputPinCount() {
 		return false;
 	}
+	
+	
+	
+	protected abstract boolean evaluate();
 }
