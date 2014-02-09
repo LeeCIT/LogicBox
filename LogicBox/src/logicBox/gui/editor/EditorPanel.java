@@ -48,7 +48,7 @@ public class EditorPanel extends JPanel
 				Gfx.drawArc( g, new Vec2(0), 12, 45, 180 );
 			Gfx.popColor( g );
 			
-			GateGraphic graphic = SchematicGenerator.generateAndGate( Util.randomIntRange( 1, 8 ), false );
+			GateGraphic graphic = SchematicGenerator.generateAndGate( 2, true );
 			graphic.draw( g, new Vec2(256), 0 );
 		Gfx.popMatrix( g );
 	}
@@ -56,7 +56,7 @@ public class EditorPanel extends JPanel
 	
 	
 	private void fillBackground( Graphics2D g ) {
-		Gfx.pushColorAndSet( g, EditorStyle.background );
+		Gfx.pushColorAndSet( g, EditorStyle.colBackground );
 		g.fillRect( getX(), getY(), getWidth(), getHeight() );
 		Gfx.popColor( g );
 	}
@@ -76,13 +76,13 @@ public class EditorPanel extends JPanel
 		double  zoomMin     = cam.getZoomMin();
 		double  thickThresh = 1.0 / 3.0;
 		boolean fakeThin    = zoom <= thickThresh;
-		boolean disableAA   = fakeThin || (zoom > 2); 
+		boolean disableAA   = fakeThin || (zoom > 2);
 		double  thickness   = fakeThin ? 1.0 : EditorStyle.gridThickness;
 		double  thinness    = 1.0 - Geo.boxStep( zoom, zoomMin, thickThresh );
 		double  thinSoften  = 0.8;
 		double  colFactor   = thinness * thinSoften;
 		
-		Color col = Geo.lerp( EditorStyle.grid, EditorStyle.background, colFactor );
+		Color col = Geo.lerp( EditorStyle.colGrid, EditorStyle.colBackground, colFactor );
 		
 		if (disableAA)
 			Gfx.pushAntialiasingStateAndSet( g, false );
@@ -104,6 +104,8 @@ public class EditorPanel extends JPanel
 			}
 		};
 	}
+	
+	
 	
 	
 	

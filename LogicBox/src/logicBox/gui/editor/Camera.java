@@ -8,7 +8,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import javax.swing.SwingUtilities;
 import logicBox.util.Callback;
-import logicBox.util.CallbackParam;
 import logicBox.util.Geo;
 import logicBox.util.Region;
 import logicBox.util.Vec2;

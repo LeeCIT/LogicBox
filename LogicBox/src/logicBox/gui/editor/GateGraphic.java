@@ -3,6 +3,7 @@
 
 package logicBox.gui.editor;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.List;
@@ -25,14 +26,22 @@ public class GateGraphic implements Drawable
 	private Vec2    bubblePos;
 	private double  bubbleRadius;
 	
+	private boolean isSelected;
+	private Color   colStroke;
+	private Color   colFill;  
+	
 	private List<Vec2> pinConnectors;
 	
 	
 	
 	public GateGraphic( VecPath polyBody, VecPath polyPins, List<Vec2> pinConnectors ) {
+		this.colStroke     = EditorStyle.colComponentStroke;
+		this.colFill       = EditorStyle.colComponentFill;
 		this.polyBody      = polyBody;
 		this.polyPins      = polyPins;
 		this.pinConnectors = pinConnectors;
+		
+		setSelected( false );
 	}
 	
 	
@@ -45,21 +54,41 @@ public class GateGraphic implements Drawable
 	
 	
 	
+	public void setSelected( boolean state ) {
+		isSelected = state;
+		
+		if (isSelected) {
+			colStroke = EditorStyle.makeSelect( EditorStyle.colComponentStroke );
+			colFill   = EditorStyle.makeSelect( EditorStyle.colComponentFill   );
+		} else {
+			colStroke = EditorStyle.colComponentStroke;
+			colFill   = EditorStyle.colComponentFill;
+		}
+	}
+	
+	
+	
+	public boolean isSelected() {
+		return isSelected;
+	}
+	
+	
+	
 	public void draw( Graphics2D g, Vec2 pos, double angle ) {
 		Gfx.pushMatrix( g );
-			
-			g.transform( AffineTransform.getTranslateInstance( pos.x, pos.y ) );
-			g.transform( AffineTransform.getRotateInstance   ( Math.toRadians( angle ) ) );
+			Gfx.translate( g, pos   );
+			Gfx.rotate   ( g, angle );
 		
-			Gfx.pushColorAndSet( g, EditorStyle.componentStroke );
+			Gfx.pushColorAndSet( g, colStroke );
 				Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
 					g.draw( polyPins );
 				Gfx.popStroke( g );
 					
-				Gfx.pushColorAndSet( g, EditorStyle.componentFill );
+				Gfx.pushColorAndSet( g, colFill );
 				Gfx.pushAntialiasingStateAndSet( g, false );
 					g.fill( polyBody );
-					if (hasBubble) Gfx.drawCircle( g, bubblePos, bubbleRadius, true );
+					if (hasBubble)
+						Gfx.drawCircle( g, bubblePos, bubbleRadius, true );
 				Gfx.popAntialiasingState( g );
 				Gfx.popColor( g );
 				
@@ -74,7 +103,6 @@ public class GateGraphic implements Drawable
 				}
 				
 			Gfx.popColor( g );
-		
 		Gfx.popMatrix( g );
 	}
 	
