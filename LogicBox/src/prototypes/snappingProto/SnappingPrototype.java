@@ -162,7 +162,6 @@ public class SnappingPrototype extends ComponentAdapter {
 		int mainFrameRightSidePos 	= mainFramePosX + mainFrame.getWidth();
 		int difference 				= mainFrameRightSidePos - compPosX;
 
-		System.out.println(difference);
 		if (difference <= 0 && difference >= -snappingDistance) {
 			return true;
 		}
