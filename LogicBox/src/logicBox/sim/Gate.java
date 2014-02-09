@@ -54,4 +54,10 @@ public abstract class Gate extends Component implements PinIn, PinOut, Updateabl
 	
 	
 	protected abstract boolean evaluate();
+	
+	
+	
+	public void update() {
+		pinOut.setState( evaluate() );
+	}
 }
