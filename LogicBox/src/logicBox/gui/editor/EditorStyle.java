@@ -5,6 +5,7 @@ package logicBox.gui.editor;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Stroke;
+import logicBox.util.Geo;
 
 
 
@@ -14,31 +15,35 @@ import java.awt.Stroke;
  */
 public class EditorStyle
 {
-	public static Color  background      = new Color(  55,  37,  37 );
-	public static Color  grid            = new Color(  89,  51,  72 );
-	public static Color  traceOff        = new Color(  58, 122,  54 );
-	public static Color  traceOn         = new Color( 146, 248, 122 );
-	public static Color  junctionOff     = new Color( 208, 135,   8 );
-	public static Color  junctionOn      = new Color( 255, 227,  39 );
-	public static Color  componentStroke = new Color( 243,  75,  99 );
-	public static Color  componentFill   = new Color( 112,  18,  58 );
-	public static double highlightFrac   = 0.25;
+	public static Color colBackground      = new Color(  55,  37,  37 );
+	public static Color colGrid            = new Color(  89,  51,  72 );
+	public static Color colTraceOff        = new Color(  58, 122,  54 );
+	public static Color colTraceOn         = new Color( 146, 248, 122 );
+	public static Color colJunctionOff     = new Color( 208, 135,   8 );
+	public static Color colJunctionOn      = new Color( 255, 227,  39 );
+	public static Color colComponentStroke = new Color( 243,  75,  99 );
+	public static Color colComponentFill   = new Color( 112,  18,  58 );
+	public static Color colSelection       = new Color( 78,  185, 252 );
 	
 	public static double gridThickness = 3.0;
 	public static float  compThickness = 5.0f;
+	
 	public static Stroke strokeBody   = new BasicStroke( compThickness );
 	public static Stroke strokePin    = new BasicStroke( compThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
 	public static Stroke strokeBubble = new BasicStroke( compThickness * 0.5f );
 	
+	private static double highlightFrac = 0.125;
+	private static double selectFrac    = 0.5;
+	
 	
 	
 	public static Color makeHighlight( Color col ) {
-		int highlight = (int) (255.0 * highlightFrac);
-		
-		return new Color(
-			Math.min( col.getRed  () + highlight, 255 ),
-			Math.min( col.getGreen() + highlight, 255 ),
-			Math.min( col.getBlue () + highlight, 255 )
-		);
+		return Geo.lerp( col, Color.white, highlightFrac );
+	}
+	
+	
+	
+	public static Color makeSelect( Color col ) {
+		return Geo.lerp( col, colSelection, selectFrac );
 	}
 }
