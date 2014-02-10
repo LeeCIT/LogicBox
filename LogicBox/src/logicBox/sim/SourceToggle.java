@@ -24,6 +24,6 @@ public class SourceToggle extends SourceFixed
 	
 	
 	public String getName() {
-		return super.getName();
+		return "Switchable source";
 	}
 }
