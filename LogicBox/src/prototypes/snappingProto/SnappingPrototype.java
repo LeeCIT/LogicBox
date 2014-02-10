@@ -77,7 +77,7 @@ public class SnappingPrototype extends ComponentAdapter {
 			compPosX = 0;
 
 		if (compPosX > desktop.width - compWidth - snappingDistance)
-			compPosX = desktop.width - compHeight;
+			compPosX = desktop.width - compWidth;
 		
 		if (compPosY > desktop.height - compHeight - snappingDistance)
 			compPosY = desktop.height - compHeight;
