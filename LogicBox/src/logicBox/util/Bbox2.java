@@ -6,7 +6,7 @@ package logicBox.util;
 
 
 /**
- * 2D Bounding box.
+ * 2D bounding box.
  * @author Lee Coakley
  */
 public class Bbox2 extends Region
