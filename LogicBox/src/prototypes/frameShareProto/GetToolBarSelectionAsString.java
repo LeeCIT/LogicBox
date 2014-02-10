@@ -1,7 +1,6 @@
-package frameShareProto;
+package prototypes.frameShareProto;
+import prototypes.frameShareProto.ToolSelectionEnum.ToolSelection;
 
-
-import frameShareProto.ToolSelectionEnum.ToolSelection;
 
 public class GetToolBarSelectionAsString {
 	

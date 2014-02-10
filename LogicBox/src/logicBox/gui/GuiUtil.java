@@ -3,7 +3,7 @@ package logicBox.gui;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-import frameShareProto.MainFrame;
+import prototypes.frameShareProto.MainFrame;
 
 
 
@@ -33,8 +33,7 @@ public class GuiUtil {
 	 * @param title
 	 * @param message
 	 */
-	public static void showError(String title, String message) 
-	{
+	public static void showError(String title, String message) {
 		JOptionPane.showMessageDialog(MainFrame.currentInstance, message, title, JOptionPane.ERROR_MESSAGE);
 	}
 	
