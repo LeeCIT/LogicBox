@@ -25,8 +25,8 @@ public class Gfx
 	
 	
 	public static void drawCircle( Graphics2D g, Vec2 pos, double radius, boolean filled ) {		
-		int  tl   = (int) -radius;
-		int  size = (int) (radius * 2.0);
+		int tl   = (int) -radius;
+		int size = (int) (radius * 2.0);
 		
 		Gfx.pushMatrix( g );
 			Gfx.translate( g, pos );
