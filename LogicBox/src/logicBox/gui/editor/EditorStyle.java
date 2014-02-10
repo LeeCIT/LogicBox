@@ -30,6 +30,7 @@ public class EditorStyle
 	
 	public static Stroke strokeBody   = new BasicStroke( compThickness );
 	public static Stroke strokePin    = new BasicStroke( compThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+	public static Stroke strokeTrace  = new BasicStroke( compThickness, BasicStroke.CAP_BUTT,  BasicStroke.JOIN_ROUND );
 	public static Stroke strokeBubble = new BasicStroke( compThickness * 0.5f );
 	
 	private static double highlightFrac = 0.125;
