@@ -3,6 +3,7 @@
 
 package logicBox.gui.editor;
 import java.awt.*;
+import java.awt.MultipleGradientPaint.CycleMethod;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import logicBox.gui.Gfx;
@@ -97,6 +98,12 @@ public class EditorPanel extends JPanel
 		Vec2   a2i    = Geo.lenDir(radius,angleA).add( intersect );
 		Vec2   b2i    = Geo.lenDir(radius,angleB).add( intersect );
 		
+		Paint lastPaint = g.getPaint();
+		Color   shade = Geo.lerp( EditorStyle.colTraceOff, Color.white, 0.33 );
+		float[] fracs = { 0.0f, 0.5f, 1.0f };
+		Color[] cols  = { EditorStyle.colTraceOff, shade, EditorStyle.colTraceOff };
+		Paint shadePaint = new LinearGradientPaint( a2i, b2i, fracs, cols, CycleMethod.NO_CYCLE );
+		
 		VecPath poly = new VecPath();
 		poly.moveTo( a   );
 		poly.lineTo( a2i );
@@ -105,12 +112,14 @@ public class EditorPanel extends JPanel
 		
 		Gfx.pushColorAndSet ( g, EditorStyle.colTraceOff );
 		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBody );
-		
 			g.draw( poly );
+			
+			g.setPaint( shadePaint );
 			Gfx.drawArc( g, intersect, radius, angleA, angleB );
+			g.setPaint( lastPaint );
+			
 			drawConnection( g, a );
 			drawConnection( g, b );
-			
 		Gfx.popStroke( g );
 		Gfx.popColor( g );
 	}
