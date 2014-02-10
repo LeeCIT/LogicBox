@@ -6,10 +6,10 @@ import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import logicBox.gui.Gfx;
+import logicBox.gui.VecPath;
 import logicBox.util.Callback;
 import logicBox.util.Geo;
 import logicBox.util.Region;
-import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
@@ -48,13 +48,102 @@ public class EditorPanel extends JPanel
 				Gfx.drawArc( g, new Vec2(0), 12, 45, 180 );
 			Gfx.popColor( g );
 			
-			GateGraphic graphic = SchematicGenerator.generateAndGate( 2, true );
+			drawTrace( g );
+			Vec2 ota   = new Vec2( 448-96, 384-32 );
+			Vec2 inter = new Vec2( 448,    384-32 );
+			Vec2 otb   = new Vec2( 448+96, 384-32 );
+			drawOverlappedTrace( g, ota, inter, otb );
+			
+			Graphic graphic = GraphicGen.generateAndGate( 2, true );
 			graphic.draw( g, new Vec2(256), 0 );
 		Gfx.popMatrix( g );
 	}
 	
 	
 	
+	private void drawTrace( Graphics2D g ) {
+		Vec2 a = new Vec2( 256+64,256 );
+		Vec2 j = a.add( 64 );
+		Vec2 c = j.add( new Vec2(64,0) );
+		Vec2 d = c.add( new Vec2(0,64) );
+		Vec2 e = j.subtract( new Vec2(64,0) );
+		
+		VecPath poly = new VecPath();
+		poly.moveTo( a );
+		poly.lineTo( j );
+		poly.lineTo( c );
+		poly.lineTo( d );
+		poly.moveTo( j );
+		poly.lineTo( e );
+		
+		Gfx.pushColorAndSet ( g, EditorStyle.colTraceOff );
+		Gfx.pushStrokeAndSet( g, EditorStyle.strokeTrace );
+		
+			g.draw( poly );
+			drawJunction( g, j );
+			drawConnection( g, a );
+			drawConnection( g, d );
+			
+		Gfx.popStroke( g );
+		Gfx.popColor( g );
+	}
+	
+	
+	
+	private void drawOverlappedTrace( Graphics2D g, Vec2 a, Vec2 intersect, Vec2 b ) {
+		double radius = EditorStyle.compThickness * 2;
+		double angleB = Geo.angleBetween( a, b );
+		double angleA = angleB + 180;
+		Vec2   a2i    = Geo.lenDir(radius,angleA).add( intersect );
+		Vec2   b2i    = Geo.lenDir(radius,angleB).add( intersect );
+		
+		VecPath poly = new VecPath();
+		poly.moveTo( a   );
+		poly.lineTo( a2i );
+		poly.moveTo( b2i );
+		poly.lineTo( b   );
+		
+		Gfx.pushColorAndSet ( g, EditorStyle.colTraceOff );
+		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBody );
+		
+			g.draw( poly );
+			Gfx.drawArc( g, intersect, radius, angleA, angleB );
+			drawConnection( g, a );
+			drawConnection( g, b );
+			
+		Gfx.popStroke( g );
+		Gfx.popColor( g );
+	}
+	
+	
+	
+	private void drawJunction( Graphics2D g, Vec2 pos ) {
+		double radius = 4;
+		
+		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBubble );
+			Gfx.pushAntialiasingStateAndSet( g, false );
+			Gfx.drawCircle( g, pos, radius, EditorStyle.colJunctionOff, true );
+			Gfx.popAntialiasingState( g );
+			
+			Gfx.drawCircle( g, pos, radius, EditorStyle.colJunctionOn, false );
+		Gfx.popStroke( g );
+	}
+	
+	
+	
+	private void drawConnection( Graphics2D g, Vec2 pos ) {
+		double radius = 3;
+		
+		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBubble );
+			Gfx.pushAntialiasingStateAndSet( g, false );
+			Gfx.drawCircle( g, pos, radius, EditorStyle.colBackground, true );
+			Gfx.popAntialiasingState( g );
+			Gfx.drawCircle( g, pos, radius, EditorStyle.colTraceOff, false );
+		Gfx.popStroke( g );
+	}
+
+
+
 	private void fillBackground( Graphics2D g ) {
 		Gfx.pushColorAndSet( g, EditorStyle.colBackground );
 		g.fillRect( getX(), getY(), getWidth(), getHeight() );
@@ -119,6 +208,7 @@ public class EditorPanel extends JPanel
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}
 }
+
 
 
 
