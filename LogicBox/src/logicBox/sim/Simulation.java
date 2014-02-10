@@ -64,10 +64,10 @@ public class Simulation
 				System.out.println( "\tUpdated " + com );
 			}
 			
-			if (com instanceof PinOut) {
-				PinOut out = ((PinOut) com);
+			if (com instanceof PinIo) {
+				PinIo pinIo = ((PinIo) com);
 				
-				for (Pin pin: out.getPinOutputs()) {
+				for (Pin pin: pinIo.getPinOutputs()) {
 					if (pin.getState()) {
 						AffectedPathSet set = getAffectedPath( pin );
 						set.setStates( true );
@@ -167,7 +167,7 @@ public class Simulation
 	
 	
 	
-	public static Trace connect( PinOut outComp, int outPinIndex, PinIn inComp, int inPinIndex ) {
+	public static Trace connect( PinIo outComp, int outPinIndex, PinIo inComp, int inPinIndex ) {
 		Pin pinOut = outComp.getPinOutputs().get( outPinIndex );
 		Pin pinIn  = inComp .getPinInputs() .get( inPinIndex  );
 		return connectPins( pinOut, pinIn );
@@ -175,7 +175,7 @@ public class Simulation
 
 
 
-	public static Trace connect( Junction outJunc, PinIn inComp, int inPinIndex ) {
+	public static Trace connect( Junction outJunc, PinIo inComp, int inPinIndex ) {
 		Pin pinOut = outJunc.createPin();
 		Pin pinIn  = inComp.getPinInputs().get( inPinIndex );
 		return connectPins( pinOut, pinIn );

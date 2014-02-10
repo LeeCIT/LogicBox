@@ -26,4 +26,10 @@ public class GateNand extends GateAnd
 	public void update() {
 		pinOut.setState( ! evaluate() );
 	}
+	
+	
+	
+	public String getName() {
+		return "Nand gate";
+	}
 }

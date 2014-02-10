@@ -20,4 +20,10 @@ public class SourceToggle extends SourceFixed
 	public void toggleState() {
 		pinOut.setState( ! pinOut.getState() );
 	}
+	
+	
+	
+	public String getName() {
+		return super.getName();
+	}
 }

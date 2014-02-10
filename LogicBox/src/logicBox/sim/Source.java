@@ -2,6 +2,7 @@
 
 
 package logicBox.sim;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -10,7 +11,7 @@ import java.util.List;
  * A logic-level source.
  * @author Lee Coakley
  */
-public abstract class Source extends Component implements PinOut, Updateable
+public abstract class Source extends ComponentActive
 {
 	protected Pin pinOut;
 	
@@ -18,7 +19,7 @@ public abstract class Source extends Component implements PinOut, Updateable
 	
 	public Source( boolean state ) {
 		super();
-		pinOut = new Pin( this, IoMode.output );
+		pinOut = new Pin( this, PinIoMode.output );
 		setState( state );
 	}
 	
@@ -26,6 +27,18 @@ public abstract class Source extends Component implements PinOut, Updateable
 	
 	public void setState( boolean state ) {
 		pinOut.setState( state );
+	}
+	
+	
+	
+	public boolean getState() {
+		return pinOut.getState();
+	}
+	
+	
+	
+	public List<Pin> getPinInputs() {
+		return new ArrayList<>();
 	}
 	
 	

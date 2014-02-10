@@ -23,4 +23,10 @@ public class GateXor extends Gate
 		
 		return a ^ b;
 	}
+	
+	
+	
+	public String getName() {
+		return "Xor gate";
+	}
 }

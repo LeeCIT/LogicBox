@@ -24,7 +24,7 @@ public abstract class Display extends ComponentActive
 		pinInputs = new ArrayList<>();
 		
 		for (int i=0; i<inputPinCount; i++)
-			pinInputs.add( new Pin(this, IoMode.input) );
+			pinInputs.add( new Pin(this, PinIoMode.input) );
 	}
 	
 	
@@ -37,5 +37,11 @@ public abstract class Display extends ComponentActive
 	
 	public List<Pin> getPinOutputs() {
 		return new ArrayList<>();
+	}
+	
+	
+	
+	public void update() {
+		// Do nothing
 	}
 }

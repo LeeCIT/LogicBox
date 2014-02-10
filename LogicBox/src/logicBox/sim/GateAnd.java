@@ -37,4 +37,10 @@ public class GateAnd extends GateVariableInputs
 	public void update() {
 		pinOut.setState( evaluate() );
 	}
+
+
+
+	public String getName() {
+		return "And gate";
+	}
 }
