@@ -11,5 +11,9 @@ package logicBox.sim;
  */
 public abstract class Component
 {
-	protected long simStep; // Simulation step the component was last updated on.
+	protected long simStep; // Simulation step the component was last touched on
+	
+	
+	
+	public abstract String getName();
 }
