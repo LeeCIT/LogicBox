@@ -23,13 +23,18 @@ public enum ComponentType
 	
 	sourceFixed,
 	sourceToggle,
+	sourceOscillator,
 	
 	junction,
 	trace,
 	
+	displayLed,
+	displaySevenSeg,
+	
 	mux,
 	demux,
-	flipflop,
+	flipFlopD,
 	
-	blackBoxPin // Need IoMode and which side of the box they'll be on...
+	blackBox,
+	blackBoxPin; // Need IoMode and which side of the box they'll be on...
 }
