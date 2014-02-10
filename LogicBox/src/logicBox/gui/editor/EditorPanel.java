@@ -99,7 +99,7 @@ public class EditorPanel extends JPanel
 		Vec2   b2i    = Geo.lenDir(radius,angleB).add( intersect );
 		
 		Paint lastPaint = g.getPaint();
-		Color   shade = Geo.lerp( EditorStyle.colTraceOff, Color.white, 0.33 );
+		Color   shade = Geo.lerp( EditorStyle.colTraceOff, new Color(0,255,0), 0.5 );
 		float[] fracs = { 0.0f, 0.5f, 1.0f };
 		Color[] cols  = { EditorStyle.colTraceOff, shade, EditorStyle.colTraceOff };
 		Paint shadePaint = new LinearGradientPaint( a2i, b2i, fracs, cols, CycleMethod.NO_CYCLE );
