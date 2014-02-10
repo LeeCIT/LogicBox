@@ -26,10 +26,11 @@ public class ContextMenuString extends ContextMenuItem
 	
 	
 	
-	public ContextMenuString( Icon icon, String name, Callback callback ) {
+	public ContextMenuString( Icon icon, String name, char mnemonic, Callback callback ) {
 		this.icon     = icon;
 		this.name     = name;
 		this.callback = callback;
+		this.mnemonic = mnemonic;
 	}
 	
 	
@@ -37,14 +38,19 @@ public class ContextMenuString extends ContextMenuItem
 	protected void addTo( final JPopupMenu menu ) {
 		JMenuItem item = new JMenuItem();
 		item.setName( name );
-		item.setIcon( icon );		
-		item.setMnemonic( mnemonic );
 		
-		item.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				callback.execute();
-			}
-		});
+		if (icon != null)
+			item.setIcon( icon );
+		
+		if (mnemonic != 0)
+			item.setMnemonic( mnemonic );
+		
+		if (callback != null)
+			item.addActionListener( new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					callback.execute();
+				}
+			});
 		
 		menu.add( item );
 	}
