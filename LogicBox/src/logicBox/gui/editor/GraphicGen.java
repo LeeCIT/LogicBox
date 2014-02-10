@@ -6,6 +6,7 @@ package logicBox.gui.editor;
 import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.VecPath;
+import logicBox.sim.Component;
 import logicBox.util.Geo;
 import logicBox.util.Region;
 import logicBox.util.Vec2;
@@ -14,16 +15,22 @@ import logicBox.util.Vec2;
 
 /**
  * Generates graphical representations for components and metadata that allows them to be 
- * interfaced with other program functionality.
+ * interfaced with the simulation.
  * @author Lee Coakley
  */
-public class SchematicGenerator
+public class GraphicGen
 {
 	private static final double baseSize        = 64;
 	private static final double flatFrac        = 0.5;
 	private static final double pinLenFrac      = 0.5;
 	private static final double bubbleFrac      = 0.1;
 	private static final int    pinGrowthThresh = 4;
+	
+	
+	
+	public static void generate( Component com ) {
+		
+	}
 	
 	
 	
@@ -35,7 +42,7 @@ public class SchematicGenerator
 	
 	
 	// TODO: map pins by index top-down, position, IoMode
-	public static GateGraphic generateAndGate( int pinCount, boolean invert ) {
+	public static Graphic generateAndGate( int pinCount, boolean invert ) {
 		final Region r            = getBaseRegion();
 		final Vec2   size         = r.getSize();
 		final double pinLength    = size.x * pinLenFrac;
@@ -92,8 +99,11 @@ public class SchematicGenerator
 		for (int i=1; i<pinPos.size(); i+=2)
 			pinConnects.add( pinPos.get(i) );
 		
-		GateGraphic gate = new GateGraphic( polyBody, polyPins, pinConnects );
-		gate.enableBubble( bubblePos, bubbleRadius );
+		Graphic gate = new Graphic( polyBody, polyPins, pinConnects );
+		
+		if (invert)
+			gate.enableBubble( bubblePos, bubbleRadius );
+		
 		return gate;
 	}
 	

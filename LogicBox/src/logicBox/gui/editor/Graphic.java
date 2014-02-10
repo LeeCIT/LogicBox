@@ -5,23 +5,25 @@ package logicBox.gui.editor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.util.List;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
+import logicBox.util.Bbox2;
+import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
 
 
 /**
- * Performs component drawing for gates.
- * Essentially it just caches the computations from ComGraphics.
+ * Performs component drawing.
+ * Essentially it just caches the computations from GraphicsGen.
  * @author Lee Coakley
  */
-public class GateGraphic implements Drawable
+public class Graphic implements Drawable
 {
 	private VecPath polyBody;
 	private VecPath polyPins;
+	
 	private boolean hasBubble;
 	private Vec2    bubblePos;
 	private double  bubbleRadius;
@@ -34,7 +36,7 @@ public class GateGraphic implements Drawable
 	
 	
 	
-	public GateGraphic( VecPath polyBody, VecPath polyPins, List<Vec2> pinConnectors ) {
+	public Graphic( VecPath polyBody, VecPath polyPins, List<Vec2> pinConnectors ) {
 		this.colStroke     = EditorStyle.colComponentStroke;
 		this.colFill       = EditorStyle.colComponentFill;
 		this.polyBody      = polyBody;
@@ -114,6 +116,29 @@ public class GateGraphic implements Drawable
 	 */
 	public List<Vec2> getPinConnectors() {
 		return pinConnectors;
+	}
+	
+	
+	
+	/**
+	 * Test whether pos (in local space) is contained inside the graphic.
+	 * For this to make sense you have to transform pos first.
+	 */
+	public boolean contains( Vec2 pos ) {
+		return Geo.distance( bubblePos, pos ) <= bubbleRadius
+			|| polyBody.contains( pos )
+			|| polyPins.contains( pos );
+	}
+	
+	
+	
+	/**
+	 * Test whether bounding box intersects the graphic.
+	 * The bbox must be transformed to the graphic's local space.
+	 */
+	public boolean overlaps( Bbox2 bbox ) {
+		//return polyBody.i
+		return false;
 	}
 }
 
