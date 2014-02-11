@@ -1,8 +1,5 @@
 package helpMenuPrototype;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import javax.swing.JFrame;
 
 public class HelpMenu extends JFrame
@@ -19,10 +16,9 @@ public class HelpMenu extends JFrame
 	 * the passed in JFrame.
 	 * @param mainFrame
 	 */
-	public void callMenu( JFrame mainFrame )
+	public void callMenu()
 	{
-		mainFrame.addKeyListener( new functionListener() ); //Set keylistener to the main frame.
-		mainFrame.setFocusable(true); //Put the main frame into focus.
+		setVisible(true);
 	}
 	
 	
