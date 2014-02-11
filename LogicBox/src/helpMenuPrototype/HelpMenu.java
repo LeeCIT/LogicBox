@@ -25,24 +25,5 @@ public class HelpMenu extends JFrame
 		mainFrame.setFocusable(true); //Put the main frame into focus.
 	}
 	
-	/**
-	 * Inner KeyListener
-	 * class for the mainFrame
-	 * @author Shaun
-	 */
-	class functionListener implements KeyListener
-	{
-		@Override
-		public void keyPressed(KeyEvent e)
-		{
-			//Check if the F1 key was pressed
-			if ( e.getKeyCode() == 112 ) { setVisible(true); }
-		}
-		
-		@Override
-		public void keyReleased(KeyEvent e) {}
-		
-		@Override
-		public void keyTyped(KeyEvent e) {}
-	}
+	
 }
