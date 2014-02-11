@@ -36,7 +36,7 @@ public class WebClient
 		{
 		    public void failed(UnirestException e) 
 		    {
-	    		ri.onRequestResponse(null, RequestInterface.status.FAILED);
+	    		ri.onRequestResponse(user, RequestInterface.status.FAILED);
 		    }
 
 		    public void completed(HttpResponse<JsonNode> response) 
@@ -49,7 +49,7 @@ public class WebClient
 
 		    public void cancelled() 
 		    {
-		    	ri.onRequestResponse(null, RequestInterface.status.CANCELLED);
+		    	ri.onRequestResponse(user, RequestInterface.status.CANCELLED);
 		    }
 		});	
 	}
@@ -62,7 +62,7 @@ public class WebClient
 		{
 		    public void failed(UnirestException e) 
 		    {
-	    		ri.onRequestResponse(null, RequestInterface.status.FAILED);
+	    		ri.onRequestResponse(user, RequestInterface.status.FAILED);
 		    }
 
 		    public void completed(HttpResponse<JsonNode> response) 
@@ -78,7 +78,7 @@ public class WebClient
 
 		    public void cancelled() 
 		    {
-		    	ri.onRequestResponse(null, RequestInterface.status.CANCELLED);
+		    	ri.onRequestResponse(user, RequestInterface.status.CANCELLED);
 		    }
 		});	
 	}
