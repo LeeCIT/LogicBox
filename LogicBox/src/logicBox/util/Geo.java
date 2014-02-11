@@ -122,10 +122,37 @@ public class Geo
 	
 	
 	/**
+	 * Get the vector needed to go from A to B.
+	 */
+	public static Vec2 delta( Vec2 a, Vec2 b ) {
+		return b.subtract( a );
+	}
+	
+	
+	
+	/**
+	 * Get the length of a vector squared.
+	 */
+	public static double lengthSqr( Vec2 v ) {
+		return dot( v, v );
+	}
+	
+	
+	
+	/**
+	 * Get the length of a vector.
+	 */
+	public static double length( Vec2 v ) {
+		return Math.sqrt( lengthSqr(v) );
+	}
+	
+	
+	
+	/**
 	 * Get the euclidean distance squared between two points.
 	 */
 	public static double distanceSqr( Vec2 a, Vec2 b ) {
-		return sqr(b.x-a.x) + sqr(b.y-a.y);
+		return lengthSqr( delta(a,b) );
 	}
 	
 	
@@ -134,13 +161,13 @@ public class Geo
 	 * Get the euclidean distance between two points.
 	 */
 	public static double distance( Vec2 a, Vec2 b ) {
-		return Math.sqrt( distanceSqr(a,b) );
+		return length( delta(a,b) );
 	}
 	
 	
 	
 	/**
-	 * Find the square of X.
+	 * Get the square of X.
 	 */
 	public static double sqr( double x ) {
 		return x * x;
@@ -149,11 +176,11 @@ public class Geo
 	
 	
 	/**
-	 * Get A dot B.
+	 * Get the dot product of A and B.
 	 */
 	public static double dot( Vec2 a, Vec2 b ) {
 		return (a.x * b.x) 
-		     + (b.x * b.y);
+		     + (b.y * b.y);
 	}
 	
 	
