@@ -12,7 +12,7 @@ package logicBox.util;
 public class Bbox2 extends Region
 {
 	public Bbox2( Vec2 tl, Vec2 br ) {
-		super( tl, br );
+		super( tl.copy(), br.copy() );
 	}
 	
 	
