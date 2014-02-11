@@ -212,7 +212,7 @@ public class Gfx
 	
 	
 	public static void rotate( Graphics2D g, double a ) {
-		g.transform( AffineTransform.getRotateInstance( Math.toRadians(a) ) );
+		g.transform( AffineTransform.getRotateInstance( Math.toRadians(-a) ) );
 	}
 
 
