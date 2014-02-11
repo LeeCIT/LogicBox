@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.VecPath;
 import logicBox.sim.Component;
+import logicBox.sim.PinIoMode;
 import logicBox.util.Geo;
 import logicBox.util.Region;
 import logicBox.util.Vec2;
@@ -42,7 +43,7 @@ public class GraphicGen
 	
 	
 	// TODO: map pins by index top-down, position, IoMode
-	public static Graphic generateAndGate( int pinCount, boolean invert ) {
+	public static GraphicComActive generateAndGate( int pinCount, boolean invert ) {
 		final Region r            = getBaseRegion();
 		final Vec2   size         = r.getSize();
 		final double pinLength    = size.x * pinLenFrac;
@@ -94,15 +95,17 @@ public class GraphicGen
 			polyPins.lineTo( pinPos.get(i+1) );
 		}
 		
-		final List<Vec2> pinConnects = new ArrayList<>();
-		pinConnects.add( pinOutEnd );
-		for (int i=1; i<pinPos.size(); i+=2)
-			pinConnects.add( pinPos.get(i) );
+		final List<GraphicPinMapping> pinMappings = new ArrayList<>();
+		pinMappings.add( new GraphicPinMapping( pinOutEnd, PinIoMode.output, 0 ) );
 		
-		Graphic gate = new Graphic( polyBody, polyPins, pinConnects );
+		for (int i=3; i<pinPos.size(); i+=2)
+			pinMappings.add( new GraphicPinMapping( pinPos.get(i), PinIoMode.input, (i-2)/2 ) );
+		
+		GraphicComActive gate = new GraphicComActive( polyBody, polyPins, pinMappings );
 		
 		if (invert)
 			gate.enableBubble( bubblePos, bubbleRadius );
+		
 		
 		return gate;
 	}
