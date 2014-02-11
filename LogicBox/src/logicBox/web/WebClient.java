@@ -18,16 +18,14 @@ import com.mashape.unirest.request.HttpRequestWithBody;
 
 public class WebClient 
 {	
-	private AuthInterface ai;
 	private String url;
 	
-	public WebClient(String url, Object ai)
+	public WebClient(String url)
 	{
 		this.url = url;
-		this.ai = (AuthInterface) ai;
 	}
 	
-	public void post(String request, Map<String, Object> params, final Auth auth)
+	public void post(String request, Map<String, Object> params, final Auth auth, final AuthInterface ai)
 	{
 		HttpRequestWithBody h = Unirest.post(url + request);
 

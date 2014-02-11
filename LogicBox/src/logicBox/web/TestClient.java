@@ -4,9 +4,9 @@ public class TestClient implements AuthInterface
 {
 	public static void main(String[] args) 
 	{
-		Auth a = new Auth("http://cloud.jatochnietdan.com/", new TestClient());
+		Auth a = new Auth("http://cloud.jatochnietdan.com/");
 		
-		a.register("robert", "easy");
+		a.register("robert", "easy", new TestClient());
 	}
 
 	@Override
