@@ -34,6 +34,11 @@ public class User
 		wc.post("login", map, this, ri);
 	}
 	
+	public void requestInfo(RequestInterface ri)
+	{
+		wc.get("user/", this, ri);
+	}
+	
 	public ArrayList<String> getErrors()
 	{
 		return errors;

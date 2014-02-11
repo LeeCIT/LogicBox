@@ -13,6 +13,7 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.GetRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
 
 
@@ -41,6 +42,35 @@ public class WebClient
 		    public void completed(HttpResponse<JsonNode> response) 
 		    {
 		    	parseHeaders(response.getHeaders());
+		    	parseErrors(response.getBody().getObject(), user.getErrors());
+		    	
+		    	ri.onRequestResponse(user, RequestInterface.status.COMPLETED);
+		    }
+
+		    public void cancelled() 
+		    {
+		    	ri.onRequestResponse(null, RequestInterface.status.CANCELLED);
+		    }
+		});	
+	}
+	
+	public void get(String request, final User user, final RequestInterface ri)
+	{
+		GetRequest r = Unirest.get(url + request);
+		
+		r.asJsonAsync(new Callback<JsonNode>() 
+		{
+		    public void failed(UnirestException e) 
+		    {
+	    		ri.onRequestResponse(null, RequestInterface.status.FAILED);
+		    }
+
+		    public void completed(HttpResponse<JsonNode> response) 
+		    {
+		    	parseHeaders(response.getHeaders());
+		    	
+		    	System.out.println(response.getBody());
+		    	
 		    	parseErrors(response.getBody().getObject(), user.getErrors());
 		    	
 		    	ri.onRequestResponse(user, RequestInterface.status.COMPLETED);
