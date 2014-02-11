@@ -28,6 +28,8 @@ public class WebClient
 			
 			HttpResponse<JsonNode> result = h.asJson();
 			
+			parseHeaders(result.getHeaders());
+			
 			return result.getBody();
 		} 
 		catch (UnirestException e) 
@@ -36,5 +38,13 @@ public class WebClient
 		}		
 		
 		return null;
+	}
+	
+	private void parseHeaders(Map<String, String> headers)
+	{
+		if(headers.containsKey("set-cookie"))
+		{
+			Unirest.setDefaultHeader("Cookie", headers.get("set-cookie"));
+		}
 	}
 }
