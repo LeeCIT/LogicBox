@@ -15,11 +15,11 @@ import logicBox.util.Vec2;
 
 
 /**
- * Performs component drawing.
+ * Performs drawing for active components.
  * Essentially it just caches the computations from GraphicsGen.
  * @author Lee Coakley
  */
-public class Graphic implements Drawable
+public class GraphicComActive implements Drawable
 {
 	private VecPath polyBody;
 	private VecPath polyPins;
@@ -32,16 +32,16 @@ public class Graphic implements Drawable
 	private Color   colStroke;
 	private Color   colFill;  
 	
-	private List<Vec2> pinConnectors;
+	private List<GraphicPinMapping> pinMap;
 	
 	
 	
-	public Graphic( VecPath polyBody, VecPath polyPins, List<Vec2> pinConnectors ) {
-		this.colStroke     = EditorStyle.colComponentStroke;
-		this.colFill       = EditorStyle.colComponentFill;
-		this.polyBody      = polyBody;
-		this.polyPins      = polyPins;
-		this.pinConnectors = pinConnectors;
+	public GraphicComActive( VecPath polyBody, VecPath polyPins, List<GraphicPinMapping> pinMap ) {
+		this.colStroke = EditorStyle.colComponentStroke;
+		this.colFill   = EditorStyle.colComponentFill;
+		this.polyBody  = polyBody;
+		this.polyPins  = polyPins;
+		this.pinMap    = pinMap;
 		
 		setSelected( false );
 	}
@@ -103,19 +103,8 @@ public class Graphic implements Drawable
 					Gfx.drawCircle( g, bubblePos, bubbleRadius, false );
 					Gfx.popStroke( g );
 				}
-				
 			Gfx.popColor( g );
 		Gfx.popMatrix( g );
-	}
-	
-	
-	
-	/**
-	 * Get the component's untransformed pin endpoints relative to [0,0]
-	 * These are where traces connect.
-	 */
-	public List<Vec2> getPinConnectors() {
-		return pinConnectors;
 	}
 	
 	
@@ -125,8 +114,11 @@ public class Graphic implements Drawable
 	 * For this to make sense you have to transform pos first.
 	 */
 	public boolean contains( Vec2 pos ) {
-		return Geo.distance( bubblePos, pos ) <= bubbleRadius
-			|| polyBody.contains( pos )
+		if (hasBubble
+		&&  Geo.distance(bubblePos, pos) <= bubbleRadius)
+			return true;
+		
+		return polyBody.contains( pos )
 			|| polyPins.contains( pos );
 	}
 	
@@ -139,6 +131,28 @@ public class Graphic implements Drawable
 	public boolean overlaps( Bbox2 bbox ) {
 		//return polyBody.i
 		return false;
+	}
+	
+	
+	
+	/**
+	 * Find the nearest pin connection point within the given distance threshold.
+	 * Local coordinates.
+	 * Returns null if there are no pins within the threshold.
+	 */
+	public GraphicPinMapping findClosestPin( Vec2 pos, double threshold ) {
+		GraphicPinMapping best     = null;
+		double            bestDist = Double.POSITIVE_INFINITY;
+		
+		for (GraphicPinMapping gpm: pinMap) {
+			double dist = Geo.distance( gpm.pos, pos );
+			
+			if (dist <= bestDist
+			&&  dist <= threshold)
+				best = gpm;
+		}
+		
+		return best;
 	}
 }
 
