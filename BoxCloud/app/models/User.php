@@ -32,4 +32,12 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 			'password' => 'required'
 		);
 	}
+	
+	public static function getLoginRules()
+	{
+		return array(
+			'email' => 'required|email',
+			'password' => 'required'
+		);
+	}
 }
