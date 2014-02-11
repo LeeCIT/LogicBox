@@ -14,15 +14,15 @@ import logicBox.util.Vec2;
  */
 public class EditorComponent implements Drawable
 {
-	private Component component;
-	private Graphic   graphic;
+	private Component        component;
+	private GraphicComActive graphicComActive;
 	
-	private Vec2    pos;
-	private double  angle;
+	private Vec2   pos;
+	private double angle;
 	
 	
 	
 	public void draw( Graphics2D g, Vec2 pos, double angle ) {
-		graphic.draw( g, pos, angle );
+		graphicComActive.draw( g, pos, angle );
 	}
 }
