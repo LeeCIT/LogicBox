@@ -1,15 +1,24 @@
 package logicBox.web;
 
-public class TestClient 
+public class TestClient implements AuthInterface
 {
 	public static void main(String[] args) 
 	{
-		Auth a = new Auth("http://cloud.jatochnietdan.com/");
+		Auth a = new Auth("http://cloud.jatochnietdan.com/", new TestClient());
 		
-		if(!a.register("robert", ""))
+		a.register("robert", "easy");
+	}
+
+	@Override
+	public void onRegisterResponse(Auth auth, AuthInterface.status status) 
+	{
+		if(status == AuthInterface.status.COMPLETED)
 		{
-			for(String error : a.getErrors())
-				System.out.println(error);
+			if(auth.hasErrors())
+			{
+				for(String s : auth.getErrors())
+					System.out.println(s);
+			}
 		}
 	}
 }

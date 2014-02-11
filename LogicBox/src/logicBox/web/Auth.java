@@ -2,33 +2,26 @@ package logicBox.web;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-public class Auth 
+public class Auth
 {
 	private WebClient wc = null;
 	private ArrayList<String> errors = new ArrayList<String>();
 	
-	public Auth(String url)
+	public Auth(String url, Object implement)
 	{
-		this.wc = new WebClient(url);
+		this.wc = new WebClient(url, implement);
 	}
-	
-	public boolean register(String email, String password)
+
+	public void register(String email, String password)
 	{
 		Map<String, Object> map = new HashMap<String, Object>(); 
 		
 		map.put("email", email);
 		map.put("password", password);
 		
-		JSONObject result = wc.post("register", map).getObject();
-		
-		return !hasErrors(result);
+		wc.post("register", map, this);
 	}
 	
 	public ArrayList<String> getErrors()
@@ -36,35 +29,8 @@ public class Auth
 		return errors;
 	}
 	
-	private boolean hasErrors(JSONObject result)
+	public boolean hasErrors()
 	{
-		if(result.has("error"))
-		{
-			errors.clear();
-			
-			try 
-			{
-				JSONObject messages = result.getJSONObject("messages");
-				
-				@SuppressWarnings("unchecked") // Need to use a legacy API, unfortunate
-				Iterator<String> i = messages.keys();
-				
-				while(i.hasNext())
-				{
-					JSONArray a = (JSONArray) messages.get(i.next());
-					
-					errors.add(a.getString(0));
-				}
-					
-			} 
-			catch (JSONException e) 
-			{
-				e.printStackTrace();
-			}
-
-			return true;
-		}
-		
-		return false;
+		return errors.size() > 0;
 	}
 }

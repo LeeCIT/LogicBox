@@ -1,43 +1,58 @@
 package logicBox.web;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.async.Callback;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequestWithBody;
 
 
 public class WebClient 
-{
+{	
+	private AuthInterface ai;
 	private String url;
 	
-	public WebClient(String url)
+	public WebClient(String url, Object ai)
 	{
 		this.url = url;
+		this.ai = (AuthInterface) ai;
 	}
 	
-	public JsonNode post(String request, Map<String, Object> params)
+	public void post(String request, Map<String, Object> params, final Auth auth)
 	{
-		try 
-		{	
-			HttpRequestWithBody h = Unirest.post(url + request);
+		HttpRequestWithBody h = Unirest.post(url + request);
 
-			h.fields(params);
-			
-			HttpResponse<JsonNode> result = h.asJson();
-			
-			parseHeaders(result.getHeaders());
-			
-			return result.getBody();
-		} 
-		catch (UnirestException e) 
-		{
-			e.printStackTrace();
-		}		
+		h.fields(params);
 		
-		return null;
+		h.asJsonAsync(new Callback<JsonNode>() 
+		{
+		    public void failed(UnirestException e) 
+		    {
+		    	ai.onRegisterResponse(null, AuthInterface.status.FAILED);
+		    }
+
+		    public void completed(HttpResponse<JsonNode> response) 
+		    {
+		    	parseHeaders(response.getHeaders());
+		    	parseErrors(response.getBody().getObject(), auth.getErrors());
+		    	
+		    	ai.onRegisterResponse(auth, AuthInterface.status.COMPLETED);
+		    }
+
+		    public void cancelled() 
+		    {
+		    	ai.onRegisterResponse(null, AuthInterface.status.CANCELLED);
+		    }
+		});	
 	}
 	
 	private void parseHeaders(Map<String, String> headers)
@@ -46,5 +61,37 @@ public class WebClient
 		{
 			Unirest.setDefaultHeader("Cookie", headers.get("set-cookie"));
 		}
+	}
+	
+	private boolean parseErrors(JSONObject result, ArrayList<String> errors)
+	{
+		if(result.has("error"))
+		{
+			errors.clear();
+			
+			try 
+			{
+				JSONObject messages = result.getJSONObject("messages");
+				
+				@SuppressWarnings("unchecked") // Need to use a legacy API, unfortunate
+				Iterator<String> i = messages.keys();
+				
+				while(i.hasNext())
+				{
+					JSONArray a = (JSONArray) messages.get(i.next());
+					
+					errors.add(a.getString(0));
+				}
+					
+			} 
+			catch (JSONException e) 
+			{
+				e.printStackTrace();
+			}
+
+			return true;
+		}
+		
+		return false;
 	}
 }
