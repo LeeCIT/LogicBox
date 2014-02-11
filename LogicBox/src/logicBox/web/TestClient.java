@@ -1,22 +1,22 @@
 package logicBox.web;
 
-public class TestClient implements AuthInterface
+public class TestClient implements RequestInterface
 {
 	public static void main(String[] args) 
 	{
-		Auth a = new Auth("http://cloud.jatochnietdan.com/");
+		User a = new User("http://cloud.jatochnietdan.com/");
 		
 		a.register("robert", "easy", new TestClient());
 	}
 
 	@Override
-	public void onRegisterResponse(Auth auth, AuthInterface.status status) 
+	public void onRequestResponse(User user, RequestInterface.status status) 
 	{
-		if(status == AuthInterface.status.COMPLETED)
+		if(status == RequestInterface.status.COMPLETED)
 		{
-			if(auth.hasErrors())
+			if(user.hasErrors())
 			{
-				for(String s : auth.getErrors())
+				for(String s : user.getErrors())
 					System.out.println(s);
 			}
 		}

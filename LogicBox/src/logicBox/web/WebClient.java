@@ -25,7 +25,7 @@ public class WebClient
 		this.url = url;
 	}
 	
-	public void post(String request, Map<String, Object> params, final Auth auth, final AuthInterface ai)
+	public void post(String request, Map<String, Object> params, final User user, final RequestInterface ri)
 	{
 		HttpRequestWithBody h = Unirest.post(url + request);
 
@@ -35,20 +35,20 @@ public class WebClient
 		{
 		    public void failed(UnirestException e) 
 		    {
-		    	ai.onRegisterResponse(null, AuthInterface.status.FAILED);
+	    		ri.onRequestResponse(null, RequestInterface.status.FAILED);
 		    }
 
 		    public void completed(HttpResponse<JsonNode> response) 
 		    {
 		    	parseHeaders(response.getHeaders());
-		    	parseErrors(response.getBody().getObject(), auth.getErrors());
+		    	parseErrors(response.getBody().getObject(), user.getErrors());
 		    	
-		    	ai.onRegisterResponse(auth, AuthInterface.status.COMPLETED);
+		    	ri.onRequestResponse(user, RequestInterface.status.COMPLETED);
 		    }
 
 		    public void cancelled() 
 		    {
-		    	ai.onRegisterResponse(null, AuthInterface.status.CANCELLED);
+		    	ri.onRequestResponse(null, RequestInterface.status.CANCELLED);
 		    }
 		});	
 	}
