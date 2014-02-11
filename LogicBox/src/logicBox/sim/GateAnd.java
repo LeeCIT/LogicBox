@@ -9,11 +9,10 @@ package logicBox.sim;
  * A gate which outputs true if all its inputs are true.
  * @author Lee Coakley
  */
-public class GateAnd extends Gate
+public class GateAnd extends GateVariableInputs
 {
 	public GateAnd() {
 		super();
-		
 	}
 	
 	
@@ -33,4 +32,11 @@ public class GateAnd extends Gate
 			
 		pinOut.setState( state );
 	}
+	
+	
+	
+	public boolean hasVariableInputPinCount() {
+		return true;
+	}
 }
+

@@ -1,8 +1,5 @@
 
-
-
 package logicBox.sim;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,6 +1,4 @@
 
-
-
 package logicBox.util;
 
 import java.awt.Color;
@@ -11,6 +9,9 @@ import java.awt.Color;
 
 /**
  * Provides advanced geometric and mathematical utility functions.
+ * Coordinate system used works as follows:
+ * Top left at [0,0], increases east and south
+ * East is 0 degrees, increases anticlockwise
  * @author Lee Coakley
  */
 public class Geo
@@ -68,16 +69,6 @@ public class Geo
 	
 	
 	/**
-	 * Linear interpolate from A to B by fraction F.
-	 * Interpolant is biased towards the end of the range, so it's slower at the beginning and sharp at the end.
-	 */
-	public static double sqerp( double a, double b, double f ) {
-		return a + (b-a) * sqr(f);
-	}
-	
-	
-	
-	/**
 	 * Normalise given current value and min/max.
 	 */
 	public static double unlerp( double v, double minv, double maxv ) {
@@ -122,8 +113,17 @@ public class Geo
 	/**
 	 * Get the average of two points, IE the middle of them.
 	 */
-	public static Vec2 getCentre( Vec2 a, Vec2 b ) {
+	public static Vec2 centre( Vec2 a, Vec2 b ) {
 		return lerp( a, b, 0.5 );
+	}
+	
+	
+	
+	/**
+	 * Get the euclidean distance squared between two points.
+	 */
+	public static double distanceSqr( Vec2 a, Vec2 b ) {
+		return sqr(b.x-a.x) + sqr(b.y-a.y);
 	}
 	
 	
@@ -132,7 +132,7 @@ public class Geo
 	 * Get the euclidean distance between two points.
 	 */
 	public static double distance( Vec2 a, Vec2 b ) {
-		return Math.sqrt( sqr(b.x-a.x) + sqr(b.y-a.y) );
+		return Math.sqrt( distanceSqr(a,b) );
 	}
 	
 	
@@ -142,6 +142,16 @@ public class Geo
 	 */
 	public static double sqr( double x ) {
 		return x * x;
+	}
+	
+	
+	
+	/**
+	 * Get A dot B.
+	 */
+	public static double dot( Vec2 a, Vec2 b ) {
+		return (a.x * b.x) 
+		     + (b.x * b.y);
 	}
 	
 	
@@ -164,6 +174,19 @@ public class Geo
 		double rads = Math.atan2( d.y, -d.x );
 		double degs = Math.toDegrees( rads );
 		return (degs + 180.0) % 360.0;
+	}
+	
+	
+	
+	/**
+	 * Normalised angular difference in range (-180,+180).
+	 * Result is negative if B is anticlockwise with respect to A.
+	 * Order of comparison affects the sign, but the absolute value is the same either way.
+	 */
+	public static double angleDiff( double a, double b ) {
+	    double diff   = a - b;
+	    double mod360 = diff % 360;
+	    return ((mod360 + 540.0) % 360.0) - 180.0;
 	}
 	
 	
@@ -262,9 +285,9 @@ public class Geo
 	 * Math.round() uses banker's rounding which gives undesirable results sometimes (in graphics for example).
 	 */
 	public static double roundArith( double x ) {
-		return (x >= 0.0)                   ?
-				Math.floor( 	  x + 0.5 ) :
-				Math.floor( 1.0 + x - 0.5 ) ; 
+		if (x >= 0.0)
+		     return Math.floor(       x + 0.5 );
+		else return Math.floor( 1.0 + x - 0.5 );
 	}
 	
 	
@@ -280,48 +303,15 @@ public class Geo
 			 return rounded;
 		else return x;
 	}
+	
+	
+	
+	/**
+	 * Round to nearest multiple.
+	 */
+	public static double roundToMultiple( double x, double mult ) {
+		return roundArith( x / mult ) * mult;
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

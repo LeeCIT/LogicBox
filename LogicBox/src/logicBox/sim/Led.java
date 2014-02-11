@@ -1,8 +1,5 @@
 
-
-
 package logicBox.sim;
-
 import java.util.List;
 
 
@@ -19,7 +16,7 @@ public class Led extends Component implements PinIn
 	
 	public Led() {
 		super();
-		this.pinInput = new Pin( this, true );
+		this.pinInput = new Pin( this, IoMode.input );
 	}
 	
 	
@@ -40,3 +37,4 @@ public class Led extends Component implements PinIn
 		return Util.wrapInList( pinInput );
 	}
 }
+

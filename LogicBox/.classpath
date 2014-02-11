@@ -2,5 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+<<<<<<< HEAD
+=======
+	<classpathentry kind="lib" path="miglayout-4.0-swing.jar"/>
+>>>>>>> refs/heads/master
 	<classpathentry kind="output" path="bin"/>
 </classpath>
