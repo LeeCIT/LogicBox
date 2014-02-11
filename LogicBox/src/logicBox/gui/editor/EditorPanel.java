@@ -4,6 +4,9 @@
 package logicBox.gui.editor;
 import java.awt.*;
 import java.awt.MultipleGradientPaint.CycleMethod;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import logicBox.gui.Gfx;
@@ -27,6 +30,25 @@ public class EditorPanel extends JPanel
 	
 	public EditorPanel() {
 		cam = new Camera( this, createOnTransformCallback() );
+		
+		addMouseMotionListener( new MouseMotionAdapter() {
+			public void mouseMoved( MouseEvent ev ) {
+				Vec2   comPos   = new Vec2( 256 );
+				double comAngle = 270;
+				
+				Vec2 pos = cam.getMousePosWorld();
+				pos = pos.subtract( comPos );
+				pos = pos.rotate( -comAngle );
+				GraphicComActive gca = GraphicGen.generateAndGate( 2, true );
+				
+				if (gca.contains( pos ))
+					System.out.println( "contains: " + pos );
+				
+				GraphicPinMapping gpm = gca.findClosestPin( pos, 10 );
+				if (gpm != null)
+					System.out.println( "findClosestPin: " + gpm.pos + ", " + gpm.mode + ", " + gpm.index );
+			}
+		});
 	}
 	
 	
@@ -55,8 +77,8 @@ public class EditorPanel extends JPanel
 			Vec2 otb   = new Vec2( 448+96, 384-32 );
 			drawOverlappedTrace( g, ota, inter, otb );
 			
-			Graphic graphic = GraphicGen.generateAndGate( 2, true );
-			graphic.draw( g, new Vec2(256), 0 );
+			GraphicComActive graphicComActive = GraphicGen.generateAndGate( 2, true );
+			graphicComActive.draw( g, new Vec2(256), 270 );
 		Gfx.popMatrix( g );
 	}
 	
