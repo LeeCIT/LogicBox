@@ -147,9 +147,11 @@ public class GraphicComActive implements Drawable
 		for (GraphicPinMapping gpm: pinMap) {
 			double dist = Geo.distance( gpm.pos, pos );
 			
-			if (dist <= bestDist
-			&&  dist <= threshold)
-				best = gpm;
+			if (dist <= threshold
+			&&  dist <= bestDist) {
+				bestDist = dist;
+				best     = gpm;
+			}
 		}
 		
 		return best;
