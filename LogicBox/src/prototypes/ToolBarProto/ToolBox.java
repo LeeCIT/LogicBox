@@ -13,6 +13,16 @@ public class ToolBox extends JToolBar
 	
 	
 	/**
+	 * Creates a toolbox with a frame title and the default orientation
+	 * @param frameName
+	 * @param vertical
+	 */
+	public ToolBox(String frameName, int vertical) {
+		super(frameName, vertical);
+	}
+
+
+	/**
 	 * For adding many items at once. Takes a list of items and adds them to the toolbox
 	 * @param items
 	 */
