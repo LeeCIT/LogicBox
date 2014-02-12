@@ -137,7 +137,7 @@ public class GraphicComActive implements Drawable
 	
 	/**
 	 * Find the nearest pin connection point within the given distance threshold.
-	 * Local coordinates.
+	 * Uses local coordinates.
 	 * Returns null if there are no pins within the threshold.
 	 */
 	public GraphicPinMapping findClosestPin( Vec2 pos, double threshold ) {
