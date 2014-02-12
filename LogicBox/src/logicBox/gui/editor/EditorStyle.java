@@ -38,13 +38,13 @@ public class EditorStyle
 	
 	
 	
-	public static Color makeHighlight( Color col ) {
-		return Geo.lerp( col, Color.white, highlightFrac );
+	public static Color makeHighlighted( Color col ) {
+		return Geo.lerp( col, Color.white, highlightFrac ); // TODO make nicer
 	}
 	
 	
 	
-	public static Color makeSelect( Color col ) {
-		return Geo.lerp( col, colSelection, selectFrac );
+	public static Color makeSelected( Color col ) {
+		return Geo.lerp( col, colSelection, selectFrac ); // TODO make nicer
 	}
 }
