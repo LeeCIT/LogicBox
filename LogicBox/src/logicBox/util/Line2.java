@@ -40,7 +40,7 @@ public class Line2 implements Serializable
 	    double lenSqr = Geo.distanceSqr( a, b );
 
 	    if (lenSqr == 0)
-	        return a;
+	        return a.copy();
 
 	    Vec2   offset = point.subtract( a );
 	    double t      = Geo.dot( offset, delta ) / lenSqr;
@@ -91,6 +91,12 @@ public class Line2 implements Serializable
 	
 	private Vec2 delta() {
 		return b.subtract( a );
+	}
+	
+	
+	
+	public String toString() {
+		return "" + a + " -> " + b;
 	}
 }
 
