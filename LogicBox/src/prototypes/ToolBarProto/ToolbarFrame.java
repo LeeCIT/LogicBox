@@ -36,7 +36,11 @@ public class ToolbarFrame extends JFrame{
 		toolbarList.add(andGate);
 		toolbarList.add(orGate);
 		
-		JToolBar tool = new MakeToolbox(toolbarList);
+		ToolBox tool = new ToolBox();
+		tool.addToolBoxItem(toolbarList);
+		
+		
+		
 		
 		add(tool);
 
