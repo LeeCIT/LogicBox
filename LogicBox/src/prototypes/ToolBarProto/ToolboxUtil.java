@@ -56,4 +56,28 @@ public class ToolboxUtil{
 			}
 		});
 	}
+	
+	
+	
+	
+	/**
+	 * Add the snapping ability to the toolbox
+	 * @param toolbar	The toolbox to snap
+	 * @param frame		If you want to snap to other frames
+	 * @param snappingdistance	The distance the object should snap to
+	 */
+	public static void addSnapping(JToolBar toolbox, final JFrame frame, int snappingdistance) {
+		// Fix to a terrible flaw in JToolbar
+		toolbox.addHierarchyListener(new HierarchyListener() {			
+			public void hierarchyChanged(HierarchyEvent e) {
+				JToolBar bar = (JToolBar) e.getComponent();
+				final Window topLevel = SwingUtilities.windowForComponent(bar);
+				if (topLevel instanceof JDialog) {
+					((JDialog) topLevel).addComponentListener(new SnappingPrototype(frame));
+				}    
+			}
+		});
+	}
+	
+	
 }
