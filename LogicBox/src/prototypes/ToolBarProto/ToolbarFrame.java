@@ -27,30 +27,44 @@ public class ToolbarFrame extends JFrame{
 		toolbar.addSeparator();
 		toolbar.add(new JButton("Bulb"));
 
-		ToolboxItemData andGate = new ToolboxItemData(new JButton("And Gate"), null, null);
-		ToolboxItemData orGate  = new ToolboxItemData(new JButton("Or Gate"), null, null);
+		ToolboxItemStore andGate = new ToolboxItemStore(new JButton("And Gate"), null, null);
+		ToolboxItemStore orGate  = new ToolboxItemStore(new JButton("Or Gate"), null, null);
 
 		
-		List<ToolboxItem> toolbarList = new ArrayList<ToolboxItem>();
-		toolbarList.add(andGate);
-		toolbarList.add(orGate);
+//		List<ToolboxItem> toolbarList = new ArrayList<ToolboxItem>();
+//		toolbarList.add(andGate);
+//		toolbarList.add(orGate);
 		
 		ToolBox tool = new ToolBox();
-		tool.addSeparator();
-		tool.add(new JLabel("Gates"));
-		tool.addSeparator();
-		tool.addToolBoxItemList(toolbarList);
-		tool.addSeparator();
+//		tool.addSeparator();
+//		tool.add(new JLabel("Gates"));
+//		tool.addSeparator();
+//		tool.addToolBoxItemList(toolbarList);
+//		tool.addSeparator();
 		
 		
 		// Panel test
-		JPanel pan = new JPanel();
-		pan.add(new JLabel("Other stuff"));
-		pan.add(new JButton("Demo"));
-		pan.add(new JButton("bulb"));
-		tool.add(pan);
+		ToolboxButtonCallback andGatea = new ToolboxButtonCallback(new JButton("And gate"), null);
+		ToolboxButtonCallback orGatea  = new ToolboxButtonCallback(new JButton("Or gate"),  null);
+		ToolboxButtonCallback demo     = new ToolboxButtonCallback(new JButton("Demo"),  null);
+		ToolboxButtonCallback nub      = new ToolboxButtonCallback(new JButton("nub"),  null);
+
+
 		
-				
+		
+		List<ToolboxButtonCallback> buttons = new ArrayList<ToolboxButtonCallback>();
+		buttons.add(andGatea);
+		buttons.add(orGatea);
+		buttons.add(demo);
+		buttons.add(nub);
+		
+		tool.add(new JLabel("Gates"));
+		tool.add(new JSeparator());
+		
+		ToolboxPanel pan = new ToolboxPanel(buttons);
+		
+		
+		tool.add(pan);	
 		
 		add(tool);
 

@@ -9,14 +9,14 @@ import javax.swing.JToolBar;
 
 import logicBox.util.Callback;
 
-public class ToolboxItemData extends ToolboxItem
+public class ToolboxItemStore extends ToolboxItem
 {
 	private JButton  button;
 	private Callback callback;
 	private Icon 	 icon;
 
 	
-	public ToolboxItemData(JButton button, Icon icon, Callback callback) {
+	public ToolboxItemStore(JButton button, Icon icon, Callback callback) {
 		this.button		= button;
 		this.icon 		= icon;
 		this.callback 	= callback;

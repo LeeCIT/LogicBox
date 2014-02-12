@@ -2,6 +2,7 @@ package prototypes.ToolBarProto;
 
 import java.util.List;
 
+import javax.swing.JPanel;
 import javax.swing.JToolBar;
 
 
@@ -23,11 +24,22 @@ public class ToolBox extends JToolBar
 	
 	
 	/**
-	 * Add a individual toolbar item
+	 * Add a individual toolbox item
 	 * @param item
 	 */
 	public void addToolBoxItemButton(ToolboxItem item) {
 		item.addTo(this);
+	}
+	
+	
+	
+	/**
+	 * Add a the category heading and the list of buttons to add to the panel in groups of 3
+	 * @param heading
+	 * @param items
+	 */
+	public void addPanelWithButtons(String heading, List<ToolboxItem> items) {
+		
 	}
 	
 	
