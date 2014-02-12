@@ -56,6 +56,8 @@ public class ToolbarFrame extends JFrame{
 		add(tool);
 
 		ToolboxUtil.addSnapping(tool, frame);
+		ToolboxUtil.preventToolBoxhorizontalOrientation(tool);
+		
 
 		// Demo
 		addComponentListener(new SnappingPrototype());
