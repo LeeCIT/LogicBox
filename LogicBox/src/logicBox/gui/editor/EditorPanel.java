@@ -46,7 +46,7 @@ public class EditorPanel extends JPanel
 				
 				GraphicPinMapping gpm = gca.findClosestPin( pos, 10 );
 				if (gpm != null)
-					System.out.println( "findClosestPin: " + gpm.pos + ", " + gpm.mode + ", " + gpm.index );
+					System.out.println( "findClosestPin: " + gpm.mode + ", " + gpm.index );
 			}
 		});
 	}
