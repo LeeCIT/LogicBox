@@ -22,6 +22,7 @@ public class HelpMenu extends JFrame
 		
 		addToContentPane();
 		setComponentDimensions();
+		
 	}
 	
 	/**
@@ -52,6 +53,16 @@ public class HelpMenu extends JFrame
 			case 1:
 			{
 				gateTabs.setSelectedIndex(gate);
+				break;
+			}
+			case 2:
+			{
+				gateTabs.setSelectedIndex(gate);
+				break;
+			}
+			default:
+			{
+				gateTabs.setSelectedIndex(0);
 				break;
 			}
 		}
@@ -88,10 +99,10 @@ public class HelpMenu extends JFrame
 	}
 	
 	
+	
 	public static void main(String[] args) 
 	{
 		HelpMenu menu = new HelpMenu();
-		menu.callMenu();
-		menu.callGateInfo(1);
+		menu.callMenu();	
 	}
 }
