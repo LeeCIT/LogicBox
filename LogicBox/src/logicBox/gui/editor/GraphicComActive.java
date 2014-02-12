@@ -144,6 +144,8 @@ public class GraphicComActive implements Drawable
 		GraphicPinMapping best     = null;
 		double            bestDist = Double.POSITIVE_INFINITY;
 		
+		threshold *= threshold; // Squared because distance is squared
+		
 		for (GraphicPinMapping gpm: pinMap) {
 			Vec2   closest = gpm.line.closestPoint( pos );
 			double dist    = Geo.distanceSqr( closest, pos );
