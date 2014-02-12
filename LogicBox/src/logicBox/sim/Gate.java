@@ -42,7 +42,7 @@ public abstract class Gate extends ComponentActive
 	
 	
 	public List<Pin> getPinOutputs() {
-		return Util.wrapInList( pinOut );
+		return SimUtil.wrapInList( pinOut );
 	}
 	
 	
