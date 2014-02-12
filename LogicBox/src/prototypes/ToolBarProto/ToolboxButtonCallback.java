@@ -20,7 +20,6 @@ public class ToolboxButtonCallback
 	
 	
 	public ToolboxButtonCallback(JButton button, Callback callback) {
-		super();
 		this.button = button;
 		this.callback = callback;
 	}

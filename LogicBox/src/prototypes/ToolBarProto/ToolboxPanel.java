@@ -15,7 +15,10 @@ public class ToolboxPanel extends JPanel
 	
 	public ToolboxPanel() {}
 	
-	
+	/**
+	 * Make a panel with the buttons arranged correctly.
+	 * @param buttons a list of toolbox buttons with callback
+	 */
 	public ToolboxPanel(final List<ToolboxButtonCallback> buttons) {				
 		this.setLayout(new MigLayout("wrap 3"));
 		for (int i=0; i<buttons.size(); i++) {
