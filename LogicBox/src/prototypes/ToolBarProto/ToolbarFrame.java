@@ -57,12 +57,9 @@ public class ToolbarFrame extends JFrame{
 		buttons.add(orGatea);
 		buttons.add(demo);
 		buttons.add(nub);
-		
-		tool.add(new JLabel("Gates"));
-		tool.add(new JSeparator());
-		
+				
 		ToolboxPanel pan = new ToolboxPanel(buttons);
-		
+		ToolboxUtil.addCategory(tool, "Gates");
 		
 		tool.add(pan);	
 		
