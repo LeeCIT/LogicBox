@@ -19,7 +19,7 @@ public class ToolbarFrame extends JFrame{
 		GuiUtil.setNativeLookAndFeel();
 		
 		
-		ToolBox tool = new ToolBox("LogicBox Toolbox", JToolBar.VERTICAL);
+		Toolbox tool = new Toolbox("LogicBox Toolbox", JToolBar.VERTICAL);
 		
 		// Panel test
 		ToolboxButtonCallback andGate  = new ToolboxButtonCallback(new JButton("And gate"), null);
@@ -55,23 +55,7 @@ public class ToolbarFrame extends JFrame{
 		
 		add(tool);
 
-	
-
-		// Fix to a terrible flaw in JToolbar
-		tool.addHierarchyListener(new HierarchyListener() {			
-			public void hierarchyChanged(HierarchyEvent e) {
-				JToolBar bar = (JToolBar) e.getComponent();
-				final Window topLevel = SwingUtilities.windowForComponent(bar);
-
-				if (topLevel instanceof JDialog) {
-					((JDialog) topLevel).addComponentListener(new SnappingPrototype(frame));
-				}    
-			}
-		});
-
-
-
-		
+		ToolboxUtil.addSnapping(tool, frame);
 
 		// Demo
 		addComponentListener(new SnappingPrototype());
