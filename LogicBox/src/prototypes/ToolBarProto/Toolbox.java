@@ -8,9 +8,9 @@ import javax.swing.JToolBar;
 
 
 
-public class ToolBox extends JToolBar
+public class Toolbox extends JToolBar
 {	
-	public ToolBox() {}
+	public Toolbox() {}
 	
 	
 	/**
@@ -18,7 +18,7 @@ public class ToolBox extends JToolBar
 	 * @param frameName
 	 * @param vertical
 	 */
-	public ToolBox(String frameName, int vertical) {
+	public Toolbox(String frameName, int vertical) {
 		super(frameName, vertical);
 	}
 
