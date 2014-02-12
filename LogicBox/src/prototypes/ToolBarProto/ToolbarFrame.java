@@ -2,13 +2,12 @@ package prototypes.ToolBarProto;
 
 import java.awt.Component;
 import java.awt.Window;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.HierarchyEvent;
 import java.awt.event.*;
+
 import javax.swing.*;
 
 import java.util.*;
+
 import logicBox.gui.GuiUtil;
 import prototypes.snappingProto.SnappingPrototype;
 
@@ -37,10 +36,21 @@ public class ToolbarFrame extends JFrame{
 		toolbarList.add(orGate);
 		
 		ToolBox tool = new ToolBox();
-		tool.addToolBoxItem(toolbarList);
+		tool.addSeparator();
+		tool.add(new JLabel("Gates"));
+		tool.addSeparator();
+		tool.addToolBoxItemList(toolbarList);
+		tool.addSeparator();
 		
 		
+		// Panel test
+		JPanel pan = new JPanel();
+		pan.add(new JLabel("Other stuff"));
+		pan.add(new JButton("Demo"));
+		pan.add(new JButton("bulb"));
+		tool.add(pan);
 		
+				
 		
 		add(tool);
 
@@ -60,8 +70,7 @@ public class ToolbarFrame extends JFrame{
 
 
 
-		//add(toolbar);
-
+		
 
 		// Demo
 		addComponentListener(new SnappingPrototype());
