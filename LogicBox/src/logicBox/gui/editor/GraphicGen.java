@@ -36,7 +36,6 @@ public class GraphicGen
 	
 	
 	
-	// TODO: map pins by index top-down, position, IoMode
 	public static GraphicComActive generateAndGate( int pinCount, boolean invert ) {
 		final Region r            = getBaseRegion();
 		final Vec2   size         = r.getSize();
@@ -45,7 +44,7 @@ public class GraphicGen
 		final double thickness    = EditorStyle.compThickness;
 		
 		if (pinCount > pinGrowthThresh)
-			r.br.y += getPinSpacingGrowth() * (pinCount-pinGrowthThresh);
+			r.br.y += getPinSpacingGrowth() * (pinCount - pinGrowthThresh);
 		
 		final Vec2 bezRefTr = r.getTopRight();
 		final Vec2 bezRefBr = r.getBottomRight();
