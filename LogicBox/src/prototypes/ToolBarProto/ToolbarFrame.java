@@ -12,51 +12,46 @@ import logicBox.gui.GuiUtil;
 import prototypes.snappingProto.SnappingPrototype;
 
 public class ToolbarFrame extends JFrame{
-
-	private final JToolBar toolbar;
 	private JFrame frame = this;
 
 
 	public ToolbarFrame() {
 		GuiUtil.setNativeLookAndFeel();
-
-		toolbar = new JToolBar("LogicBox Tool bar", JToolBar.VERTICAL);
-
-		toolbar.add(new JButton("DemoGate"));
-		toolbar.add(new JButton("XORGate"));
-		toolbar.addSeparator();
-		toolbar.add(new JButton("Bulb"));
-
-		
 		
 		
 		ToolBox tool = new ToolBox("LogicBox Toolbox", JToolBar.VERTICAL);
-//		tool.addSeparator();
-//		tool.add(new JLabel("Gates"));
-//		tool.addSeparator();
-//		tool.addToolBoxItemList(toolbarList);
-//		tool.addSeparator();
-		
 		
 		// Panel test
-		ToolboxButtonCallback andGatea = new ToolboxButtonCallback(new JButton("And gate"), null);
-		ToolboxButtonCallback orGatea  = new ToolboxButtonCallback(new JButton("Or gate"),  null);
+		ToolboxButtonCallback andGate  = new ToolboxButtonCallback(new JButton("And gate"), null);
+		ToolboxButtonCallback orGate   = new ToolboxButtonCallback(new JButton("Or gate"),  null);
 		ToolboxButtonCallback demo     = new ToolboxButtonCallback(new JButton("Demo"),  null);
 		ToolboxButtonCallback nub      = new ToolboxButtonCallback(new JButton("nub"),  null);
-
-
-		
 		
 		List<ToolboxButtonCallback> buttons = new ArrayList<ToolboxButtonCallback>();
-		buttons.add(andGatea);
-		buttons.add(orGatea);
+		buttons.add(andGate);
+		buttons.add(orGate);
 		buttons.add(demo);
 		buttons.add(nub);
 				
-		ToolboxPanel pan = new ToolboxPanel(buttons);
-		ToolboxUtil.addCategory(tool, "Gates");
+		ToolboxButtonCallback bulb  = new ToolboxButtonCallback(new JButton("Bulb"), null);
+		ToolboxButtonCallback led   = new ToolboxButtonCallback(new JButton("Led"),  null);
+		ToolboxButtonCallback multi = new ToolboxButtonCallback(new JButton("Multi"),  null);
+		ToolboxButtonCallback nubs  = new ToolboxButtonCallback(new JButton("nubs"),  null);
 		
-		tool.add(pan);	
+		List<ToolboxButtonCallback> other = new ArrayList<ToolboxButtonCallback>();
+		other.add(bulb);
+		other.add(led);
+		other.add(multi);
+		other.add(nubs);
+		
+		// Add buttons to the panel so they display correctly. in lines of 3
+		ToolboxPanel pan = new ToolboxPanel(buttons);
+		tool.addCategory("Gates");
+		tool.add(pan);
+		tool.addCategory("Others");
+		ToolboxPanel pans = new ToolboxPanel(other);
+		tool.add(pans);
+		
 		
 		add(tool);
 
