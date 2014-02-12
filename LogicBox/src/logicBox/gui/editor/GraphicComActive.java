@@ -129,7 +129,7 @@ public class GraphicComActive implements Drawable
 	 * The bbox must be transformed to the graphic's local space.
 	 */
 	public boolean overlaps( Bbox2 bbox ) {
-		//return polyBody.i
+		//return polyBody.intersects(  );
 		return false;
 	}
 	
@@ -145,7 +145,8 @@ public class GraphicComActive implements Drawable
 		double            bestDist = Double.POSITIVE_INFINITY;
 		
 		for (GraphicPinMapping gpm: pinMap) {
-			double dist = Geo.distance( gpm.pos, pos );
+			Vec2   closest = gpm.line.closestPoint( pos );
+			double dist    = Geo.distance( closest, pos );
 			
 			if (dist <= threshold
 			&&  dist <= bestDist) {
