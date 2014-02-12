@@ -25,6 +25,13 @@ public class Line2 implements Serializable
 	
 	
 	
+	public Line2( double x1, double y1, double x2, double y2) {
+		this.a = new Vec2( x1, y1 );
+		this.b = new Vec2( x2, y2 );
+	}
+	
+	
+	
 	/**
 	 * Find the point on the line which lies closest to the parameter.
 	 */
