@@ -28,15 +28,15 @@ public class ToolbarFrame extends JFrame{
 		toolbar.addSeparator();
 		toolbar.add(new JButton("Bulb"));
 
-		ToolbarItemData andGate = new ToolbarItemData(new JButton("And Gate"), null, null);
-		ToolbarItemData orGate  = new ToolbarItemData(new JButton("Or Gate"), null, null);
+		ToolboxItemData andGate = new ToolboxItemData(new JButton("And Gate"), null, null);
+		ToolboxItemData orGate  = new ToolboxItemData(new JButton("Or Gate"), null, null);
 
 		
-		List<ToolbarItem> toolbarList = new ArrayList<ToolbarItem>();
+		List<ToolboxItem> toolbarList = new ArrayList<ToolboxItem>();
 		toolbarList.add(andGate);
 		toolbarList.add(orGate);
 		
-		JToolBar tool = new MakeJToolbar(toolbarList);
+		JToolBar tool = new MakeToolbox(toolbarList);
 		
 		add(tool);
 
