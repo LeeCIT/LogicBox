@@ -6,7 +6,6 @@ import java.awt.*;
 import java.awt.MultipleGradientPaint.CycleMethod;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import logicBox.gui.Gfx;
@@ -31,6 +30,12 @@ public class EditorPanel extends JPanel
 	public EditorPanel() {
 		cam = new Camera( this, createOnTransformCallback() );
 		
+		addMouseOverTest();
+	}
+	
+	
+	
+	private void addMouseOverTest() {
 		addMouseMotionListener( new MouseMotionAdapter() {
 			public void mouseMoved( MouseEvent ev ) {
 				Vec2   comPos   = new Vec2( 256 );
@@ -50,9 +55,9 @@ public class EditorPanel extends JPanel
 			}
 		});
 	}
-	
-	
-	
+
+
+
 	protected void paintComponent( Graphics gx ) {
 		Graphics2D g = (Graphics2D) gx;
 		
