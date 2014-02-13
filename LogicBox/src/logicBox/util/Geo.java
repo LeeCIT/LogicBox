@@ -341,6 +341,34 @@ public class Geo
 	public static double roundToMultiple( double x, double mult ) {
 		return roundArith( x / mult ) * mult;
 	}
+	
+	
+	
+	/**
+	 * Round to next highest power of two.
+	 * Source: http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
+	 */
+	public static int roundToNextPowerOfTwo( int x ) {
+		x--;
+	    x |= x >>  1;
+	    x |= x >>  2;
+	    x |= x >>  4;
+	    x |= x >>  8;
+	    x |= x >> 16;
+	    x++;
+
+	    return x;
+	}
+	
+	
+	
+	/**
+	 * Check if number is a power of two.
+	 * Source: http://graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2
+	 */
+	public static boolean isPowerOfTwo( int x ) {
+		return (x & (x-1)) == 0;
+	}
 }
 
 
