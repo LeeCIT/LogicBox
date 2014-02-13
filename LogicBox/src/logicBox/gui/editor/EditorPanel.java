@@ -158,7 +158,7 @@ public class EditorPanel extends JPanel
 		
 		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBubble );
 			Gfx.pushAntialiasingStateAndSet( g, false );
-			Gfx.drawCircle( g, pos, radius, EditorStyle.colJunctionOff, true );
+				Gfx.drawCircle( g, pos, radius, EditorStyle.colJunctionOff, true );
 			Gfx.popAntialiasingState( g );
 			
 			Gfx.drawCircle( g, pos, radius, EditorStyle.colJunctionOn, false );
@@ -172,8 +172,9 @@ public class EditorPanel extends JPanel
 		
 		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBubble );
 			Gfx.pushAntialiasingStateAndSet( g, false );
-			Gfx.drawCircle( g, pos, radius, EditorStyle.colBackground, true );
+				Gfx.drawCircle( g, pos, radius, EditorStyle.colBackground, true );
 			Gfx.popAntialiasingState( g );
+			
 			Gfx.drawCircle( g, pos, radius, EditorStyle.colTraceOff, false );
 		Gfx.popStroke( g );
 	}
@@ -182,7 +183,7 @@ public class EditorPanel extends JPanel
 
 	private void fillBackground( Graphics2D g ) {
 		Gfx.pushColorAndSet( g, EditorStyle.colBackground );
-		g.fillRect( getX(), getY(), getWidth(), getHeight() );
+			g.fillRect( getX(), getY(), getWidth(), getHeight() );
 		Gfx.popColor( g );
 	}
 	
@@ -213,7 +214,7 @@ public class EditorPanel extends JPanel
 			Gfx.pushAntialiasingStateAndSet( g, false );
 		
 		Gfx.pushColorAndSet( g, col );
-		Gfx.drawGrid( g, worldRegion, offset, cellSize, thickness );
+			Gfx.drawGrid( g, worldRegion, offset, cellSize, thickness );
 		Gfx.popColor( g );
 		
 		if (disableAA)

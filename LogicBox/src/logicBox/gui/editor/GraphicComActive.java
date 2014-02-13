@@ -118,8 +118,11 @@ public class GraphicComActive implements Drawable
 		&&  Geo.distance(bubblePos, pos) <= bubbleRadius)
 			return true;
 		
-		return polyBody.contains( pos )
-			|| polyPins.contains( pos );
+		for (GraphicPinMapping gpm: pinMap)
+			if (Geo.distanceSqr( gpm.line.closestPoint( pos ), pos ) <= Geo.sqr(EditorStyle.compThickness)*0.5)
+				return true;
+		
+		return polyBody.contains( pos );
 	}
 	
 	
