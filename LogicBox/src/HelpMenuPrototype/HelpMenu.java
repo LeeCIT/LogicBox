@@ -61,6 +61,66 @@ public class HelpMenu extends JPanel
 				System.out.println("Xnor gate info");
 				break;
 			}
+			case sourceFixed:
+			{
+				System.out.println("Source fixed info");
+				break;
+			}
+			case sourceToggle:
+			{
+				System.out.println("Source toggle info");
+				break;
+			}
+			case sourceOscillator:
+			{
+				System.out.println("Source Oscillator info");
+				break;
+			}
+			case junction:
+			{
+				System.out.println("Junction info");
+				break;
+			}
+			case trace:
+			{
+				System.out.println("Trace info");
+				break;
+			}
+			case displayLed:
+			{
+				System.out.println("LED info");
+				break;
+			}
+			case displaySevenSeg:
+			{
+				System.out.println("Seven Seg info");
+				break;
+			}
+			case mux:
+			{
+				System.out.println("Mux info");
+				break;
+			}
+			case demux:
+			{
+				System.out.println("Demux info");
+				break;
+			}
+			case flipFlopD:
+			{
+				System.out.println("D Flip Flop info");
+				break;
+			}
+			case blackBox:
+			{
+				System.out.println("Black Box info");
+				break;
+			}
+			case blackBoxPin:
+			{
+				System.out.println("Black Box Pin info");
+				break;
+			}
 			default:
 			{
 				
