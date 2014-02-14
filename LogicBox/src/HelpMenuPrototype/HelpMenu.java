@@ -7,7 +7,7 @@ import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 import logicBox.sim.Component;
 
-public class HelpMenu extends JFrame
+public class HelpMenu extends JPanel
 {
 	private int gate;
 	private JTabbedPane gateTabs;
@@ -83,7 +83,7 @@ public class HelpMenu extends JFrame
 	 */
 	private void addToContentPane()
 	{
-		getContentPane().add(gateTabs  = new JTabbedPane());
+		getRootPane().add(gateTabs  = new JTabbedPane());
 		gateTabs.add("& Gate", andGate = new JPanel());
 		gateTabs.add("| Gate", orGate  = new JPanel());
 	}
