@@ -47,6 +47,15 @@ public class EditorWorld
 	
 	
 	
+	public void move( EditorComponent ecom, Vec2 to ) {
+		ecom.pos = to;
+		
+		remove( ecom );
+		add   ( ecom );
+	}
+	
+	
+	
 	public List<EditorComponent> find( Vec2 pos ) {
 		List<EditorComponent> list = new ArrayList<>();
 		

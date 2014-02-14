@@ -39,6 +39,8 @@ public class EditorPanel extends JPanel
 		cam   = new Camera( this, createOnTransformCallback() );
 		world = new EditorWorld();
 		
+		new ToolDragger( this, world, cam );
+		
 		EditorComponent ecom = new EditorComponent( new GateAnd(2), GraphicGen.generateAndGate(2,false), new Vec2(768) );
 		
 		world.add( ecom );
@@ -62,9 +64,8 @@ public class EditorPanel extends JPanel
 	private void addMouseOverTest() {
 		addMouseMotionListener( new MouseMotionAdapter() {
 			public void mouseMoved( MouseEvent ev ) {
-				System.out.println( "Moved" );
 				for (EditorComponent ecom: world.find( cam.getMousePosWorld() ))
-					System.out.println( ecom );
+					System.out.println( "Edd: " + ecom );
 			}
 		});
 	}
@@ -100,8 +101,10 @@ public class EditorPanel extends JPanel
 			GraphicComActive graphicComActive = GraphicGen.generateAndGate( 2, true );
 			graphicComActive.draw( g, new Vec2(256), 270 );
 			
-			for (EditorComponent ecom: world.getComponents())
+			for (EditorComponent ecom: world.getComponents()) {
 				ecom.draw( g );
+				System.out.println( "Draw at " + ecom.pos );  
+			}
 			
 		Gfx.popMatrix( g );
 	}
@@ -288,8 +291,6 @@ public class EditorPanel extends JPanel
 		EditorPanel panel = new EditorPanel();
 		
 		frame.setSize( new Dimension(600,600) );
-		frame.add( new JLabel("What"), "wrap" );
-		frame.add( new JLabel("What"), "split 2" );
 		frame.add( panel );
 		frame.setVisible( true );
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
