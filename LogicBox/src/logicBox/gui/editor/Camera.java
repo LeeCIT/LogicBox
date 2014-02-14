@@ -77,7 +77,7 @@ public class Camera
 		Vec2 out = new Vec2();
 		
 		try {
-			AffineTransform inv = matrix.createInverse();
+			AffineTransform inv = matrix.createInverse(); // TODO consider caching this
 			inv.transform( pos, out );
 		}
 		catch (NoninvertibleTransformException ex) {
