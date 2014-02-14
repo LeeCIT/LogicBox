@@ -20,9 +20,8 @@ public class HelpMenu extends JPanel
 		
 		setLayout( new MigLayout() );
 		
-		addToContentPane();
+		addComponents();
 		setComponentDimensions();
-		
 	}
 	
 	/**
@@ -81,9 +80,9 @@ public class HelpMenu extends JPanel
 	 * Add each component
 	 * to the content pane.
 	 */
-	private void addToContentPane()
+	private void addComponents()
 	{
-		getRootPane().add(gateTabs  = new JTabbedPane());
+		add(gateTabs  = new JTabbedPane());
 		gateTabs.add("& Gate", andGate = new JPanel());
 		gateTabs.add("| Gate", orGate  = new JPanel());
 	}
