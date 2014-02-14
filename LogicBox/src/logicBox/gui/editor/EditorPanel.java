@@ -101,7 +101,7 @@ public class EditorPanel extends JPanel
 			graphicComActive.draw( g, new Vec2(256), 270 );
 			
 			for (EditorComponent ecom: world.getComponents())
-				ecom.draw( g, null, 0 );
+				ecom.draw( g );
 			
 		Gfx.popMatrix( g );
 	}
