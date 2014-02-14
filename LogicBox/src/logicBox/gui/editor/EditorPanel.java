@@ -28,6 +28,7 @@ public class EditorPanel extends JPanel
 	
 	
 	public EditorPanel() {
+		super( true );
 		cam = new Camera( this, createOnTransformCallback() );
 		
 		addMouseOverTest();
