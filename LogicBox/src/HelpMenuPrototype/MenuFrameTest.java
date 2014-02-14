@@ -8,7 +8,7 @@ import logicBox.sim.ComponentType;
 public class MenuFrameTest extends JFrame 
 {
 	private HelpMenu menu;
-	private ComponentType gateNotType;
+	private ComponentType gateNot;
 	
 	public MenuFrameTest() 
 	{
@@ -16,7 +16,7 @@ public class MenuFrameTest extends JFrame
 		setVisible(true);
 		setLayout( new MigLayout() );
 		
-		getContentPane().add(menu = new HelpMenu(gateNotType));
+		getContentPane().add(menu = new HelpMenu(gateNot));
 	}
 	
 	public static void main(String[] args) 
