@@ -14,11 +14,11 @@ import logicBox.util.Vec2;
  */
 public class EditorComponent implements Drawable
 {
-	private Component        component;
-	private GraphicComActive graphicComActive;
+	protected Component        component;
+	protected GraphicComActive graphicComActive;
 	
-	private Vec2   pos;
-	private double angle;
+	protected Vec2   pos;
+	protected double angle;
 	
 	
 	
