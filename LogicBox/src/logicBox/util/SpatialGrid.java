@@ -59,22 +59,16 @@ public class SpatialGrid<T>
 	
 	
 	
-	public Iterable<T> find( Vec2 pos ) {
-		AccumulationTraversal atrx = new AccumulationTraversal();
-		traverse( pos, atrx );
-		return atrx.getAccumulation();
+	public Iterable<T> findPotentials( Vec2 pos ) {
+		return traverse( pos, new AccumulationTraversal() ).getAccumulation();
 	}
 	
-	public Iterable<T> find( Bbox2 bbox ) {
-		AccumulationTraversal atrx = new AccumulationTraversal();
-		traverse( bbox, atrx );
-		return atrx.getAccumulation();
+	public Iterable<T> findPotentials( Bbox2 bbox ) {
+		return traverse( bbox, new AccumulationTraversal() ).getAccumulation();
 	}
 	
-	public Iterable<T> find( Line2 line ) {
-		AccumulationTraversal atrx = new AccumulationTraversal();
-		traverse( line, atrx );
-		return atrx.getAccumulation();
+	public Iterable<T> findPotentials( Line2 line ) {
+		return traverse( line, new AccumulationTraversal() ).getAccumulation();
 	}
 	
 	
@@ -130,15 +124,16 @@ public class SpatialGrid<T>
 	
 	
 	
-	private void traverse( Vec2 pos, TraversalFunctor trav ) {
+	private <TF extends TraversalFunctor> TF traverse( Vec2 pos, TF trav ) {
 		int x = ((int) pos.x) >> cellSizePower;
 		int y = ((int) pos.y) >> cellSizePower;
 		trav.process( coordToIndex(x,y) );
+		return trav;
 	}
 	
 	
 
-	private void traverse( Bbox2 bbox, TraversalFunctor trav ) {
+	private <TF extends TraversalFunctor> TF traverse( Bbox2 bbox, TF trav ) {
 		int xb = ((int) bbox.tl.x           ) >> cellSizePower; // Snap low, div
 		int yb = ((int) bbox.tl.y           ) >> cellSizePower; // 
 		int xe = ((int) bbox.br.x + cellSize) >> cellSizePower; // Snap high, div
@@ -147,12 +142,15 @@ public class SpatialGrid<T>
 	    for (int y=yb; y<ye; y++)
 	    for (int x=xb; x<xe; x++)
 	    	trav.process( coordToIndex(x,y) );
+	    
+	    return trav;
 	}
 	
 	
 	
-	private void traverse( Line2 line, TraversalFunctor trav ) {
+	private <TF extends TraversalFunctor> TF traverse( Line2 line, TF trav ) {
 		// TODO need DDA line algo here
+		return trav;
 	}
 	
 	
@@ -210,7 +208,7 @@ public class SpatialGrid<T>
 		sg.add( new Vec2(297,261),           "Vec2" );
 		sg.add( new Bbox2(129,129, 256,512), "Bbox" );
 		
-		for (String s: sg.find( new Vec2(256,256) ))
+		for (String s: sg.findPotentials( new Vec2(256,256) ))
 			System.out.println( "\t" + s );
 		
 		System.out.println( "Load: " + sg.getLoadOnNonEmptyCells() );
