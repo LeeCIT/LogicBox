@@ -2,10 +2,9 @@ package prototypes.printingProto;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.*;
 import java.awt.print.*;
 import javax.swing.*;
-import prototypes.ToolBarProto.ToolbarFrame;
+
 
 public class Printing implements Printable{
 	
