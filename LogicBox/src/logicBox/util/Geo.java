@@ -131,6 +131,16 @@ public class Geo
 	
 	
 	/**
+	 * Snap to nearest multiple of S.
+	 */
+	public static Vec2 snapNear( Vec2 v, double s ) {
+		return new Vec2( roundToMultiple( v.x, s ),
+						 roundToMultiple( v.y, s ) );
+	}
+	
+	
+	
+	/**
 	 * Get the length of a vector squared.
 	 */
 	public static double lengthSqr( Vec2 v ) {
