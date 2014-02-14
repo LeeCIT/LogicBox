@@ -125,6 +125,16 @@ public class Vec2 extends Point2D implements Serializable
 	
 	
 	
+	public Vec2 rotate( Vec2 uv ) {
+	    double c = uv.x;
+	    double s = uv.y;
+
+	    return new Vec2( x*c  +  y*-s,
+	                     x*s  +  y* c );
+	}
+	
+	
+	
 	public double getSmallest() {
 		return Math.min( x, y );
 	}
