@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
+import logicBox.util.Bbox2;
 import logicBox.util.Callback;
 import logicBox.util.Geo;
 import logicBox.util.Region;
@@ -83,6 +84,8 @@ public class EditorPanel extends JPanel
 			Vec2 otb   = new Vec2( 448+96, 384-32 );
 			drawOverlappedTrace( g, ota, inter, otb );
 			
+			drawSelection( g, new Bbox2(512,512,1024,1024) );
+			
 			GraphicComActive graphicComActive = GraphicGen.generateAndGate( 2, true );
 			graphicComActive.draw( g, new Vec2(256), 270 );
 		Gfx.popMatrix( g );
@@ -90,6 +93,20 @@ public class EditorPanel extends JPanel
 	
 	
 	
+	private void drawSelection( Graphics2D g, Bbox2 bbox ) {
+		double zoom      = cam.getZoom();
+		float  thickness = (float) (EditorStyle.compThickness / zoom);
+		int    arc       = (int)   (16.0 / zoom);
+		
+		Gfx.pushStrokeAndSet( g, EditorStyle.makeSelectionStroke(thickness) );
+			Gfx.pushColorAndSet( g, EditorStyle.colSelectionStroke );
+				g.drawRoundRect( (int) bbox.getLeft(), (int) bbox.getTop(), (int) bbox.getSize().x, (int) bbox.getSize().y, arc, arc );
+			Gfx.popColor( g );
+		Gfx.popStroke( g );
+	}
+
+
+
 	private void drawTrace( Graphics2D g ) {
 		Vec2 a = new Vec2( 256+64,256 );
 		Vec2 j = a.add( 64 );
