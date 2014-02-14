@@ -6,11 +6,15 @@ package logicBox.util;
 
 
 /**
- * 2D bounding box.
+ * 2D axis-aligned bounding box.
  * @author Lee Coakley
  */
 public class Bbox2 extends Region
 {
+	public Bbox2() {}
+	
+	
+	
 	public Bbox2( Vec2 tl, Vec2 br ) {
 		super( tl.copy(), br.copy() );
 	}
@@ -30,9 +34,9 @@ public class Bbox2 extends Region
 			&& other.br.x <= br.x
 			&& other.br.y <= br.y;
 	}
-
-
-
+	
+	
+	
 	public boolean overlaps( Bbox2 other ) {
 		return other.tl.x <= br.x
 			&& other.tl.y <= br.y
