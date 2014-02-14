@@ -5,17 +5,18 @@ import java.awt.Dimension;
 import javax.swing.*;
 
 import net.miginfocom.swing.MigLayout;
-import logicBox.sim.Component;
+import logicBox.sim.ComponentType;
 
 public class HelpMenu extends JFrame
 {
-	private int gate;
+	private ComponentType gateType;
 	private JTabbedPane gateTabs;
 	private JPanel andGate;
 	private JPanel orGate;
 	
-	public HelpMenu() 
+	public HelpMenu( ComponentType gateType ) 
 	{
+		this.gateType = gateType;
 		setSize(300,300);
 		
 		setLayout( new MigLayout() );
@@ -28,11 +29,11 @@ public class HelpMenu extends JFrame
 	/**
 	 * Call a specific tab
 	 * within the help menu.
-	 * @param gate
+	 * @param gateType
 	 */
-	public void callGateInfo( int gate )
+	public void callGateInfo( ComponentType gateType )
 	{
-		this.gate = gate;
+		this.gateType = gateType;
 		setSelectedTab();
 	}
 	
@@ -43,21 +44,41 @@ public class HelpMenu extends JFrame
 	 */
 	private void setSelectedTab()
 	{
-		switch (gate)
+		switch (gateType)
 		{
-			case 0:
+			case gateRelay:
 			{
-				gateTabs.setSelectedIndex(gate);
+				gateTabs.setSelectedIndex(0);
 				break;
 			}
-			case 1:
+			case gateNot:
 			{
-				gateTabs.setSelectedIndex(gate);
+				gateTabs.setSelectedIndex(1);
 				break;
 			}
-			case 2:
+			case gateAnd:
 			{
-				gateTabs.setSelectedIndex(gate);
+				gateTabs.setSelectedIndex(3);
+				break;
+			}
+			case gateNand:
+			{
+				gateTabs.setSelectedIndex(4);
+				break;
+			}
+			case gateOr:
+			{
+				gateTabs.setSelectedIndex(5);
+				break;
+			}
+			case gateNor:
+			{
+				gateTabs.setSelectedIndex(6);
+				break;
+			}
+			case gateXnor:
+			{
+				gateTabs.setSelectedIndex(7);
 				break;
 			}
 			default:
@@ -102,7 +123,6 @@ public class HelpMenu extends JFrame
 	
 	public static void main(String[] args) 
 	{
-		HelpMenu menu = new HelpMenu();
-		menu.callMenu();	
+		
 	}
 }
