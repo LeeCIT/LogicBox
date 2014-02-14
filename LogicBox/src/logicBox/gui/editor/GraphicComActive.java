@@ -49,6 +49,12 @@ public class GraphicComActive implements Drawable
 	
 	
 	
+	public Bbox2 getBbox() {
+		return bbox;
+	}
+	
+	
+	
 	public void enableBubble( Vec2 pos, double radius ) {
 		bubblePos    = pos;
 		bubbleRadius = radius;
