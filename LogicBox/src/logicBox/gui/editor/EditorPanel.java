@@ -9,7 +9,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
@@ -101,10 +100,8 @@ public class EditorPanel extends JPanel
 			GraphicComActive graphicComActive = GraphicGen.generateAndGate( 2, true );
 			graphicComActive.draw( g, new Vec2(256), 270 );
 			
-			for (EditorComponent ecom: world.getComponents()) {
+			for (EditorComponent ecom: world.getComponents())
 				ecom.draw( g );
-				System.out.println( "Draw at " + ecom.pos );  
-			}
 			
 		Gfx.popMatrix( g );
 	}
