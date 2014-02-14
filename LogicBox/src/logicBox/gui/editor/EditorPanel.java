@@ -11,8 +11,10 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
+import logicBox.sim.GateAnd;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
 import logicBox.util.Geo;
@@ -27,13 +29,19 @@ import logicBox.util.Vec2;
  */
 public class EditorPanel extends JPanel
 {
-	private Camera cam;
+	private Camera      cam;
+	private EditorWorld world;
 	
 	
 	
 	public EditorPanel() {
 		super( true );
-		cam = new Camera( this, createOnTransformCallback() );
+		cam   = new Camera( this, createOnTransformCallback() );
+		world = new EditorWorld();
+		
+		EditorComponent ecom = new EditorComponent( new GateAnd(2), GraphicGen.generateAndGate(2,false), new Vec2(768) );
+		
+		world.add( ecom );
 		
 		addMouseOverTest();
 		setupActions();
@@ -48,26 +56,15 @@ public class EditorPanel extends JPanel
 			}
 		});
 	}
-
-
-
+	
+	
+	
 	private void addMouseOverTest() {
 		addMouseMotionListener( new MouseMotionAdapter() {
 			public void mouseMoved( MouseEvent ev ) {
-				Vec2   comPos   = new Vec2( 256 );
-				double comAngle = 270;
-				
-				Vec2 pos = cam.getMousePosWorld();
-				pos = pos.subtract( comPos );
-				pos = pos.rotate( -comAngle );
-				GraphicComActive gca = GraphicGen.generateAndGate( 2, true );
-				
-				if (gca.contains( pos ))
-					System.out.println( "contains: " + pos );
-				
-				GraphicPinMapping gpm = gca.findClosestPin( pos, 2.5 );
-				if (gpm != null)
-					System.out.println( "findClosestPin: " + gpm.mode + ", " + gpm.index );
+				System.out.println( "Moved" );
+				for (EditorComponent ecom: world.find( cam.getMousePosWorld() ))
+					System.out.println( ecom );
 			}
 		});
 	}
@@ -102,6 +99,10 @@ public class EditorPanel extends JPanel
 			
 			GraphicComActive graphicComActive = GraphicGen.generateAndGate( 2, true );
 			graphicComActive.draw( g, new Vec2(256), 270 );
+			
+			for (EditorComponent ecom: world.getComponents())
+				ecom.draw( g, null, 0 );
+			
 		Gfx.popMatrix( g );
 	}
 	
@@ -273,6 +274,16 @@ public class EditorPanel extends JPanel
 	
 	
 	public static void main( String[] args ) {
+		SwingUtilities.invokeLater( new Runnable() {
+			public void run() {
+				test();
+			}
+		});
+	}
+	
+	
+	
+	public static void test() {
 		EditorFrame frame = new EditorFrame();
 		EditorPanel panel = new EditorPanel();
 		
