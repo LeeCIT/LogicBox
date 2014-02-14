@@ -208,6 +208,19 @@ public class Geo
 	
 	
 	/**
+	 * Express an angle as a unit vector.
+	 */
+	public static Vec2 angleToVector( double angle ) {
+		double r = Math.toRadians( angle );
+	    double c = Math.cos( r );
+	    double s = Math.sin( r );
+
+	    return new Vec2( c, -s );
+	}
+	
+	
+	
+	/**
 	 * Normalised angular difference in range (-180,+180).
 	 * Result is negative if B is anticlockwise with respect to A.
 	 * Order of comparison affects the sign, but the absolute value is the same either way.
