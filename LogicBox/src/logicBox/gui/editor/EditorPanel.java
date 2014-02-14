@@ -4,9 +4,12 @@
 package logicBox.gui.editor;
 import java.awt.*;
 import java.awt.MultipleGradientPaint.CycleMethod;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
@@ -33,10 +36,21 @@ public class EditorPanel extends JPanel
 		cam = new Camera( this, createOnTransformCallback() );
 		
 		addMouseOverTest();
+		setupActions();
 	}
 	
 	
 	
+	private void setupActions() {
+		addComponentListener( new ComponentAdapter() {
+			public void componentResized( ComponentEvent e ) {
+				repaint();
+			}
+		});
+	}
+
+
+
 	private void addMouseOverTest() {
 		addMouseMotionListener( new MouseMotionAdapter() {
 			public void mouseMoved( MouseEvent ev ) {
@@ -196,13 +210,18 @@ public class EditorPanel extends JPanel
 			Gfx.drawCircle( g, pos, radius, EditorStyle.colTraceOff, false );
 		Gfx.popStroke( g );
 	}
-
-
-
+	
+	
+	
 	private void fillBackground( Graphics2D g ) {
-		Gfx.pushColorAndSet( g, EditorStyle.colBackground );
-			g.fillRect( getX(), getY(), getWidth(), getHeight() );
-		Gfx.popColor( g );
+		Gfx.pushMatrix( g );
+			Gfx.setIdentity( g );
+			
+			Gfx.pushColorAndSet( g, EditorStyle.colBackground );
+				g.fillRect( 0, 0, getWidth(), getHeight() );
+			Gfx.popColor( g );
+		
+		Gfx.popMatrix( g );
 	}
 	
 	
@@ -215,7 +234,7 @@ public class EditorPanel extends JPanel
 		
 		worldRegion.tl = worldRegion.tl.subtract( cellSize 				 );
 		worldRegion.br = worldRegion.br.add     ( cellSize.multiply( 2 ) );
-
+		
 		double  zoom        = cam.getZoom();
 		double  zoomMin     = cam.getZoomMin();
 		double  thickThresh = 1.0 / 3.0;
@@ -258,7 +277,9 @@ public class EditorPanel extends JPanel
 		EditorPanel panel = new EditorPanel();
 		
 		frame.setSize( new Dimension(600,600) );
-		frame.setContentPane( panel );
+		frame.add( new JLabel("What"), "wrap" );
+		frame.add( new JLabel("What"), "split 2" );
+		frame.add( panel );
 		frame.setVisible( true );
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}
