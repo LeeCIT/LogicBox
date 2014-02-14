@@ -7,9 +7,9 @@ import java.awt.print.*;
 import javax.swing.*;
 import prototypes.ToolBarProto.ToolbarFrame;
 
-public class Printing implements Printable, ActionListener{
+public class Printing implements Printable{
 	
-	static JFrame frame;
+	JFrame frame;
 
 
 	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
@@ -31,8 +31,11 @@ public class Printing implements Printable, ActionListener{
 	
 	
 	
-	 public void actionPerformed(ActionEvent e) {
-         PrinterJob job = PrinterJob.getPrinterJob();
+	
+	 public void setUpPrintJob(JFrame frame) {
+		 this.frame = frame;
+		 
+		 PrinterJob job = PrinterJob.getPrinterJob();
          job.setPrintable(this);
          boolean printOk = job.printDialog();
          if (printOk) {
@@ -42,18 +45,6 @@ public class Printing implements Printable, ActionListener{
               ex.printStackTrace();
              }
          }
-    }
- 
-	 
-    public static void main(String args[]) {
-        frame = new JFrame("Hello World Printer");
-        
-        JButton printButton = new JButton("Demo printing");
-        printButton.addActionListener(new Printing());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add("Center", printButton);
-        frame.pack();
-        frame.setVisible(true);
-    }
+	 }
 
 }
