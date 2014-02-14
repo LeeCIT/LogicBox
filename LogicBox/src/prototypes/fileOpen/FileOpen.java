@@ -2,12 +2,21 @@ package prototypes.fileOpen;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import logicBox.gui.GuiUtil;
 
 public class FileOpen {
-
+	
+	private File loadFile;
+	
+	/**
+	 * Open the file open dialog
+	 * @param frame	The frame that the dialog is to come from
+	 */
 	public FileOpen(JFrame frame) {
 		JFileChooser chooser = new JFileChooser();
 		
@@ -19,7 +28,17 @@ public class FileOpen {
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
 			System.out.println("You chose to open this file: " +
 					chooser.getSelectedFile().getName());
+			loadFile = chooser.getSelectedFile();
 		}
+	}
+	
+	
+	/**
+	 * Get the file picked
+	 * @return
+	 */
+	public File getPickedFile() {
+		return loadFile;
 	}
 
 
