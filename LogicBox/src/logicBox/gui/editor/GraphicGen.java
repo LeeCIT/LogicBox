@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.VecPath;
 import logicBox.sim.PinIoMode;
+import logicBox.util.Bbox2;
 import logicBox.util.Geo;
 import logicBox.util.Line2;
 import logicBox.util.Region;
@@ -96,7 +97,10 @@ public class GraphicGen
 		for (int i=inOffset; i<pins.size(); i++)
 			pinMappings.add( new GraphicPinMapping( pins.get(i), PinIoMode.input, i-inOffset ) );
 		
-		GraphicComActive gate = new GraphicComActive( polyBody, polyPins, pinMappings );
+		
+		Bbox2 bbox = new Bbox2( r.getLeft()-pinLength, r.getTop(), r.getRight()+pinLength, r.getBottom() );
+		
+		GraphicComActive gate = new GraphicComActive( polyBody, polyPins, pinMappings, bbox );
 		
 		if (invert)
 			gate.enableBubble( bubblePos, bubbleRadius );

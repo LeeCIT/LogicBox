@@ -21,6 +21,8 @@ import logicBox.util.Vec2;
  */
 public class GraphicComActive implements Drawable
 {
+	private Bbox2 bbox;
+	
 	private VecPath polyBody;
 	private VecPath polyPins;
 	
@@ -36,14 +38,13 @@ public class GraphicComActive implements Drawable
 	
 	
 	
-	public GraphicComActive( VecPath polyBody, VecPath polyPins, List<GraphicPinMapping> pinMap ) {
+	public GraphicComActive( VecPath polyBody, VecPath polyPins, List<GraphicPinMapping> pinMap, Bbox2 bbox ) {
 		this.colStroke = EditorStyle.colComponentStroke;
 		this.colFill   = EditorStyle.colComponentFill;
+		this.bbox      = bbox;
 		this.polyBody  = polyBody;
 		this.polyPins  = polyPins;
 		this.pinMap    = pinMap;
-		
-		setSelected( false );
 	}
 	
 	
@@ -112,14 +113,17 @@ public class GraphicComActive implements Drawable
 	/**
 	 * Test whether pos (in local space) is contained inside the graphic.
 	 * For this to make sense you have to transform pos first.
+	 * Intended for mouse-over usage, so it's fairly precise.
 	 */
 	public boolean contains( Vec2 pos ) {
 		if (hasBubble
 		&&  Geo.distance(bubblePos, pos) <= bubbleRadius)
 			return true;
 		
+		double pinDistComp = Geo.sqr(EditorStyle.compThickness) * 0.5;
+		
 		for (GraphicPinMapping gpm: pinMap)
-			if (Geo.distanceSqr( gpm.line.closestPoint( pos ), pos ) <= Geo.sqr(EditorStyle.compThickness)*0.5)
+			if (Geo.distanceSqr( gpm.line.closestPoint(pos), pos) <= pinDistComp)
 				return true;
 		
 		return polyBody.contains( pos );
@@ -128,24 +132,25 @@ public class GraphicComActive implements Drawable
 	
 	
 	/**
-	 * Test whether bounding box intersects the graphic.
+	 * Test whether the bounding box intersects the graphic.
 	 * The bbox must be transformed to the graphic's local space.
+	 * Intended for selections.  Not very precise (excludes pins, bubbles etc).
 	 */
 	public boolean overlaps( Bbox2 bbox ) {
-		//return polyBody.intersects(  );
-		return false;
+		Vec2 size = bbox.getSize();
+		return polyBody.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y );
 	}
 	
 	
 	
 	/**
-	 * Find the nearest pin connection point within the given distance threshold.
+	 * Find the nearest pin within the given distance threshold.
 	 * Uses local coordinates.
 	 * Returns null if there are no pins within the threshold.
 	 */
 	public GraphicPinMapping findClosestPin( Vec2 pos, double threshold ) {
 		GraphicPinMapping best     = null;
-		double            bestDist = Double.POSITIVE_INFINITY;
+		double            bestDist = Double.MAX_VALUE;
 		
 		threshold *= threshold; // Squared because distance is squared
 		
