@@ -42,9 +42,8 @@ public class Region
 	
 	
 	
-	public void applyOffset( Vec2 offs ) {
-		tl = tl.add( offs );
-		br = br.add( offs );
+	public Region translate( Vec2 offs ) {
+		return new Region( tl.add(offs), br.add(offs) );
 	}
 	
 	
