@@ -1,93 +1,76 @@
 package HelpMenuPrototype;
 
-import java.awt.Dimension;
-
 import javax.swing.*;
-
 import net.miginfocom.swing.MigLayout;
 import logicBox.sim.ComponentType;
 
-public class HelpMenu extends JFrame
+public class HelpMenu extends JPanel
 {
 	private ComponentType gateType;
-	private JTabbedPane gateTabs;
-	private JPanel andGate;
-	private JPanel orGate;
 	
 	public HelpMenu( ComponentType gateType ) 
 	{
 		this.gateType = gateType;
 		setSize(300,300);
-		
 		setLayout( new MigLayout() );
-		
-		addToContentPane();
-		setComponentDimensions();
-		
-	}
-	
-	/**
-	 * Call a specific tab
-	 * within the help menu.
-	 * @param gateType
-	 */
-	public void callGateInfo( ComponentType gateType )
-	{
-		this.gateType = gateType;
-		setSelectedTab();
+		callMenu();
+		displayGateInfo();
 	}
 	
 	
 	/**
-	 * Set the specified tab
-	 * as the one to be viewed.
+	 * Display help information
+	 * based on the specified gate.
 	 */
-	private void setSelectedTab()
+	private void displayGateInfo()
 	{
 		switch (gateType)
 		{
 			case gateRelay:
 			{
-				gateTabs.setSelectedIndex(0);
+				System.out.println("Relay info");
 				break;
 			}
 			case gateNot:
 			{
-				gateTabs.setSelectedIndex(1);
+				System.out.println("Not gate info");
 				break;
 			}
 			case gateAnd:
 			{
-				gateTabs.setSelectedIndex(3);
+				System.out.println("And gate info");
 				break;
 			}
 			case gateNand:
 			{
-				gateTabs.setSelectedIndex(4);
+				System.out.println("Nand gate info");
 				break;
 			}
 			case gateOr:
 			{
-				gateTabs.setSelectedIndex(5);
+				System.out.println("Or gate info");
 				break;
 			}
 			case gateNor:
 			{
-				gateTabs.setSelectedIndex(6);
+				System.out.println("Nor gate info");
 				break;
 			}
 			case gateXnor:
 			{
-				gateTabs.setSelectedIndex(7);
+				System.out.println("Xnor gate info");
 				break;
 			}
 			default:
 			{
-				gateTabs.setSelectedIndex(0);
+				
 				break;
 			}
 		}
 	}
+	
+	
+	
 
 	/**
 	 * Call the help menu.
@@ -98,31 +81,4 @@ public class HelpMenu extends JFrame
 	}
 	
 	
-	/**
-	 * Add each component
-	 * to the content pane.
-	 */
-	private void addToContentPane()
-	{
-		getContentPane().add(gateTabs  = new JTabbedPane());
-		gateTabs.add("& Gate", andGate = new JPanel());
-		gateTabs.add("| Gate", orGate  = new JPanel());
-	}
-	
-	/**
-	 * Set the dimensions
-	 * of each component.
-	 */
-	protected void setComponentDimensions()
-	{
-		andGate.setPreferredSize(new Dimension(getSize()));
-		orGate.setPreferredSize(new Dimension(getSize()));
-	}
-	
-	
-	
-	public static void main(String[] args) 
-	{
-		
-	}
 }
