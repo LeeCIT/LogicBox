@@ -9,7 +9,7 @@ package logicBox.sim;
  * Specifies directionality for a pin.
  * @author Lee Coakley
  */
-public enum IoMode
+public enum PinIoMode
 {
 	input,
 	output,

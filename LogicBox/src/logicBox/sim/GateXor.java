@@ -17,10 +17,16 @@ public class GateXor extends Gate
 	
 	
 	
-	public void update() {
+	public boolean evaluate() {
 		boolean a = pinInputs.get( 0 ).getState();
 		boolean b = pinInputs.get( 1 ).getState();
 		
-		pinOut.setState( a ^ b );
+		return a ^ b;
+	}
+	
+	
+	
+	public String getName() {
+		return "Xor gate";
 	}
 }

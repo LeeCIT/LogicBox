@@ -11,10 +11,10 @@ import java.util.ArrayList;
  * Joins traces together.  Used to be called 'Solder'.
  * @author Lee Coakley
  */
-public class Junction extends Component implements Stateful
+public class Junction extends ComponentPassive
 {
-	protected ArrayList<Pin> pins;
-	protected boolean        state;
+	private ArrayList<Pin> pins;
+	private boolean        state;
 	
 	
 	
@@ -43,7 +43,7 @@ public class Junction extends Component implements Stateful
 	 * Create a new pin, add it to the junction and return it.
 	 */
 	public Pin createPin() {
-		Pin pin = new Pin( this, IoMode.bidi );
+		Pin pin = new Pin( this, PinIoMode.bidi );
 		pins.add( pin );
 		return pin;
 	}
@@ -58,5 +58,11 @@ public class Junction extends Component implements Stateful
 
 	public void setState( boolean state ) {
 		this.state = state;
+	}
+
+
+
+	public String getName() {
+		return "Junction";
 	}
 }

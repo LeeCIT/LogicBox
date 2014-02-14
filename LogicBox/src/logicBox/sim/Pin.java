@@ -9,19 +9,19 @@ package logicBox.sim;
  * A pin is an attachment point for traces on a component.
  * @author Lee Coakley
  */
-public class Pin extends Component implements Stateful
+public class Pin extends ComponentPassive
 {
-	protected Component component; // Component this is physically attached to.
+	protected Component comp; // Component this is physically attached to.
 	protected Trace     trace;
-	protected IoMode    mode;
+	protected PinIoMode mode;
 	protected boolean   state;
 	
 	
 	
-	public Pin( Component attachTo, IoMode mode ) {
+	public Pin( Component attachTo, PinIoMode mode ) {
 		super();
-		this.component = attachTo;
-		this.mode      = mode;
+		this.comp = attachTo;
+		this.mode = mode;
 	}
 	
 	
@@ -52,31 +52,31 @@ public class Pin extends Component implements Stateful
 	 * Get the component this pin is physically attached to.
 	 */
 	public Component getAttachedComponent() {
-		return component;
+		return comp;
 	}
 	
 	
 	
-	public IoMode getIoMode() {
+	public PinIoMode getIoMode() {
 		return mode;
 	}
 	
 	
 	
 	public boolean isInput() {
-		return mode == IoMode.input;
+		return mode == PinIoMode.input;
 	}
 	
 	
 	
 	public boolean isOutput() {
-		return mode == IoMode.output;
+		return mode == PinIoMode.output;
 	}
 	
 	
 	
 	public boolean isBidirectional() {
-		return mode == IoMode.bidi;
+		return mode == PinIoMode.bidi;
 	}
 	
 	
@@ -90,4 +90,24 @@ public class Pin extends Component implements Stateful
 	public void setState( boolean state ) {
 		this.state = state;
 	}
+	
+	
+	
+	public String getName() {
+		return "Pin";
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

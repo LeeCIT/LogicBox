@@ -25,8 +25,8 @@ public class Gfx
 	
 	
 	public static void drawCircle( Graphics2D g, Vec2 pos, double radius, boolean filled ) {		
-		int  tl   = (int) -radius;
-		int  size = (int) (radius * 2.0);
+		int tl   = (int) -radius;
+		int size = (int) (radius * 2.0);
 		
 		Gfx.pushMatrix( g );
 			Gfx.translate( g, pos );
@@ -34,7 +34,6 @@ public class Gfx
 			if (filled)
 				 g.fillOval( tl, tl, size, size );
 			else g.drawOval( tl, tl, size, size );
-			
 		Gfx.popMatrix( g );
 	}
 	
@@ -49,7 +48,7 @@ public class Gfx
 	
 	
 	public static void drawArc( Graphics2D g, Vec2 pos, double radius, double angleA, double angleB ) {		
-		Vec2 tl        = pos.substract( radius );
+		Vec2 tl        = pos.subtract( radius );
 		int  tlx       = (int) tl.x;
 		int  tly       = (int) tl.y;
 		int  size      = (int) (radius * 2.0);
@@ -213,7 +212,7 @@ public class Gfx
 	
 	
 	public static void rotate( Graphics2D g, double a ) {
-		g.transform( AffineTransform.getRotateInstance( Math.toRadians(a) ) );
+		g.transform( AffineTransform.getRotateInstance( Math.toRadians(-a) ) );
 	}
 
 

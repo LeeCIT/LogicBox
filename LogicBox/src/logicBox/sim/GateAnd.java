@@ -23,19 +23,24 @@ public class GateAnd extends GateVariableInputs
 	
 	
 	
-	public void update() {
+	public boolean evaluate() {
 		boolean state = true;
 		
 		for (Pin pin: pinInputs)
-			if (pin != null)
-				state &= pin.getState();
+			state &= pin.getState();
 			
-		pinOut.setState( state );
+		return state;
 	}
-	
-	
-	
-	public boolean hasVariableInputPinCount() {
-		return true;
+
+
+
+	public void update() {
+		pinOut.setState( evaluate() );
+	}
+
+
+
+	public String getName() {
+		return "And gate";
 	}
 }

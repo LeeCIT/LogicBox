@@ -105,13 +105,13 @@ public class Camera
 	
 	
 	public void zoomIn() {
-		zoomLogarithmic( -1 );
+		zoomLogarithmic( -1, false );
 	}
 	
 	
 	
 	public void zoomOut() {
-		zoomLogarithmic( 1 );
+		zoomLogarithmic( 1, false );
 	}
 	
 	
@@ -140,7 +140,7 @@ public class Camera
 	
 	
 	
-	private void zoomLogarithmic( double wheelInput ) {
+	private void zoomLogarithmic( double wheelInput, boolean isMouseInput ) {
 		double  delta = -wheelInput;
 		boolean in    = delta > 0.0;
 		double  mod   = zoomRate * Math.abs( delta );
@@ -154,12 +154,19 @@ public class Camera
 		if (Geo.absDiff( zoom, 1.0 ) < roundingSnapThresh)
 			zoom = 1.0;
 		
+		// TODO account for mouse position
 		updateTransform();
 	}
 	
 	
 	
 	private void updateTransform() {
+		updateTransform( new Vec2(0.5) );
+	}
+	
+	
+	
+	private void updateTransform( Vec2 normalisedRelativePointer ) {
 		Region region = new Region( component );
 		Vec2   half   = region.getSize().multiply( 0.5 );
 		
@@ -178,7 +185,7 @@ public class Camera
 	private void setupActions() {
 		component.addMouseWheelListener( new MouseWheelListener() {
 			public void mouseWheelMoved( MouseWheelEvent ev ) {
-				zoomLogarithmic( ev.getPreciseWheelRotation() );
+				zoomLogarithmic( ev.getPreciseWheelRotation(), true );
 			}
 		});
 		

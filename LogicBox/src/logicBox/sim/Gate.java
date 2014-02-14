@@ -11,7 +11,7 @@ import java.util.List;
  * A logic gate.
  * @author Lee Coakley
  */
-public abstract class Gate extends Component implements PinIn, PinOut, Updateable
+public abstract class Gate extends ComponentActive
 {
 	protected ArrayList<Pin> pinInputs;
 	protected Pin            pinOut;
@@ -21,7 +21,7 @@ public abstract class Gate extends Component implements PinIn, PinOut, Updateabl
 	public Gate() {
 		super();
 		pinInputs = new ArrayList<>();
-		pinOut    = new Pin( this, IoMode.output );
+		pinOut    = new Pin( this, PinIoMode.output );
 	}
 	
 	
@@ -30,7 +30,7 @@ public abstract class Gate extends Component implements PinIn, PinOut, Updateabl
 		this();
 		
 		for (int i=0; i<inputPinCount; i++)
-			pinInputs.add( new Pin( this, IoMode.input ) );
+			pinInputs.add( new Pin( this, PinIoMode.input ) );
 	}
 	
 	
@@ -42,12 +42,22 @@ public abstract class Gate extends Component implements PinIn, PinOut, Updateabl
 	
 	
 	public List<Pin> getPinOutputs() {
-		return Util.wrapInList( pinOut );
+		return SimUtil.wrapInList( pinOut );
 	}
 	
 	
 	
 	public boolean hasVariableInputPinCount() {
 		return false;
+	}
+	
+	
+	
+	protected abstract boolean evaluate();
+	
+	
+	
+	public void update() {
+		pinOut.setState( evaluate() );
 	}
 }

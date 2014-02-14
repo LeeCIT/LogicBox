@@ -17,6 +17,12 @@ public class Region
 	
 	
 	
+	public Region() {
+		// Do nothing
+	}
+	
+	
+	
 	public Region( Vec2 tl, Vec2 br ) {
 		this.tl = tl;
 		this.br = br;

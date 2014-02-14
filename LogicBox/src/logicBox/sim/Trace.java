@@ -10,7 +10,7 @@ package logicBox.sim;
  * @author Lee Coakley
  * @see    Pin
  */
-public class Trace extends Component implements Stateful
+public class Trace extends ComponentPassive
 {
 	protected Pin     source, dest;
 	protected boolean state;
@@ -57,5 +57,11 @@ public class Trace extends Component implements Stateful
 
 	public void setState( boolean state ) {
 		this.state = state;
+	}
+
+
+
+	public String getName() {
+		return "Trace";
 	}
 }
