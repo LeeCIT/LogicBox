@@ -6,11 +6,11 @@ import logicBox.sim.ComponentType;
 
 public class HelpMenu extends JPanel
 {
-	private ComponentType gateType;
+	private ComponentType componentType;
 	
-	public HelpMenu( ComponentType gateType ) 
+	public HelpMenu( ComponentType componentType ) 
 	{
-		this.gateType = gateType;
+		this.componentType = componentType;
 		setSize(300,300);
 		setLayout( new MigLayout() );
 		callMenu();
@@ -24,7 +24,7 @@ public class HelpMenu extends JPanel
 	 */
 	private void displayGateInfo()
 	{
-		switch (gateType)
+		switch (componentType)
 		{
 			case gateRelay:
 			{
