@@ -142,9 +142,9 @@ public class ToolDragger extends Tool
 		if ( ! (dragInitiated || dragging))
 			return;
 		
-		double angle   = Geo.angleBetween( pos, draggedComponent.pos );
+		double angle   = Geo.angleBetween( draggedComponent.pos, pos );
 		double snapped = Geo.roundToMultiple( angle, 45 );
-		draggedComponent.angle = snapped - 180;
+		draggedComponent.angle = snapped;
 		panel.repaint();
 	}
 	
