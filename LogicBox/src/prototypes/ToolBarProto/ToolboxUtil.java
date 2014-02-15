@@ -84,7 +84,10 @@ public class ToolboxUtil{
 	}
 
 
-
+	/**
+	 * Prevent the toolbox from going horizontal
+	 * @param toolbox
+	 */
 	public static void preventToolBoxhorizontalOrientation(final JToolBar toolbox) {
 		toolbox.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
