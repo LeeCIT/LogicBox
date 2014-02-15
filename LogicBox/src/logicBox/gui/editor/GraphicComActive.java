@@ -31,6 +31,7 @@ public class GraphicComActive implements Drawable
 	private double  bubbleRadius;
 	
 	private boolean isSelected;
+	private boolean isHighlighted;
 	private Color   colStroke;
 	private Color   colFill;  
 	
@@ -63,12 +64,32 @@ public class GraphicComActive implements Drawable
 	
 	
 	
+	public void setHighlighted( boolean state ) {
+		isHighlighted = state;
+		
+		if (isHighlighted) {
+			colStroke = EditorStyle.colHighlightStroke;
+			colFill   = EditorStyle.colHighlightFill;
+		} else {
+			colStroke = EditorStyle.colComponentStroke;
+			colFill   = EditorStyle.colComponentFill;
+		}
+	}
+	
+	
+	
+	public boolean isHighlighted() {
+		return isHighlighted;
+	}
+	
+	
+	
 	public void setSelected( boolean state ) {
 		isSelected = state;
 		
 		if (isSelected) {
-			colStroke = EditorStyle.makeSelected( EditorStyle.colComponentStroke );
-			colFill   = EditorStyle.makeSelected( EditorStyle.colComponentFill   );
+			colStroke = EditorStyle.makeSelectedCol( EditorStyle.colComponentStroke );
+			colFill   = EditorStyle.makeSelectedCol( EditorStyle.colComponentFill   );
 		} else {
 			colStroke = EditorStyle.colComponentStroke;
 			colFill   = EditorStyle.colComponentFill;

@@ -10,7 +10,7 @@ import logicBox.util.Geo;
 
 
 /**
- * Defines the colour palette used by the editor.
+ * Defines the colour palette and line styles used by the editor.
  * @author Lee Coakley
  */
 public class EditorStyle
@@ -23,33 +23,23 @@ public class EditorStyle
 	public static Color colJunctionOn      = new Color( 255, 227,  39 );
 	public static Color colComponentStroke = new Color( 243,  75,  99 );
 	public static Color colComponentFill   = new Color( 112,  18,  58 );
-	public static Color colSelectionStroke = new Color( 78,  185, 252 );
-	public static Color colSelectionFill   = new Color( 78,  185, 252, 128 );
+	public static Color colHighlightStroke = new Color( 245, 238, 207 );
+	public static Color colHighlightFill   = new Color( 183, 117, 126 );
+	public static Color colSelectionStroke = new Color(  78, 185, 252 );
+	public static Color colSelectionFill   = new Color(  78, 185, 252 );
 	
 	public static double gridThickness = 3.0;
 	public static float  compThickness = 5.0f;
 	
-	//public static Stroke strokeSelection = makeStrokeSelection();
-	public static Stroke strokeBody      = new BasicStroke( compThickness );
-	public static Stroke strokePin       = new BasicStroke( compThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
-	public static Stroke strokeTrace     = new BasicStroke( compThickness, BasicStroke.CAP_BUTT,  BasicStroke.JOIN_ROUND );
-	public static Stroke strokeBubble    = new BasicStroke( compThickness * 0.5f );
+	public static Stroke strokeBody   = new BasicStroke( compThickness );
+	public static Stroke strokePin    = new BasicStroke( compThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+	public static Stroke strokeTrace  = new BasicStroke( compThickness, BasicStroke.CAP_BUTT,  BasicStroke.JOIN_ROUND );
+	public static Stroke strokeBubble = new BasicStroke( compThickness * 0.5f );
 	
 	
 	
-	private static double highlightFrac = 0.125;
-	private static double selectFrac    = 0.5;
-	
-	
-	
-	public static Color makeHighlighted( Color col ) {
-		return Geo.lerp( col, Color.white, highlightFrac ); // TODO make nicer
-	}
-	
-	
-	
-	public static Color makeSelected( Color col ) {
-		return Geo.lerp( col, colSelectionStroke, selectFrac ); // TODO make nicer
+	public static Color makeSelectedCol( Color c ) {
+		return Geo.lerp( c, colSelectionStroke, 0.5 ); // TODO make nicer
 	}
 	
 	
