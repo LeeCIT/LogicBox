@@ -96,7 +96,7 @@ public class ToolboxUtil{
 					Integer oldValue = (Integer) evt.getOldValue();
 					Integer newValue = (Integer) evt.getNewValue();
 					if (newValue.intValue() == JToolBar.HORIZONTAL) {
-						toolbox.setOrientation(SwingConstants.VERTICAL);
+						newValue = JToolBar.VERTICAL;
 					}	
 				}
 				}});

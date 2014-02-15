@@ -1,5 +1,6 @@
 package prototypes.ToolBarProto;
 
+import java.awt.Insets;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -20,6 +21,8 @@ public class Toolbox extends JToolBar
 	 */
 	public Toolbox(String frameName, int vertical) {
 		super(frameName, vertical);
+		super.setMargin(new Insets(0, 2, 0, 0));
+		super.setOrientation(JToolBar.VERTICAL);
 	}
 
 
@@ -50,7 +53,7 @@ public class Toolbox extends JToolBar
 	 * @param items
 	 */
 	public void addCategory(String heading) {
-		add(new JLabel(heading));
+		add(new JLabel(" " + heading));
 		this.add(new JToolBar.Separator());
 	}
 	
