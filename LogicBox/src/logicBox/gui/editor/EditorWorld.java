@@ -56,6 +56,16 @@ public class EditorWorld
 	
 	
 	
+	public EditorComponent findTopmostAt( Vec2 pos ) {
+		List<EditorComponent> list = find( pos );
+		
+		if ( ! list.isEmpty())
+			 return list.get( list.size() - 1 ); 
+		else return null;
+	}
+	
+	
+	
 	public List<EditorComponent> find( Vec2 pos ) {
 		List<EditorComponent> list = new ArrayList<>();
 		
