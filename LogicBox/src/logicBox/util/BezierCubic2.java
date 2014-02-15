@@ -88,8 +88,10 @@ public class BezierCubic2
 			public void process( Line2 com ) {
 				Line2.IntersectResult ir = ref.intersect( com );
 				
-				if (ir.intersects)
+				if (ir.intersects) {
+					result.intersects = true;
 					result.posList.add( ir.pos );
+				}
 			}
 		});
 		
@@ -111,6 +113,8 @@ public class BezierCubic2
 		
 		return Bbox2.createFromPoints( points );
 	}
+	
+	
 	
 	
 	
