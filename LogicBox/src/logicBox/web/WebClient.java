@@ -36,7 +36,7 @@ public class WebClient
 		{
 		    public void failed(UnirestException e) 
 		    {
-	    		ri.onRequestResponse(user, RequestInterface.status.FAILED);
+	    		ri.onRequestResponse(null, user, RequestInterface.status.FAILED);
 		    }
 
 		    public void completed(HttpResponse<JsonNode> response) 
@@ -44,12 +44,12 @@ public class WebClient
 		    	parseHeaders(response.getHeaders());
 		    	parseErrors(response.getBody().getObject(), user.getErrors());
 		    	
-		    	ri.onRequestResponse(user, RequestInterface.status.COMPLETED);
+		    	ri.onRequestResponse(response, user, RequestInterface.status.COMPLETED);
 		    }
 
 		    public void cancelled() 
 		    {
-		    	ri.onRequestResponse(user, RequestInterface.status.CANCELLED);
+		    	ri.onRequestResponse(null, user, RequestInterface.status.CANCELLED);
 		    }
 		});	
 	}
@@ -62,23 +62,20 @@ public class WebClient
 		{
 		    public void failed(UnirestException e) 
 		    {
-	    		ri.onRequestResponse(user, RequestInterface.status.FAILED);
+	    		ri.onRequestResponse(null, user, RequestInterface.status.FAILED);
 		    }
 
 		    public void completed(HttpResponse<JsonNode> response) 
 		    {
 		    	parseHeaders(response.getHeaders());
-		    	
-		    	System.out.println(response.getBody());
-		    	
 		    	parseErrors(response.getBody().getObject(), user.getErrors());
 		    	
-		    	ri.onRequestResponse(user, RequestInterface.status.COMPLETED);
+		    	ri.onRequestResponse(response, user, RequestInterface.status.COMPLETED);
 		    }
 
 		    public void cancelled() 
 		    {
-		    	ri.onRequestResponse(user, RequestInterface.status.CANCELLED);
+		    	ri.onRequestResponse(null, user, RequestInterface.status.CANCELLED);
 		    }
 		});	
 	}
