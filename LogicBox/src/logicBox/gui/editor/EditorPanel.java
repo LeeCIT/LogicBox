@@ -2,12 +2,19 @@
 
 
 package logicBox.gui.editor;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.LinearGradientPaint;
 import java.awt.MultipleGradientPaint.CycleMethod;
+import java.awt.Paint;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -31,12 +38,15 @@ public class EditorPanel extends JPanel
 	private Camera      cam;
 	private EditorWorld world;
 	
+	private List<RepaintListener> repaintListeners;
+	
 	
 	
 	public EditorPanel() {
 		super( true );
-		cam   = new Camera( this, createOnTransformCallback() );
-		world = new EditorWorld();
+		cam              = new Camera( this, createOnTransformCallback() );
+		world            = new EditorWorld();
+		repaintListeners = new ArrayList<>();
 		
 		new ToolDragger( this, world, cam );
 		
@@ -46,6 +56,18 @@ public class EditorPanel extends JPanel
 		
 		addMouseOverTest();
 		setupActions();
+	}
+	
+	
+	
+	public void addRepaintListener( RepaintListener rl ) {
+		repaintListeners.add( rl );
+	}
+	
+	
+	
+	public void removeRepaintListener( RepaintListener rl ) {
+		repaintListeners.remove( rl );
 	}
 	
 	
@@ -83,31 +105,31 @@ public class EditorPanel extends JPanel
 			Gfx.setAntialiasingState( g, true );
 			drawGrid( g );
 			
-			Gfx.pushColorAndSet( g, Color.yellow );
-				Gfx.drawCircle( g, new Vec2(0),            16, false );
-				Gfx.drawCircle( g, cam.getMousePosWorld(),  3, true  );
-				Gfx.drawArc( g, new Vec2(0), 12, 45, 180 );
-			Gfx.popColor( g );
-			
-			drawTrace( g );
-			Vec2 ota   = new Vec2( 448-96, 384-32 );
-			Vec2 inter = new Vec2( 448,    384-32 );
-			Vec2 otb   = new Vec2( 448+96, 384-32 );
-			drawOverlappedTrace( g, ota, inter, otb );
-			
-			drawSelection( g, new Bbox2(512,512,1024,1024) );
-			
-			GraphicComActive graphicComActive = GraphicGen.generateAndGate( 2, true );
-			graphicComActive.draw( g, new Vec2(256), 270 );
+			drawDebugCrap( g );
 			
 			for (EditorComponent ecom: world.getComponents())
 				ecom.draw( g );
+			
+			for (RepaintListener rpl: repaintListeners)
+				rpl.draw( g );
 			
 		Gfx.popMatrix( g );
 	}
 	
 	
 	
+	private void drawDebugCrap( Graphics2D g ) {
+		drawTrace( g );
+		Vec2 ota   = new Vec2( 448-96, 384-32 );
+		Vec2 inter = new Vec2( 448,    384-32 );
+		Vec2 otb   = new Vec2( 448+96, 384-32 );
+		drawOverlappedTrace( g, ota, inter, otb );
+		
+		drawSelection( g, new Bbox2(512,512,1024,1024) );
+	}
+
+
+
 	private void drawSelection( Graphics2D g, Bbox2 bbox ) {
 		double zoom      = cam.getZoom();
 		float  thickness = (float) (EditorStyle.compThickness / zoom);

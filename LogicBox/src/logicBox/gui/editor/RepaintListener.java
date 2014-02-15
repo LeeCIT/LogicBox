@@ -11,5 +11,5 @@ import java.awt.Graphics2D;
  * @author Lee Coakley
  */
 public interface RepaintListener {
-	public void paint( Graphics2D g );
+	public void draw( Graphics2D g );
 }

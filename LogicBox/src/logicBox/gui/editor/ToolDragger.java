@@ -4,6 +4,7 @@
 package logicBox.gui.editor;
 
 import java.awt.Cursor;
+import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -38,18 +39,43 @@ public class ToolDragger extends Tool
 	private EditorComponent draggedComponent;
 	private double          rotateStartAngle;
 	private MouseAdapter    eventListener;
+	private RepaintListener repaintListener;
 	
 	
 	
 	public ToolDragger( EditorPanel panel, EditorWorld world, Camera cam ) {
-		this.panel         = panel;
-		this.world         = world;
-		this.cam           = cam;
-		this.eventListener = createEventListener();
-		this.dragThreshold = 4;
+		this.panel           = panel;
+		this.world           = world;
+		this.cam             = cam;
+		this.eventListener   = createEventListener();
+		this.repaintListener = createRepaintListener();
+		this.dragThreshold   = 4;
 		
-		createEventListener();
-		attach();
+		attach(); // TODO debug remove
+	}
+	
+	
+	
+	public void attach() {
+		if (isAttached())
+			return;
+		
+		panel.addMouseListener      ( eventListener   );
+		panel.addMouseMotionListener( eventListener   );
+		panel.addRepaintListener    ( repaintListener );
+		setAttached( true );
+	}
+
+
+
+	public void detach() {
+		if ( ! isAttached())
+			return;
+		
+		panel.removeMouseListener      ( eventListener );
+		panel.removeMouseMotionListener( eventListener );
+		panel.removeRepaintListener    ( repaintListener );
+		setAttached( false );
 	}
 	
 	
@@ -78,27 +104,15 @@ public class ToolDragger extends Tool
 			}
 		};
 	}
-
-
-
-	public void attach() {
-		if (isAttached())
-			return;
-		
-		panel.addMouseListener      ( eventListener );
-		panel.addMouseMotionListener( eventListener );
-		setAttached( true );
-	}
-
-
-
-	public void detach() {
-		if ( ! isAttached())
-			return;
-		
-		panel.removeMouseListener      ( eventListener );
-		panel.removeMouseMotionListener( eventListener );
-		setAttached( false );
+	
+	
+	
+	private RepaintListener createRepaintListener() {
+		return new RepaintListener() {
+			public void draw( Graphics2D g ) {
+				// TODO
+			}
+		};
 	}
 	
 	
