@@ -1,12 +1,16 @@
 package HelpMenuPrototype;
 
+import java.util.HashMap;
+
 import javax.swing.*;
+
 import net.miginfocom.swing.MigLayout;
 import logicBox.sim.ComponentType;
 
 public class HelpMenu extends JPanel
 {
 	private ComponentType componentType;
+	private HashMap <ComponentType, String> componentMap = new HashMap <ComponentType, String> ();
 	
 	public HelpMenu( ComponentType componentType ) 
 	{
@@ -17,6 +21,11 @@ public class HelpMenu extends JPanel
 		displayGateInfo();
 	}
 	
+	
+	public void displayComponentInfo()
+	{
+		
+	}
 	
 	/**
 	 * Display help information
