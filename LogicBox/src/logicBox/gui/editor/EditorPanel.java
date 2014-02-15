@@ -21,6 +21,7 @@ import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.sim.GateAnd;
+import logicBox.sim.GateNand;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
 import logicBox.util.Geo;
@@ -35,10 +36,12 @@ import logicBox.util.Vec2;
  */
 public class EditorPanel extends JPanel
 {
+	private List<RepaintListener> repaintListeners;
+	
 	private Camera      cam;
 	private EditorWorld world;
 	
-	private List<RepaintListener> repaintListeners;
+	
 	
 	
 	
@@ -48,11 +51,13 @@ public class EditorPanel extends JPanel
 		world            = new EditorWorld();
 		repaintListeners = new ArrayList<>();
 		
-		new ToolDragger( this, world, cam );
+		new ToolDragger    ( this, world, cam ).attach();
+		new ToolHighlighter( this, world, cam ).attach();
 		
-		EditorComponent ecom = new EditorComponent( new GateAnd(2), GraphicGen.generateAndGate(2,false), new Vec2(768) );
-		
-		world.add( ecom );
+		world.add( new EditorComponent( new GateAnd(2),  GraphicGen.generateAndGate(2,false), new Vec2( 640) ) );
+		world.add( new EditorComponent( new GateAnd(4),  GraphicGen.generateAndGate(4,false), new Vec2( 768) ) );
+		world.add( new EditorComponent( new GateNand(3), GraphicGen.generateAndGate(3,true ), new Vec2( 900) ) );
+		world.add( new EditorComponent( new GateNand(2), GraphicGen.generateAndGate(2,true ), new Vec2(1024) ) );
 		
 		addMouseOverTest();
 		setupActions();
@@ -86,7 +91,7 @@ public class EditorPanel extends JPanel
 		addMouseMotionListener( new MouseMotionAdapter() {
 			public void mouseMoved( MouseEvent ev ) {
 				for (EditorComponent ecom: world.find( cam.getMousePosWorld() ))
-					System.out.println( "Edd: " + ecom );
+					System.out.println( "Edd: " + ecom.com.getName() );
 			}
 		});
 	}
