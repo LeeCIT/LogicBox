@@ -48,18 +48,15 @@ public class ToolbarFrame extends JFrame{
 		other.add(nubs);
 		
 		// Add buttons to the panel so they display correctly. in lines of 3
-		ToolboxPanel pan = new ToolboxPanel(buttons);
 		tool.addCategory("Gates");
-		tool.add(pan);
+		tool.addListOfButtons(buttons);
 		tool.addCategory("Others");
-		ToolboxPanel pans = new ToolboxPanel(other);
-		tool.add(pans);
+		tool.addListOfButtons(other);
 		
 		JPanel editPan = new EditorPanel();
 				
+		tool.addSnapping(frame, 10);
 		
-
-		ToolboxUtil.addSnapping(tool, frame);
 		//ToolboxUtil.preventToolBoxhorizontalOrientation(tool);
 		tool.setMargin(new Insets(0, 2, 0, 0));
 		add(editPan, BorderLayout.CENTER);
