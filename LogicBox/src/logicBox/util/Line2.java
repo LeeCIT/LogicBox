@@ -4,6 +4,8 @@
 package logicBox.util;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -85,6 +87,15 @@ public class Line2 implements Serializable
 	    result.intersects = true;
 	    result.pos        = Geo.lerp( a, b, crossDiv );
 	    return result;
+	}
+	
+	
+	
+	public Bbox2 getBbox() {
+		List<Vec2> points = new ArrayList<>();
+		points.add( a  );
+		points.add( b  );
+		return Bbox2.createFromPoints( points );
 	}
 	
 	
