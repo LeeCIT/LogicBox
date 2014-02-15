@@ -64,8 +64,8 @@ public class Bbox2 extends Region
 			Vec2 p = points.get( i );
 			min.x = Math.min( min.x, p.x );
 			min.y = Math.min( min.y, p.y );
-			max.x = Math.max( min.x, p.x );
-			max.y = Math.max( min.y, p.y );
+			max.x = Math.max( max.x, p.x );
+			max.y = Math.max( max.y, p.y );
 		}
 		
 		return new Bbox2( min, max );
