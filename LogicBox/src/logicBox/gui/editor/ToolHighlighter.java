@@ -85,7 +85,7 @@ public class ToolHighlighter extends Tool
 	
 	
 	
-	protected void doHighlight( Vec2 pos ) {
+	private void doHighlight( Vec2 pos ) {
 		boolean changed = false;
 		
 		if (lastComponent != null) {
