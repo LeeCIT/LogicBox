@@ -150,6 +150,7 @@ public class SpatialGrid<T>
 	
 	private <TF extends TraversalFunctor> TF traverse( Line2 line, TF trav ) {
 		// TODO need DDA line algo here
+		traverse( line.getBbox(), trav );
 		return trav;
 	}
 	
