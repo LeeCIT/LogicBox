@@ -48,10 +48,8 @@ public class ToolbarFrame extends JFrame{
 		other.add(nubs);
 		
 		// Add buttons to the panel so they display correctly. in lines of 3
-		tool.addCategory("Gates");
-		tool.addListOfButtons(buttons);
-		tool.addCategory("Others");
-		tool.addListOfButtons(other);
+		tool.addCategoryWithList("Gates", buttons);
+		tool.addCategoryWithList("Others", other);
 		
 		JPanel editPan = new EditorPanel();
 				

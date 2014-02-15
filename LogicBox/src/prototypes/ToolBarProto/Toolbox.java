@@ -25,8 +25,8 @@ public class Toolbox extends JToolBar
 	 */
 	public Toolbox(String frameName, int vertical) {
 		super(frameName, vertical);
-		super.setMargin(new Insets(0, 2, 0, 0));
-		super.setOrientation(JToolBar.VERTICAL);
+		setMargin(new Insets(0, 2, 0, 0));
+		setOrientation(JToolBar.VERTICAL);
 	}
 
 
@@ -58,7 +58,7 @@ public class Toolbox extends JToolBar
 	 */
 	public void addCategory(String heading) {
 		add(new JLabel(" " + heading));
-		this.add(new JToolBar.Separator());
+		add(new JToolBar.Separator());
 	}
 	
 	
@@ -129,13 +129,8 @@ public class Toolbox extends JToolBar
 	 * @param buttons
 	 */
 	public void addListOfButtons(List<ToolboxButtonCallback> buttons) {
-		this.add(new ToolboxPanel(buttons));
+		add(new ToolboxPanel(buttons));
 	}
-	
-	
-	
-	
-	
 	
 	
 	
@@ -143,7 +138,7 @@ public class Toolbox extends JToolBar
 	 * Prevent the toolbox from going horizontal
 	 * @param toolbox
 	 */
-	public static void preventToolBoxhorizontalOrientation(final JToolBar toolbox) {
+	public void preventToolBoxhorizontalOrientation(final JToolBar toolbox) {
 		toolbox.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				String propName = evt.getPropertyName();
@@ -154,11 +149,18 @@ public class Toolbox extends JToolBar
 						newValue = JToolBar.VERTICAL;
 					}	
 				}
-				}});
+			}});
 	}
 	
 	
 	
-	
-	
+	/**
+	 * Add the category heading then the list that will appear under the category
+	 * @param category
+	 * @param items
+	 */
+	public void addCategoryWithList(String category, List<ToolboxButtonCallback> items) {
+		addCategory(category);
+		addListOfButtons(items);
+	}
 }
