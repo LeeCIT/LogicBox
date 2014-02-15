@@ -4,6 +4,7 @@
 package HelpMenuPrototype;
 
 
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -17,6 +18,9 @@ import logicBox.util.Util;
 
 public class MenuFrameTest extends JFrame 
 {	
+	
+	
+	
 	public MenuFrameTest() 
 	{	
 		HelpMenu menu = new HelpMenu( getComponentMap() );
@@ -28,7 +32,7 @@ public class MenuFrameTest extends JFrame
 		setVisible(true);
 		
 		
-		menu.setDisplayedInfo( ComponentType.gateAnd );
+		menu.setDisplayedInfo( ComponentType.gateOr );
 		
 		menu.addMouseListener( new ClickTest(menu) );
 	}
@@ -48,12 +52,13 @@ public class MenuFrameTest extends JFrame
 		
 		compMap.put(ComponentType.gateAnd, "And gate info");
 		compMap.put(ComponentType.gateNot, "Not gate info");
+		compMap.put(ComponentType.gateOr, "Or gate information");
 		
 		return compMap;
 	}
 	
 	
-
+	
 	public static void main(String[] args) 
 	{
 		MenuFrameTest frame = new MenuFrameTest();
@@ -82,4 +87,7 @@ public class MenuFrameTest extends JFrame
 		
 		
 	}
+	
+	
+	
 }
