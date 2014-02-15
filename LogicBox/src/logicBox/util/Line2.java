@@ -100,6 +100,12 @@ public class Line2 implements Serializable
 	
 	
 	
+	public Line2 swapEndpoints() {
+		return new Line2( b, a );
+	}
+	
+	
+	
 	private Vec2 delta() {
 		return b.subtract( a );
 	}
