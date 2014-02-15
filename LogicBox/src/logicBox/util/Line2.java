@@ -51,7 +51,7 @@ public class Line2 implements Serializable
 	
 	
 	
-	class IntersectResult {
+	public class IntersectResult {
 		public boolean intersects;
 		public Vec2    pos;
 	}
