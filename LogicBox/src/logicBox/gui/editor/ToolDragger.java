@@ -49,9 +49,7 @@ public class ToolDragger extends Tool
 		this.cam             = cam;
 		this.eventListener   = createEventListener();
 		this.repaintListener = createRepaintListener();
-		this.dragThreshold   = 4;
-		
-		attach(); // TODO debug remove
+		this.dragThreshold   = 4; // TODO this isn't used in GUI-space terms below, but it should be
 	}
 	
 	
@@ -60,9 +58,9 @@ public class ToolDragger extends Tool
 		if (isAttached())
 			return;
 		
-		panel.addMouseListener      ( eventListener   );
-		panel.addMouseMotionListener( eventListener   );
-		panel.addRepaintListener    ( repaintListener );
+		panel.addMouseListener      ( eventListener );
+		panel.addMouseMotionListener( eventListener );
+		panel.addRepaintListener( repaintListener );
 		setAttached( true );
 	}
 
@@ -74,7 +72,7 @@ public class ToolDragger extends Tool
 		
 		panel.removeMouseListener      ( eventListener );
 		panel.removeMouseMotionListener( eventListener );
-		panel.removeRepaintListener    ( repaintListener );
+		panel.removeRepaintListener( repaintListener );
 		setAttached( false );
 	}
 	
@@ -117,13 +115,11 @@ public class ToolDragger extends Tool
 	
 	
 	
-	private void dragInitiate( Vec2 pos ) {
-		List<EditorComponent> list = world.find( pos );
-		EditorComponent       ecom;
+	private void dragInitiate( Vec2 pos ) {		
+		EditorComponent ecom = world.findTopmostAt( pos );
 		
-		if (list.isEmpty())
+		if (ecom == null)
 			return;
-		else ecom = list.get( list.size() - 1 );
 		
 		dragInitiated    = true;
 		dragInitiatedAt  = pos;
@@ -145,7 +141,8 @@ public class ToolDragger extends Tool
 		
 		if (dragging) {
 			panel.setCursor( new Cursor(Cursor.MOVE_CURSOR) );
-			world.move( draggedComponent, Geo.snapNear( pos.add( dragOffset ), 32 ) );
+			//world.move( draggedComponent, Geo.snapNear( pos.add( dragOffset ), 32 ) ); // TODO 
+			world.move( draggedComponent, pos.add( dragOffset ) );
 			panel.repaint();
 		}
 	}
@@ -155,6 +152,8 @@ public class ToolDragger extends Tool
 	protected void rotateMove( Vec2 pos ) {
 		if ( ! (dragInitiated || dragging))
 			return;
+		
+		panel.setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
 		
 		double angle   = Geo.angleBetween( draggedComponent.pos, pos );
 		double snapped = Geo.roundToMultiple( angle, 45 );
