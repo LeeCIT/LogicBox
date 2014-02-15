@@ -70,16 +70,16 @@ public class SnappingPrototype extends ComponentAdapter {
 		int compWidth     = comp.getWidth();
 		int compHeight    = comp.getHeight();
 		
-		if (compPosY < snappingDistance) 
+		if (compPosY < snappingDistance && compPosY > 0) 
 			compPosY = 0;
 
-		if (compPosX < 0 + snappingDistance)
+		if (compPosX < snappingDistance && compPosX > 0)
 			compPosX = 0;
 
-		if (compPosX > desktop.width - compWidth - snappingDistance)
+		if (compPosX > desktop.width - compWidth - snappingDistance && compPosX + compWidth < desktop.width)
 			compPosX = desktop.width - compWidth;
 		
-		if (compPosY > desktop.height - compHeight - snappingDistance)
+		if (compPosY > desktop.height - compHeight - snappingDistance && compPosY + compHeight < desktop.height)
 			compPosY = desktop.height - compHeight;
 
 		// Snap to the main frame component if the main frame has a reference
