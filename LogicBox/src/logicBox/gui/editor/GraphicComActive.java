@@ -17,6 +17,8 @@ import logicBox.util.Vec2;
 /**
  * Performs drawing for active components.
  * Essentially it just caches the computations from GraphicsGen.
+ * TODO move setHighlighted and setSelected etc into EditorComponent
+ * TODO put the transformation burden on the graphics, and cache the result, instead of transforming everything else.
  * @author Lee Coakley
  */
 public class GraphicComActive implements Drawable
