@@ -45,7 +45,7 @@ public class EditorPanel extends JPanel
 	
 	private Camera      cam;
 	private EditorWorld world;
-	private boolean     enableAntialiasing;;
+	private boolean     enableAntialiasing;
 	
 	
 	
@@ -66,10 +66,10 @@ public class EditorPanel extends JPanel
 		world.add( new EditorComponent( new GateNot(),   GraphicGen.generateGateNot(),   new Vec2(  0, 128) ) );
 		world.add( new EditorComponent( new GateAnd(),   GraphicGen.generateGateAnd(2),  new Vec2(  0, 256) ) );
 		world.add( new EditorComponent( new GateNand(),  GraphicGen.generateGateNand(2), new Vec2(  0, 384) ) );
-		world.add( new EditorComponent( new GateOr(),    GraphicGen.generateGateOr(2),   new Vec2(128, 0  ) ) );
-		world.add( new EditorComponent( new GateNor(),   GraphicGen.generateGateNor(2),  new Vec2(128, 128) ) );
-		world.add( new EditorComponent( new GateXor(),   GraphicGen.generateGateXor(),   new Vec2(128, 256) ) );
-		world.add( new EditorComponent( new GateXnor(),  GraphicGen.generateGateXnor(),  new Vec2(128, 384) ) );
+		world.add( new EditorComponent( new GateOr(),    GraphicGen.generateGateOr(2),   new Vec2(192,   0) ) );
+		world.add( new EditorComponent( new GateNor(),   GraphicGen.generateGateNor(2),  new Vec2(192, 128) ) );
+		world.add( new EditorComponent( new GateXor(),   GraphicGen.generateGateXor(),   new Vec2(192, 256) ) );
+		world.add( new EditorComponent( new GateXnor(),  GraphicGen.generateGateXnor(),  new Vec2(192, 384) ) );
 		
 		addMouseOverTest();
 		setupActions();
