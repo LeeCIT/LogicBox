@@ -22,7 +22,6 @@ import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.sim.GateAnd;
 import logicBox.sim.GateNand;
-import logicBox.util.Bbox2;
 import logicBox.util.Callback;
 import logicBox.util.Geo;
 import logicBox.util.Region;
@@ -43,8 +42,6 @@ public class EditorPanel extends JPanel
 	
 	
 	
-	
-	
 	public EditorPanel() {
 		super( true );
 		cam              = new Camera( this, createOnTransformCallback() );
@@ -53,15 +50,16 @@ public class EditorPanel extends JPanel
 		
 		new ToolDragger    ( this, world, cam ).attach();
 		new ToolHighlighter( this, world, cam ).attach();
+		new ToolSelector   ( this, world, cam ).attach();
 		
-		world.add( new EditorComponent( new GateAnd(2),  GraphicGen.generateGateRelay(),   new Vec2(  0, 0  ) ) );
-		world.add( new EditorComponent( new GateAnd(4),  GraphicGen.generateGateNot(),     new Vec2(  0, 128) ) );
-		world.add( new EditorComponent( new GateNand(3), GraphicGen.generateGateAnd(3),    new Vec2(  0, 256) ) );
-		world.add( new EditorComponent( new GateNand(2), GraphicGen.generateGateNand(2),   new Vec2(  0, 384) ) );
-		world.add( new EditorComponent( new GateAnd(2),  GraphicGen.generateGateOr(2),     new Vec2(128, 0  ) ) );
-		world.add( new EditorComponent( new GateAnd(4),  GraphicGen.generateGateNor(2),    new Vec2(128, 128) ) );
-		world.add( new EditorComponent( new GateNand(3), GraphicGen.generateGateXor(),     new Vec2(128, 256) ) );
-		world.add( new EditorComponent( new GateNand(2), GraphicGen.generateGateXnor(),    new Vec2(128, 384) ) );
+		world.add( new EditorComponent( new GateAnd(2),  GraphicGen.generateGateRelay(), new Vec2(  0, 0  ) ) );
+		world.add( new EditorComponent( new GateAnd(4),  GraphicGen.generateGateNot(),   new Vec2(  0, 128) ) );
+		world.add( new EditorComponent( new GateNand(3), GraphicGen.generateGateAnd(3),  new Vec2(  0, 256) ) );
+		world.add( new EditorComponent( new GateNand(2), GraphicGen.generateGateNand(2), new Vec2(  0, 384) ) );
+		world.add( new EditorComponent( new GateAnd(2),  GraphicGen.generateGateOr(2),   new Vec2(128, 0  ) ) );
+		world.add( new EditorComponent( new GateAnd(4),  GraphicGen.generateGateNor(2),  new Vec2(128, 128) ) );
+		world.add( new EditorComponent( new GateNand(3), GraphicGen.generateGateXor(),   new Vec2(128, 256) ) );
+		world.add( new EditorComponent( new GateNand(2), GraphicGen.generateGateXnor(),  new Vec2(128, 384) ) );
 		
 		addMouseOverTest();
 		setupActions();
@@ -135,22 +133,6 @@ public class EditorPanel extends JPanel
 		Vec2 inter = new Vec2( 448,    384-32 );
 		Vec2 otb   = new Vec2( 448+96, 384-32 );
 		drawOverlappedTrace( g, ota, inter, otb );
-		
-		drawSelection( g, new Bbox2(512,512,1024,1024) );
-	}
-	
-	
-	
-	private void drawSelection( Graphics2D g, Bbox2 bbox ) {
-		double zoom      = cam.getZoom();
-		float  thickness = (float) (EditorStyle.compThickness / zoom);
-		int    arc       = (int)   (16.0 / zoom);
-		
-		Gfx.pushStrokeAndSet( g, EditorStyle.makeSelectionStroke(thickness) );
-			Gfx.pushColorAndSet( g, EditorStyle.colSelectionStroke );
-				g.drawRoundRect( (int) bbox.getLeft(), (int) bbox.getTop(), (int) bbox.getSize().x, (int) bbox.getSize().y, arc, arc );
-			Gfx.popColor( g );
-		Gfx.popStroke( g );
 	}
 	
 	
