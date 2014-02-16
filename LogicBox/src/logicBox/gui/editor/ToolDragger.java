@@ -141,7 +141,7 @@ public class ToolDragger extends Tool
 		
 		if (dragging) {
 			panel.setCursor( new Cursor(Cursor.MOVE_CURSOR) );
-			//world.move( draggedComponent, Geo.snapNear( pos.add( dragOffset ), 32 ) ); // TODO 
+			//world.move( draggedComponent, Geo.snapNear( pos.add( dragOffset ), 32 ) ); // TODO snap
 			world.move( draggedComponent, pos.add( dragOffset ) );
 			panel.repaint();
 		}
@@ -170,9 +170,15 @@ public class ToolDragger extends Tool
 	
 	
 	private void dragCancel() {
+		boolean wasDragging = dragging;
+		
+		dragFinishedCommon();
+		
+		if ( ! wasDragging)
+			return;
+		
 		world.move( draggedComponent, dragInitiatedAt.add(dragOffset) );
 		draggedComponent.angle = rotateStartAngle;
-		dragFinishedCommon();
 	}
 	
 	
