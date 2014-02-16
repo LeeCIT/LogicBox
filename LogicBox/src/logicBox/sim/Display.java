@@ -22,9 +22,7 @@ public abstract class Display extends ComponentActive
 	public Display( int inputPinCount ) {
 		super();
 		pinInputs = new ArrayList<>();
-		
-		for (int i=0; i<inputPinCount; i++)
-			pinInputs.add( new Pin(this, PinIoMode.input) );
+		SimUtil.addPins( pinInputs, this, PinIoMode.input, inputPinCount );
 	}
 	
 	
