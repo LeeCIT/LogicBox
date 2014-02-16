@@ -19,6 +19,15 @@ import java.awt.Color;
 public class Geo
 {
 	/**
+	 * Get the base-2 logarithm of x.
+	 * In other words, get which power of 2 the number is.
+	 */
+	public static double log2( double x ) {
+		return Math.log(x) / Math.log(2);
+	}
+	
+	
+	/**
 	 * Linear interpolate from A to B by fraction F.
 	 */
 	public static double lerp( double a, double b, double f ) {
