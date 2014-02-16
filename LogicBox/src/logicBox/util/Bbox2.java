@@ -49,6 +49,21 @@ public class Bbox2 extends Region
 	
 	
 	/**
+	 * Expand on each axis by this amount in total.
+	 * In other words: half this amount gets added to the extents of the box.
+	 */
+	public Bbox2 expand( Vec2 amount ) {
+		Vec2 ex = amount.multiply( 0.5 );
+		
+		return new Bbox2(
+			tl.subtract( ex ),
+			br.add     ( ex )
+		);
+	}
+	
+	
+	
+	/**
 	 * Create a bounding box from the extremes of a set of points.
 	 * Returns null if the list is empty.
 	 */
