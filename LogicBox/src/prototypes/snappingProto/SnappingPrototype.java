@@ -10,6 +10,7 @@ public class SnappingPrototype extends ComponentAdapter {
 	private boolean locked;
 	private int     snappingDistance;
 	private int     defaultSnap = 10;
+	private boolean snappedToFrame;
 
 	private JFrame mainFrame;
 
@@ -88,28 +89,37 @@ public class SnappingPrototype extends ComponentAdapter {
 			int mainFramePosY = mainFrame.getY();
 
 			if (isComponentOnXAxisOfFrame(mainFramePosX, comp)) {
-				if (checkTopOfFrame(mainFramePosY, comp))
+				if (checkTopOfFrame(mainFramePosY, comp)) {
 					compPosY = mainFramePosY - compHeight;
+					snappedToFrame = true;
+				}
 
-				if (checkBottomOfFrame(mainFramePosY, compPosY))
+				if (checkBottomOfFrame(mainFramePosY, compPosY)) {
 					compPosY = mainFramePosY + mainFrame.getHeight();
+					snappedToFrame = true;
+				}
 			}
 
 			if (isComponentOnYaxisOfFrame(mainFramePosY, comp)) {
-				if (checkLeftside(mainFramePosX, comp))
+				if (checkLeftside(mainFramePosX, comp)) {
 					compPosX = mainFramePosX - compWidth;
+					snappedToFrame = true;
+				}
 
 				// Snap to the right of the main frame
-				if (checkRightSide(mainFramePosX, compPosX))
-					compPosX = mainFramePosX + mainFrame.getWidth();
+				if (checkRightSide(mainFramePosX, compPosX)) {
+					compPosX = mainFramePosX + mainFrame.getWidth(); 
+					snappedToFrame = true;
+				}
 			}			
 		}
-
+System.out.println(snappedToFrame);
 		// When snapping is done it generates other events
 		// To avoid infinite loops lock the component, set the location and unlock
 		locked = true;
 		comp.setLocation(compPosX, compPosY);
 		locked = false;
+		snappedToFrame = false;
 	}
 
 
