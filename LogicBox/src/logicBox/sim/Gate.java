@@ -13,8 +13,8 @@ import java.util.List;
  */
 public abstract class Gate extends ComponentActive
 {
-	protected ArrayList<Pin> pinInputs;
-	protected Pin            pinOut;
+	protected List<Pin> pinInputs;
+	protected Pin       pinOut;
 	
 	
 	
@@ -28,9 +28,7 @@ public abstract class Gate extends ComponentActive
 	
 	public Gate( int inputPinCount ) {
 		this();
-		
-		for (int i=0; i<inputPinCount; i++)
-			pinInputs.add( new Pin( this, PinIoMode.input ) );
+		SimUtil.addPins( pinInputs, this, PinIoMode.input, inputPinCount );
 	}
 	
 	
