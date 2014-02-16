@@ -27,7 +27,7 @@ public class MenuFrameTest extends JFrame
 		
 		
 		
-		setLayout( new MigLayout("debug", "[fill,grow]", "[fill,grow]") );
+		setLayout( new MigLayout() );
 		setSize(300,300);
 		add( menu, "wrap" );
 		setVisible(true);
