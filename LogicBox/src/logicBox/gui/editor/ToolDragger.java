@@ -4,7 +4,6 @@
 package logicBox.gui.editor;
 
 import java.awt.Cursor;
-import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
@@ -38,7 +37,6 @@ public class ToolDragger extends Tool
 	private EditorComponent draggedComponent;
 	private double          rotateStartAngle;
 	private MouseAdapter    eventListener;
-	private RepaintListener repaintListener;
 	
 	
 	
@@ -58,7 +56,6 @@ public class ToolDragger extends Tool
 		
 		panel.addMouseListener      ( eventListener );
 		panel.addMouseMotionListener( eventListener );
-		panel.addRepaintListener( repaintListener );
 		setAttached( true );
 	}
 
@@ -70,7 +67,6 @@ public class ToolDragger extends Tool
 		
 		panel.removeMouseListener      ( eventListener );
 		panel.removeMouseMotionListener( eventListener );
-		panel.removeRepaintListener( repaintListener );
 		setAttached( false );
 	}
 	
