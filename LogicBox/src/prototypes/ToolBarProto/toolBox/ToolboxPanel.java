@@ -1,4 +1,4 @@
-package prototypes.ToolBarProto;
+package prototypes.ToolBarProto.toolBox;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
