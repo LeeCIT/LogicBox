@@ -54,10 +54,14 @@ public class EditorPanel extends JPanel
 		new ToolDragger    ( this, world, cam ).attach();
 		new ToolHighlighter( this, world, cam ).attach();
 		
-		world.add( new EditorComponent( new GateAnd(2),  GraphicGen.generateAndGate(2,false), new Vec2( 640) ) );
-		world.add( new EditorComponent( new GateAnd(4),  GraphicGen.generateAndGate(4,false), new Vec2( 768) ) );
-		world.add( new EditorComponent( new GateNand(3), GraphicGen.generateAndGate(3,true ), new Vec2( 900) ) );
-		world.add( new EditorComponent( new GateNand(2), GraphicGen.generateAndGate(2,true ), new Vec2(1024) ) );
+		world.add( new EditorComponent( new GateAnd(2),  GraphicGen.generateGateRelay(),   new Vec2(  0, 0  ) ) );
+		world.add( new EditorComponent( new GateAnd(4),  GraphicGen.generateGateNot(),     new Vec2(  0, 128) ) );
+		world.add( new EditorComponent( new GateNand(3), GraphicGen.generateGateAnd(3),    new Vec2(  0, 256) ) );
+		world.add( new EditorComponent( new GateNand(2), GraphicGen.generateGateNand(2),   new Vec2(  0, 384) ) );
+		world.add( new EditorComponent( new GateAnd(2),  GraphicGen.generateGateOr(2),     new Vec2(128, 0  ) ) );
+		world.add( new EditorComponent( new GateAnd(4),  GraphicGen.generateGateNor(2),    new Vec2(128, 128) ) );
+		world.add( new EditorComponent( new GateNand(3), GraphicGen.generateGateXor(),     new Vec2(128, 256) ) );
+		world.add( new EditorComponent( new GateNand(2), GraphicGen.generateGateXnor(),    new Vec2(128, 384) ) );
 		
 		addMouseOverTest();
 		setupActions();
@@ -91,7 +95,7 @@ public class EditorPanel extends JPanel
 		addMouseMotionListener( new MouseMotionAdapter() {
 			public void mouseMoved( MouseEvent ev ) {
 				for (EditorComponent ecom: world.find( cam.getMousePosWorld() ))
-					System.out.println( "Edd: " + ecom.com.getName() );
+					System.out.println( "Ed: " + ecom.com.getName() );
 			}
 		});
 	}
@@ -99,6 +103,8 @@ public class EditorPanel extends JPanel
 
 
 	protected void paintComponent( Graphics gx ) {
+		super.paintComponent( gx );
+		
 		Graphics2D g = (Graphics2D) gx;
 		
 		Gfx.pushMatrix( g );
@@ -132,9 +138,9 @@ public class EditorPanel extends JPanel
 		
 		drawSelection( g, new Bbox2(512,512,1024,1024) );
 	}
-
-
-
+	
+	
+	
 	private void drawSelection( Graphics2D g, Bbox2 bbox ) {
 		double zoom      = cam.getZoom();
 		float  thickness = (float) (EditorStyle.compThickness / zoom);
@@ -146,9 +152,9 @@ public class EditorPanel extends JPanel
 			Gfx.popColor( g );
 		Gfx.popStroke( g );
 	}
-
-
-
+	
+	
+	
 	private void drawTrace( Graphics2D g ) {
 		Vec2 a = new Vec2( 256+64,256 );
 		Vec2 j = a.add( 64 );
@@ -165,14 +171,12 @@ public class EditorPanel extends JPanel
 		poly.lineTo( e );
 		
 		Gfx.pushColorAndSet ( g, EditorStyle.colTraceOff );
-		Gfx.pushStrokeAndSet( g, EditorStyle.strokeTrace );
-		
-			g.draw( poly );
-			drawJunction( g, j );
-			drawConnection( g, a );
-			drawConnection( g, d );
-			
-		Gfx.popStroke( g );
+			Gfx.pushStrokeAndSet( g, EditorStyle.strokeTrace );
+				g.draw( poly );
+				drawJunction( g, j );
+				drawConnection( g, a );
+				drawConnection( g, d );
+			Gfx.popStroke( g );
 		Gfx.popColor( g );
 	}
 	
@@ -185,7 +189,7 @@ public class EditorPanel extends JPanel
 		Vec2   a2i    = Geo.lenDir(radius,angleA).add( intersect );
 		Vec2   b2i    = Geo.lenDir(radius,angleB).add( intersect );
 		
-		Paint lastPaint = g.getPaint();
+		Paint lastPaint = g.getPaint(); // TODO abstract this away
 		Color   shade = Geo.lerp( EditorStyle.colTraceOff, new Color(0,255,0), 0.5 );
 		float[] fracs = { 0.0f, 0.5f, 1.0f };
 		Color[] cols  = { EditorStyle.colTraceOff, shade, EditorStyle.colTraceOff };
@@ -198,16 +202,16 @@ public class EditorPanel extends JPanel
 		poly.lineTo( b   );
 		
 		Gfx.pushColorAndSet ( g, EditorStyle.colTraceOff );
-		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBody );
-			g.draw( poly );
-			
-			g.setPaint( shadePaint );
-			Gfx.drawArc( g, intersect, radius, angleA, angleB );
-			g.setPaint( lastPaint );
-			
-			drawConnection( g, a );
-			drawConnection( g, b );
-		Gfx.popStroke( g );
+			Gfx.pushStrokeAndSet( g, EditorStyle.strokeBody );
+				g.draw( poly );
+				
+				g.setPaint( shadePaint );
+				Gfx.drawArc( g, intersect, radius, angleA, angleB );
+				g.setPaint( lastPaint );
+				
+				drawConnection( g, a );
+				drawConnection( g, b );
+			Gfx.popStroke( g );
 		Gfx.popColor( g );
 	}
 	
