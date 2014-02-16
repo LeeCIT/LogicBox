@@ -22,6 +22,12 @@ import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.sim.GateAnd;
 import logicBox.sim.GateNand;
+import logicBox.sim.GateNor;
+import logicBox.sim.GateNot;
+import logicBox.sim.GateOr;
+import logicBox.sim.GateRelay;
+import logicBox.sim.GateXnor;
+import logicBox.sim.GateXor;
 import logicBox.util.Callback;
 import logicBox.util.Geo;
 import logicBox.util.Region;
@@ -56,14 +62,14 @@ public class EditorPanel extends JPanel
 		new ToolHighlighter( this, world, cam ).attach();
 		new ToolSelector   ( this, world, cam ).attach();
 		
-		world.add( new EditorComponent( new GateAnd(2),  GraphicGen.generateGateRelay(), new Vec2(  0, 0  ) ) );
-		world.add( new EditorComponent( new GateAnd(4),  GraphicGen.generateGateNot(),   new Vec2(  0, 128) ) );
-		world.add( new EditorComponent( new GateNand(3), GraphicGen.generateGateAnd(3),  new Vec2(  0, 256) ) );
-		world.add( new EditorComponent( new GateNand(2), GraphicGen.generateGateNand(2), new Vec2(  0, 384) ) );
-		world.add( new EditorComponent( new GateAnd(2),  GraphicGen.generateGateOr(2),   new Vec2(128, 0  ) ) );
-		world.add( new EditorComponent( new GateAnd(4),  GraphicGen.generateGateNor(2),  new Vec2(128, 128) ) );
-		world.add( new EditorComponent( new GateNand(3), GraphicGen.generateGateXor(),   new Vec2(128, 256) ) );
-		world.add( new EditorComponent( new GateNand(2), GraphicGen.generateGateXnor(),  new Vec2(128, 384) ) );
+		world.add( new EditorComponent( new GateRelay(), GraphicGen.generateGateRelay(), new Vec2(  0, 0  ) ) );
+		world.add( new EditorComponent( new GateNot(),   GraphicGen.generateGateNot(),   new Vec2(  0, 128) ) );
+		world.add( new EditorComponent( new GateAnd(),   GraphicGen.generateGateAnd(2),  new Vec2(  0, 256) ) );
+		world.add( new EditorComponent( new GateNand(),  GraphicGen.generateGateNand(2), new Vec2(  0, 384) ) );
+		world.add( new EditorComponent( new GateOr(),    GraphicGen.generateGateOr(2),   new Vec2(128, 0  ) ) );
+		world.add( new EditorComponent( new GateNor(),   GraphicGen.generateGateNor(2),  new Vec2(128, 128) ) );
+		world.add( new EditorComponent( new GateXor(),   GraphicGen.generateGateXor(),   new Vec2(128, 256) ) );
+		world.add( new EditorComponent( new GateXnor(),  GraphicGen.generateGateXnor(),  new Vec2(128, 384) ) );
 		
 		addMouseOverTest();
 		setupActions();
