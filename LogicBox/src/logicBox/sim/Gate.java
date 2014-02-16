@@ -45,7 +45,7 @@ public abstract class Gate extends ComponentActive
 	
 	
 	
-	public boolean hasVariableInputPinCount() {
+	public boolean hasConfigurableInputPinCount() {
 		return false;
 	}
 	

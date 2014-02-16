@@ -6,13 +6,17 @@ package logicBox.sim;
 
 
 /**
- * A gate which outputs false if all its inputs are true.
+ * Inverted AND gate.
+ * 0,0 -> 1
+ * 0,1 -> 1
+ * 1,0 -> 1
+ * 1,1 -> 0
  * @author Lee Coakley
  */
 public class GateNand extends GateAnd
 {
 	public GateNand() {
-		super();
+		super( 2 );
 	}
 	
 	
