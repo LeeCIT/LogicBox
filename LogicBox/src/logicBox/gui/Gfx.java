@@ -166,17 +166,26 @@ public class Gfx
 		Vec2 ly = new Vec2( left,  0      );
 		Vec2 ry = new Vec2( right, 0      );
 		
-		for (double x=left; x<right; x+=cellSize.x) {
-			xt.x = x;
-			xb.x = x;
-			Gfx.drawThickLine( g, xt, xb, thickness );
-		}
+		Stroke  stroke = new BasicStroke( (float) thickness );
+		VecPath poly   = new VecPath();
 		
-		for (double y=top; y<bottom; y+=cellSize.y) {
-			ly.y = y;
-			ry.y = y;
-			Gfx.drawThickLine( g, ly, ry, thickness );
-		}
+		Gfx.pushStrokeAndSet( g, stroke );
+			for (double x=left; x<right; x+=cellSize.x) {
+				xt.x = x;
+				xb.x = x;
+				poly.moveTo( xt );
+				poly.lineTo( xb );
+			}
+			
+			for (double y=top; y<bottom; y+=cellSize.y) {
+				ly.y = y;
+				ry.y = y;
+				poly.moveTo( ly );
+				poly.lineTo( ry );
+			}
+			
+			g.draw( poly );			
+		Gfx.popStroke( g );
 	}
 	
 	

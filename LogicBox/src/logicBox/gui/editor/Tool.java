@@ -11,5 +11,25 @@ package logicBox.gui.editor;
  */
 public abstract class Tool
 {
+	protected boolean attached;
 	
+	
+	
+	public boolean isAttached() {
+		return attached;
+	}
+	
+	
+	
+	protected void setAttached( boolean state ) {
+		attached = state;
+	}
+	
+	
+	
+	public abstract void attach();
+	
+	
+	
+	public abstract void detach();
 }

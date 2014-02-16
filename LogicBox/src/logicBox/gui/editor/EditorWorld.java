@@ -29,9 +29,13 @@ public class EditorWorld
 	
 	
 	
+	/**
+	 * Add a component to the world.
+	 * To remove it you have to use remove().
+	 */
 	public void add( EditorComponent ecom ) {
 		Vec2  pos       = ecom.pos;
-		Bbox2 bboxSrc   = ecom.graphic.getBbox();
+		Bbox2 bboxSrc   = ecom.graphic.computeBbox();
 		Bbox2 bboxTrans = new Bbox2( bboxSrc.tl.add(pos), bboxSrc.br.add(pos) );
 		
 		ecoms.add( ecom );
@@ -40,6 +44,11 @@ public class EditorWorld
 	
 	
 	
+	/**
+	 * Remove a component from the world.
+	 * This doesn't destroy it or detach it from the simulation or anything.
+	 * @param ecom
+	 */
 	public void remove( EditorComponent ecom ) {
 		ecoms.remove( ecom );
 		grid .remove( ecom );
@@ -47,6 +56,10 @@ public class EditorWorld
 	
 	
 	
+	/**
+	 * Move a component.
+	 * Never move an ECom around without calling this function.
+	 */
 	public void move( EditorComponent ecom, Vec2 to ) {
 		ecom.pos = to;
 		
@@ -56,6 +69,23 @@ public class EditorWorld
 	
 	
 	
+	/**
+	 * Find the component most recently added at the given position.
+	 * Returns null if no component is found.
+	 */
+	public EditorComponent findTopmostAt( Vec2 pos ) {
+		List<EditorComponent> list = find( pos );
+		
+		if ( ! list.isEmpty())
+			 return list.get( list.size() - 1 ); 
+		else return null;
+	}
+	
+	
+	
+	/**
+	 * Find all components which contain the given position.
+	 */
 	public List<EditorComponent> find( Vec2 pos ) {
 		List<EditorComponent> list = new ArrayList<>();
 		
@@ -68,12 +98,36 @@ public class EditorWorld
 	
 	
 	
+	/**
+	 * Find all components which overlap the given bounding box.
+	 */
+	public List<EditorComponent> find( Bbox2 bbox ) {
+		List<EditorComponent> list = new ArrayList<>();
+		
+		// TODO
+		//for (EditorComponent ecom: grid.findPotentials( bbox ))
+		//	if (ecom.graphic.contains( transformToComLocalSpace(pos,ecom) ))
+		//		list.add( ecom );
+		
+		return list;
+	}
+	
+	
+	
+	/**
+	 * Get a list of all components.
+	 * @return
+	 */
 	public List<EditorComponent> getComponents() {
 		return ecoms;
 	}
 	
 	
 	
+	/**
+	 * Find the extent of the world occupied by components.
+	 * This is the union of all component bounding boxes.
+	 */
 	public Bbox2 getOccupiedWorldExtent() {
 		return null; // TODO getOccupiedWorldExtent
 	}
@@ -82,6 +136,7 @@ public class EditorWorld
 	
 	// TODO this should be cached when components change, which is relatively infrequent
 	// TODO this won't work for Bbox2... shit.  Gotta implement Poly2 now.
+	// TODO actaully, just make graphics be transformed already.  damn son
 	private Vec2 transformToComLocalSpace( Vec2 pos, EditorComponent ecom ) {
 		return pos.subtract( ecom.pos ).rotate( -ecom.angle );
 	}
