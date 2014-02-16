@@ -2,6 +2,7 @@ package prototypes.snappingProto;
 
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 
 
@@ -57,20 +58,20 @@ public class SnappingPrototype extends ComponentAdapter {
 		mainFrame 				= frame;
 		this.snappingDistance 	= snappingDistance;
 	}
-	
-	
-	
+
+
+
 	public void componentMoved(ComponentEvent evt) {
 		if (locked) // Checks if already snapped to positions
 			return;
 
 		Rectangle desktop = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-		Component comp    = evt.getComponent();
+		final Component comp    = evt.getComponent();
 		int compPosX      = comp.getX();
 		int compPosY      = comp.getY();
 		int compWidth     = comp.getWidth();
 		int compHeight    = comp.getHeight();
-		
+
 		if (compPosY < snappingDistance && compPosY > 0) 
 			compPosY = 0;
 
@@ -79,12 +80,12 @@ public class SnappingPrototype extends ComponentAdapter {
 
 		if (compPosX > desktop.width - compWidth - snappingDistance && compPosX + compWidth < desktop.width)
 			compPosX = desktop.width - compWidth;
-		
+
 		if (compPosY > desktop.height - compHeight - snappingDistance && compPosY + compHeight < desktop.height)
 			compPosY = desktop.height - compHeight;
 
 		// Snap to the main frame component if the main frame has a reference
-		if (mainFrame != null) {
+		if (mainFrame != null) {		
 			int mainFramePosX = mainFrame.getX();
 			int mainFramePosY = mainFrame.getY();
 
@@ -99,6 +100,9 @@ public class SnappingPrototype extends ComponentAdapter {
 					snappedToFrame = true;
 				}
 			}
+			else {
+				snappedToFrame = false;
+			}
 
 			if (isComponentOnYaxisOfFrame(mainFramePosY, comp)) {
 				if (checkLeftside(mainFramePosX, comp)) {
@@ -111,46 +115,72 @@ public class SnappingPrototype extends ComponentAdapter {
 					compPosX = mainFramePosX + mainFrame.getWidth(); 
 					snappedToFrame = true;
 				}
-			}			
+			}
+			else {
+				snappedToFrame = false;
+			}
+
+			
+			// If the second component is above the main frame it is no longer snapped
+			if (mainFrame.getBounds().intersects(comp.getBounds())) {
+				snappedToFrame = false;
+			}
+
+
+
+			// Add to frame so it will move the secondary box with it
+			ComponentAdapter moveFrame = new ComponentAdapter() {
+				public void componentMoved(ComponentEvent e) {
+					comp.setLocation(e.getComponent().getLocation());
+				}
+			};
+			
+			if (snappedToFrame) {System.out.println("snapper");
+				mainFrame.addComponentListener(moveFrame);
+			}
+			else {System.out.println("not snapped");
+				mainFrame.removeComponentListener(moveFrame);
+			}
+
 		}
-System.out.println(snappedToFrame);
+
+
 		// When snapping is done it generates other events
 		// To avoid infinite loops lock the component, set the location and unlock
 		locked = true;
 		comp.setLocation(compPosX, compPosY);
 		locked = false;
-		snappedToFrame = false;
 	}
 
 
-	
+
 	private boolean checkLeftside(int mainFramePosx, Component comp) {
 		int difference = mainFramePosx - (comp.getX() + comp.getWidth());
 		return (difference >= 0 && difference <= snappingDistance);
 	}
-	
-	
-	
+
+
+
 	private boolean checkRightSide(int mainFramePosX, int compPosX) {
 		int mainFrameRightSidePos = mainFramePosX + mainFrame.getWidth();
 		int difference 			  = mainFrameRightSidePos - compPosX;
 		return (difference <= 0 && difference >= -snappingDistance);
 	}
 
-	
-	
+
+
 	private boolean checkTopOfFrame(int mainFramePosY, Component comp) {
 		int yDifference = mainFramePosY - (comp.getY() + comp.getHeight());
 		return (yDifference >= 0 && yDifference <= snappingDistance);
 	}
-	
-	
-	
+
+
+
 	private boolean checkBottomOfFrame(int mainFramePosY, int compPosY) {
 		int mainFrameBottomPos = mainFramePosY + mainFrame.getHeight();
 		int yDifference 	   = mainFrameBottomPos - compPosY;
 		return yDifference <= 0
-			&& yDifference >= -snappingDistance; // To check the snapping distance must be minus as it going from - to + to check
+				&& yDifference >= -snappingDistance; // To check the snapping distance must be minus as it going from - to + to check
 	}
 
 
@@ -174,9 +204,9 @@ System.out.println(snappedToFrame);
 		return (compY >= mainFramePosY && compY <= mainFrameYLength) || (compLength >= mainFramePosY && compLength <= mainFrameYLength);
 	}
 
-	
-	
-	
+
+
+
 
 	//Demo main, just to test the functionality
 	public static void main(String[] args) {
