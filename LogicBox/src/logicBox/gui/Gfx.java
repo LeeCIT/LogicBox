@@ -156,6 +156,7 @@ public class Gfx
 	
 	
 	public static void drawGrid( Graphics2D g, Region region, Vec2 offset, Vec2 cellSize, double thickness ) {
+		// TODO this function is expensive, optimise it by using VecPath and setStroke
 		double left   = region.getLeft()   + offset.x;
 		double right  = region.getRight()  + offset.x;
 		double top    = region.getTop()    + offset.y;
