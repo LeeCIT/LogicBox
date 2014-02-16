@@ -133,7 +133,7 @@ public class ToolDragger extends Tool
 	private void dragMove( Vec2 pos ) {
 		if (dragInitiated) {
 			if ( ! dragging) 
-				if (Geo.distance(pos,dragInitiatedAt) >= dragThreshold) {
+				if (isDragThresholdMet(pos)) {
 					dragging      = true;
 					dragInitiated = false;
 				}
@@ -149,6 +149,12 @@ public class ToolDragger extends Tool
 	
 	
 	
+	private boolean isDragThresholdMet( Vec2 pos ) {
+		return Geo.distance(pos,dragInitiatedAt) >= (dragThreshold / cam.getZoom());
+	}
+
+
+
 	protected void rotateMove( Vec2 pos ) {
 		if ( ! (dragInitiated || dragging))
 			return;

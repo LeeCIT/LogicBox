@@ -82,7 +82,7 @@ public class BezierCubic2
 	
 	public IntersectResult intersect( Line2 line, int segments ) {
 		final IntersectResult result = new IntersectResult();
-		final Line2 ref = line;
+		final Line2           ref    = line;
 		
 		traverse( segments, new BezierTraverser() {
 			public void process( Line2 com ) {
@@ -105,12 +105,10 @@ public class BezierCubic2
 	 */
 	public Bbox2 getBbox() {
 		List<Vec2> points = new ArrayList<>();
-		
 		points.add( a  );
 		points.add( c1 );
 		points.add( c2 );
 		points.add( b  );
-		
 		return Bbox2.createFromPoints( points );
 	}
 	
