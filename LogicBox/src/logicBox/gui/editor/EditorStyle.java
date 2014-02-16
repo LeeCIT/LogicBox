@@ -46,6 +46,14 @@ public class EditorStyle
 	
 	public static Stroke makeSelectionStroke( float thickness ) {
 		float[] dashPattern = { thickness };
-		return new BasicStroke( thickness * 0.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1.0f, dashPattern, 0 );
+		
+		return new BasicStroke(
+			thickness * 0.5f,
+			BasicStroke.CAP_ROUND,
+			BasicStroke.JOIN_ROUND,
+			1.0f,
+			dashPattern,
+			0
+		);
 	}
 }
