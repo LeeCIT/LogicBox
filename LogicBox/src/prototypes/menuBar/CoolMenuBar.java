@@ -49,22 +49,10 @@ public class CoolMenuBar extends JMenuBar
 		add(menu);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
+	
+	
+	
 
 
 

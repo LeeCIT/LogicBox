@@ -16,7 +16,6 @@ import logicBox.util.Callback;
  */
 public class CoolMenuItem extends JMenuItem
 {
-	
 	private String heading;
 	private boolean isSeparator;
 	
