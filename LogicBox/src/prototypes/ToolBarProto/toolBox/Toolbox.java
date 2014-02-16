@@ -1,4 +1,4 @@
-package prototypes.ToolBarProto;
+package prototypes.ToolBarProto.toolBox;
 
 import java.awt.Insets;
 import java.awt.Window;
@@ -14,10 +14,7 @@ import prototypes.snappingProto.SnappingPrototype;
 
 
 public class Toolbox extends JToolBar
-{	
-	public Toolbox() {}
-	
-	
+{		
 	/**
 	 * Creates a toolbox with a frame title and the default orientation
 	 * @param frameName

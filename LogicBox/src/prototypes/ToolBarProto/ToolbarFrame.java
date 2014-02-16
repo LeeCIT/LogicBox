@@ -12,6 +12,8 @@ import java.util.*;
 
 import logicBox.gui.GuiUtil;
 import logicBox.gui.editor.EditorPanel;
+import prototypes.ToolBarProto.toolBox.Toolbox;
+import prototypes.ToolBarProto.toolBox.ToolboxButtonCallback;
 import prototypes.snappingProto.SnappingPrototype;
 
 public class ToolbarFrame extends JFrame{
