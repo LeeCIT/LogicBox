@@ -3,6 +3,7 @@
 
 package logicBox.util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -84,6 +85,21 @@ public class Bbox2 extends Region
 		}
 		
 		return new Bbox2( min, max );
+	}
+	
+	
+	
+	/**
+	 * Create a bounding box from the extremes of a set of points.
+	 * Returns null if the list is empty.
+	 */
+	public static Bbox2 createFromPoints( Vec2...points ) {
+		List<Vec2> list = new ArrayList<>();
+		
+		for (Vec2 v: points)
+			list.add( v );
+		
+		return createFromPoints( list );
 	}
 }
 
