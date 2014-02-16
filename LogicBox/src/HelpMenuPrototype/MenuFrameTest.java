@@ -25,6 +25,7 @@ public class MenuFrameTest extends JFrame
 	{	
 		HelpMenu menu = new HelpMenu( getComponentMap() );
 		
+		menu.setSize(getSize());
 		
 		setLayout( new MigLayout("debug", "[fill,grow]", "[fill,grow]") );
 		setSize(300,300);
@@ -52,7 +53,7 @@ public class MenuFrameTest extends JFrame
 		
 		compMap.put(ComponentType.gateAnd, "And gate info");
 		compMap.put(ComponentType.gateNot, "Not gate info");
-		compMap.put(ComponentType.gateOr, "Or gate information");
+		compMap.put(ComponentType.gateOr, "This right here will be everything and anything you need to know about what an or gate does!");
 		
 		return compMap;
 	}
@@ -82,7 +83,7 @@ public class MenuFrameTest extends JFrame
 		
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			menu.setDisplayedInfo(getRandomComp());
+			//menu.setDisplayedInfo(getRandomComp());
 		}
 		
 		
