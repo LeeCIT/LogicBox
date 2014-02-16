@@ -7,7 +7,6 @@ import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 import javax.swing.SwingUtilities;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
