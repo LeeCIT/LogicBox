@@ -5,6 +5,8 @@ package logicBox.gui.editor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
@@ -52,8 +54,20 @@ public class GraphicComActive implements Drawable
 	
 	
 	
-	public Bbox2 getBbox() {
-		return new Bbox2( 0,0,0,0 ); // TODO
+	public Bbox2 computeBbox() {
+		List<Vec2> points = new ArrayList<>();
+		VecPath[]  polys  = { polyBody, polyPins, polyAux }; // No bubble.  It's always inside the c-hull anyway.
+		
+		for (VecPath v: polys) {
+			if (v != null) {			
+				Rectangle2D rect = v.getBounds2D();
+				points.add( new Vec2(rect.getMinX(), rect.getMinY()) );
+				points.add( new Vec2(rect.getMaxX(), rect.getMaxY()) );
+			}
+		}
+		
+		Bbox2 bbox = Bbox2.createFromPoints( points );
+		return bbox.expand( new Vec2(EditorStyle.compThickness) );
 	}
 	
 	
