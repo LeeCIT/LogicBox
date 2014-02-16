@@ -4,7 +4,6 @@
 package logicBox.gui.editor;
 
 import java.awt.Cursor;
-import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
@@ -38,7 +37,6 @@ public class ToolDragger extends Tool
 	private EditorComponent draggedComponent;
 	private double          rotateStartAngle;
 	private MouseAdapter    eventListener;
-	private RepaintListener repaintListener;
 	
 	
 	
@@ -47,8 +45,7 @@ public class ToolDragger extends Tool
 		this.world           = world;
 		this.cam             = cam;
 		this.eventListener   = createEventListener();
-		this.repaintListener = createRepaintListener();
-		this.dragThreshold   = 4; // TODO this isn't used in GUI-space terms below, but it should be
+		this.dragThreshold   = 4;
 	}
 	
 	
@@ -59,7 +56,6 @@ public class ToolDragger extends Tool
 		
 		panel.addMouseListener      ( eventListener );
 		panel.addMouseMotionListener( eventListener );
-		panel.addRepaintListener( repaintListener );
 		setAttached( true );
 	}
 
@@ -71,7 +67,6 @@ public class ToolDragger extends Tool
 		
 		panel.removeMouseListener      ( eventListener );
 		panel.removeMouseMotionListener( eventListener );
-		panel.removeRepaintListener( repaintListener );
 		setAttached( false );
 	}
 	
@@ -98,16 +93,6 @@ public class ToolDragger extends Tool
 				if ( ! ev.isShiftDown())
 					 dragMove  ( pos );
 				else rotateMove( pos );
-			}
-		};
-	}
-	
-	
-	
-	private RepaintListener createRepaintListener() {
-		return new RepaintListener() {
-			public void draw( Graphics2D g ) {
-				// TODO
 			}
 		};
 	}
@@ -154,7 +139,7 @@ public class ToolDragger extends Tool
 
 
 
-	protected void rotateMove( Vec2 pos ) {
+	private void rotateMove( Vec2 pos ) {
 		if ( ! (dragInitiated || dragging))
 			return;
 		
