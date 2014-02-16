@@ -125,23 +125,6 @@ public class SnappingPrototype extends ComponentAdapter {
 			if (mainFrame.getBounds().intersects(comp.getBounds())) {
 				snappedToFrame = false;
 			}
-
-
-
-			// Add to frame so it will move the secondary box with it
-			ComponentAdapter moveFrame = new ComponentAdapter() {
-				public void componentMoved(ComponentEvent e) {
-					comp.setLocation(e.getComponent().getLocation());
-				}
-			};
-			
-			if (snappedToFrame) {System.out.println("snapper");
-				mainFrame.addComponentListener(moveFrame);
-			}
-			else {System.out.println("not snapped");
-				mainFrame.removeComponentListener(moveFrame);
-			}
-
 		}
 
 
