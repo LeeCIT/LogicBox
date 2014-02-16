@@ -19,14 +19,14 @@ import logicBox.util.Vec2;
  * Essentially it just caches the computations from GraphicsGen.
  * TODO move setHighlighted and setSelected etc into EditorComponent
  * TODO put the transformation burden on the graphics, and cache the result, instead of transforming everything else.
+ * TODO when components rotate, their bbox must change.  Account for this
  * @author Lee Coakley
  */
 public class GraphicComActive implements Drawable
 {
-	private Bbox2 bbox;
-	
 	private VecPath polyBody;
 	private VecPath polyPins;
+	private VecPath	polyAux;
 	
 	private boolean hasBubble;
 	private Vec2    bubblePos;
@@ -41,19 +41,19 @@ public class GraphicComActive implements Drawable
 	
 	
 	
-	public GraphicComActive( VecPath polyBody, VecPath polyPins, List<GraphicPinMapping> pinMap, Bbox2 bbox ) {
+	public GraphicComActive( VecPath polyBody, VecPath polyPins, VecPath polyAux, List<GraphicPinMapping> pinMap ) {
 		this.colStroke = EditorStyle.colComponentStroke;
 		this.colFill   = EditorStyle.colComponentFill;
-		this.bbox      = bbox;
 		this.polyBody  = polyBody;
 		this.polyPins  = polyPins;
+		this.polyAux   = polyAux;
 		this.pinMap    = pinMap;
 	}
 	
 	
 	
 	public Bbox2 getBbox() {
-		return bbox;
+		return new Bbox2( 0,0,0,0 ); // TODO
 	}
 	
 	
@@ -114,25 +114,36 @@ public class GraphicComActive implements Drawable
 			Gfx.pushColorAndSet( g, colStroke );
 				Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
 					g.draw( polyPins );
+					
+					if (polyAux != null)
+						g.draw( polyAux );
 				Gfx.popStroke( g );
 					
+				
 				Gfx.pushColorAndSet( g, colFill );
-				Gfx.pushAntialiasingStateAndSet( g, false );
-					g.fill( polyBody );
-					if (hasBubble)
-						Gfx.drawCircle( g, bubblePos, bubbleRadius, true );
-				Gfx.popAntialiasingState( g );
+					Gfx.pushAntialiasingStateAndSet( g, false );
+						g.fill( polyBody );
+					Gfx.popAntialiasingState( g );
 				Gfx.popColor( g );
+				
 				
 				Gfx.pushStrokeAndSet( g, EditorStyle.strokeBody );
 					g.draw( polyBody );
 				Gfx.popStroke( g );
 				
+				
 				if (hasBubble) {
+					Gfx.pushColorAndSet( g, colFill );
+						Gfx.pushAntialiasingStateAndSet( g, false );
+							Gfx.drawCircle( g, bubblePos, bubbleRadius, true );
+						Gfx.popAntialiasingState( g );
+					Gfx.popColor( g );
+					
 					Gfx.pushStrokeAndSet( g, EditorStyle.strokeBubble );
-					Gfx.drawCircle( g, bubblePos, bubbleRadius, false );
+						Gfx.drawCircle( g, bubblePos, bubbleRadius, false );
 					Gfx.popStroke( g );
 				}
+				
 			Gfx.popColor( g );
 		Gfx.popMatrix( g );
 	}
@@ -164,6 +175,7 @@ public class GraphicComActive implements Drawable
 	 * Test whether the bounding box intersects the graphic.
 	 * The bbox must be transformed to the graphic's local space.
 	 * Intended for selections.  Not very precise (excludes pins, bubbles etc).
+	 * TODO this is pretty crap for the general case, so make something else too
 	 */
 	public boolean overlaps( Bbox2 bbox ) {
 		Vec2 size = bbox.getSize();
@@ -178,10 +190,10 @@ public class GraphicComActive implements Drawable
 	 * Returns null if there are no pins within the threshold.
 	 */
 	public GraphicPinMapping findClosestPin( Vec2 pos, double threshold ) {
+		threshold *= threshold; // Squared because distance is squared
+		
 		GraphicPinMapping best     = null;
 		double            bestDist = Double.MAX_VALUE;
-		
-		threshold *= threshold; // Squared because distance is squared
 		
 		for (GraphicPinMapping gpm: pinMap) {
 			Vec2   closest = gpm.line.closestPoint( pos );
