@@ -47,8 +47,7 @@ public class ToolDragger extends Tool
 		this.world           = world;
 		this.cam             = cam;
 		this.eventListener   = createEventListener();
-		this.repaintListener = createRepaintListener();
-		this.dragThreshold   = 4; // TODO this isn't used in GUI-space terms below, but it should be
+		this.dragThreshold   = 4;
 	}
 	
 	
@@ -104,16 +103,6 @@ public class ToolDragger extends Tool
 	
 	
 	
-	private RepaintListener createRepaintListener() {
-		return new RepaintListener() {
-			public void draw( Graphics2D g ) {
-				// TODO
-			}
-		};
-	}
-	
-	
-	
 	private void dragInitiate( Vec2 pos ) {		
 		EditorComponent ecom = world.findTopmostAt( pos );
 		
@@ -154,7 +143,7 @@ public class ToolDragger extends Tool
 
 
 
-	protected void rotateMove( Vec2 pos ) {
+	private void rotateMove( Vec2 pos ) {
 		if ( ! (dragInitiated || dragging))
 			return;
 		
