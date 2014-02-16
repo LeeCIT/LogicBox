@@ -8,9 +8,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import prototypes.ToolBarProto.ToolbarSeperator;
-import prototypes.ToolBarProto.Toolbox;
-import prototypes.ToolBarProto.ToolboxItemStore;
 import logicBox.gui.GUI;
 import logicBox.gui.Gfx;
 import logicBox.gui.contextMenu.ContextMenu;
@@ -26,7 +23,7 @@ import logicBox.util.Vec2;
  * For use in the ToolBox class.
  * @author Lee Coakley
  */
-public class ButtonGraphicCom extends JButton
+public class ToolboxButton extends JButton
 {
 	private GraphicComActive gca;
 	private String           tooltip;
@@ -34,16 +31,12 @@ public class ButtonGraphicCom extends JButton
 	
 	
 	
-	public ButtonGraphicCom( GraphicComActive gca, String tooltip, ContextMenu contextMenu ) {
+	public ToolboxButton( GraphicComActive gca, String tooltip, ContextMenu contextMenu ) {
 		super();
 		
 		this.gca         = gca;
 		this.tooltip     = tooltip;
-		this.contextMenu = contextMenu;		
-		
-		this.gca         = GraphicGen.generateGateXnor();
-		this.tooltip     = "test";
-	    this.contextMenu = null;
+		this.contextMenu = contextMenu;
 	    
 	    setRolloverEnabled( true );
 	}
@@ -84,26 +77,23 @@ public class ButtonGraphicCom extends JButton
 		
 		JFrame frame = new EditorFrame();
 		
-		ButtonGraphicCom[] buttons = {
-			new ButtonGraphicCom( GraphicGen.generateGateRelay(), null, null ),
-			new ButtonGraphicCom( GraphicGen.generateGateNot(),   null, null ),
-			new ButtonGraphicCom( GraphicGen.generateGateAnd(2),  null, null ),
-			new ButtonGraphicCom( GraphicGen.generateGateNand(2), null, null ),
-			new ButtonGraphicCom( GraphicGen.generateGateOr(2),   null, null ),
-			new ButtonGraphicCom( GraphicGen.generateGateNor(2),  null, null ),
-			new ButtonGraphicCom( GraphicGen.generateGateXor(),   null, null ),
-			new ButtonGraphicCom( GraphicGen.generateGateXnor(),  null, null )
+		ToolboxButton[] buttons = {
+			new ToolboxButton( GraphicGen.generateGateRelay(), null, null ),
+			new ToolboxButton( GraphicGen.generateGateNot(),   null, null ),
+			new ToolboxButton( GraphicGen.generateGateAnd(2),  null, null ),
+			new ToolboxButton( GraphicGen.generateGateNand(2), null, null ),
+			new ToolboxButton( GraphicGen.generateGateOr(2),   null, null ),
+			new ToolboxButton( GraphicGen.generateGateNor(2),  null, null ),
+			new ToolboxButton( GraphicGen.generateGateXor(),   null, null ),
+			new ToolboxButton( GraphicGen.generateGateXnor(),  null, null )
 		};
 		
-		Toolbox toolbox = new Toolbox();
-		
-		toolbox.addToolBoxItem( new ToolbarSeperator() );
-		
-		for (ButtonGraphicCom butt: buttons)
-			toolbox.addToolBoxItem( new ToolboxItemStore(butt,null,null) );
+		Toolbox toolbox = new Toolbox( frame );
+		toolbox.addCategory( "Gates", buttons );
 		
 		frame.setSize( new Dimension(600,600) );
-		frame.add( toolbox );
+		frame.add( toolbox, "west" );
+		frame.add( new EditorPanel() );
 		frame.setVisible( true );
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}
