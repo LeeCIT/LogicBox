@@ -324,6 +324,19 @@ public class Geo
 	
 	
 	/**
+	 * Compute the scaling factor needed to fit a given rectangle into another while preserving aspect.
+	 */
+	public static double getAspectScaleFactor( Vec2 size, Vec2 fitIn, boolean inside ) {
+		Vec2 ratios = fitIn.divide( size );
+        
+        if (inside)
+        	 return ratios.getSmallest();
+        else return ratios.getBiggest();
+	}
+	
+	
+	
+	/**
 	 * Get the absolute difference between two numbers.
 	 */
 	public static double absDiff( double x, double y ) {
