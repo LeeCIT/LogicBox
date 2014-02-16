@@ -23,19 +23,14 @@ public class MenuFrameTest extends JFrame
 	
 	public MenuFrameTest() 
 	{	
-		HelpMenu menu = new HelpMenu( getComponentMap() );
-		
-		menu.setSize(getSize());
+		HelpPanel menu = new HelpPanel( getComponentMap() );
 		
 		setLayout( new MigLayout("debug", "[fill,grow]", "[fill,grow]") );
 		setSize(300,300);
 		add( menu, "wrap" );
 		setVisible(true);
 		
-		
 		menu.setDisplayedInfo( ComponentType.gateOr );
-		
-		menu.addMouseListener( new ClickTest(menu) );
 	}
 	
 	
@@ -66,27 +61,6 @@ public class MenuFrameTest extends JFrame
 		
 		
 		System.out.println( MenuFrameTest.getRandomComp() );
-	}
-	
-	
-	
-	private class ClickTest extends MouseAdapter
-	{
-		private HelpMenu menu;
-		
-		
-		public ClickTest( HelpMenu menu ) {
-			this.menu = menu;
-		}
-		
-		
-		
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			//menu.setDisplayedInfo(getRandomComp());
-		}
-		
-		
 	}
 	
 	
