@@ -25,6 +25,8 @@ public class MenuFrameTest extends JFrame
 	{	
 		HelpPanel menu = new HelpPanel( getComponentMap() );
 		
+		
+		
 		setLayout( new MigLayout("debug", "[fill,grow]", "[fill,grow]") );
 		setSize(300,300);
 		add( menu, "wrap" );
