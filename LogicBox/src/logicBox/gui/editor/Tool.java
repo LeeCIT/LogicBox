@@ -11,7 +11,7 @@ package logicBox.gui.editor;
  */
 public abstract class Tool
 {
-	protected boolean attached;
+	private boolean attached;
 	
 	
 	
