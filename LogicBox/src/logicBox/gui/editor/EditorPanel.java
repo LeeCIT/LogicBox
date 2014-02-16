@@ -39,11 +39,15 @@ public class EditorPanel extends JPanel
 	
 	private Camera      cam;
 	private EditorWorld world;
+	private boolean     enableAntialiasing;;
 	
 	
 	
 	public EditorPanel() {
 		super( true );
+		
+		enableAntialiasing = true;
+		
 		cam              = new Camera( this, createOnTransformCallback() );
 		world            = new EditorWorld();
 		repaintListeners = new ArrayList<>();
@@ -63,6 +67,12 @@ public class EditorPanel extends JPanel
 		
 		addMouseOverTest();
 		setupActions();
+	}
+	
+	
+	
+	public void setAntialiasingEnabled( boolean state ) {
+		enableAntialiasing = state;
 	}
 	
 	
@@ -97,31 +107,30 @@ public class EditorPanel extends JPanel
 			}
 		});
 	}
-
-
-
+	
+	
+	
 	protected void paintComponent( Graphics gx ) {
 		super.paintComponent( gx );
 		
 		Graphics2D g = (Graphics2D) gx;
 		
 		Gfx.pushMatrix( g );
-			Gfx.setAntialiasingState( g, false );
-			fillBackground( g );
-			
-			g.setTransform( cam.getTransform() );
-			
-			Gfx.setAntialiasingState( g, true );
-			drawGrid( g );
-			
-			drawDebugCrap( g );
-			
-			for (EditorComponent ecom: world.getComponents())
-				ecom.draw( g );
-			
-			for (RepaintListener rpl: repaintListeners)
-				rpl.draw( g );
-			
+			Gfx.pushAntialiasingStateAndSet( g, enableAntialiasing );
+				Gfx.pushAntialiasingStateAndSet( g, false );
+					fillBackground( g );
+				Gfx.popAntialiasingState( g );
+				
+				g.setTransform( cam.getTransform() );
+				drawGrid( g );
+				drawDebugCrap( g );
+				
+				for (EditorComponent ecom: world.getComponents())
+					ecom.draw( g );
+				
+				for (RepaintListener rpl: repaintListeners)
+					rpl.draw( g );
+			Gfx.popAntialiasingState( g );
 		Gfx.popMatrix( g );
 	}
 	
