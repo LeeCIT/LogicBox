@@ -315,10 +315,12 @@ public class EditorPanel extends JPanel
 		EditorFrame frame = new EditorFrame();
 		EditorPanel panel = new EditorPanel();
 		
+		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		frame.setSize( new Dimension(600,600) );
 		frame.add( panel );
 		frame.setVisible( true );
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		
+		// TODO use the toolbox
 	}
 }
 
