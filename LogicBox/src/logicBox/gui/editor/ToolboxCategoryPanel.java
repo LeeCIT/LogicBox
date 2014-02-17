@@ -8,9 +8,9 @@ import net.miginfocom.swing.MigLayout;
 
 
 
-public class ToolboxCategory extends JPanel
+public class ToolboxCategoryPanel extends JPanel
 {
-	public ToolboxCategory( ToolboxButton...buttons ) {
+	public ToolboxCategoryPanel( ToolboxButton...buttons ) {
 		super( new MigLayout( "wrap 3" ) );
 		
 		for (ToolboxButton butt: buttons)

@@ -3,21 +3,22 @@
 
 package logicBox.gui.editor;
 
+import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
+import logicBox.gui.GUI;
 import prototypes.snappingProto.SnappingPrototype;
 
 
 
 /**
- * The editor toolbox, where components are displayed in a pallet for easy creation.
+ * The editor toolbox, where components are displayed in a palette for easy creation.
  * @author John Murphy
  * @author Lee Coakley
- *
  */
 public class Toolbox extends JToolBar
 {
@@ -31,13 +32,13 @@ public class Toolbox extends JToolBar
 	
 	
 	/**
-	 * Add the category heading then the list that will appear under the category
+	 * Add a category of buttons.then the list that will appear under the category
 	 * @param category
 	 * @param items
 	 */
 	public void addCategory( String title, ToolboxButton...buttons ) {
 		addCategory( title );
-		JPanel panel = new ToolboxCategory( buttons );
+		JPanel panel = new ToolboxCategoryPanel( buttons );
 		add( panel );
 	}
 	
@@ -64,7 +65,7 @@ public class Toolbox extends JToolBar
 	private void makeSnappable( final JFrame frame ) {
 		// Fix to a terrible flaw in JToolbar (what flaw?)
 		this.addHierarchyListener(new HierarchyListener() {			
-			public void hierarchyChanged(HierarchyEvent e) {
+			public void hierarchyChanged( HierarchyEvent ev ) {
 				final Window topLevel = SwingUtilities.windowForComponent( Toolbox.this );
 				
 				if (topLevel instanceof JDialog)
@@ -95,4 +96,64 @@ public class Toolbox extends JToolBar
 			}
 		});
 	}
+	
+	
+	
+	
+	
+	public static void main( String[] args ) {
+		GUI.setNativeStyle();
+		
+		JFrame frame = new EditorFrame();
+		
+		ToolboxButton[] buttons = {
+			new ToolboxButton( GraphicGen.generateGateRelay(), null, null ),
+			new ToolboxButton( GraphicGen.generateGateNot(),   null, null ),
+			new ToolboxButton( GraphicGen.generateGateAnd(2),  null, null ),
+			new ToolboxButton( GraphicGen.generateGateNand(2), null, null ),
+			new ToolboxButton( GraphicGen.generateGateOr(2),   null, null ),
+			new ToolboxButton( GraphicGen.generateGateNor(2),  null, null ),
+			new ToolboxButton( GraphicGen.generateGateXor(),   null, null ),
+			new ToolboxButton( GraphicGen.generateGateXnor(),  null, null )
+		};
+		
+		Toolbox toolbox = new Toolbox( frame );
+		toolbox.addCategory( "Gates", buttons );
+		
+		frame.setSize( new Dimension(600,600) );
+		frame.add( toolbox, "west" );
+		frame.add( new EditorPanel() );
+		frame.setVisible( true );
+		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

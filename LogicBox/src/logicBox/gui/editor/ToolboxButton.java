@@ -3,12 +3,9 @@
 
 package logicBox.gui.editor;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import logicBox.gui.GUI;
 import logicBox.gui.Gfx;
 import logicBox.gui.contextMenu.ContextMenu;
 import logicBox.util.Bbox2;
@@ -39,6 +36,7 @@ public class ToolboxButton extends JButton
 		this.contextMenu = contextMenu;
 	    
 	    setRolloverEnabled( true );
+	    gca.setInverted( true );
 	}
 	
 	
@@ -66,36 +64,6 @@ public class ToolboxButton extends JButton
 			Gfx.popAntialiasingState( g );
 			
 		Gfx.popMatrix( g );
-	}
-	
-	
-	
-	
-	
-	public static void main( String[] args ) {
-		GUI.setNativeStyle();
-		
-		JFrame frame = new EditorFrame();
-		
-		ToolboxButton[] buttons = {
-			new ToolboxButton( GraphicGen.generateGateRelay(), null, null ),
-			new ToolboxButton( GraphicGen.generateGateNot(),   null, null ),
-			new ToolboxButton( GraphicGen.generateGateAnd(2),  null, null ),
-			new ToolboxButton( GraphicGen.generateGateNand(2), null, null ),
-			new ToolboxButton( GraphicGen.generateGateOr(2),   null, null ),
-			new ToolboxButton( GraphicGen.generateGateNor(2),  null, null ),
-			new ToolboxButton( GraphicGen.generateGateXor(),   null, null ),
-			new ToolboxButton( GraphicGen.generateGateXnor(),  null, null )
-		};
-		
-		Toolbox toolbox = new Toolbox( frame );
-		toolbox.addCategory( "Gates", buttons );
-		
-		frame.setSize( new Dimension(600,600) );
-		frame.add( toolbox, "west" );
-		frame.add( new EditorPanel() );
-		frame.setVisible( true );
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}
 }
 
