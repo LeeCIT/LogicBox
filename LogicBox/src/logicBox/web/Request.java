@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class User
+public class Request
 {
 	private WebClient wc = null;
 	private ArrayList<String> errors = new ArrayList<String>();
 	
-	public User(String url)
+	public Request(String url)
 	{
 		this.wc = new WebClient(url);
 	}

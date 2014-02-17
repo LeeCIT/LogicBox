@@ -10,5 +10,5 @@ public interface RequestInterface
 		COMPLETED, CANCELLED, FAILED
 	};
 	
-	void onRequestResponse(HttpResponse<JsonNode> response, User a, status s);
+	void onRequestResponse(HttpResponse<JsonNode> response, Request request, status status);
 }

@@ -27,7 +27,7 @@ public class WebClient
 		this.url = url;
 	}
 	
-	public void post(String request, Map<String, Object> params, final User user, final RequestInterface ri)
+	public void post(String request, Map<String, Object> params, final Request req, final RequestInterface ri)
 	{
 		HttpRequestWithBody h = Unirest.post(url + request);
 
@@ -37,7 +37,7 @@ public class WebClient
 		{
 		    public void failed(UnirestException e) 
 		    {
-	    		ri.onRequestResponse(null, user, RequestInterface.status.FAILED);
+	    		ri.onRequestResponse(null, req, RequestInterface.status.FAILED);
 	    		
 	    		endRequest();
 		    }
@@ -45,23 +45,23 @@ public class WebClient
 		    public void completed(HttpResponse<JsonNode> response) 
 		    {
 		    	parseHeaders(response.getHeaders());
-		    	parseErrors(response.getBody().getObject(), user.getErrors());
+		    	parseErrors(response.getBody().getObject(), req.getErrors());
 		    	
-		    	ri.onRequestResponse(response, user, RequestInterface.status.COMPLETED);
+		    	ri.onRequestResponse(response, req, RequestInterface.status.COMPLETED);
 		    	
 		    	endRequest();
 		    }
 
 		    public void cancelled() 
 		    {
-		    	ri.onRequestResponse(null, user, RequestInterface.status.CANCELLED);
+		    	ri.onRequestResponse(null, req, RequestInterface.status.CANCELLED);
 		    	
 		    	endRequest();
 		    }
 		});	
 	}
 	
-	public void get(String request, final User user, final RequestInterface ri)
+	public void get(String request, final Request req, final RequestInterface ri)
 	{
 		GetRequest r = Unirest.get(url + request);
 		
@@ -69,7 +69,7 @@ public class WebClient
 		{
 		    public void failed(UnirestException e) 
 		    {
-	    		ri.onRequestResponse(null, user, RequestInterface.status.FAILED);
+	    		ri.onRequestResponse(null, req, RequestInterface.status.FAILED);
 	    		
 	    		endRequest();
 		    }
@@ -77,16 +77,16 @@ public class WebClient
 		    public void completed(HttpResponse<JsonNode> response) 
 		    {
 		    	parseHeaders(response.getHeaders());
-		    	parseErrors(response.getBody().getObject(), user.getErrors());
+		    	parseErrors(response.getBody().getObject(), req.getErrors());
 		    	
-		    	ri.onRequestResponse(response, user, RequestInterface.status.COMPLETED);
+		    	ri.onRequestResponse(response, req, RequestInterface.status.COMPLETED);
 		    	
 		    	endRequest();
 		    }
 
 		    public void cancelled() 
 		    {
-		    	ri.onRequestResponse(null, user, RequestInterface.status.CANCELLED);
+		    	ri.onRequestResponse(null, req, RequestInterface.status.CANCELLED);
 		    	
 		    	endRequest();
 		    }
