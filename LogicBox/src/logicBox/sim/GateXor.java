@@ -6,7 +6,11 @@ package logicBox.sim;
 
 
 /**
- * A gate which outputs true if its inputs are different.
+ * Outputs true if its inputs are different.
+ * 0,0 -> 0
+ * 0,1 -> 1
+ * 1,0 -> 1
+ * 1,1 -> 0
  * @author Lee Coakley
  */
 public class GateXor extends Gate

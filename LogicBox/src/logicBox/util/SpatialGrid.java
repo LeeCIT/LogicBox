@@ -31,7 +31,7 @@ public class SpatialGrid<T>
 			throw new RuntimeException( "Cell size must be a power of 2.  Got " + cellSize );
 		
 		this.cellSize       = cs;
-		this.cellSizePower  = log2i( cs );
+		this.cellSizePower  = (int) Geo.log2( cs );
 		this.cellsPerRow    = (int) Math.ceil( width  / (double) cs );
 		this.cellsPerColumn = (int) Math.ceil( height / (double) cs );
 		
@@ -101,13 +101,6 @@ public class SpatialGrid<T>
 		if (total != 0)
 			 return load / total;
 		else return 0;
-	}
-	
-	
-	
-	
-	private int log2i( double x ) {
-		return (int) (Math.log(x) / Math.log( 2.0 ));
 	}
 	
 	

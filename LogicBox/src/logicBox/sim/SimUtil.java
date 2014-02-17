@@ -18,4 +18,11 @@ public class SimUtil
 		list.add( item );
 		return list;
 	}
+	
+	
+	
+	public static void addPins( List<Pin> list, Component com, PinIoMode mode, int count ) {
+		for (int i=0; i<count; i++)
+			list.add( new Pin(com,mode) );
+	}
 }
