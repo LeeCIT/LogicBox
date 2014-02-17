@@ -106,8 +106,8 @@ public class GraphicComActive implements Drawable
 		isSelected = state;
 		
 		if (isSelected) {
-			colStroke = EditorStyle.makeSelectedCol( EditorStyle.colComponentStroke );
-			colFill   = EditorStyle.makeSelectedCol( EditorStyle.colComponentFill   );
+			colStroke = EditorStyle.colSelectionStroke;
+			colFill   = EditorStyle.colSelectionFill;
 		} else {
 			colStroke = EditorStyle.colComponentStroke;
 			colFill   = EditorStyle.colComponentFill;
