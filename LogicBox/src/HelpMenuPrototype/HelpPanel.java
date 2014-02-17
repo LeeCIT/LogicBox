@@ -31,8 +31,8 @@ public class HelpPanel extends JPanel
 	
 	
 	public HelpPanel( Map<ComponentType, String> compMap ) {
-		super( new MigLayout() );
-		setLayout( new MigLayout("fill") );
+		super();
+		setLayout( new MigLayout() );
 		this.componentMap = compMap;
 		compDescription = new JTextArea();
 		setSize(300, 300);
@@ -107,7 +107,7 @@ public class HelpPanel extends JPanel
 	private void addToPanel()
 	{
 		JScrollPane scroll = new JScrollPane(compDescription);
-		add( scroll, "grow" );
+		add( scroll, "w 100%, h 100%" );
 		compDescription.setPreferredSize(new Dimension(getSize()));
 		compDescription.setLineWrap(true); //Wrap the text when it reaches the end of the TextArea.
 		compDescription.setWrapStyleWord(true); //Wrap at every word rather than every letter.
