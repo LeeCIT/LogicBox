@@ -1,196 +1,143 @@
+
+
+
 package prototypes.snappingProto;
-
-import java.awt.*;
-import java.awt.event.*;
-
-import javax.swing.*;
+import java.awt.Component;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import logicBox.util.Geo;
+import logicBox.util.Vec2;
 
 
 
 public class SnappingPrototype extends ComponentAdapter {
-	private boolean locked;
-	private int     snappingDistance;
-	private int     defaultSnap = 10;
-	private boolean snappedToFrame;
-
-	private JFrame mainFrame;
-
-
-
-	/**
-	 * Default constructor. The default snapping distance is 10
-	 * The snap will only snap to the screen edges
-	 */
-	public SnappingPrototype() {
-		snappingDistance = defaultSnap;
+	private boolean   motionInterlock;
+	private Component snapTo; // Ignore for now, just snap to desktop
+	
+	
+	
+	public SnappingPrototype( Component snapTo ) {
+		this.snapTo = snapTo;
 	}
-
-
-
-	/**
-	 * Adds window edge snapping at the specified snapping distance
-	 * @param snappingDistance		Snapping distance
-	 */
-	public SnappingPrototype(int snappingDistance) {
-		this.snappingDistance = snappingDistance;
-	}
-
-
-
-	/**
-	 * Will snap to the window edge and the Frame reference passed in with
-	 * a default snapping distance of 10
-	 * @param frame		The frame to snap to
-	 */
-	public SnappingPrototype(JFrame frame) {
-		mainFrame = frame;
-		snappingDistance = defaultSnap;
-	}
-
-
-
-	/**
-	 * Will snap to the frame passed in and the window at the specified snapping distance
-	 * @param frame		The frame to snap to
-	 * @param snappingDistance		The distance to snap
-	 */
-	public SnappingPrototype(JFrame frame, int snappingDistance) {
-		mainFrame 				= frame;
-		this.snappingDistance 	= snappingDistance;
-	}
-
-
-
-	public void componentMoved(ComponentEvent evt) {
-		if (locked) // Checks if already snapped to positions
+	
+	
+	
+	public void componentMoved( ComponentEvent ev ) {
+		if (motionInterlock)
 			return;
-
-		Rectangle desktop = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-		final Component comp    = evt.getComponent();
-		int compPosX      = comp.getX();
-		int compPosY      = comp.getY();
-		int compWidth     = comp.getWidth();
-		int compHeight    = comp.getHeight();
-
-		if (compPosY < snappingDistance && compPosY > 0) 
-			compPosY = 0;
-
-		if (compPosX < snappingDistance && compPosX > 0)
-			compPosX = 0;
-
-		if (compPosX > desktop.width - compWidth - snappingDistance && compPosX + compWidth < desktop.width)
-			compPosX = desktop.width - compWidth;
-
-		if (compPosY > desktop.height - compHeight - snappingDistance && compPosY + compHeight < desktop.height)
-			compPosY = desktop.height - compHeight;
-
-		// Snap to the main frame component if the main frame has a reference
-		if (mainFrame != null) {		
-			int mainFramePosX = mainFrame.getX();
-			int mainFramePosY = mainFrame.getY();
-
-			if (isComponentOnXAxisOfFrame(mainFramePosX, comp)) {
-				if (checkTopOfFrame(mainFramePosY, comp)) {
-					compPosY = mainFramePosY - compHeight;
-					snappedToFrame = true;
-				}
-
-				if (checkBottomOfFrame(mainFramePosY, compPosY)) {
-					compPosY = mainFramePosY + mainFrame.getHeight();
-					snappedToFrame = true;
-				}
-			}
-			else {
-				snappedToFrame = false;
-			}
-
-			if (isComponentOnYaxisOfFrame(mainFramePosY, comp)) {
-				if (checkLeftside(mainFramePosX, comp)) {
-					compPosX = mainFramePosX - compWidth;
-					snappedToFrame = true;
-				}
-
-				// Snap to the right of the main frame
-				if (checkRightSide(mainFramePosX, compPosX)) {
-					compPosX = mainFramePosX + mainFrame.getWidth(); 
-					snappedToFrame = true;
-				}
-			}
-			else {
-				snappedToFrame = false;
-			}
-
-			
-			// If the second component is above the main frame it is no longer snapped
-			if (mainFrame.getBounds().intersects(comp.getBounds())) {
-				snappedToFrame = false;
-			}
+		
+		Rectangle      desk  = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		Rectangle      ref   = desk;
+		Rectangle      com   = ev.getComponent().getBounds();
+		List<EdgePair> edges = getSnappableEdgePairs( ref, com, 10 );
+		
+		for (EdgePair pair: edges) {
+			System.out.println( "Pair dist: " + Geo.absDiff(pair.ref.pos, pair.com.pos) );
+			snapToEdge( ev.getComponent(), com, pair );
+		}
+	}
+	
+	
+	
+	public void snapToEdge( Component comp, Rectangle rectComp, EdgePair edgePair ) {
+		Vec2 pos = new Vec2( comp.getLocation() );
+		
+		switch (edgePair.ref.edge) {
+			case left:   pos.x = edgePair.ref.pos;                         break;
+			case top:    pos.y = edgePair.ref.pos;                         break;
+			case right:  pos.x = edgePair.ref.pos - rectComp.getWidth();   break;
+			case bottom: pos.y = edgePair.ref.pos - rectComp.getHeight();  break;
 		}
 
-
-		// When snapping is done it generates other events
-		// To avoid infinite loops lock the component, set the location and unlock
-		locked = true;
-		comp.setLocation(compPosX, compPosY);
-		locked = false;
+		motionInterlock = true;
+		comp.setLocation( (int) pos.x, (int) pos.y );
+		motionInterlock = false;
 	}
+	
+	
+	
+	private enum Edge {
+		left,
+		right,
+		top,
+		bottom
+	};
+	
+	
+	
+	private class EdgePos {
+		public Edge   edge;
+		public double pos;
+		
+		public EdgePos( Edge edge, double pos ) {
+			this.edge = edge;
+			this.pos  = pos;
+		}
+	};
+	
+	
+	
+	private class EdgePair {
+		public EdgePos ref,com;
 
-
-
-	private boolean checkLeftside(int mainFramePosx, Component comp) {
-		int difference = mainFramePosx - (comp.getX() + comp.getWidth());
-		return (difference >= 0 && difference <= snappingDistance);
+		public EdgePair( EdgePos ref, EdgePos com ) {
+			this.ref = ref;
+			this.com = com;
+		}
 	}
-
-
-
-	private boolean checkRightSide(int mainFramePosX, int compPosX) {
-		int mainFrameRightSidePos = mainFramePosX + mainFrame.getWidth();
-		int difference 			  = mainFrameRightSidePos - compPosX;
-		return (difference <= 0 && difference >= -snappingDistance);
+	
+	
+	
+	private EdgePos[] getEdges( Rectangle rect ) {
+		Vec2 pos  = new Vec2( rect.getX(),     rect.getY()      );
+		Vec2 size = new Vec2( rect.getWidth(), rect.getHeight() );
+		
+		EdgePos[] edges = {
+			new EdgePos( Edge.left,   pos.x          ),
+			new EdgePos( Edge.top,    pos.y          ),
+			new EdgePos( Edge.right,  pos.x + size.x ),
+			new EdgePos( Edge.bottom, pos.y + size.y ),
+		};
+		
+		return edges;
 	}
-
-
-
-	private boolean checkTopOfFrame(int mainFramePosY, Component comp) {
-		int yDifference = mainFramePosY - (comp.getY() + comp.getHeight());
-		return (yDifference >= 0 && yDifference <= snappingDistance);
+	
+	
+	
+	private List<EdgePair> getEdgesWithinDistanceThreshold( EdgePos[] refs, EdgePos[] coms, double thresh ) {
+		List<EdgePair> list = new ArrayList<>();
+		
+		for (int i=0; i<refs.length; i++) {
+			EdgePos ref  = refs[ i ];
+			EdgePos com  = coms[ i ];
+			double  dist = Geo.absDiff( ref.pos, com.pos );
+			
+			if (dist <= thresh)
+				list.add( new EdgePair(ref,com) );
+		}
+		
+		return list;
 	}
-
-
-
-	private boolean checkBottomOfFrame(int mainFramePosY, int compPosY) {
-		int mainFrameBottomPos = mainFramePosY + mainFrame.getHeight();
-		int yDifference 	   = mainFrameBottomPos - compPosY;
-		return yDifference <= 0
-				&& yDifference >= -snappingDistance; // To check the snapping distance must be minus as it going from - to + to check
+	
+	
+	
+	private List<EdgePair> getSnappableEdgePairs( Rectangle ref, Rectangle com, double thresh ) {
+		EdgePos[] edgeRef = getEdges( ref );
+		EdgePos[] edgeCom = getEdges( com );
+		
+		return getEdgesWithinDistanceThreshold( edgeRef, edgeCom, thresh );
 	}
-
-
-
-	/**
-	 * Checks is the component in the same region as the main frame in terms of the x axis
-	 */
-	private boolean isComponentOnXAxisOfFrame(int mainFramePosX, Component comp) {
-		int mainFrameXLength = mainFramePosX + mainFrame.getWidth();
-		int compX = comp.getX();
-		int compLength = compX + comp.getWidth();
-		return (compX >= mainFramePosX && compX <= mainFrameXLength) || (compLength >= mainFramePosX && compLength <= mainFrameXLength);
-	}
-
-
-
-	private boolean isComponentOnYaxisOfFrame(int mainFramePosY, Component comp) {
-		int mainFrameYLength = mainFramePosY + mainFrame.getHeight();
-		int compY = comp.getY();
-		int compLength = compY + comp.getHeight();
-		return (compY >= mainFramePosY && compY <= mainFrameYLength) || (compLength >= mainFramePosY && compLength <= mainFrameYLength);
-	}
-
-
-
-
-
+	
+	
+	
+	
+	
 	//Demo main, just to test the functionality
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
@@ -199,21 +146,22 @@ public class SnappingPrototype extends ComponentAdapter {
 		JFrame secondDemo = new JFrame();
 		JLabel secondLab  = new JLabel("Demo test, move towards the edge of the screen to snap, Second frame");
 
-		//First frame
+		//First frameC
 		frame.getContentPane().add(label);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.addComponentListener(new SnappingPrototype());
+		//frame.addComponentListener( new SnappingPrototype() );
 		frame.setSize(400, 400); //Just simulating demo size
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 
 		//Second frame
 		secondDemo.getContentPane().add(secondLab);
-		secondDemo.addComponentListener(new SnappingPrototype(frame));
+		secondDemo.addComponentListener( new SnappingPrototype(frame) );
 		secondDemo.setSize(150, 300);
 		secondDemo.setVisible(true);
 		secondDemo.setLocationRelativeTo(null);
 	}
 }
+
 
 
