@@ -1,5 +1,6 @@
 package logicBox.web;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -37,6 +38,8 @@ public class WebClient
 		    public void failed(UnirestException e) 
 		    {
 	    		ri.onRequestResponse(null, user, RequestInterface.status.FAILED);
+	    		
+	    		endRequest();
 		    }
 
 		    public void completed(HttpResponse<JsonNode> response) 
@@ -45,11 +48,15 @@ public class WebClient
 		    	parseErrors(response.getBody().getObject(), user.getErrors());
 		    	
 		    	ri.onRequestResponse(response, user, RequestInterface.status.COMPLETED);
+		    	
+		    	endRequest();
 		    }
 
 		    public void cancelled() 
 		    {
 		    	ri.onRequestResponse(null, user, RequestInterface.status.CANCELLED);
+		    	
+		    	endRequest();
 		    }
 		});	
 	}
@@ -63,6 +70,8 @@ public class WebClient
 		    public void failed(UnirestException e) 
 		    {
 	    		ri.onRequestResponse(null, user, RequestInterface.status.FAILED);
+	    		
+	    		endRequest();
 		    }
 
 		    public void completed(HttpResponse<JsonNode> response) 
@@ -71,11 +80,15 @@ public class WebClient
 		    	parseErrors(response.getBody().getObject(), user.getErrors());
 		    	
 		    	ri.onRequestResponse(response, user, RequestInterface.status.COMPLETED);
+		    	
+		    	endRequest();
 		    }
 
 		    public void cancelled() 
 		    {
 		    	ri.onRequestResponse(null, user, RequestInterface.status.CANCELLED);
+		    	
+		    	endRequest();
 		    }
 		});	
 	}
@@ -85,6 +98,18 @@ public class WebClient
 		if(headers.containsKey("set-cookie"))
 		{
 			Unirest.setDefaultHeader("Cookie", headers.get("set-cookie"));
+		}
+	}
+	
+	private void endRequest()
+	{
+		try 
+		{
+			Unirest.shutdown();
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
 		}
 	}
 	
