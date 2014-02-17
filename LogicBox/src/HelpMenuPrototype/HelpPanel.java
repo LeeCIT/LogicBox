@@ -43,27 +43,6 @@ public class HelpPanel extends JPanel
 	
 	
 	/**
-	 * Draw the help information onto the panel.
-	 */
-	public void paintComponent( Graphics g ) {	
-		//super.paintComponent( g );
-		
-		//if ( getDescription().length() > (super.getX()) )
-		//{
-		//	String holderOne = getDescription().substring(0, super.getX()-1) + " \n";
-		//	g.drawString(holderOne, 10, 15);
-		//	g.drawString(getDescription(), 10, 25);
-		//}
-		//else
-		//g.drawString(getDescription(), 10, 15);
-		
-		//System.out.println(getX());
-		//System.out.println(getDescription().length());
-	}
-	
-	
-	
-	/**
 	 * Display the description of the specified component.
 	 * @param compDes
 	 */
