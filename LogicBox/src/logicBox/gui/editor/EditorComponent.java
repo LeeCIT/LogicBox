@@ -12,17 +12,25 @@ import logicBox.util.Vec2;
  * 
  * @author Lee Coakley
  */
-public class EditorComponent implements Drawable
+public class EditorComponent
 {
-	private Component        component;
-	private GraphicComActive graphicComActive;
+	protected Component        com;
+	protected GraphicComActive graphic;
 	
-	private Vec2   pos;
-	private double angle;
+	protected Vec2   pos;
+	protected double angle;
 	
 	
 	
-	public void draw( Graphics2D g, Vec2 pos, double angle ) {
-		graphicComActive.draw( g, pos, angle );
+	public EditorComponent( Component com, GraphicComActive gca, Vec2 pos ) {
+		this.com     = com;
+		this.graphic = gca;
+		this.pos     = pos;
+	}
+	
+	
+	
+	public void draw( Graphics2D g ) {
+		graphic.draw( g, pos, angle );
 	}
 }

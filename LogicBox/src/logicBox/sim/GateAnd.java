@@ -7,12 +7,16 @@ package logicBox.sim;
 
 /**
  * A gate which outputs true if all its inputs are true.
+ * 0,0 -> 0
+ * 0,1 -> 0
+ * 1,0 -> 0
+ * 1,1 -> 1
  * @author Lee Coakley
  */
-public class GateAnd extends GateVariableInputs
+public class GateAnd extends GateConfigurableInputs
 {
 	public GateAnd() {
-		super();
+		super( 2 );
 	}
 	
 	
@@ -31,15 +35,9 @@ public class GateAnd extends GateVariableInputs
 			
 		return state;
 	}
-
-
-
-	public void update() {
-		pinOut.setState( evaluate() );
-	}
-
-
-
+	
+	
+	
 	public String getName() {
 		return "And gate";
 	}

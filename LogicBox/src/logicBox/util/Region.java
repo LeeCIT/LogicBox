@@ -30,17 +30,20 @@ public class Region
 	
 	
 	
+	/**
+	 * Create a region based on a component.
+	 * This is intended for drawing: its coordinates are [0,0] -> [w,h]-[1,1]
+	 */
 	public Region( Component com ) {
-		Rectangle rect = com.getBounds();
-		this.tl = new Vec2( rect.getMinX(), rect.getMinY() );
-		this.br = new Vec2( rect.getMaxX(), rect.getMaxY() );
+		this.tl = new Vec2( 0, 0 );
+		this.br = new Vec2( com.getWidth()  - 1,
+						    com.getHeight() - 1 );
 	}
 	
 	
 	
-	public void applyOffset( Vec2 offs ) {
-		tl = tl.add( offs );
-		br = br.add( offs );
+	public Region translate( Vec2 offs ) {
+		return new Region( tl.add(offs), br.add(offs) );
 	}
 	
 	

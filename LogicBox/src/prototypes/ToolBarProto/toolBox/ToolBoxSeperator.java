@@ -1,8 +1,8 @@
-package prototypes.ToolBarProto;
+package prototypes.ToolBarProto.toolBox;
 
 import javax.swing.JToolBar;
 
-public class ToolbarSeperator extends ToolboxItem
+public class ToolBoxSeperator extends ToolboxItem
 {
 	/**
 	 * Add a toolbox separator

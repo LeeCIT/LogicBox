@@ -53,57 +53,91 @@ public class Vec2 extends Point2D implements Serializable
 	
 	
 	public Vec2 add( Vec2 v ) {
-		return new Vec2( x + v.x,
-						 y + v.y );
+		return new Vec2( x + v.x, y + v.y );
 	}
 	
 	
 	
 	public Vec2 subtract( Vec2 v ) {
-		return new Vec2( x - v.x,
-						 y - v.y );
+		return new Vec2( x - v.x, y - v.y );
 	}
 	
 	
 	
 	public Vec2 multiply( Vec2 v ) {
-		return new Vec2( x * v.x,
-						 y * v.y );
+		return new Vec2( x * v.x, y * v.y );
+	}
+	
+	
+	
+	public Vec2 divide( Vec2 v ) {
+		return new Vec2( x / v.x, y / v.y );
 	}
 	
 	
 	
 	public Vec2 modulo( Vec2 v ) {
-		return new Vec2( x % v.x,
-						 y % v.y );
+		return new Vec2( x % v.x, y % v.y );
 	}
 	
 	
 	
 	public Vec2 add( double v ) {
-		return new Vec2( x + v,
-						 y + v );
+		return new Vec2( x + v, y + v );
 	}
 	
 	
 	
 	public Vec2 subtract( double v ) {
-		return new Vec2( x - v,
-						 y - v );
+		return new Vec2( x - v, y - v );
 	}
 	
 	
 	
 	public Vec2 multiply( double v ) {
-		return new Vec2( x * v,
-						 y * v );
+		return new Vec2( x * v, y * v );
+	}
+	
+	
+	
+	public Vec2 divide( double v ) {
+		return new Vec2( x / v, y / v );
 	}
 	
 	
 	
 	public Vec2 modulo( double v ) {
-		return new Vec2( x % v,
-						 y % v );
+		return new Vec2( x % v, y % v );
+	}
+	
+	
+	
+	public Vec2 add( double vx, double vy ) {
+		return new Vec2( x + vx, y + vy );
+	}
+	
+	
+	
+	public Vec2 subtract( double vx, double vy ) {
+		return new Vec2( x - vx, y - vy );
+}
+	
+	
+	
+	public Vec2 multiply( double vx, double vy ) {
+		return new Vec2( x * vx, y * vy );
+	}
+	
+	
+	
+	public Vec2 divide( double vx, double vy ) {
+		return new Vec2( x / vx, y / vy );
+	}
+	
+	
+	
+	public Vec2 modulo( double vx, double vy ) {
+		return new Vec2( x % vx, y % vy );
 	}
 	
 	
@@ -121,6 +155,16 @@ public class Vec2 extends Point2D implements Serializable
 
 	    return new Vec2( x* c  +  y*s,
 	                     x*-s  +  y*c );
+	}
+	
+	
+	
+	public Vec2 rotate( Vec2 uv ) {
+	    double c = uv.x;
+	    double s = uv.y;
+
+	    return new Vec2( x*c  +  y*-s,
+	                     x*s  +  y* c );
 	}
 	
 	

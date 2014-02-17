@@ -22,10 +22,10 @@ public class Camera
 {
 	private Component component;
 	
-	private double zoomRate  = 1.0 + (1.0 / 3.0);
-	private double zoomRange = 8.0;
-	private double zoomMin   = 1.0 / zoomRange;
-	private double zoomMax   = zoomRange;
+	private double zoomRate;
+	private double zoomRange;
+	private double zoomMin;
+	private double zoomMax;
 	private double zoom;
 	
 	private boolean panningActive;
@@ -33,7 +33,7 @@ public class Camera
 	private Vec2    pan;
 	
 	private AffineTransform matrix;
-	private Callback       onTransform;
+	private Callback        onTransform;
 	
 	
 	
@@ -45,10 +45,10 @@ public class Camera
 		zoomRate  = 1.0 + (1.0 / 3.0);
 		zoomRange = 8.0;
 		zoomMin   = 1.0 / zoomRange;
-		zoomMax   = zoomRange;
+		zoomMax   =       zoomRange;
 		zoom      = 1.0;
 		
-		pan       = new Vec2( 0 );
+		pan       = new Region( attachTo ).getCentre();
 		matrix    = new AffineTransform();
 		
 		onTransform = onTransformChange;
@@ -77,7 +77,7 @@ public class Camera
 		Vec2 out = new Vec2();
 		
 		try {
-			AffineTransform inv = matrix.createInverse();
+			AffineTransform inv = matrix.createInverse(); // TODO consider caching this
 			inv.transform( pos, out );
 		}
 		catch (NoninvertibleTransformException ex) {

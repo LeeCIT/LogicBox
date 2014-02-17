@@ -19,6 +19,16 @@ import java.awt.Color;
 public class Geo
 {
 	/**
+	 * Get the base-2 logarithm of x.
+	 * In other words, get which power of 2 the number is.
+	 */
+	public static double log2( double x ) {
+		return Math.log(x) / Math.log(2);
+	}
+	
+	
+	
+	/**
 	 * Linear interpolate from A to B by fraction F.
 	 */
 	public static double lerp( double a, double b, double f ) {
@@ -131,6 +141,16 @@ public class Geo
 	
 	
 	/**
+	 * Snap to nearest multiple of S.
+	 */
+	public static Vec2 snapNear( Vec2 v, double s ) {
+		return new Vec2( roundToMultiple( v.x, s ),
+						 roundToMultiple( v.y, s ) );
+	}
+	
+	
+	
+	/**
 	 * Get the length of a vector squared.
 	 */
 	public static double lengthSqr( Vec2 v ) {
@@ -203,6 +223,19 @@ public class Geo
 		double rads = Math.atan2( d.y, -d.x );
 		double degs = Math.toDegrees( rads );
 		return (degs + 180.0) % 360.0;
+	}
+	
+	
+	
+	/**
+	 * Express an angle as a unit vector.
+	 */
+	public static Vec2 angleToVector( double angle ) {
+		double r = Math.toRadians( angle );
+	    double c = Math.cos( r );
+	    double s = Math.sin( r );
+
+	    return new Vec2( c, -s );
 	}
 	
 	
@@ -296,6 +329,19 @@ public class Geo
 		double sqr       = sqrSync( input, wavelength );
 		double rangeConv = (sqr + 1.0) * 0.5;
 	    return lerp( low, high, rangeConv );
+	}
+	
+	
+	
+	/**
+	 * Compute the scaling factor needed to fit a given rectangle into another while preserving aspect.
+	 */
+	public static double getAspectScaleFactor( Vec2 size, Vec2 fitIn, boolean inside ) {
+		Vec2 ratios = fitIn.divide( size );
+        
+        if (inside)
+        	 return ratios.getSmallest();
+        else return ratios.getBiggest();
 	}
 	
 	

@@ -6,7 +6,7 @@ package logicBox.sim;
 
 
 /**
- * A powered component with pins that can respond to input or provide output.
+ * A powered component with pins that can respond to input and/or provide output.
  * @author Lee Coakley
  */
 public abstract class ComponentActive extends Component implements Updateable, PinIo

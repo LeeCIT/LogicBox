@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui;
+package logicBox.gui.contextMenu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

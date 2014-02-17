@@ -65,6 +65,23 @@ public class Gfx
 	
 	
 	
+	public static void drawRegionRounded( Graphics2D g, Region region, double radius, boolean filled ) {
+		int w = (int) region.getSize().x;
+		int h = (int) region.getSize().y;
+		int r = (int) radius;
+		
+		Gfx.pushMatrix( g );
+			Gfx.translate( g, region.getTopLeft() );
+			
+			if (filled)
+				 g.fillRoundRect( 0,0, w,h, r,r );
+			else g.drawRoundRect( 0,0, w,h, r,r );
+			
+		Gfx.popMatrix( g );
+	}
+	
+	
+	
 	private static void drawThickLineImpl( Graphics2D g, Vec2 a, Vec2 b, double thickness, boolean rounded ) {
 		if (thickness < 2.0) {
 			g.drawLine( (int) a.x, (int) a.y, (int) b.x, (int) b.y );
@@ -121,40 +138,6 @@ public class Gfx
 	
 	
 	
-	/**
-	 * Draw a bezier curve with two control points.
-	 * TODO update to newer drawing method
-	 */
-	public static void drawBezierCubic( Graphics2D g, Vec2 a, Vec2 b, Vec2 c1, Vec2 c2, double thickness ) {
-		int    precision = 64;
-		Vec2   t         = new Vec2( 1.0 / (double)(precision-1) );
-		double tAcc      = 0.0;
-		
-		Vec2 svDelta = t.multiply( c1.subtract(a)  );
-		Vec2 cvDelta = t.multiply( c2.subtract(c1) );
-		Vec2 evDelta = t.multiply( b .subtract(c2) );
-		Vec2 cur     = a  .copy();
-		Vec2 last    = cur.copy();
-	    
-		for (int i=0; i<precision; i++) {
-			drawThickRoundedLine( g, last, cur, thickness );
-			
-			tAcc += t.x;
-			
-			a  = a .add( svDelta );
-			c1 = c1.add( cvDelta );
-			c2 = c2.add( evDelta );
-			
-			last = cur.copy();
-			
-			Vec2 lsc = Geo.lerp( a,   c1,  tAcc );
-			Vec2 lce = Geo.lerp( c1,  b,   tAcc );
-				 cur = Geo.lerp( lsc, lce, tAcc );
-		}
-	}
-	
-	
-	
 	public static void drawGrid( Graphics2D g, Region region, Vec2 offset, Vec2 cellSize, double thickness ) {
 		double left   = region.getLeft()   + offset.x;
 		double right  = region.getRight()  + offset.x;
@@ -166,17 +149,26 @@ public class Gfx
 		Vec2 ly = new Vec2( left,  0      );
 		Vec2 ry = new Vec2( right, 0      );
 		
-		for (double x=left; x<right; x+=cellSize.x) {
-			xt.x = x;
-			xb.x = x;
-			Gfx.drawThickLine( g, xt, xb, thickness );
-		}
+		Stroke  stroke = new BasicStroke( (float) thickness );
+		VecPath poly   = new VecPath();
 		
-		for (double y=top; y<bottom; y+=cellSize.y) {
-			ly.y = y;
-			ry.y = y;
-			Gfx.drawThickLine( g, ly, ry, thickness );
-		}
+		Gfx.pushStrokeAndSet( g, stroke );
+			for (double x=left; x<right; x+=cellSize.x) {
+				xt.x = x;
+				xb.x = x;
+				poly.moveTo( xt );
+				poly.lineTo( xb );
+			}
+			
+			for (double y=top; y<bottom; y+=cellSize.y) {
+				ly.y = y;
+				ry.y = y;
+				poly.moveTo( ly );
+				poly.lineTo( ry );
+			}
+			
+			g.draw( poly );			
+		Gfx.popStroke( g );
 	}
 	
 	
@@ -272,6 +264,7 @@ public class Gfx
 		g.setStroke( strokeStack.pop() );
 	}
 }
+
 
 
 

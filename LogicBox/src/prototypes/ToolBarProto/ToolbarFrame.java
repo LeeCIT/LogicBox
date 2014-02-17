@@ -1,6 +1,8 @@
 package prototypes.ToolBarProto;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.*;
 
@@ -9,6 +11,9 @@ import javax.swing.*;
 import java.util.*;
 
 import logicBox.gui.GuiUtil;
+import logicBox.gui.editor.EditorPanel;
+import prototypes.ToolBarProto.toolBox.Toolbox;
+import prototypes.ToolBarProto.toolBox.ToolboxButtonCallback;
 import prototypes.snappingProto.SnappingPrototype;
 
 public class ToolbarFrame extends JFrame{
@@ -45,26 +50,24 @@ public class ToolbarFrame extends JFrame{
 		other.add(nubs);
 		
 		// Add buttons to the panel so they display correctly. in lines of 3
-		ToolboxPanel pan = new ToolboxPanel(buttons);
-		tool.addCategory("Gates");
-		tool.add(pan);
-		tool.addCategory("Others");
-		ToolboxPanel pans = new ToolboxPanel(other);
-		tool.add(pans);
+		tool.addCategoryWithList("Gates", buttons);
+		tool.addCategoryWithList("Others", other);
 		
+		JPanel editPan = new EditorPanel();
+				
+		tool.addSnapping(frame, 10);
 		
-		add(tool);
-
-		ToolboxUtil.addSnapping(tool, frame);
-		ToolboxUtil.preventToolBoxhorizontalOrientation(tool);
-		
+		//ToolboxUtil.preventToolBoxhorizontalOrientation(tool);
+		tool.setMargin(new Insets(0, 2, 0, 0));
+		add(editPan, BorderLayout.CENTER);
+		add(tool, BorderLayout.WEST);
 
 		// Demo
 		addComponentListener(new SnappingPrototype());
-		setSize(150, 300);
+		setSize(600, 600);
 		setVisible(true);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
+		
 	}
 }
