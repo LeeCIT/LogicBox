@@ -36,6 +36,7 @@ public class GraphicComActive implements Drawable
 	
 	private boolean isSelected;
 	private boolean isHighlighted;
+	private boolean isInverted;
 	private Color   colStroke;
 	private Color   colFill;  
 	
@@ -44,12 +45,12 @@ public class GraphicComActive implements Drawable
 	
 	
 	public GraphicComActive( VecPath polyBody, VecPath polyPins, VecPath polyAux, List<GraphicPinMapping> pinMap ) {
-		this.colStroke = EditorStyle.colComponentStroke;
-		this.colFill   = EditorStyle.colComponentFill;
 		this.polyBody  = polyBody;
 		this.polyPins  = polyPins;
 		this.polyAux   = polyAux;
 		this.pinMap    = pinMap;
+		
+		setSelected( false );
 	}
 	
 	
@@ -120,7 +121,22 @@ public class GraphicComActive implements Drawable
 	
 	
 	
+	public void setInverted( boolean state ) {	
+		isInverted = state;
+	}
+	
+	
+	
+	public boolean isInverted() {
+		return isInverted;
+	}
+	
+	
+	
 	public void draw( Graphics2D g, Vec2 pos, double angle ) {
+		Color colStroke = (isInverted) ? this.colFill   : this.colStroke;
+		Color colFill   = (isInverted) ? this.colStroke : this.colFill;
+		
 		Gfx.pushMatrix( g );
 			Gfx.translate( g, pos   );
 			Gfx.rotate   ( g, angle );
