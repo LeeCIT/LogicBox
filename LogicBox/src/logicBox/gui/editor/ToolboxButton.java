@@ -45,7 +45,7 @@ public class ToolboxButton extends JButton
 	protected void paintComponent( Graphics gx ) {
 		super.paintComponent( gx );
 		
-		double borderFrac = 0.1;
+		double borderFrac = 0.0625;
 		Bbox2  bbox       = gca.computeBbox();
 		Vec2   sizeBbox   = bbox.getSize();
 		Vec2   sizeComp   = new Region(this).getSize();
