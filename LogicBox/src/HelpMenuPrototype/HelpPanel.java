@@ -102,6 +102,17 @@ public class HelpPanel extends JPanel
 	
 	
 	/**
+	 * Return get the JTextArea holding the description
+	 * of the component.
+	 * @return
+	 */
+	public JTextArea getComponentDescriptionArea(){
+		return compDescription;
+	}
+	
+	
+	
+	/**
 	 * Add components to the HelpPanel
 	 */
 	private void addToPanel()
