@@ -102,12 +102,12 @@ public class EditorWorld
 	 * Find all components which overlap the given bounding box.
 	 */
 	public List<EditorComponent> find( Bbox2 bbox ) {
-		List<EditorComponent> list = new ArrayList<>();
+		List<EditorComponent> list = new ArrayList<>(); 
 		
-		// TODO
-		//for (EditorComponent ecom: grid.findPotentials( bbox ))
-		//	if (ecom.graphic.contains( transformToComLocalSpace(pos,ecom) ))
-		//		list.add( ecom );
+		// TODO 
+		for (EditorComponent ecom: grid.findPotentials( bbox ))
+			if (ecom.graphic.overlaps( transformToComLocalSpace(bbox,ecom) ))
+				list.add( ecom );
 		
 		return list;
 	}
@@ -136,8 +136,48 @@ public class EditorWorld
 	
 	// TODO this should be cached when components change, which is relatively infrequent
 	// TODO this won't work for Bbox2... shit.  Gotta implement Poly2 now.
-	// TODO actaully, just make graphics be transformed already.  damn son
+	// TODO actually, just make graphics be transformed already.  damn son
 	private Vec2 transformToComLocalSpace( Vec2 pos, EditorComponent ecom ) {
 		return pos.subtract( ecom.pos ).rotate( -ecom.angle );
 	}
+	
+	
+	
+	// TODO this doesn't work on rotated components.  see above.
+	private Bbox2 transformToComLocalSpace( Bbox2 bbox, EditorComponent ecom ) {
+		return new Bbox2(
+			transformToComLocalSpace( bbox.tl, ecom ),
+			transformToComLocalSpace( bbox.br, ecom )
+		);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
