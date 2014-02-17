@@ -14,6 +14,6 @@ public class ToolboxCategoryPanel extends JPanel
 		super( new MigLayout( "wrap 3" ) );
 		
 		for (ToolboxButton butt: buttons)
-			add( butt, "w 64, h 64" );
+			add( butt, "w 48, h 32" );
 	}
 }

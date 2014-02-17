@@ -37,6 +37,7 @@ public class ToolboxButton extends JButton
 	    
 	    setRolloverEnabled( true );
 	    gca.setInverted( true );
+	    gca.setFillAntialias( true );
 	}
 	
 	
