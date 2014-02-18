@@ -4,6 +4,7 @@
 package logicBox.gui.editor;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Window;
 import java.awt.event.*;
@@ -50,8 +51,20 @@ public class Toolbox extends JToolBar
 	 * @param items
 	 */
 	private void addCategory( String title ) {
-		add( new JLabel( title )      );
+		add( createCategoryLabel( title ) );
 		add( new JToolBar.Separator() );
+	}
+	
+	
+	
+	private JLabel createCategoryLabel( String title ) {
+		JLabel label = new JLabel( title );
+		Font   font  = label.getFont();
+		Font   bold  = new Font( font.getName(), Font.BOLD, font.getSize() );
+		
+		label.setFont( bold );
+		
+		return label;
 	}
 	
 	
@@ -107,14 +120,14 @@ public class Toolbox extends JToolBar
 		JFrame frame = new EditorFrame();
 		
 		ToolboxButton[] buttons = {
-			new ToolboxButton( GraphicGen.generateGateRelay(), null, null ),
-			new ToolboxButton( GraphicGen.generateGateNot(),   null, null ),
-			new ToolboxButton( GraphicGen.generateGateAnd(2),  null, null ),
-			new ToolboxButton( GraphicGen.generateGateNand(2), null, null ),
-			new ToolboxButton( GraphicGen.generateGateOr(2),   null, null ),
-			new ToolboxButton( GraphicGen.generateGateNor(2),  null, null ),
-			new ToolboxButton( GraphicGen.generateGateXor(),   null, null ),
-			new ToolboxButton( GraphicGen.generateGateXnor(),  null, null )
+			new ToolboxButton( GraphicGen.generateGateBuffer(), "test", null ),
+			new ToolboxButton( GraphicGen.generateGateNot(),    "test", null ),
+			new ToolboxButton( GraphicGen.generateGateAnd(2),   "test", null ),
+			new ToolboxButton( GraphicGen.generateGateNand(2),  "test", null ),
+			new ToolboxButton( GraphicGen.generateGateOr(2),    "test", null ),
+			new ToolboxButton( GraphicGen.generateGateNor(2),   "test", null ),
+			new ToolboxButton( GraphicGen.generateGateXor(2),   "test", null ),
+			new ToolboxButton( GraphicGen.generateGateXnor(2),  "test", null )
 		};
 		
 		Toolbox toolbox = new Toolbox( frame );
