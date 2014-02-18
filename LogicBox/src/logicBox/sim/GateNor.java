@@ -34,6 +34,6 @@ public class GateNor extends GateOr
 	
 	
 	public String getName() {
-		return "Nor gate";
+		return "NOR gate";
 	}
 }

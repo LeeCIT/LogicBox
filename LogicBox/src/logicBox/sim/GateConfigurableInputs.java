@@ -6,7 +6,8 @@ package logicBox.sim;
 
 
 /**
- * Gate with user-configurable input pin count.  TODO
+ * Gate with user-configurable input pin count.
+ * TODO other components than gates need configurable inputs.  Mux/demux etc
  * @author Lee Coakley
  */
 public abstract class GateConfigurableInputs extends Gate
