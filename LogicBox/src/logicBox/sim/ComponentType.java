@@ -12,7 +12,7 @@ package logicBox.sim;
  */
 public enum ComponentType
 {
-	gateRelay,
+	gateBuffer,
 	gateNot,
 	gateAnd,
 	gateNand,
@@ -30,11 +30,41 @@ public enum ComponentType
 	
 	displayLed,
 	displaySevenSeg,
+	displayLCD,
 	
 	mux,
 	demux,
 	flipFlopD,
 	
+	comparator,
+	shifter,
+	counter,
+	
+	register,
+	rom,
+	
 	blackBox,
-	blackBoxPin; // Need IoMode and which side of the box they'll be on...
+	blackBoxPin; // Need IoMode and which side of the box they'll be on
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
