@@ -62,8 +62,11 @@ public class Mux extends ComponentActive
 			if (pinSelects.get(i).getState())
 				select |= (1 << i);
 		
-		boolean routeLevel = pinInputs.get( select ).getState();
-		pinOutputs.get(0).setState( routeLevel );
+		boolean state = false;
+		if (select < pinInputs.size())
+			state = pinInputs.get(select).getState();
+		
+		pinOutputs.get(0).setState( state );
 	}
 	
 	
@@ -77,7 +80,7 @@ public class Mux extends ComponentActive
 	
 	
 	public static void main( String[] args ) {
-		Mux mux = new Mux( 8 );
+		Mux mux = new Mux( 4 );
 		
 		// Select pin index 3 (fourth pin)
 		mux.getPinSelects().get(0).setState( true );
