@@ -41,7 +41,7 @@ public class Gfx
 	
 	public static void drawCircle( Graphics2D g, Vec2 pos, double radius, Color col, boolean filled ) {
 		pushColorAndSet( g, col );
-		drawCircle( g, pos, radius, filled );
+			drawCircle( g, pos, radius, filled );
 		popColor( g );
 	}
 	
@@ -76,18 +76,12 @@ public class Gfx
 			if (filled)
 				 g.fillRoundRect( 0,0, w,h, r,r );
 			else g.drawRoundRect( 0,0, w,h, r,r );
-			
 		Gfx.popMatrix( g );
 	}
 	
 	
 	
 	private static void drawThickLineImpl( Graphics2D g, Vec2 a, Vec2 b, double thickness, boolean rounded ) {
-		if (thickness < 2.0) {
-			g.drawLine( (int) a.x, (int) a.y, (int) b.x, (int) b.y );
-			return;
-		}
-		
 		Stroke stroke;
 		
 		if ( ! rounded)
@@ -149,7 +143,7 @@ public class Gfx
 		Vec2 ly = new Vec2( left,  0      );
 		Vec2 ry = new Vec2( right, 0      );
 		
-		Stroke  stroke = new BasicStroke( (float) thickness );
+		Stroke  stroke = (thickness > 1) ? new BasicStroke((float) thickness) : g.getStroke();
 		VecPath poly   = new VecPath();
 		
 		Gfx.pushStrokeAndSet( g, stroke );
@@ -219,8 +213,7 @@ public class Gfx
 	 * Enable/disable sub-pixel precision when rendering.
 	 */
 	public static void setAntialiasingState( Graphics2D g, boolean state ) {
-		g.setRenderingHint(
-			RenderingHints.KEY_ANTIALIASING,
+		g.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
 			state ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF
 		);
 	}
