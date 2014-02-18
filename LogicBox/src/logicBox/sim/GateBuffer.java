@@ -11,9 +11,9 @@ package logicBox.sim;
  * 1 -> 1
  * @author Lee Coakley
  */
-public class GateRelay extends Gate
+public class GateBuffer extends Gate
 {
-	public GateRelay() {
+	public GateBuffer() {
 		super( 1 );
 	}
 	
@@ -22,10 +22,10 @@ public class GateRelay extends Gate
 	public boolean evaluate() {
 		return getPinInputs().get(0).getState();
 	}
-
-
-
+	
+	
+	
 	public String getName() {
-		return "Relay gate";
+		return "Buffer";
 	}
 }
