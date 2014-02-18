@@ -216,7 +216,11 @@ public class GraphicComActive implements Drawable
 	 */
 	public boolean overlaps( Bbox2 bbox ) {
 		Vec2 size = bbox.getSize();
-		return polyBody.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y );
+		
+		return (polyAux != null
+			&&  polyAux.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ))
+			|| polyBody.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y )
+			|| polyPins.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ); 
 	}
 	
 	
