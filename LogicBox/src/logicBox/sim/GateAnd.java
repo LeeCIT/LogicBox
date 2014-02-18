@@ -39,6 +39,6 @@ public class GateAnd extends GateConfigurableInputs
 	
 	
 	public String getName() {
-		return "And gate";
+		return "AND gate";
 	}
 }

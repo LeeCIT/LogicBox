@@ -16,7 +16,13 @@ package logicBox.sim;
 public class GateXnor extends GateXor
 {
 	public GateXnor() {
-		super();
+		super( 2 );
+	}
+	
+	
+	
+	public GateXnor( int inputPinCount ) {
+		super( inputPinCount );
 	}
 	
 	
@@ -28,6 +34,6 @@ public class GateXnor extends GateXor
 	
 	
 	public String getName() {
-		return "Xnor gate";
+		return "XNOR gate";
 	}
 }

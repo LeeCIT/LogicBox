@@ -39,6 +39,6 @@ public class GateOr extends GateConfigurableInputs
 	
 	
 	public String getName() {
-		return "Or gate";
+		return "OR gate";
 	}
 }

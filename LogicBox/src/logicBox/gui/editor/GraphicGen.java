@@ -22,14 +22,14 @@ import logicBox.util.Vec2;
  */
 public class GraphicGen
 {
-	public static GraphicComActive generateGateRelay() {
-		return generateGateRelay( false );
+	public static GraphicComActive generateGateBuffer() {
+		return generateGateBuffer( false );
 	}
 	
 	
 	
 	public static GraphicComActive generateGateNot() {
-		return generateGateRelay( true );
+		return generateGateBuffer( true );
 	}
 	
 	
@@ -58,14 +58,14 @@ public class GraphicGen
 	
 	
 	
-	public static GraphicComActive generateGateXor() {
-		return generateGateOr( 2, true, false );
+	public static GraphicComActive generateGateXor( int pinCount ) {
+		return generateGateOr( pinCount, true, false );
 	}
 	
 	
 	
-	public static GraphicComActive generateGateXnor() {
-		return generateGateOr( 2, true, true );
+	public static GraphicComActive generateGateXnor( int pinCount ) {
+		return generateGateOr( pinCount, true, true );
 	}
 	
 	
@@ -79,7 +79,7 @@ public class GraphicGen
 	
 	
 	
-	private static GraphicComActive generateGateRelay( boolean invert ) {
+	private static GraphicComActive generateGateBuffer( boolean invert ) {
 		Region r            = getBaseRegion();
 		Vec2   size         = r.getSize();
 		double pinLength    = size.x * pinLenFrac;

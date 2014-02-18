@@ -34,6 +34,6 @@ public class GateNand extends GateAnd
 	
 	
 	public String getName() {
-		return "Nand gate";
+		return "NAND gate";
 	}
 }

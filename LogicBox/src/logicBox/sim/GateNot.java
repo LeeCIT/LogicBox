@@ -11,7 +11,7 @@ package logicBox.sim;
  * 1 -> 0
  * @author Lee Coakley
  */
-public class GateNot extends GateRelay
+public class GateNot extends GateBuffer
 {
 	public GateNot() {
 		super();
@@ -26,6 +26,6 @@ public class GateNot extends GateRelay
 
 
 	public String getName() {
-		return "Not gate";
+		return "NOT gate";
 	}
 }
