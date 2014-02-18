@@ -1,7 +1,9 @@
 
 
 
-package logicBox.sim;
+package logicBox.sim.component;
+
+import logicBox.sim.Pin;
 
 
 

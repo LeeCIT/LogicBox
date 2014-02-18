@@ -3,7 +3,7 @@
 
 package logicBox.gui.editor;
 import java.awt.Graphics2D;
-import logicBox.sim.Component;
+import logicBox.sim.component.Component;
 import logicBox.util.Vec2;
 
 

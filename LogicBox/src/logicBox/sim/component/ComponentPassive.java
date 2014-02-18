@@ -1,7 +1,8 @@
 
 
 
-package logicBox.sim;
+package logicBox.sim.component;
+
 
 
 

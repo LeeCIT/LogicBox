@@ -1,7 +1,10 @@
 
 
 
-package logicBox.sim;
+package logicBox.sim.component;
+
+import logicBox.sim.PinIo;
+import logicBox.sim.Updateable;
 
 
 

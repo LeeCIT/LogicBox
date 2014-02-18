@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.Map;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
-import logicBox.sim.ComponentType;
+import logicBox.sim.component.ComponentType;
 
 
 

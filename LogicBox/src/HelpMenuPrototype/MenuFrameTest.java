@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JFrame;
 import net.miginfocom.swing.MigLayout;
-import logicBox.sim.ComponentType;
+import logicBox.sim.component.ComponentType;
 import logicBox.util.Util;
 
 

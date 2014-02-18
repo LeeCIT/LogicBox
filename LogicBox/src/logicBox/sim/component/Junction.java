@@ -1,9 +1,11 @@
 
 
 
-package logicBox.sim;
+package logicBox.sim.component;
 import java.util.List;
 import java.util.ArrayList;
+import logicBox.sim.Pin;
+import logicBox.sim.PinIoMode;
 
 
 

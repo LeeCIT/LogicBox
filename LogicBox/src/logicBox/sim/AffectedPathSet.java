@@ -7,6 +7,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import logicBox.sim.component.Component;
+import logicBox.sim.component.Junction;
+import logicBox.sim.component.Stateful;
+import logicBox.sim.component.Trace;
 
 
 
