@@ -26,4 +26,10 @@ public class DisplayLed extends Display
 	public String getName() {
 		return "LED display";
 	}
+	
+	
+	
+	public void update() {
+		// Do nothing
+	}
 }

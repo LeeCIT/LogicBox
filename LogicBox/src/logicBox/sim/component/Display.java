@@ -39,10 +39,4 @@ public abstract class Display extends ComponentActive
 	public List<Pin> getPinOutputs() {
 		return new ArrayList<>();
 	}
-	
-	
-	
-	public void update() {
-		// Do nothing
-	}
 }
