@@ -15,13 +15,13 @@ public class McqPanel extends JPanel
 	
 	
 	
-	private ArrayList<String> questions;
+	private ArrayList<McqQuestions> mcqList;
 	
 	
 	
-	public McqPanel( ArrayList<String> questions ) {
+	public McqPanel( ArrayList<McqQuestions> mcqList ) {
 		super();
-		this.questions = questions;
+		this.mcqList = mcqList;
 		
 	}
 	
