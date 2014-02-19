@@ -26,4 +26,21 @@ public class SimUtil
 		for (int i=0; i<count; i++)
 			list.add( new Pin(com,mode) );
 	}
+	
+	
+	
+	/**
+	 * Interpret a list of pins as an integer based on their states.
+	 * The size of the list must be less than 32.
+	 * The LSB is the pin with the lowest index, the MSB the highest.
+	 */
+	public static int decodeToInt( List<Pin> pins ) {
+		int value = 0;
+		
+		for (int i=0; i<pins.size(); i++)
+			if (pins.get(i).getState())
+				value |= (1 << i);
+		
+		return value;
+	}
 }
