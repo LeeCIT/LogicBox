@@ -15,7 +15,7 @@ import logicBox.sim.Pin;
  * 1,1 -> 1
  * @author Lee Coakley
  */
-public class GateOr extends GateConfigurableInputs
+public class GateOr extends Gate
 {
 	public GateOr() {
 		super( 2 );
