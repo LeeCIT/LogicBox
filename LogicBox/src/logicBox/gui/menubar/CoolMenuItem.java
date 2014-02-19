@@ -19,6 +19,15 @@ public class CoolMenuItem extends JMenuItem
 	private String heading;
 	private boolean isSeparator;
 	
+	/**
+	 * Make a item for the menu bar. If it is a separator leave all others null. If it is a main heading allow 
+	 * @param title			The heading that appears under the main one
+	 * @param heading		The main heading, to use leave others null
+	 * @param callback		The action the item will take
+	 * @param mnemonic		The mnemonic of the item
+	 * @param icon			A icon to display if necessary
+	 * @param isSeparator	To say it is a separator leave other sections null
+	 */
 	public CoolMenuItem (String title, String heading, final Callback callback, char mnemonic, Icon icon, boolean isSeparator) {
 		super();
 		
