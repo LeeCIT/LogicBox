@@ -12,7 +12,7 @@ import logicBox.sim.component.Component;
  * Utility methods for the simulator.
  * @author Lee Coakley
  */
-public class SimUtil
+public abstract class SimUtil
 {
 	public static <T> List<T> wrapInList( T item ) {
 		List<T> list = new ArrayList<T>();

@@ -7,8 +7,6 @@ import java.awt.Color;
 
 
 
-
-
 /**
  * Provides advanced geometric and mathematical utility functions.
  * Coordinate system used works as follows:
@@ -16,7 +14,7 @@ import java.awt.Color;
  * East is 0 degrees, increases anticlockwise
  * @author Lee Coakley
  */
-public class Geo
+public abstract class Geo
 {
 	/**
 	 * Get the base-2 logarithm of x.

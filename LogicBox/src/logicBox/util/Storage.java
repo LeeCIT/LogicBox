@@ -13,7 +13,7 @@ import java.util.List;
  * Provides IO utility functions.
  * @author Lee Coakley
  */
-public class Storage
+public abstract class Storage
 {
 	/**
 	 * Read a file line-by-line into a list.
