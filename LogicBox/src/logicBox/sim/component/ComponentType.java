@@ -32,6 +32,7 @@ public enum ComponentType
 	displaySevenSeg,
 	displayLCD,
 	
+	decoder,
 	mux,
 	demux,
 	flipFlopD,
