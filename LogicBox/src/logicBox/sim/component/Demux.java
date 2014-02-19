@@ -58,12 +58,15 @@ public class Demux extends Plexer
 		// Now output index 3 should be true
 		demux.update();
 		
+		System.out.println();
 		for (Pin pin: demux.getPinSelects())
 			System.out.println( "sel: " + pin.getState() );
 		
+		System.out.println();
 		for (Pin pin: demux.getPinInputs())
 			System.out.println( "in : " + pin.getState() );		
 		
+		System.out.println();
 		for (Pin pin: demux.getPinOutputs())
 			System.out.println( "out: " + pin.getState() );
 	}
