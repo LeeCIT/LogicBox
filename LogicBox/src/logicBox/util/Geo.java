@@ -415,6 +415,18 @@ public class Geo
 	public static boolean isPowerOfTwo( int x ) {
 		return (x & (x-1)) == 0;
 	}
+
+
+
+	/**
+	 * Get a random integer in the given half-open range.
+	 * @param low
+	 * @param highex (exclusive)
+	 * @return int
+	 */
+	public static int randomIntRange( int low, int highex ) {
+		return low + ((int) Math.floor(Math.random() * (highex-low)));
+	}
 }
 
 

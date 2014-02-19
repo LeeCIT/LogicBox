@@ -12,7 +12,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 import net.miginfocom.swing.MigLayout;
 import logicBox.sim.component.ComponentType;
-import logicBox.util.Util;
+import logicBox.util.Geo;
 
 
 
@@ -39,7 +39,7 @@ public class MenuFrameTest extends JFrame
 	
 	private static ComponentType getRandomComp() {
 		ComponentType[] components = ComponentType.values();
-		int random = Util.randomIntRange(0, components.length);
+		int random = Geo.randomIntRange(0, components.length);
 		return components[random];
 	}
 
