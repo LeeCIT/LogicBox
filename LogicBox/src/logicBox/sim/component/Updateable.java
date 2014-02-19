@@ -1,7 +1,7 @@
 
 
 
-package logicBox.sim;
+package logicBox.sim.component;
 
 
 
@@ -11,7 +11,7 @@ package logicBox.sim;
  */
 public interface Updateable {
 	/**
-	 * Update output pin states based on inputs.
+	 * Update internal state and output pin states in response to a simulation update.
 	 */
 	public void update();
 }

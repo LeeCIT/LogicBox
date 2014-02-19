@@ -4,7 +4,6 @@
 package logicBox.sim.component;
 
 import logicBox.sim.PinIo;
-import logicBox.sim.Updateable;
 
 
 

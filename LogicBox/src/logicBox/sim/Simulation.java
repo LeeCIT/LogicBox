@@ -8,6 +8,7 @@ import logicBox.sim.component.Component;
 import logicBox.sim.component.Junction;
 import logicBox.sim.component.Source;
 import logicBox.sim.component.Trace;
+import logicBox.sim.component.Updateable;
 
 
 
