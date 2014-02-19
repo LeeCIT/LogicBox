@@ -3,73 +3,35 @@
 
 package logicBox.sim.component;
 
-import java.util.ArrayList;
-import java.util.List;
 import logicBox.sim.Pin;
-import logicBox.sim.PinIoMode;
-import logicBox.sim.SimUtil;
-import logicBox.util.Geo;
+
 
 
 /**
  * An N-to-1 multiplexer.
  * @author Lee Coakley
  */
-public class Mux extends ComponentActive
+public class Mux extends Plexer
 {
-	private List<Pin> pinInputs;
-	private List<Pin> pinSelects;
-	private List<Pin> pinOutputs;
-	
-	
-	
 	public Mux( int inputPinCount ) {
 		super();
-		pinInputs  = new ArrayList<>();
-		pinSelects = new ArrayList<>();
-		pinOutputs = new ArrayList<>();
-		
-		int selectPinCount = (int) Math.ceil( Geo.log2(inputPinCount) );
-		
-		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  inputPinCount  );
-		SimUtil.addPins( pinSelects, this, PinIoMode.input,  selectPinCount );
-		SimUtil.addPins( pinOutputs, this, PinIoMode.output, 1              );
+		createPins( inputPinCount, computeSelectPinCount(inputPinCount), 1 );
 	}
 	
 	
 	
-	public List<Pin> getPinInputs() {
-		return pinInputs;
+	protected Pin getSourcePin() {
+		int select = decodeSelectPins();
+		
+		if (select < getPinInputCount())
+			 return getPinInputs().get( select );
+		else return null;
 	}
 	
 	
 	
-	public List<Pin> getPinSelects() {
-		return pinSelects;
-	}
-	
-	
-	
-	public List<Pin> getPinOutputs() {
-		return pinOutputs;
-	}
-	
-	
-	
-	public void update() {
-		for (Pin pin: pinOutputs)
-			pin.setState( false );
-		
-		int select = 0;
-		for (int i=0; i<pinSelects.size(); i++)
-			if (pinSelects.get(i).getState())
-				select |= (1 << i);
-		
-		boolean state = false;
-		if (select < pinInputs.size())
-			state = pinInputs.get(select).getState();
-		
-		pinOutputs.get(0).setState( state );
+	protected Pin getDestinationPin() {
+		return pinOutputs.get( 0 );
 	}
 	
 	
@@ -85,21 +47,26 @@ public class Mux extends ComponentActive
 	public static void main( String[] args ) {
 		Mux mux = new Mux( 4 );
 		
+		System.out.println( mux.getName() );
+		
 		// Select pin index 3 (fourth pin)
 		mux.getPinSelects().get(0).setState( true );
 		mux.getPinSelects().get(1).setState( true );
 		
 		mux.getPinInputs().get(3).setState( true );
 		
-		// Now output should be true
+		// Now output index 3 should be true
 		mux.update();
 		
+		System.out.println();
 		for (Pin pin: mux.getPinSelects())
 			System.out.println( "sel: " + pin.getState() );
 		
+		System.out.println();
 		for (Pin pin: mux.getPinInputs())
 			System.out.println( "in : " + pin.getState() );		
 		
+		System.out.println();
 		for (Pin pin: mux.getPinOutputs())
 			System.out.println( "out: " + pin.getState() );
 	}
