@@ -4,6 +4,11 @@
 package logicBox.util;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 
 
 
@@ -424,6 +429,56 @@ public abstract class Geo
 	 */
 	public static int randomIntRange( int low, int highex ) {
 		return low + ((int) Math.floor(Math.random() * (highex-low)));
+	}
+	
+	
+	
+	/**
+	 * Find the least member of a sequence according to a user-defined comparator.
+	 * See main() below for an example usage. 
+	 * @param iterable Iterable<T>
+	 * @return T, or null if the sequence is empty.
+	 */
+	public static <T> T findLeast( Iterable<T> iterable, Comparator<T> comp ) {
+		Iterator<T> iter = iterable.iterator();
+		
+		if ( ! iter.hasNext())
+			return null;
+		
+		T best = iter.next();
+		
+		while (iter.hasNext()) {
+			T cur = iter.next();
+			
+			if (comp.compare(cur,best) < 0)
+				best = cur;
+		}
+		
+		return best;
+	}
+	
+	
+	
+	
+	
+	public static void main( String[] args ) {
+		List<Vec2> otherPoints = new ArrayList<>();
+		otherPoints.add( new Vec2(10,0) );
+		otherPoints.add( new Vec2(20,0) );
+		otherPoints.add( new Vec2(30,0) );
+		otherPoints.add( new Vec2(40,0) );
+		
+		final Vec2 point = new Vec2( 21, 0 );
+		
+		Vec2 closest = findLeast( otherPoints, new Comparator<Vec2>() {
+			public int compare( Vec2 a, Vec2 b ) {
+				double aDist = Geo.distanceSqr( a, point );
+				double bDist = Geo.distanceSqr( b, point );
+				return (aDist<bDist) ? -1 : +1;
+			}
+		});
+		
+		System.out.println( "Closest to " + point + " is " + closest );
 	}
 }
 
