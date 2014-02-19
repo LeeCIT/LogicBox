@@ -2,14 +2,10 @@
 package prototypes.menuBar;
 
 import java.awt.BorderLayout;
-import java.awt.Menu;
-import java.awt.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.*;
-
-import logicBox.gui.GuiUtil;
+import logicBox.gui.GUI;
 import prototypes.snappingProto.SnappingPrototype;
 
 /**
@@ -59,7 +55,7 @@ public class CoolMenuBar extends JMenuBar
 
 
 	public static void main(String[] args) {
-		GuiUtil.setNativeLookAndFeel();
+		GUI.setNativeStyle();
 		JFrame   frame = new JFrame("Demo");					
 		
 		// Make first then add list with the headings and sub headings

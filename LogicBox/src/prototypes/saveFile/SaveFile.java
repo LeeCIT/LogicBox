@@ -1,17 +1,13 @@
+
 package prototypes.saveFile;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
+import java.awt.event.*;
+import java.io.*;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import logicBox.gui.GuiUtil;
+import logicBox.gui.GUI;
+
 
 
 public class SaveFile {
@@ -48,8 +44,7 @@ public class SaveFile {
 
 
 	public static void main(String[] args) {
-
-		GuiUtil.setNativeLookAndFeel();
+		GUI.setNativeStyle();
 		final JFrame frame = new JFrame("Save file demo");
 		JButton saveFile   = new JButton("Save file");
 
