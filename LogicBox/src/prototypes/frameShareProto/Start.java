@@ -1,15 +1,13 @@
 package prototypes.frameShareProto;
 
-import logicBox.gui.GuiUtil;
+import logicBox.gui.GUI;
+
 
 public class Start {
 	
 	
 	public static void main(String[] args) {
-		
-		
-		GuiUtil.setNativeLookAndFeel();
-		
+		GUI.setNativeStyle();		
 		new MainFrame();
 		new ToolBar();
 		

@@ -3,11 +3,10 @@ package prototypes.fileOpen;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import logicBox.gui.GUI;
 
-import logicBox.gui.GuiUtil;
 
 public class FileOpen {
 	
@@ -67,7 +66,7 @@ public class FileOpen {
 
 	public static void main(String[] args) {
 		
-		GuiUtil.setNativeLookAndFeel();
+		GUI.setNativeStyle();
 		
 		final JFrame frame = new JFrame("Open file demo");
 

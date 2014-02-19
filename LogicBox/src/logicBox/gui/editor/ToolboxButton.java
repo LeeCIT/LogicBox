@@ -23,20 +23,25 @@ import logicBox.util.Vec2;
 public class ToolboxButton extends JButton
 {
 	private GraphicComActive gca;
-	private String           tooltip;
 	private ContextMenu      contextMenu;
 	
 	
 	
+	/**
+	 * Create a toolbox button.
+	 * Note that the Graphic is modified by the button.  Make a fresh copy.
+	 */
 	public ToolboxButton( GraphicComActive gca, String tooltip, ContextMenu contextMenu ) {
 		super();
 		
 		this.gca         = gca;
-		this.tooltip     = tooltip;
 		this.contextMenu = contextMenu;
+		
+		setToolTipText( tooltip );
 	    
 	    setRolloverEnabled( true );
 	    gca.setInverted( true );
+	    gca.setFillAntialias( true );
 	}
 	
 	
@@ -44,13 +49,15 @@ public class ToolboxButton extends JButton
 	protected void paintComponent( Graphics gx ) {
 		super.paintComponent( gx );
 		
-		double borderFrac = 0.1;
-		Bbox2  bbox       = gca.computeBbox();
-		Vec2   sizeBbox   = bbox.getSize();
-		Vec2   sizeComp   = new Region(this).getSize();
-		double scaleMul   = Geo.getAspectScaleFactor( sizeBbox, sizeComp, true );
-		Vec2   scale      = new Vec2( scaleMul * (1.0 - borderFrac) );
-		Vec2   trans      = sizeComp.multiply( 0.5 );
+		boolean armed      = getModel().isArmed();
+		boolean rollover   = getModel().isRollover();
+		double  borderFrac = 0.0625;
+		Bbox2   bbox       = gca.computeBbox();
+		Vec2    sizeBbox   = bbox.getSize();
+		Vec2    sizeComp   = new Region(this).getSize();
+		double  scaleMul   = Geo.getAspectScaleFactor( sizeBbox, sizeComp, true );
+		Vec2    scale      = new Vec2( scaleMul * (1.0 - borderFrac) );
+		Vec2    trans      = sizeComp.multiply( 0.5 ).add( armed ? 1 : 0 );
 		
 		Graphics2D g = (Graphics2D) gx;
 		
@@ -59,10 +66,9 @@ public class ToolboxButton extends JButton
 			Gfx.scale    ( g, scale.multiply( 1.0 - borderFrac ) );
 			
 			Gfx.pushAntialiasingStateAndSet( g, true );
-				gca.setHighlighted( getModel().isRollover() );
+				gca.setHighlighted( rollover );
 				gca.draw( g, new Vec2(0), 0 );
 			Gfx.popAntialiasingState( g );
-			
 		Gfx.popMatrix( g );
 	}
 }

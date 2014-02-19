@@ -37,6 +37,7 @@ public class GraphicComActive implements Drawable
 	private boolean isSelected;
 	private boolean isHighlighted;
 	private boolean isInverted;
+	private boolean isFillAntialised;
 	private Color   colStroke;
 	private Color   colFill;  
 	
@@ -105,8 +106,8 @@ public class GraphicComActive implements Drawable
 		isSelected = state;
 		
 		if (isSelected) {
-			colStroke = EditorStyle.makeSelectedCol( EditorStyle.colComponentStroke );
-			colFill   = EditorStyle.makeSelectedCol( EditorStyle.colComponentFill   );
+			colStroke = EditorStyle.colSelectionStroke;
+			colFill   = EditorStyle.colSelectionFill;
 		} else {
 			colStroke = EditorStyle.colComponentStroke;
 			colFill   = EditorStyle.colComponentFill;
@@ -133,6 +134,12 @@ public class GraphicComActive implements Drawable
 	
 	
 	
+	public void setFillAntialias( boolean state ) {
+		this.isFillAntialised = state;
+	}
+	
+	
+	
 	public void draw( Graphics2D g, Vec2 pos, double angle ) {
 		Color colStroke = (isInverted) ? this.colFill   : this.colStroke;
 		Color colFill   = (isInverted) ? this.colStroke : this.colFill;
@@ -151,7 +158,7 @@ public class GraphicComActive implements Drawable
 					
 				
 				Gfx.pushColorAndSet( g, colFill );
-					Gfx.pushAntialiasingStateAndSet( g, false );
+					Gfx.pushAntialiasingStateAndSet( g, isFillAntialised );
 						g.fill( polyBody );
 					Gfx.popAntialiasingState( g );
 				Gfx.popColor( g );
@@ -164,7 +171,7 @@ public class GraphicComActive implements Drawable
 				
 				if (hasBubble) {
 					Gfx.pushColorAndSet( g, colFill );
-						Gfx.pushAntialiasingStateAndSet( g, false );
+						Gfx.pushAntialiasingStateAndSet( g, isFillAntialised );
 							Gfx.drawCircle( g, bubblePos, bubbleRadius, true );
 						Gfx.popAntialiasingState( g );
 					Gfx.popColor( g );
@@ -209,7 +216,11 @@ public class GraphicComActive implements Drawable
 	 */
 	public boolean overlaps( Bbox2 bbox ) {
 		Vec2 size = bbox.getSize();
-		return polyBody.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y );
+		
+		return (polyAux != null
+			&&  polyAux.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ))
+			|| polyBody.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y )
+			|| polyPins.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ); 
 	}
 	
 	

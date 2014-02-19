@@ -9,7 +9,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import logicBox.sim.ComponentType;
+import logicBox.sim.component.ComponentType;
 import net.miginfocom.swing.MigLayout;
 
 

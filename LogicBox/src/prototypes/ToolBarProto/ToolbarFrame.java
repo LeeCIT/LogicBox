@@ -1,16 +1,10 @@
 package prototypes.ToolBarProto;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Insets;
-import java.awt.Window;
-import java.awt.event.*;
-
 import javax.swing.*;
-
 import java.util.*;
-
-import logicBox.gui.GuiUtil;
+import logicBox.gui.GUI;
 import logicBox.gui.editor.EditorPanel;
 import prototypes.ToolBarProto.toolBox.Toolbox;
 import prototypes.ToolBarProto.toolBox.ToolboxButtonCallback;
@@ -21,7 +15,7 @@ public class ToolbarFrame extends JFrame{
 
 
 	public ToolbarFrame() {
-		GuiUtil.setNativeLookAndFeel();
+		GUI.setNativeStyle();
 		
 		
 		Toolbox tool = new Toolbox("LogicBox Toolbox", JToolBar.VERTICAL);

@@ -3,6 +3,10 @@
 
 package logicBox.sim;
 
+import logicBox.sim.component.Component;
+import logicBox.sim.component.ComponentPassive;
+import logicBox.sim.component.Trace;
+
 
 
 /**

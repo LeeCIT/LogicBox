@@ -26,7 +26,7 @@ public class EditorStyle
 	public static Color colHighlightStroke = new Color( 245, 238, 207 );
 	public static Color colHighlightFill   = new Color( 183, 117, 126 );
 	public static Color colSelectionStroke = new Color(  78, 185, 252 );
-	public static Color colSelectionFill   = new Color(  78, 185, 252 );
+	public static Color colSelectionFill   = new Color(   0,  95, 192 );
 	
 	public static double gridThickness = 3.0;
 	public static float  compThickness = 5.0f;
@@ -35,12 +35,6 @@ public class EditorStyle
 	public static Stroke strokePin    = new BasicStroke( compThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
 	public static Stroke strokeTrace  = new BasicStroke( compThickness, BasicStroke.CAP_BUTT,  BasicStroke.JOIN_ROUND );
 	public static Stroke strokeBubble = new BasicStroke( compThickness * 0.5f );
-	
-	
-	
-	public static Color makeSelectedCol( Color c ) {
-		return Geo.lerp( c, colSelectionStroke, 0.5 ); // TODO make nicer
-	}
 	
 	
 	

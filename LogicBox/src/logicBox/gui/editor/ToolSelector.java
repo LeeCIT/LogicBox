@@ -157,7 +157,10 @@ public class ToolSelector extends Tool
 	
 	
 	
-	private void dragComplete() {	
+	private void dragComplete() {
+		for (EditorComponent ecom: world.find( getDragBbox() ))
+			ecom.graphic.setSelected( true );
+		
 		dragInitiated = false;
 		dragging      = false;
 		panel.setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
