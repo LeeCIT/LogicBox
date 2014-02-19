@@ -24,7 +24,7 @@ public abstract class Plexer extends ComponentActive
 	
 	
 	
-	public Plexer(  ) {
+	public Plexer() {
 		super();
 		pinInputs  = new ArrayList<>();
 		pinSelects = new ArrayList<>();
@@ -88,12 +88,6 @@ public abstract class Plexer extends ComponentActive
 	
 	
 	protected int decodeSelectPins() {
-		int select = 0;
-		
-		for (int i=0; i<pinSelects.size(); i++)
-			if (pinSelects.get(i).getState())
-				select |= (1 << i);
-		
-		return select;
+		return SimUtil.decodeToInt( pinSelects );
 	}
 }
