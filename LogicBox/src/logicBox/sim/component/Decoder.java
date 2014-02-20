@@ -9,6 +9,12 @@ import logicBox.sim.SimUtil;
 
 
 
+/**
+ * Decoder.
+ * Activates one output pin corresponding to the unsigned integer bit-pattern formed by the inputs.
+ * LSB is pin 0.
+ * @author Lee Coakley
+ */
 public class Decoder extends ComponentActive
 {
 	private List<Pin> pinInputs;
