@@ -57,15 +57,10 @@ public class McqPanel extends JPanel
 		
 		
 		
-		//Populate the ArrayList with new RadioButtons.
-		for ( int i = 0; i < answers.size(); i++ ){
-			buttons.add( new JRadioButton() );
-		}
-		
-		
 		//Display each answer with a radio button across from it.
-		for ( String ans: answers){
+		for ( String ans: answers ) {
 			add ( new JLabel(ans) );
+			buttons.add( new JRadioButton() );
 			options.add( buttons.get(j) );
 			add ( buttons.get(j), "wrap" );
 			j++;
