@@ -20,18 +20,26 @@ public class McqPanel extends JPanel
 	
 	
 	private ArrayList<String> answers;
+	private ArrayList<JRadioButton> buttons = new ArrayList<>();
 	private String correctAnswer, question;
-	private ButtonGroup options;
+	private ButtonGroup options = new ButtonGroup();
+	
 	
 	
 	public McqPanel( ArrayList<String> answers, String correctAnswer, String question ) {
+		
 		super();
+		
+		
 		setLayout( new MigLayout() );
 		setSize(300, 300);
 		setBorder(new LineBorder(new Color(0, 0, 0)));
+		
+		
 		this.answers = answers;
 		this.correctAnswer = correctAnswer;
 		this.question = question;
+		
 		
 		displayQuestion();
 	}
@@ -43,12 +51,24 @@ public class McqPanel extends JPanel
 	 */
 	private void displayQuestion() {
 		
+		int j = 0;
+		
 		add( new JLabel(question), "wrap" ); //Add the question to the panel.
 		
-		for ( String ans: answers)
-		{
+		
+		
+		//Populate the ArrayList with new RadioButtons.
+		for ( int i = 0; i < answers.size(); i++ ){
+			buttons.add( new JRadioButton() );
+		}
+		
+		
+		//Display each answer with a radio button across from it.
+		for ( String ans: answers){
 			add ( new JLabel(ans) );
-			add ( new JRadioButton(), "wrap" );
+			options.add( buttons.get(j) );
+			add ( buttons.get(j), "wrap" );
+			j++;
 		}
 		
 	}
