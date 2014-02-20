@@ -5,6 +5,8 @@ package logicBox.sim;
 import java.util.ArrayList;
 import java.util.List;
 import logicBox.sim.component.Component;
+import logicBox.sim.component.Pin;
+import logicBox.sim.component.PinIoMode;
 
 
 
@@ -31,16 +33,28 @@ public abstract class SimUtil
 	
 	/**
 	 * Interpret a list of pins as an integer based on their states.
-	 * The size of the list must be less than 32.
+	 * There must be <= 32 pins or the result will be truncated.
 	 * The LSB is the pin with the lowest index, the MSB the highest.
 	 */
-	public static int decodeToInt( List<Pin> pins ) {
+	public static int decodePinsToInt( List<Pin> pins ) {
 		int value = 0;
 		
-		for (int i=0; i<pins.size(); i++)
+		for (int i=0; i<pins.size() && i<32; i++)
 			if (pins.get(i).getState())
 				value |= (1 << i);
 		
 		return value;
+	}
+	
+	
+	
+	/**
+	 * Encode an integer onto a set of pins.
+	 * There must be <= 32 pins, or the result will be truncated.
+	 * The LSB is assigned to pins[0].
+	 */
+	public static void encodeIntToPins( int x, List<Pin> pins ) {	
+		for (int i=0; i<pins.size(); i++)
+			pins.get(i).setState( i<32 && (((x>>i) & 1) != 0) );
 	}
 }
