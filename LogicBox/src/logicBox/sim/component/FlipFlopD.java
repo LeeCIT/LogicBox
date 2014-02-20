@@ -13,7 +13,7 @@ import logicBox.sim.SimUtil;
  * D-type flip-flop.
  * A 1-bit memory with inputs [D, E] and outputs [Q, !Q].
  * When E is high D determines Q.
- * When E is low Q is read-only.
+ * When E is low the component's state does not change.
  * !Q is always the inverse of Q. 
  * @author Lee Coakley
  */
