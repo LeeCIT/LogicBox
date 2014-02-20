@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import logicBox.sim.component.Component;
 import logicBox.sim.component.Junction;
+import logicBox.sim.component.Pin;
+import logicBox.sim.component.PinIo;
 import logicBox.sim.component.Source;
 import logicBox.sim.component.Trace;
 import logicBox.sim.component.Updateable;

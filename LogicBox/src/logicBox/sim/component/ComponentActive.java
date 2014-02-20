@@ -3,8 +3,6 @@
 
 package logicBox.sim.component;
 
-import logicBox.sim.PinIo;
-
 
 
 /**

@@ -4,8 +4,6 @@
 package logicBox.sim.component;
 import java.util.List;
 import java.util.ArrayList;
-import logicBox.sim.Pin;
-import logicBox.sim.PinIoMode;
 
 
 
@@ -15,8 +13,8 @@ import logicBox.sim.PinIoMode;
  */
 public class Junction extends ComponentPassive
 {
-	private ArrayList<Pin> pins;
-	private boolean        state;
+	private List<Pin> pins;
+	private boolean   state;
 	
 	
 	

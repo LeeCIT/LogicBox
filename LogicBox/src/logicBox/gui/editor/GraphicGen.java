@@ -6,7 +6,7 @@ package logicBox.gui.editor;
 import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.VecPath;
-import logicBox.sim.PinIoMode;
+import logicBox.sim.component.PinIoMode;
 import logicBox.util.BezierCubic2;
 import logicBox.util.Geo;
 import logicBox.util.Line2;

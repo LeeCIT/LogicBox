@@ -5,7 +5,6 @@ package logicBox.sim.component;
 
 
 
-
 /**
  * A pin is an attachment point for traces on a component.
  * @author Lee Coakley

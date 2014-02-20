@@ -41,7 +41,7 @@ public class DisplaySevenSeg extends Display
 	
 	
 	public void update() {
-		int i = SimUtil.decodeToInt( pinInputs );
+		int i = SimUtil.decodePinsToInt( pinInputs );
 		
 		boolean[] states = {
 		    ! (i==2 | i==12 | i==14 | i==15                 ),

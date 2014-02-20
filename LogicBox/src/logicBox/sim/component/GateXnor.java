@@ -6,7 +6,7 @@ package logicBox.sim.component;
 
 
 /**
- * Outputs true if its inputs are the same.
+ * Outputs high if an even number of inputs are high.
  * 0,0 -> 1
  * 0,1 -> 0
  * 1,0 -> 0
