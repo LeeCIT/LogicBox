@@ -14,12 +14,13 @@ public class McqQuestions {
 	
 	
 	private ArrayList<String> answers;
-	private String question;
+	private String question, correctAnswer;
 	
 	
 	
-	public McqQuestions( String question, ArrayList<String> answers ) {
+	public McqQuestions( String question, ArrayList<String> answers, String correctAnswer ) {
 		this.answers = answers;
+		this.correctAnswer = correctAnswer;
 		this.question = question;
 		
 	}
@@ -47,4 +48,11 @@ public class McqQuestions {
 	
 	
 	
+	/**
+	 * Return the correct answer.
+	 * @return
+	 */
+	public String getCorrectAnswer(){
+		return correctAnswer;
+	}
 }
