@@ -10,25 +10,31 @@ import logicBox.sim.SimUtil;
 
 
 /**
- * D-type flip-flop.
- * A 1-bit memory with inputs [D, E] and outputs [Q, !Q].
- * When E is high D determines Q.
- * When E is low the component's state does not change.
- * !Q is always the inverse of Q. 
+ * JK-type flip-flop.
+ * A 1-bit memory with inputs [J, C, K] and outputs [Q, !Q].
+ * There are four modes of operation:
+ * 		J K C | Q
+ * 		---------
+ * 		x x 0 | No change
+ * 		0 0 1 | No change
+ * 		0 0 1 | Set Q to 0
+ * 		1 0 1 | Set Q to 1
+ * 		1 1 1 | Toggle Q
+ * 
  * @author Lee Coakley
  */
-public class FlipFlopD extends ComponentActive
+public class FlipFlopJK extends ComponentActive
 {
 	private List<Pin> pinInputs;
 	private List<Pin> pinOutputs;
 	
 	
 	
-	public FlipFlopD() {
+	public FlipFlopJK() {
 		super();
 		pinInputs  = new ArrayList<>();
 		pinOutputs = new ArrayList<>();
-		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  2 );
+		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  3 );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, 2 );
 		getPinQinv().setState( true ); // Ensure valid initial state
 	}
@@ -47,14 +53,20 @@ public class FlipFlopD extends ComponentActive
 	
 	
 	
-	public Pin getPinD() {
+	public Pin getPinJ() {
 		return pinInputs.get( 0 );
 	}
 	
 	
 	
-	public Pin getPinE() {
+	public Pin getPinC() {
 		return pinInputs.get( 1 );
+	}
+	
+	
+	
+	public Pin getPinK() {
+		return pinInputs.get( 2 );
 	}
 	
 	
@@ -72,10 +84,17 @@ public class FlipFlopD extends ComponentActive
 	
 	
 	public void update() {
-		if ( ! getPinE().getState())
+		if ( ! getPinC().getState())
 			return;
 		
-		boolean state = getPinD().getState();
+		boolean j = getPinJ().getState();
+		boolean k = getPinK().getState();
+		boolean state;
+		
+		if (j && k)
+			 state = ! getPinQ().getState();
+		else state = j;
+		
 		getPinQ   ().setState(   state );
 		getPinQinv().setState( ! state );
 	}
@@ -83,7 +102,7 @@ public class FlipFlopD extends ComponentActive
 	
 	
 	public String getName() {
-		return "D flip-flop";
+		return "JK flip-flop";
 	}
 	
 	
@@ -91,21 +110,9 @@ public class FlipFlopD extends ComponentActive
 	
 	
 	public static void main( String[] args ) {
-		FlipFlopD f = new FlipFlopD();
+		FlipFlopJK f = new FlipFlopJK();
 		
-		f.getPinE().setState( false );
-		f.getPinD().setState( true  );
-		f.update();
-		System.out.println( "\n" + f.getPinQ() + "\n" + f.getPinQinv() ); // Should still be [0,1]
-		
-		f.getPinE().setState( true );
-		f.getPinD().setState( true );
-		f.update();
-		System.out.println( "\n" + f.getPinQ() + "\n" + f.getPinQinv() ); // Should be [1,0]
-		
-		f.getPinD().setState( false );
-		f.update();
-		System.out.println( "\n" + f.getPinQ() + "\n" + f.getPinQinv() ); // Should be [0,1]
+		// TODO test
 	}
 }
 

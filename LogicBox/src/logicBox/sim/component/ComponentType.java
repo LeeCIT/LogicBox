@@ -35,7 +35,9 @@ public enum ComponentType
 	decoder,
 	mux,
 	demux,
+	
 	flipFlopD,
+	flipFlopJK,
 	
 	comparator,
 	shifter,
