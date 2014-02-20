@@ -5,8 +5,6 @@ package logicBox.sim.component;
 
 import java.util.ArrayList;
 import java.util.List;
-import logicBox.sim.Pin;
-import logicBox.sim.PinIoMode;
 import logicBox.sim.SimUtil;
 
 
@@ -54,11 +52,12 @@ public class Decoder extends ComponentActive
 		for (Pin pin: pinOutputs)
 			pin.setState( false );
 		
-		int activeIndex = SimUtil.decodeToInt( pinInputs );
+		int activeIndex = SimUtil.decodePinsToInt( pinInputs );
 		Pin activePin   = pinOutputs.get( activeIndex );
 		
 		activePin.setState( true );
 	}
+	
 	
 	
 	

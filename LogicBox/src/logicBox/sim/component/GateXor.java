@@ -6,8 +6,7 @@ package logicBox.sim.component;
 
 
 /**
- * Outputs true if its inputs are different.
- * When there are more than two inputs, the output is true if an odd number of bits are set.
+ * Outputs high if an odd number of inputs are high.
  * 0,0 -> 0
  * 0,1 -> 1
  * 1,0 -> 1

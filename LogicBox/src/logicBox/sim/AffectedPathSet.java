@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import logicBox.sim.component.Component;
 import logicBox.sim.component.Junction;
+import logicBox.sim.component.Pin;
 import logicBox.sim.component.Stateful;
 import logicBox.sim.component.Trace;
 

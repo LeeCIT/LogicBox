@@ -2,7 +2,7 @@
 
 
 package logicBox.gui.editor;
-import logicBox.sim.PinIoMode;
+import logicBox.sim.component.PinIoMode;
 import logicBox.util.Line2;
 import logicBox.util.Vec2;
 
