@@ -87,7 +87,21 @@ public class SpatialGrid<T>
 	
 	
 	
-	public double getLoadOnNonEmptyCells() {
+	public int[][] debugGridLevels() {
+		int     w = cellsPerRow;
+		int     h = cellsPerColumn;
+		int[][] g = new int[ h ][ w ];
+		
+		for (int y=0; y<h; y++)
+		for (int x=0; x<w; x++)
+			g[y][x] = core.get(y*w+x).size();
+		
+		return g;
+	}
+	
+	
+	
+	public double debugLoadOnNonEmptyCells() {
 		double load  = 0.0;
 		double total = 0.0;
 		
@@ -197,17 +211,35 @@ public class SpatialGrid<T>
 	
 	
 	public static void main( String[] args ) {
-		SpatialGrid<String> sg = new SpatialGrid<>( 256, 512, 64 );
+		SpatialGrid<String> sg = new SpatialGrid<>( 640, 480, 16 );
 		
-		sg.add( new Vec2(297,261),           "Vec2" );
-		sg.add( new Bbox2(129,129, 256,512), "Bbox" );
+		sg.add( new Vec2(197,261),           "Vec2" );
+		sg.add( new Bbox2(64,129,  256,512), "BboxA" );
+		sg.add( new Bbox2(199,219, 320,512), "BboxB" );
+		sg.add( new Bbox2(199,229, 480,512), "BboxC" );
 		
 		for (String s: sg.findPotentials( new Vec2(256,256) ))
 			System.out.println( "\t" + s );
 		
-		System.out.println( "Load: " + sg.getLoadOnNonEmptyCells() );
+		System.out.println( "Load: " + sg.debugLoadOnNonEmptyCells() );
+		
+		
+		int[][] g = sg.debugGridLevels();
+		for (int y=0; y<g.length; y++) {
+			System.out.println();
+			
+			for (int x=0; x<g[0].length; x++) {
+				int    count = g[y][x];
+				String s;
+					 if (count == 0) s = " ";
+				else if (count <= 9) s = ""+count;
+				else				 s = "+";
+				System.out.print( s );
+			}
+		}
 	}
 }
+
 
 
 
