@@ -6,6 +6,8 @@ package prototype.mcq;
 
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -26,13 +28,13 @@ public class McqPanel extends JPanel
 	
 	
 	
+	
 	public McqPanel( ArrayList<String> answers, String correctAnswer, String question ) {
 		
 		super();
 		
 		
 		setLayout( new MigLayout() );
-		setSize(300, 300);
 		setBorder(new LineBorder(new Color(0, 0, 0)));
 		
 		
@@ -42,6 +44,7 @@ public class McqPanel extends JPanel
 		
 		
 		displayQuestion();
+		
 	}
 	
 	
@@ -53,8 +56,8 @@ public class McqPanel extends JPanel
 		
 		int j = 0;
 		
-		add( new JLabel(question), "wrap" ); //Add the question to the panel.
 		
+		add( new JLabel(question), "wrap" ); //Add the question to the panel.
 		
 		
 		//Display each answer with a radio button across from it.
@@ -66,7 +69,50 @@ public class McqPanel extends JPanel
 			j++;
 		}
 		
+		JButton checkAnswer = new JButton("Check answer");
+		add( checkAnswer );
+		checkAnswer.addActionListener( new buttonListener() );
+		
 	}
+	
+	
+	
+	/**
+	 * Choose weather the panel is visible or not.
+	 * @param visible
+	 */
+	public void setPanelVisibility( boolean visible ) {
+		setVisible(visible);
+	}
+	
+	
+	
+	class buttonListener implements ActionListener
+	{
+		@Override
+		public void actionPerformed(ActionEvent e)
+		{
+			
+			for ( int i = 0; i < buttons.size(); i++ )
+			{
+				
+				if ( buttons.get(i).isSelected() )
+				{
+					
+					if ( answers.get(i).equals(correctAnswer) )
+					{
+						System.out.println("You are correct!");
+					}
+					else
+						System.out.println("INCORRECT!");
+					
+				}
+				
+			}
+			
+		}
+	}
+	
 	
 	
 	
