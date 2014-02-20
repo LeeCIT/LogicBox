@@ -28,6 +28,7 @@ public class PanelTest extends JFrame
 		String ans2 = "Answer 2";
 		String ans3 = "Answer 3";
 		String ans4 = "Answer 4";
+		String ans5 = "Answer 5";
 		
 		String question = "Which one is Answer 4?";
 		
@@ -37,6 +38,7 @@ public class PanelTest extends JFrame
 		answers.add(ans2);
 		answers.add(ans3);
 		answers.add(ans4);
+		answers.add(ans5);
 		
 		
 		McqPanel panel = new McqPanel(answers, ans4, question);
