@@ -2,8 +2,8 @@
 
 
 package prototypes.snappingProto;
+
 import java.awt.Component;
-import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -32,27 +32,36 @@ public class SnappingPrototype extends ComponentAdapter {
 		if (motionInterlock)
 			return;
 		
-		Rectangle      desk  = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-		Rectangle      ref   = desk;
+		//Rectangle      desk  =//GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		Rectangle      ref   = snapTo.getBounds();
 		Rectangle      com   = ev.getComponent().getBounds();
-		List<EdgePair> edges = getSnappableEdgePairs( ref, com, 10 );
+		List<EdgePair> edges = getSnappableEdgePairs( ref, com, 16);
 		
 		for (EdgePair pair: edges) {
-			System.out.println( "Pair dist: " + Geo.absDiff(pair.ref.pos, pair.com.pos) );
+			System.out.println( "C-" + pair.com.edge + " to R-" + pair.ref.edge + " (" + pair.dist +"px)" );
 			snapToEdge( ev.getComponent(), com, pair );
 		}
 	}
 	
 	
 	
-	public void snapToEdge( Component comp, Rectangle rectComp, EdgePair edgePair ) {
-		Vec2 pos = new Vec2( comp.getLocation() );
+	private void snapToEdge( Component comp, Rectangle rectComp, EdgePair edgePair ) {
+		Vec2 pos  = new Vec2( comp.getLocation() );
+		Vec2 size = new Vec2( comp.getWidth(), comp.getHeight() );
 		
 		switch (edgePair.ref.edge) {
-			case left:   pos.x = edgePair.ref.pos;                         break;
-			case top:    pos.y = edgePair.ref.pos;                         break;
-			case right:  pos.x = edgePair.ref.pos - rectComp.getWidth();   break;
-			case bottom: pos.y = edgePair.ref.pos - rectComp.getHeight();  break;
+			case left:
+			case right:
+				switch (edgePair.com.edge) {
+					case left:   pos.x = edgePair.ref.pos;           break;
+					case right:  pos.x = edgePair.ref.pos - size.x;  break;
+				} break;
+			case top:
+			case bottom:
+				switch (edgePair.com.edge) {
+					case top:    pos.y = edgePair.ref.pos;           break;
+					case bottom: pos.y = edgePair.ref.pos - size.y;  break;
+				} break;
 		}
 
 		motionInterlock = true;
@@ -85,10 +94,12 @@ public class SnappingPrototype extends ComponentAdapter {
 	
 	private class EdgePair {
 		public EdgePos ref,com;
+		public double  dist;
 
-		public EdgePair( EdgePos ref, EdgePos com ) {
-			this.ref = ref;
-			this.com = com;
+		public EdgePair( EdgePos ref, EdgePos com, double dist ) {
+			this.ref  = ref;
+			this.com  = com;
+			this.dist = dist;
 		}
 	}
 	
@@ -113,13 +124,12 @@ public class SnappingPrototype extends ComponentAdapter {
 	private List<EdgePair> getEdgesWithinDistanceThreshold( EdgePos[] refs, EdgePos[] coms, double thresh ) {
 		List<EdgePair> list = new ArrayList<>();
 		
-		for (int i=0; i<refs.length; i++) {
-			EdgePos ref  = refs[ i ];
-			EdgePos com  = coms[ i ];
-			double  dist = Geo.absDiff( ref.pos, com.pos );
+		for (EdgePos ref: refs)
+		for (EdgePos com: coms) {
+			double dist = Geo.absDiff( ref.pos, com.pos );
 			
 			if (dist <= thresh)
-				list.add( new EdgePair(ref,com) );
+				list.add( new EdgePair(ref,com,dist) );
 		}
 		
 		return list;
