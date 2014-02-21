@@ -16,6 +16,7 @@ import logicBox.sim.component.Updateable;
 
 /**
  * Performs the logic simulation.
+ * Note: This is just a placeholder implementation and only works in trivial cases.
  * @author Lee Coakley
  */
 public class Simulation
