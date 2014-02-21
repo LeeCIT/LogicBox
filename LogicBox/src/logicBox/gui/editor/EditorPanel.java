@@ -28,9 +28,9 @@ import logicBox.sim.component.GateNot;
 import logicBox.sim.component.GateOr;
 import logicBox.sim.component.GateXnor;
 import logicBox.sim.component.GateXor;
+import logicBox.util.Bbox2;
 import logicBox.util.Callback;
 import logicBox.util.Geo;
-import logicBox.util.Region;
 import logicBox.util.Vec2;
 
 
@@ -60,16 +60,16 @@ public class EditorPanel extends JPanel
 		
 		new ToolDragger    ( this, world, cam ).attach();
 		new ToolHighlighter( this, world, cam ).attach();
-		new ToolSelector   ( this, world, cam ).attach();
+		//new ToolSelector   ( this, world, cam ).attach();
 		
-		world.add( new EditorComponent( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, 0  ) ) );
-		world.add( new EditorComponent( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, 128) ) );
-		world.add( new EditorComponent( new GateAnd(),    GraphicGen.generateGateAnd(2),   new Vec2(  0, 256) ) );
-		world.add( new EditorComponent( new GateNand(),   GraphicGen.generateGateNand(2),  new Vec2(  0, 384) ) );
-		world.add( new EditorComponent( new GateOr(),     GraphicGen.generateGateOr(2),    new Vec2(192,   0) ) );
-		world.add( new EditorComponent( new GateNor(),    GraphicGen.generateGateNor(2),   new Vec2(192, 128) ) );
-		world.add( new EditorComponent( new GateXor(),    GraphicGen.generateGateXor(2),   new Vec2(192, 256) ) );
-		world.add( new EditorComponent( new GateXnor(),   GraphicGen.generateGateXnor(2),  new Vec2(192, 384) ) );
+		world.add( new EditorComponent( world, new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, 0  ) ) );
+		world.add( new EditorComponent( world, new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, 128) ) );
+		world.add( new EditorComponent( world, new GateAnd(),    GraphicGen.generateGateAnd(2),   new Vec2(  0, 256) ) );
+		world.add( new EditorComponent( world, new GateNand(),   GraphicGen.generateGateNand(2),  new Vec2(  0, 384) ) );
+		world.add( new EditorComponent( world, new GateOr(),     GraphicGen.generateGateOr(2),    new Vec2(192,   0) ) );
+		world.add( new EditorComponent( world, new GateNor(),    GraphicGen.generateGateNor(2),   new Vec2(192, 128) ) );
+		world.add( new EditorComponent( world, new GateXor(),    GraphicGen.generateGateXor(2),   new Vec2(192, 256) ) );
+		world.add( new EditorComponent( world, new GateXnor(),   GraphicGen.generateGateXnor(2),  new Vec2(192, 384) ) );
 		
 		addMouseOverTest();
 		setupActions();
@@ -108,8 +108,13 @@ public class EditorPanel extends JPanel
 	private void addMouseOverTest() {
 		addMouseMotionListener( new MouseMotionAdapter() {
 			public void mouseMoved( MouseEvent ev ) {
-				for (EditorComponent ecom: world.find( cam.getMousePosWorld() ))
+				for (EditorComponent ecom: world.find( cam.getMousePosWorld() )) {
+					GraphicPinMapping gpm = ecom.graphic.findClosestPin( cam.getMousePosWorld(), 5 );
 					System.out.println( "Ed: " + ecom.com.getName() );
+					System.out.println( "Ed: " + gpm );					
+				}
+				
+				
 			}
 		});
 	}
@@ -131,11 +136,25 @@ public class EditorPanel extends JPanel
 				drawGrid( g );
 				drawDebugCrap( g );
 				
-				for (EditorComponent ecom: world.getComponents())
+				for (EditorComponent ecom: world.getComponents()) {
 					ecom.draw( g );
+					
+					Gfx.pushColorAndSet( g, Color.RED );
+						Gfx.drawBbox( g, ecom.graphic.getBbox(), false );
+					Gfx.popColor( g );
+				}
 				
 				for (RepaintListener rpl: repaintListeners)
 					rpl.draw( g );
+				
+				Gfx.pushColorAndSet( g, Color.GREEN );
+					Gfx.drawBbox( g, world.getOccupiedWorldExtent(), false );
+				Gfx.popColor( g );
+				
+				Gfx.pushColorAndSet( g, Color.ORANGE );
+					Gfx.drawBbox( g, cam.getWorldViewableArea(), false );
+				Gfx.popColor( g );
+				
 			Gfx.popAntialiasingState( g );
 		Gfx.popMatrix( g );
 	}
@@ -256,10 +275,10 @@ public class EditorPanel extends JPanel
 	
 	
 	private void drawGrid( Graphics2D g ) {
-		Region worldRegion  = cam.getWorldViewableArea();
-		Vec2   cellSize     = new Vec2( 64 );
-		Vec2   cellSizeHalf = cellSize.multiply( 0.5 );
-		Vec2   offset       = worldRegion.tl.modulo( cellSize ).negate().subtract( cellSizeHalf );
+		Bbox2 worldRegion  = cam.getWorldViewableArea();
+		Vec2  cellSize     = new Vec2( 64 );
+		Vec2  cellSizeHalf = cellSize.multiply( 0.5 );
+		Vec2  offset       = worldRegion.tl.modulo( cellSize ).negate().subtract( cellSizeHalf );
 		
 		worldRegion.tl = worldRegion.tl.subtract( cellSize 				 );
 		worldRegion.br = worldRegion.br.add     ( cellSize.multiply( 2 ) );
