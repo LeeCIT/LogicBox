@@ -39,4 +39,10 @@ public class GraphicPinMapping
 	public Vec2 getPinPosEnd() {
 		return line.b;
 	}
+	
+	
+	
+	public String toString() {
+		return getClass().getSimpleName() + ": " + mode + " " + index + " " + line;
+	}
 }
