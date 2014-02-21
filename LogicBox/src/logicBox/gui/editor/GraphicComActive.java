@@ -250,6 +250,11 @@ public class GraphicComActive extends Graphic
 				Gfx.popStroke( g );
 			}
 		Gfx.popColor( g );
+		
+		Gfx.pushColorAndSet( g, Color.white );
+			for (GraphicPinMapping gpm: pinMap)
+				Gfx.drawThickLine( g, gpm.getPinPosBody(), gpm.getPinPosEnd(), 1 );
+		Gfx.popColor( g );
 	}
 }
 
