@@ -105,13 +105,10 @@ public class Bbox2 extends Region
 	
 	
 	/**
-	 * Change this bounding box such that it forms a union with another one.
-	 * Intended for use in loops.
+	 * Get the union of two bounding boxes. (The smallest that contains both of them)
 	 */
-	public void unionWith( Bbox2 other ) {
-		Bbox2 union = Bbox2.createFromPoints( tl, br, other.tl, other.br );
-		this.tl = union.tl;
-		this.br = union.br;
+	public static Bbox2 union( Bbox2 a, Bbox2 b ) {
+		return Bbox2.createFromPoints( a.tl, a.br, b.tl, b.br );
 	}
 }
 
