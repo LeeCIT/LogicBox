@@ -4,6 +4,8 @@
 package logicBox.util;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 
 
 
@@ -247,6 +249,28 @@ public abstract class Geo
 	    double diff   = a - b;
 	    double mod360 = diff % 360;
 	    return ((mod360 + 540.0) % 360.0) - 180.0;
+	}
+	
+	
+	
+	public static AffineTransform createTransform( Vec2 trans, double rotate ) {
+		return createTransform( trans, new Vec2(1,1), rotate );
+	}
+	
+	
+	
+	public static AffineTransform createTransform( Vec2 trans, Vec2 scale, double rotate ) {
+		AffineTransform t = new AffineTransform();
+		t.translate( trans.x, trans.y );
+		t.scale( scale.x, scale.y );
+		t.rotate( Math.toRadians(-rotate) );
+		return t;
+	}
+	
+	
+	
+	public static void rotate( Graphics2D g, double a ) {
+		
 	}
 	
 	
