@@ -270,12 +270,6 @@ public abstract class Geo
 	
 	
 	
-	public static void rotate( Graphics2D g, double a ) {
-		
-	}
-	
-	
-	
 	/**
 	 * Transform a monotonically increasing linear input into a sinewave.
 	 * Waveform: One dip and rise per period, zero at edges and centre.
