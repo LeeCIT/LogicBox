@@ -165,6 +165,7 @@ public class EditorWorld
 		return new RepaintListener() {
 			public void draw( Graphics2D g ) {
 				int[][] array = grid.debugGridLevels();
+				double  size  = grid.getCellSize();
 				
 				for (int y=0; y<array   .length; y++)			
 				for (int x=0; x<array[0].length; x++) {
@@ -174,7 +175,6 @@ public class EditorWorld
 						continue;
 					
 					double colF  = Geo.boxStep( count, 0, 4 );
-					double size  = grid.getCellSize();
 					Color  col   = Geo.lerp( Color.green, Color.red, colF );
 					Vec2   tl    = new Vec2(x,y).multiply( size );
 					Bbox2  bbox  = new Bbox2( tl, tl.add(size) ); 
@@ -186,6 +186,12 @@ public class EditorWorld
 						Gfx.popColor( g );
 					Gfx.popAntialiasingState( g );
 				}
+				
+				Gfx.pushAntialiasingStateAndSet( g, false );
+					Gfx.pushColorAndSet( g, Color.BLUE );
+						Gfx.drawBbox( g, new Bbox2(0,0,grid.getCellsPerRow()*size,grid.getCellsPerColumn()*size), false );
+					Gfx.popColor( g );
+				Gfx.popAntialiasingState( g );
 			}
 		};
 	}
