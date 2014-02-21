@@ -107,9 +107,9 @@ public class ToolDragger extends Tool
 		
 		dragInitiated    = true;
 		dragInitiatedAt  = pos;
-		dragOffset       = ecom.pos.subtract( pos );
+		dragOffset       = ecom.getPos().subtract( pos );
 		draggedComponent = ecom;
-		rotateStartAngle = ecom.angle;
+		rotateStartAngle = ecom.getAngle();
 	}
 	
 	
@@ -126,7 +126,7 @@ public class ToolDragger extends Tool
 		if (dragging) {
 			panel.setCursor( new Cursor(Cursor.MOVE_CURSOR) );
 			//world.move( draggedComponent, Geo.snapNear( pos.add( dragOffset ), 32 ) ); // TODO snap
-			world.move( draggedComponent, pos.add( dragOffset ) );
+			draggedComponent.setPos( pos.add(dragOffset) );
 			panel.repaint();
 		}
 	}
@@ -136,18 +136,18 @@ public class ToolDragger extends Tool
 	private boolean isDragThresholdMet( Vec2 pos ) {
 		return Geo.distance(pos,dragInitiatedAt) >= (dragThreshold / cam.getZoom());
 	}
-
-
-
+	
+	
+	
 	private void rotateMove( Vec2 pos ) {
 		if ( ! (dragInitiated || dragging))
 			return;
 		
 		panel.setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
 		
-		double angle   = Geo.angleBetween( draggedComponent.pos, pos );
+		double angle   = Geo.angleBetween( draggedComponent.getPos(), pos );
 		double snapped = Geo.roundToMultiple( angle, 45 );
-		draggedComponent.angle = snapped;
+		draggedComponent.setAngle( snapped );
 		panel.repaint();
 	}
 	
@@ -167,8 +167,8 @@ public class ToolDragger extends Tool
 		if ( ! wasDragging)
 			return;
 		
-		world.move( draggedComponent, dragInitiatedAt.add(dragOffset) );
-		draggedComponent.angle = rotateStartAngle;
+		draggedComponent.setPos( dragInitiatedAt.add(dragOffset) );
+		draggedComponent.setAngle( rotateStartAngle );
 	}
 	
 	
