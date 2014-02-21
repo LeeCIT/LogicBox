@@ -6,10 +6,10 @@ package logicBox.util;
 
 
 /**
- * Interface that takes two arbitrary arguments of the same type.
+ * Takes two arbitrary arguments of the same type.
  * @author Lee Coakley
  */
 public interface BinaryFunctor<T>
 {
-	public void call( T a, T b );
+	public T call( T a, T b );
 }
