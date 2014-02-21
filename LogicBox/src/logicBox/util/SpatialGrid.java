@@ -87,6 +87,24 @@ public class SpatialGrid<T>
 	
 	
 	
+	public int getCellSize() {
+		return cellSize;
+	}
+	
+	
+	
+	public int getCellsPerRow() {
+		return cellsPerRow;
+	}
+	
+	
+	
+	public int getCellsPerColumn() {
+		return cellsPerColumn;
+	}
+	
+	
+	
 	public int[][] debugGridLevels() {
 		int     w = cellsPerRow;
 		int     h = cellsPerColumn;
