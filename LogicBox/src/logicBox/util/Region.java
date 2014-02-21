@@ -3,6 +3,8 @@
 
 package logicBox.util;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.io.Serializable;
 
 
 
@@ -10,7 +12,7 @@ import java.awt.*;
  * Defines a region.  Used by drawing functions.
  * @author Lee Coakley
  */
-public class Region
+public class Region implements Transformable, Serializable
 {
 	public Vec2 tl; // Top left
 	public Vec2 br; // Bottom right
@@ -170,6 +172,17 @@ public class Region
 	
 	public String toString() {
 		return "" + tl + " -> " + br;
+	}
+	
+	
+	
+	/**
+	 * WARNING: This is an axis-aligned region.
+	 *  		A matrix with rotation will produce incorrect results!
+	 */
+	public void transform( AffineTransform matrix ) {
+		matrix.transform( tl, tl );
+		matrix.transform( br, br );
 	}
 }
 

@@ -3,6 +3,7 @@
 
 package logicBox.util;
 
+import java.awt.geom.AffineTransform;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
  * Represents a 2D line segment.
  * @author Lee Coakley
  */
-public class Line2 implements Serializable
+public class Line2 implements Transformable, Serializable
 {
 	private static final long serialVersionUID = 1L;
 	public Vec2 a,b;
@@ -102,6 +103,13 @@ public class Line2 implements Serializable
 	
 	public Line2 swapEndpoints() {
 		return new Line2( b, a );
+	}
+	
+	
+	
+	public void transform( AffineTransform matrix ) {
+		matrix.transform( a, a );
+		matrix.transform( b, b );
 	}
 	
 	

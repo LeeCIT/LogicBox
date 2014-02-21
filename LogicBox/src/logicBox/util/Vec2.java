@@ -2,6 +2,7 @@
 
 
 package logicBox.util;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 
@@ -165,6 +166,12 @@ public class Vec2 extends Point2D implements Serializable
 
 	    return new Vec2( x*c  +  y*-s,
 	                     x*s  +  y* c );
+	}
+	
+	
+	
+	public void transform( AffineTransform matrix ) {
+		matrix.transform( this, this );
 	}
 	
 	
