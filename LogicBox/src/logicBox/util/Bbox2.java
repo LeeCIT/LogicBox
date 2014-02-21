@@ -101,6 +101,18 @@ public class Bbox2 extends Region
 		
 		return createFromPoints( list );
 	}
+	
+	
+	
+	/**
+	 * Change this bounding box such that it forms a union with another one.
+	 * Intended for use in loops.
+	 */
+	public void unionWith( Bbox2 other ) {
+		Bbox2 union = Bbox2.createFromPoints( tl, br, other.tl, other.br );
+		this.tl = union.tl;
+		this.br = union.br;
+	}
 }
 
 
