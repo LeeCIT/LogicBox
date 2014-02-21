@@ -3,8 +3,11 @@
 
 package logicBox.gui.editor;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import logicBox.gui.Gfx;
 import logicBox.util.Bbox2;
 import logicBox.util.BinaryFunctor;
 import logicBox.util.Geo;
@@ -25,7 +28,7 @@ public class EditorWorld
 	
 	
 	public EditorWorld() {
-		grid  = new SpatialGrid<>( 1024, 1024, 64 );
+		grid  = new SpatialGrid<>( 2048, 2048, 128 );
 		ecoms = new ArrayList<>(); 
 	}
 	
@@ -154,6 +157,37 @@ public class EditorWorld
 				list.add( ecom );
 		
 		return list;
+	}
+	
+	
+	
+	public RepaintListener getSpatialGridDebugRepainter() {
+		return new RepaintListener() {
+			public void draw( Graphics2D g ) {
+				int[][] array = grid.debugGridLevels();
+				
+				for (int y=0; y<array   .length; y++)			
+				for (int x=0; x<array[0].length; x++) {
+					double count = array[y][x];
+					
+					if (count <= 0)
+						continue;
+					
+					double colF  = Geo.boxStep( count, 0, 4 );
+					double size  = grid.getCellSize();
+					Color  col   = Geo.lerp( Color.green, Color.red, colF );
+					Vec2   tl    = new Vec2(x,y).multiply( size );
+					Bbox2  bbox  = new Bbox2( tl, tl.add(size) ); 
+					
+					Gfx.pushAntialiasingStateAndSet( g, false );
+						Gfx.pushColorAndSet( g, col );
+							Gfx.drawBbox( g, bbox, false );
+							Gfx.drawOrientedRect( g, bbox.getCentre(), new Vec2(size*0.1), 0, false );
+						Gfx.popColor( g );
+					Gfx.popAntialiasingState( g );
+				}
+			}
+		};
 	}
 }
 

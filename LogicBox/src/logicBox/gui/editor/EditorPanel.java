@@ -62,6 +62,8 @@ public class EditorPanel extends JPanel
 		new ToolHighlighter( this, world, cam ).attach();
 		//new ToolSelector   ( this, world, cam ).attach();
 		
+		addRepaintListener( world.getSpatialGridDebugRepainter() );
+		
 		world.add( new EditorComponent( world, new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, 0  ) ) );
 		world.add( new EditorComponent( world, new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, 128) ) );
 		world.add( new EditorComponent( world, new GateAnd(),    GraphicGen.generateGateAnd(2),   new Vec2(  0, 256) ) );
@@ -113,8 +115,6 @@ public class EditorPanel extends JPanel
 					System.out.println( "Ed: " + ecom.com.getName() );
 					System.out.println( "Ed: " + gpm );					
 				}
-				
-				
 			}
 		});
 	}
