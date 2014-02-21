@@ -201,7 +201,7 @@ public abstract class Geo
 	 */
 	public static double dot( Vec2 a, Vec2 b ) {
 		return (a.x * b.x) 
-		     + (b.y * b.y);
+		     + (a.y * b.y);
 	}
 	
 	
