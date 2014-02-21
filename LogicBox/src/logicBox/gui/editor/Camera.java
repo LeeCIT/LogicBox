@@ -7,9 +7,9 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import javax.swing.SwingUtilities;
+import logicBox.util.Bbox2;
 import logicBox.util.Callback;
 import logicBox.util.Geo;
-import logicBox.util.Region;
 import logicBox.util.Vec2;
 
 
@@ -48,7 +48,7 @@ public class Camera
 		zoomMax   =       zoomRange;
 		zoom      = 1.0;
 		
-		pan       = new Region( attachTo ).getCentre();
+		pan       = new Bbox2( attachTo ).getCentre();
 		matrix    = new AffineTransform();
 		
 		onTransform = onTransformChange;
@@ -89,11 +89,11 @@ public class Camera
 	
 	
 	
-	public Region getWorldViewableArea() {
-		Region r = new Region( component );
-		r.tl = mapScreenToWorld( r.tl );
-		r.br = mapScreenToWorld( r.br );
-		return r;
+	public Bbox2 getWorldViewableArea() {
+		Bbox2 b = new Bbox2( component );
+		b.tl = mapScreenToWorld( b.tl );
+		b.br = mapScreenToWorld( b.br );
+		return b;
 	}
 	
 	
@@ -167,8 +167,8 @@ public class Camera
 	
 	
 	private void updateTransform( Vec2 normalisedRelativePointer ) {
-		Region region = new Region( component );
-		Vec2   half   = region.getSize().multiply( 0.5 );
+		Bbox2 region = new Bbox2( component );
+		Vec2  half   = region.getSize().multiply( 0.5 );
 		
 		matrix = new AffineTransform();
 		matrix.translate(  half.x,  half.y );

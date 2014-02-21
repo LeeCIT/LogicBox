@@ -6,6 +6,8 @@ package logicBox.gui.editor;
 import java.util.ArrayList;
 import java.util.List;
 import logicBox.util.Bbox2;
+import logicBox.util.BinaryFunctor;
+import logicBox.util.Geo;
 import logicBox.util.SpatialGrid;
 import logicBox.util.Vec2;
 
@@ -34,19 +36,18 @@ public class EditorWorld
 	 * To remove it you have to use remove().
 	 */
 	public void add( EditorComponent ecom ) {
-		Vec2  pos       = ecom.pos;
-		Bbox2 bboxSrc   = ecom.graphic.computeBbox();
-		Bbox2 bboxTrans = new Bbox2( bboxSrc.tl.add(pos), bboxSrc.br.add(pos) );
+		Bbox2 bbox = ecom.graphic.getBbox();
 		
 		ecoms.add( ecom );
-		grid.add( bboxTrans, ecom );
+		grid.add( bbox, ecom );
 	}
 	
 	
 	
 	/**
 	 * Remove a component from the world.
-	 * This doesn't destroy it or detach it from the simulation or anything.
+	 * This doesn't actually remove it from the simulation or anything.
+	 * Only the world stops knowing about it.
 	 * @param ecom
 	 */
 	public void remove( EditorComponent ecom ) {
@@ -57,12 +58,10 @@ public class EditorWorld
 	
 	
 	/**
-	 * Move a component.
-	 * Never move an ECom around without calling this function.
+	 * Update the underlying world structures in response to
+	 * a component orientation or position change.
 	 */
-	public void move( EditorComponent ecom, Vec2 to ) {
-		ecom.pos = to;
-		
+	public void onComponentTransform( EditorComponent ecom ) {
 		remove( ecom );
 		add   ( ecom );
 	}
@@ -90,7 +89,7 @@ public class EditorWorld
 		List<EditorComponent> list = new ArrayList<>();
 		
 		for (EditorComponent ecom: grid.findPotentials( pos ))
-			if (ecom.graphic.contains( transformToComLocalSpace(pos,ecom) ))
+			if (ecom.graphic.contains( pos ))
 				list.add( ecom );
 		
 		return list;
@@ -104,9 +103,8 @@ public class EditorWorld
 	public List<EditorComponent> find( Bbox2 bbox ) {
 		List<EditorComponent> list = new ArrayList<>(); 
 		
-		// TODO 
 		for (EditorComponent ecom: grid.findPotentials( bbox ))
-			if (ecom.graphic.overlaps( transformToComLocalSpace(bbox,ecom) ))
+			if (ecom.graphic.overlaps( bbox ))
 				list.add( ecom );
 		
 		return list;
@@ -129,26 +127,33 @@ public class EditorWorld
 	 * This is the union of all component bounding boxes.
 	 */
 	public Bbox2 getOccupiedWorldExtent() {
-		return null; // TODO getOccupiedWorldExtent
+		List<Bbox2> bboxes = new ArrayList<>();
+		
+		for (EditorComponent ecom: ecoms)
+			bboxes.add( ecom.graphic.getBbox() );
+		
+		return Geo.reduce( bboxes, new BinaryFunctor<Bbox2>() {
+			public Bbox2 call( Bbox2 a, Bbox2 b ) {
+				return Bbox2.union( a, b );
+			}
+		});
 	}
 	
 	
 	
-	// TODO this should be cached when components change, which is relatively infrequent
-	// TODO this won't work for Bbox2... shit.  Gotta implement Poly2 now.
-	// TODO actually, just make graphics be transformed already.  damn son
-	private Vec2 transformToComLocalSpace( Vec2 pos, EditorComponent ecom ) {
-		return pos.subtract( ecom.pos ).rotate( -ecom.angle );
-	}
-	
-	
-	
-	// TODO this doesn't work on rotated components.  see above.
-	private Bbox2 transformToComLocalSpace( Bbox2 bbox, EditorComponent ecom ) {
-		return new Bbox2(
-			transformToComLocalSpace( bbox.tl, ecom ),
-			transformToComLocalSpace( bbox.br, ecom )
-		);
+	/**
+	 * Returns only the components whose bounding boxes lie within (or close to) the view boundary. 
+	 */
+	public List<EditorComponent> getViewableComponents( Camera cam, double tolerance ) {
+		Bbox2 bbox = cam.getWorldViewableArea().expand( new Vec2(tolerance) );
+		
+		List<EditorComponent> list = new ArrayList<>();
+		
+		for (EditorComponent ecom: ecoms) 
+			if (ecom.graphic.getBbox().overlaps( bbox ))
+				list.add( ecom );
+		
+		return list;
 	}
 }
 
