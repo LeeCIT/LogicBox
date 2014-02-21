@@ -6,6 +6,7 @@ package logicBox.util;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.util.List;
 
 
 
@@ -448,6 +449,28 @@ public abstract class Geo
 	 */
 	public static int randomIntRange( int low, int highex ) {
 		return low + ((int) Math.floor(Math.random() * (highex-low)));
+	}
+	
+	
+	
+	/**
+	 * Apply a function to a list, accumulating the result.
+	 * Example: reduce() a list of numbers [0,1,2,3] using addition.
+	 * 			The result is 6: ((0+1)+2)+3).
+	 * @param list
+	 * @param functor
+	 * @return T, or null if the list is empty.
+	 */
+	public static <T> T reduce( List<T> list, BinaryFunctor<T> functor ) {
+		if (list.isEmpty())
+			return null;
+		
+		T reduced = list.get( 0 );
+		
+		for (int i=1; i<list.size(); i++)
+			reduced = functor.call( reduced, list.get(i) );
+		
+		return reduced;
 	}
 }
 
