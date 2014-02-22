@@ -53,6 +53,12 @@ public class Vec2 extends Point2D implements Serializable
 	
 	
 	
+	public double get( int i ) {
+		return (i==0) ? x : y;
+	}
+	
+	
+	
 	public Vec2 add( Vec2 v ) {
 		return new Vec2( x + v.x, y + v.y );
 	}
