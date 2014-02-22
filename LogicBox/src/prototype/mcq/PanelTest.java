@@ -45,9 +45,11 @@ public class PanelTest extends JFrame
 		answers.add(ans6);
 		answers.add(ans7);
 		
-		McqPanel panel = new McqPanel(answers, ans4, question);
+		McqQuestion q1 = new McqQuestion(question, answers, ans4);
 		
-		add(panel, "wrap");
+		McqPanel panel = new McqPanel(q1);
+		
+		add( panel );
 		
 		setVisible(true);
 	}
