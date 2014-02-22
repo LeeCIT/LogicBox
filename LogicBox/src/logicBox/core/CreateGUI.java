@@ -14,7 +14,7 @@ import logicBox.gui.editor.EditorPanel;
 public class CreateGUI extends EditorFrame
 {
 	// Reference to main frame
-	private static CreateGUI currentInstance; 
+	public static CreateGUI currentInstance; 
 	
 	public CreateGUI() {
 		add( new MenubarCreate(),    "north" );
