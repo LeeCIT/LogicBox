@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
+import logicBox.sim.component.ComponentType;
 import logicBox.sim.component.GateAnd;
 import logicBox.sim.component.GateBuffer;
 import logicBox.sim.component.GateNand;
@@ -30,6 +31,7 @@ import logicBox.sim.component.GateXnor;
 import logicBox.sim.component.GateXor;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
+import logicBox.util.CallbackParam;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
@@ -46,6 +48,7 @@ public class EditorPanel extends JPanel
 	private Camera      cam;
 	private EditorWorld world;
 	private boolean     enableAntialiasing;
+	private ToolPlacer  toolPlacer;
 	
 	
 	
@@ -60,7 +63,11 @@ public class EditorPanel extends JPanel
 		
 		new ToolDragger    ( this, world, cam ).attach();
 		new ToolHighlighter( this, world, cam ).attach();
-		//new ToolSelector   ( this, world, cam ).attach();
+		
+		toolPlacer = new ToolPlacer( this, world, cam );
+		toolPlacer.attach();
+		
+		//new ToolSelector( this, world, cam ).attach();
 		
 		addRepaintListener( world.getSpatialGridDebugRepainter() );
 		
@@ -75,6 +82,28 @@ public class EditorPanel extends JPanel
 		
 		addMouseOverTest();
 		setupActions();
+	}
+	
+	
+	
+	public void createComponent( ComponentType type ) {
+		if (type == ComponentType.gateNand) {
+			toolPlacer.placementStart(
+				new CallbackParam<Vec2>() {
+					public void execute( Vec2 pos ) {
+						world.add(
+							new EditorComponent(
+								world,
+								new GateNand(),
+								GraphicGen.generateGateNand(2),
+								pos 
+							)
+						);
+					}
+				},
+				GraphicGen.generateGateNand(2)
+			);
+		}
 	}
 	
 	

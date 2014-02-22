@@ -12,6 +12,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
 import logicBox.gui.GUI;
+import logicBox.sim.component.ComponentType;
 import prototypes.snappingProto.SnappingPrototype;
 
 
@@ -117,25 +118,27 @@ public class Toolbox extends JToolBar
 	public static void main( String[] args ) {
 		GUI.setNativeStyle();
 		
-		JFrame frame = new EditorFrame();
+		final JFrame      frame = new EditorFrame();
+		final EditorPanel panel = new EditorPanel();
 		
-		ToolboxButton[] buttons = {
-			new ToolboxButton( GraphicGen.generateGateBuffer(), "test", null ),
-			new ToolboxButton( GraphicGen.generateGateNot(),    "test", null ),
-			new ToolboxButton( GraphicGen.generateGateAnd(2),   "test", null ),
-			new ToolboxButton( GraphicGen.generateGateNand(2),  "test", null ),
-			new ToolboxButton( GraphicGen.generateGateOr(2),    "test", null ),
-			new ToolboxButton( GraphicGen.generateGateNor(2),   "test", null ),
-			new ToolboxButton( GraphicGen.generateGateXor(2),   "test", null ),
-			new ToolboxButton( GraphicGen.generateGateXnor(2),  "test", null )
-		};
+		ToolboxButton button = new ToolboxButton(
+			GraphicGen.generateGateNand( 2 ),
+			"2-input NAND gate",
+			null
+		);
+		
+		button.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
+				panel.createComponent( ComponentType.gateNand );
+			}
+		});
 		
 		Toolbox toolbox = new Toolbox( frame );
-		toolbox.addCategory( "Gates", buttons );
+		toolbox.addCategory( "Gates", button );
 		
 		frame.setSize( new Dimension(600,600) );
 		frame.add( toolbox, "west" );
-		frame.add( new EditorPanel() );
+		frame.add( panel );
 		frame.setVisible( true );
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}
