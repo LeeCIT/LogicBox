@@ -43,7 +43,7 @@ public class WindowPositionManager extends WindowAdapter{
      * Store location of the window
      * @param frame 	The frame to save
      */
-    public void storeOptions(Frame f){
+    private void storeOptions(Frame f){
         File       file       = new File(fileName);
         Properties properties = new Properties();
         
@@ -71,9 +71,23 @@ public class WindowPositionManager extends WindowAdapter{
     }
 
     
+    /**
+     * Restores the window position if the file is found otherwise it doesn't.
+     */
+    public static void restoreWindowPosition(JFrame frame) {
+    	File optionsFile = new File(WindowPositionManager.fileName);
+    	
+    	 if (optionsFile.exists()) {
+             WindowPositionManager.restoreOptions(frame);
+         } else {
+        	 frame.setLocationByPlatform(true);
+         }
+    }
+    
+    
     
     /** Restore location & size of UI */
-    public static void restoreOptions(Frame f) {
+    private static void restoreOptions(Frame f) {
         File           file = new File(fileName);
         Properties     prop = new Properties();
         BufferedReader br   = null;

@@ -30,12 +30,7 @@ class DemoFrame {
         f.add(ta);
         f.pack();
 
-        File optionsFile = new File(WindowPositionManager.fileName);
-        if (optionsFile.exists()) {
-            WindowPositionManager.restoreOptions(f);
-        } else {
-            f.setLocationByPlatform(true);
-        }
+        WindowPositionManager.restoreWindowPosition(f);
         f.setVisible(true);
     }
 }
