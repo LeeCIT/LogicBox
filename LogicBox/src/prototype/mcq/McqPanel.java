@@ -29,7 +29,7 @@ public class McqPanel extends JPanel
 	
 	
 	
-	public McqPanel( ArrayList<String> answers, String correctAnswer, String question ) {
+	public McqPanel( McqQuestion mcq ) {
 		
 		super();
 		
@@ -38,10 +38,9 @@ public class McqPanel extends JPanel
 		setBorder(new LineBorder(new Color(0, 0, 0)));
 		
 		
-		this.answers = answers;
-		this.correctAnswer = correctAnswer;
-		this.question = question;
-		
+		this.answers = mcq.getAnswers();
+		this.correctAnswer = mcq.getCorrectAnswer();
+		this.question = mcq.getQuestion();
 		
 		displayQuestion();
 		
@@ -62,7 +61,7 @@ public class McqPanel extends JPanel
 		
 		//Display each answer with a radio button across from it.
 		for ( String ans: answers ) {
-			add ( new JLabel(ans) );
+			add ( new JLabel(ans), "split 2" );
 			buttons.add( new JRadioButton() );
 			options.add( buttons.get(j) );
 			add ( buttons.get(j), "wrap" );
