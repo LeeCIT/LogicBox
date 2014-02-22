@@ -255,6 +255,13 @@ public abstract class Geo
 	
 	
 	
+	public static Vec2 normalise( Vec2 v ) {
+		double rcpSqrt = 1.0 / Math.sqrt( lengthSqr(v) );
+		return v.multiply( rcpSqrt );
+	}
+	
+	
+	
 	public static AffineTransform createTransform( Vec2 trans, double rotate ) {
 		return createTransform( trans, new Vec2(1,1), rotate );
 	}
@@ -404,6 +411,15 @@ public abstract class Geo
 	 */
 	public static double roundToMultiple( double x, double mult ) {
 		return roundArith( x / mult ) * mult;
+	}
+	
+	
+	
+	/**
+	 * Round upwards to nearest multiple.
+	 */
+	public static double ceilToMultiple( double x, double mult ) {
+		return Math.ceil( x / mult ) * mult;
 	}
 	
 	
