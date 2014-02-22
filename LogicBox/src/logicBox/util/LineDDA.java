@@ -63,39 +63,41 @@ public class LineDDA
 		int[] end      = { (int) b.x,       (int) b.y };
 		int[] delta    = { end[0]-start[0], end[1]-start[1] };
 		
-		Vec2      uv       = Geo.normalise( new Vec2(delta[0], delta[1]) ); // Delta unit vector.
-	    double [] deltaUV  = { uv.x,        uv.y        };
-	    boolean[] deltaZ   = { delta[0]==0, delta[1]==0 };
-	    boolean[] deltaGEZ = { delta[0]>=0, delta[1]>=0 };
-	    
-	    if (deltaZ[0] && deltaZ[1]) { // Goin' nowhere
-	    	callback.execute( start );
-	        return;
-	    }
-	    
-	    int   [] cellStart = new int   [2];
-	    int   [] cellEnd   = new int   [2];
-	    int   [] cellCur   = new int   [2];
-	    int   [] pStep     = new int   [2]; // Loop step direction, -1 or +1.
-	    double[] pDelta    = new double[2]; // Loop increment, 0-inf as axisd approaches 0.
-	    double[] axisAcc   = new double[2]; // Loop initial threshold for cell crossover.
+		Vec2      uv        = Geo.normalise( new Vec2(delta[0], delta[1]) ); // Delta unit vector.
+	    double [] deltaUV   = uv.toArray();
+	    boolean[] deltaZ    = { delta[0]==0, delta[1]==0 };
+	    boolean[] deltaGEZ  = { delta[0]>=0, delta[1]>=0 };
+	    int    [] cellStart = new int[2];
+	    int    [] cellEnd   = new int[2];
+	    int    [] cellCur   = new int[2];
 	    
 	    for (int ax=0; ax<2; ax++) {
 	    	cellStart[ax] = start[ax] / cellsize;
 	    	cellEnd  [ax] = end  [ax] / cellsize;
 	    	cellCur  [ax] = cellStart[ax];
-	    	
+	    }
+	    
+	    if (deltaZ[0] && deltaZ[1]) { // Goin' nowhere
+	    	callback.execute( cellStart );
+	    	return;
+	    }
+	    
+	    int   [] pStep   = new int   [2]; // Loop step direction, -1 or +1.
+	    double[] pDelta  = new double[2]; // Loop increment, 0-inf as axisd approaches 0.
+	    double[] axisAcc = new double[2]; // Loop initial threshold for cell crossover.
+	    
+	    for (int ax=0; ax<2; ax++) {
 	    	int srcp   = -(start[ax] % cellsize);
 		    int addGEZ = deltaGEZ[ax] ? cellsize : 0;
 		    int offset = srcp + addGEZ;
 		    
-		    pStep  [ax] = (deltaGEZ[ax]) ? +1 : -1;
+		    pStep  [ax] = deltaGEZ[ax] ? +1 : -1;
 		    pDelta [ax] = cellsize / Math.abs(deltaUV[ax]);
 		    axisAcc[ax] = offset / deltaUV[ax];
+		    
+		    if (deltaZ[ax])                     // Ensure only one delta is used in this case.
+		    	axisAcc[ax] = Double.MAX_VALUE; // (If both are zero, the function will have returned)
 	    }
-	    
-	    if (deltaZ[0]) axisAcc[0] = Double.MAX_VALUE; // Ensure only one delta is used in this case.
-	    if (deltaZ[1]) axisAcc[1] = Double.MAX_VALUE; // 
 	    
 	    
 	    boolean hitX = false;
@@ -108,11 +110,11 @@ public class LineDDA
 	        if (cellCur[1] == cellEnd[1]) hitY = true;
 	        
 	        if (hitX && hitY)
-	            break;
+	            return;
 	        
-	        int     axis   = (axisAcc[0] >= axisAcc[1]) ? 1 : 0;
-	        axisAcc[axis] += pDelta[axis];
-	        cellCur[axis] += pStep [axis];
+	        int     ax   = (axisAcc[0] >= axisAcc[1]) ? 1 : 0;
+	        axisAcc[ax] += pDelta[ax];
+	        cellCur[ax] += pStep [ax];
 	    }
 	}
 	
@@ -125,13 +127,21 @@ public class LineDDA
 		final Vec2  b = new Vec2( 224, 224 );
 		final int   c = 64;
 		
+		traverseDdaLine( a, a, c, new CallbackParam<int[]>() {
+			public void execute( int[] cell ) {
+				System.out.println(  Arrays.toString(cell)  );
+			}
+		});
+		
+		System.out.println( "\n----------\n" );
+		
 		traverseDdaLine( a, b, c, new CallbackParam<int[]>() {
 			public void execute( int[] cell ) {
 				System.out.println(  Arrays.toString(cell)  );
 			}
 		});
 		
-		System.out.print( "\n----------\n" );
+		System.out.println( "\n----------\n" );
 		
 		final int[] o = doNegOffsets( a, b, c );
 		traverseDdaLineUnsigned( a, b, c, new CallbackParam<int[]>() {
