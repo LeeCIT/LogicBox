@@ -1,16 +1,10 @@
 package prototypes.windowPositionSave;
 
-import java.awt.Frame;
+
 import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 
 import javax.swing.JFrame;
@@ -43,12 +37,12 @@ public class WindowPositionManager extends WindowAdapter{
      * Store location of the window
      * @param frame 	The frame to save
      */
-    private void storeOptions(Frame f){
+    private void storeOptions(JFrame f){
         File       file       = new File(fileName);
         Properties properties = new Properties();
         
         // restore the frame from 'full screen' first!
-        f.setExtendedState(Frame.NORMAL);
+        f.setExtendedState(JFrame.NORMAL);
         Rectangle r = f.getBounds();
         int x = (int)r.getX();
         int y = (int)r.getY();
@@ -87,7 +81,7 @@ public class WindowPositionManager extends WindowAdapter{
     
     
     /** Restore location & size of UI */
-    private static void restoreOptions(Frame f) {
+    private static void restoreOptions(JFrame f) {
         File           file = new File(fileName);
         Properties     prop = new Properties();
         BufferedReader br   = null;

@@ -1,13 +1,6 @@
 package prototypes.windowPositionSave;
 
-import java.awt.*;
-import java.awt.event.*;
-
 import javax.swing.*;
-
-import java.util.Properties;
-import java.io.*;
-
 import logicBox.gui.GUI;
 
 class DemoFrame {
