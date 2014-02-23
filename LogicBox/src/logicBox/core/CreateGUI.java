@@ -5,7 +5,7 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
-import logicBox.gui.MenubarCreate;
+import logicBox.gui.CreateMenubar;
 import logicBox.gui.ToolboxFrame;
 import logicBox.gui.editor.EditorFrame;
 import logicBox.gui.editor.EditorPanel;
@@ -14,10 +14,12 @@ import logicBox.gui.editor.EditorPanel;
 public class CreateGUI extends EditorFrame
 {
 	// Reference to main frame
-	private static CreateGUI currentInstance; 
+	public static CreateGUI currentInstance; 
 	
 	public CreateGUI() {
-		add( new MenubarCreate(),    "north" );
+		currentInstance = this;
+		
+		add( new CreateMenubar(),    "north" );
 		add( new ToolboxFrame(this), "west" );
 		add( new EditorPanel() );	
 		setUpFrameSettings();
