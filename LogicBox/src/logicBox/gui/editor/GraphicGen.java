@@ -278,6 +278,65 @@ public class GraphicGen
 	
 	
 	
+	public static GraphicComActive generatePlexer( int inputs, int selects, int outputs ) {
+		Bbox2 r = getBaseRegion();
+			  
+		Vec2   size      = r.getSize();
+		double pinLength = size.x * pinLenFrac;
+		double thickness = EditorStyle.compThickness;
+		
+		applyPinGrowth( r, Math.max(inputs,outputs) );
+		
+		Vec2 tl = r.getTopLeft();
+		Vec2 bl = r.getBottomLeft();
+		Vec2 tr = r.getNorm( 0.5, 0.25 );
+		Vec2 br = r.getNorm( 0.5, 0.75 );
+		
+		double      pinInX        = tl.x - pinLength;
+		Line2       pinInTerminal = new Line2( pinInX, tl.y, pinInX, bl.y );
+		Line2       pinInContact  = new Line2( tl, bl );
+		List<Line2> pinInLines    = genPinLines( pinInTerminal, pinInContact, new Vec2(1,0), inputs, true );
+		
+		double      pinSelY        = bl.y + (thickness * 0.5);
+		Line2       pinSelTerminal = new Line2( bl.x, pinSelY, br.x, pinSelY );
+		Line2       pinSelContact  = new Line2( bl, br );
+		List<Line2> pinSelLines    = genPinLines( pinSelTerminal, pinSelContact, new Vec2(0,-1), selects, true );
+		
+		double      pinOutX        = tr.x + pinLength;
+		Line2       pinOutTerminal = new Line2( pinOutX, tr.y, pinOutX, br.y );
+		Line2       pinOutContact  = new Line2( tr, br );
+		List<Line2> pinOutLines    = genPinLines( pinOutTerminal, pinOutContact, new Vec2(-1,0), outputs, true );
+		
+		List<Line2> pinLines = new ArrayList<>();
+		pinLines.addAll( pinOutLines );
+		pinLines.addAll( pinInLines  );
+		pinLines.addAll( pinSelLines );
+		
+		VecPath polyBody = new VecPath();
+		polyBody.moveTo ( tl );
+		polyBody.lineTo ( tr );
+		polyBody.lineTo ( br );
+		polyBody.lineTo ( bl );
+		polyBody.closePath();
+		
+		VecPath polyPins = new VecPath();
+		for (Line2 pin: pinLines) {
+			polyPins.moveTo( pin.a );
+			polyPins.lineTo( pin.b );
+		}
+		
+		GraphicComActive gate = new GraphicComActive(
+			polyBody,
+			polyPins,
+			null,
+			genPinMappings( pinLines, outputs )
+		);
+		
+		return gate;
+	}
+	
+	
+	
 	/**
 	 * inOffset == first index of the input pins
 	 */
