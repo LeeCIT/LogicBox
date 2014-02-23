@@ -3,6 +3,7 @@
 
 package logicBox.gui.editor;
 
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.VecPath;
@@ -298,13 +299,18 @@ public class GraphicGen
 	
 	
 	
-	// Not used now, but will be useful for mux/demux and the like
+	/**
+	 * Generate pin lines by intersecting line segments.
+	 * UV is the unit vector the intersect line is extended across.
+	 * Reverse indicates whether the line order will be inverted.
+	 * The side connected to the component should always be A, the terminal B.
+	 */
 	private static List<Line2> genPinLines( Line2 from, Line2 to, Vec2 uv, int count, boolean reverse ) {
 		List<Line2> lines = new ArrayList<>();
 		
 		for (Vec2 pos: distributePins(from.a, from.b, count)) {
 			Line2 intersector = new Line2( pos, pos.add(uv.multiply(1024)) );
-			Line2.IntersectResult ir = intersector.intersect( to );
+			Line2.IntersectResult ir = to.intersect( intersector );
 			
 			if (ir.intersects) {
 				Line2 pinLine = new Line2( pos, ir.pos );
@@ -321,6 +327,12 @@ public class GraphicGen
 	
 	
 	
+	/**
+	 * Generate pin lines by intersecting line segments with a cubic bezier curve.
+	 * UV is the unit vector the intersect line is extended across.
+	 * Reverse indicates whether the line order will be inverted.
+	 * The side connected to the component should always be A, the terminal B.
+	 */
 	private static List<Line2> genPinLines( Line2 from, BezierCubic2 to, Vec2 uv, int count, boolean reverse ) {
 		List<Line2> lines = new ArrayList<>();
 		
@@ -346,14 +358,15 @@ public class GraphicGen
 	private static List<Vec2> distributePins( Vec2 a, Vec2 b, int count ) {
 		List<Vec2> list = new ArrayList<>();
 		
-		double dist   = Geo.distance( a, b );
-		double step   = dist / count;
-		double offset = step * 0.5;
-		Vec2   cursor = new Vec2( a.x, a.y + offset );
+		double dist    = Geo.distance( a, b );
+		Vec2   deltaUV = Geo.normalise( b.subtract(a) );
+		Vec2   step    = deltaUV.multiply( dist / count );
+		Vec2   offset  = step   .multiply( 0.5 );
+		Vec2   cursor  = a.add( offset );
 		
 		for (int i=0; i<count; i++) {
 			list.add( cursor.copy() );
-			cursor.y += step;
+			cursor = cursor.add( step );
 		}
 		
 		return list;
