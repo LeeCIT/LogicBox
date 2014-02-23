@@ -11,10 +11,10 @@ package logicBox.sim.component;
  */
 public class Pin extends ComponentPassive
 {
-	protected Component comp; // Component this is physically attached to.
-	protected Trace     trace;
-	protected PinIoMode mode;
-	protected boolean   state;
+	private Component comp; // Component this is physically attached to.
+	private Trace     trace;
+	private PinIoMode mode;
+	private boolean   state;
 	
 	
 	
