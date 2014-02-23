@@ -11,7 +11,7 @@ public class Printing implements Printable{
 	JFrame frame;
 
 
-	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+	public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) {
 		
 		// Important. If this is not here then it spools forever
 		if (pageIndex > 0) {
@@ -19,7 +19,6 @@ public class Printing implements Printable{
         }
 		
 		Graphics2D g2d = (Graphics2D) graphics;
-		
 		g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
 		
 		// Print the frame
@@ -30,7 +29,10 @@ public class Printing implements Printable{
 	
 	
 	
-	
+	/**
+	 * Set up a print job, handles the dialog
+	 * @param frame
+	 */
 	 public void setUpPrintJob(JFrame frame) {
 		 this.frame = frame;
 		 
@@ -39,9 +41,9 @@ public class Printing implements Printable{
          boolean printOk = job.printDialog();
          if (printOk) {
              try {
-                  job.print();
+                 job.print();
              } catch (PrinterException ex) {
-              ex.printStackTrace();
+            	 ex.printStackTrace();
              }
          }
 	 }
