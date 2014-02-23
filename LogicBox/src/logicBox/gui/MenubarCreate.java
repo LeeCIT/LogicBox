@@ -23,8 +23,8 @@ public class MenubarCreate extends CoolMenuBar{
 		CoolMenuItem saveAs = new CoolMenuItem("Save As...", null, null,         '0', null, false);
 		CoolMenuItem sep    = new CoolMenuItem(null, 		 null, null,         '0', null, true);
 		CoolMenuItem open   = new CoolMenuItem("Open", 		 null, null,         'o', null, false);
-		CoolMenuItem print  = new CoolMenuItem("Print",		 null, printFrame(), 'p', null, false);
-		CoolMenuItem exit   = new CoolMenuItem("Exit",		 null, null,         'e', null, false);
+		CoolMenuItem print  = new CoolMenuItem("Print",		 null, print(),      'p', null, false);
+		CoolMenuItem exit   = new CoolMenuItem("Exit",		 null, exitProgram(),'e', null, false);
 
 		
 		List<CoolMenuItem> list = new ArrayList<>();
@@ -43,7 +43,19 @@ public class MenubarCreate extends CoolMenuBar{
 	
 	
 	
-	protected Callback printFrame() {
+	
+	protected Callback exitProgram() {
+		Callback callback = new Callback() {
+			public void execute() {
+				System.exit(0);				
+			}
+		};
+		return callback;
+	}
+	
+	
+	
+	protected Callback print() {
 		Callback callback = new Callback() {
 			public void execute() {
 				new Printing().setUpPrintJob(CreateGUI.currentInstance);;				
