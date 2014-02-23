@@ -2,7 +2,9 @@
 package logicBox.core;
 
 import java.awt.Dimension;
+
 import javax.swing.JFrame;
+
 import logicBox.gui.CreateMenubar;
 import logicBox.gui.ToolboxFrame;
 import logicBox.gui.editor.EditorFrame;
