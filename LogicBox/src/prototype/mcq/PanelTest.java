@@ -42,8 +42,7 @@ public class PanelTest extends JFrame
 		answers.add(ans3);
 		answers.add(ans4);
 		answers.add(ans5);
-		answers.add(ans6);
-		answers.add(ans7);
+		
 		
 		McqQuestion q1 = new McqQuestion(question, answers, ans4);
 		
