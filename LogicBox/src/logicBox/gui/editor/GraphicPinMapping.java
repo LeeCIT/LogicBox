@@ -11,7 +11,6 @@ import logicBox.util.Vec2;
 /**
  * Maps a pin's graphical representation to an IoMode and pin index.
  * Allows the graphical display to be mapped onto the simulator.
- * Positions here are in the graphics's local coordinate space, centred on [0,0].
  * @author Lee Coakley
  */
 public class GraphicPinMapping
