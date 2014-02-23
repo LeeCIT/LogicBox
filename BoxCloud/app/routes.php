@@ -11,4 +11,5 @@ Route::post('/login', 'AuthController@login');
 Route::group(array('before' => 'auth', 'prefix' => 'user'), function()
 {
 	Route::get('', 'UserController@index');
+	Route::get('files', 'FileController@index');
 });
