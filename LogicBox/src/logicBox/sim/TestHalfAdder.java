@@ -3,6 +3,15 @@
 
 package logicBox.sim;
 
+import logicBox.sim.component.DisplayLed;
+import logicBox.sim.component.Gate;
+import logicBox.sim.component.GateAnd;
+import logicBox.sim.component.GateXor;
+import logicBox.sim.component.Junction;
+import logicBox.sim.component.Source;
+import logicBox.sim.component.SourceFixed;
+import logicBox.sim.component.Trace;
+
 
 
 public class TestHalfAdder

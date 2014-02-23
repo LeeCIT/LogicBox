@@ -2,7 +2,7 @@
 
 
 package logicBox.gui.editor;
-import logicBox.sim.PinIoMode;
+import logicBox.sim.component.PinIoMode;
 import logicBox.util.Line2;
 import logicBox.util.Vec2;
 
@@ -38,5 +38,11 @@ public class GraphicPinMapping
 	
 	public Vec2 getPinPosEnd() {
 		return line.b;
+	}
+	
+	
+	
+	public String toString() {
+		return getClass().getSimpleName() + ": " + mode + " " + index + " " + line;
 	}
 }

@@ -3,12 +3,10 @@ package prototypes.frameShareProto;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
 import prototypes.frameShareProto.ToolSelectionEnum.ToolSelection;
-import logicBox.gui.GuiUtil;
+import logicBox.gui.GUI;
 
 public class MainFrame extends JFrame{
 	
@@ -22,7 +20,7 @@ public class MainFrame extends JFrame{
 	public MainFrame() {
 		
 
-		GuiUtil.setNativeLookAndFeel();
+		GUI.setNativeStyle();
 		
 		setupMouseListener();
 		

@@ -6,11 +6,11 @@ package logicBox.gui.editor;
 import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.VecPath;
-import logicBox.sim.PinIoMode;
+import logicBox.sim.component.PinIoMode;
+import logicBox.util.Bbox2;
 import logicBox.util.BezierCubic2;
 import logicBox.util.Geo;
 import logicBox.util.Line2;
-import logicBox.util.Region;
 import logicBox.util.Vec2;
 
 
@@ -22,14 +22,14 @@ import logicBox.util.Vec2;
  */
 public class GraphicGen
 {
-	public static GraphicComActive generateGateRelay() {
-		return generateGateRelay( false );
+	public static GraphicComActive generateGateBuffer() {
+		return generateGateBuffer( false );
 	}
 	
 	
 	
 	public static GraphicComActive generateGateNot() {
-		return generateGateRelay( true );
+		return generateGateBuffer( true );
 	}
 	
 	
@@ -58,14 +58,14 @@ public class GraphicGen
 	
 	
 	
-	public static GraphicComActive generateGateXor() {
-		return generateGateOr( 2, true, false );
+	public static GraphicComActive generateGateXor( int pinCount ) {
+		return generateGateOr( pinCount, true, false );
 	}
 	
 	
 	
-	public static GraphicComActive generateGateXnor() {
-		return generateGateOr( 2, true, true );
+	public static GraphicComActive generateGateXnor( int pinCount ) {
+		return generateGateOr( pinCount, true, true );
 	}
 	
 	
@@ -79,8 +79,8 @@ public class GraphicGen
 	
 	
 	
-	private static GraphicComActive generateGateRelay( boolean invert ) {
-		Region r            = getBaseRegion();
+	private static GraphicComActive generateGateBuffer( boolean invert ) {
+		Bbox2  r            = getBaseRegion();
 		Vec2   size         = r.getSize();
 		double pinLength    = size.x * pinLenFrac;
 		double bubbleRadius = size.x * bubbleFrac;
@@ -128,7 +128,7 @@ public class GraphicGen
 	
 	
 	private static GraphicComActive generateGateAnd( int pinCount, boolean invert ) {
-		Region r            = getBaseRegion();
+		Bbox2  r            = getBaseRegion();
 		Vec2   size         = r.getSize();
 		double pinLength    = size.x * pinLenFrac;
 		double bubbleRadius = size.x * bubbleFrac;
@@ -194,7 +194,7 @@ public class GraphicGen
 	
 	
 	private static GraphicComActive generateGateOr( int pinCount, boolean isXor, boolean invert ) {
-		Region r            = getBaseRegion();
+		Bbox2  r            = getBaseRegion();
 		Vec2   size         = r.getSize();
 		double pinLength    = size.x * pinLenFrac;
 		double bubbleRadius = size.x * bubbleFrac;
@@ -361,9 +361,9 @@ public class GraphicGen
 	
 	
 	
-	private static Region getBaseRegion() {
+	private static Bbox2 getBaseRegion() {
 		double half = baseSize * 0.5;
-		return new Region( new Vec2(-half), new Vec2(half) );
+		return new Bbox2( new Vec2(-half), new Vec2(half) );
 	}
 	
 	
@@ -374,7 +374,7 @@ public class GraphicGen
 	
 	
 	
-	private static void applyPinGrowth( Region r, int pinCount ) {
+	private static void applyPinGrowth( Bbox2 r, int pinCount ) {
 		if (pinCount > pinGrowthThresh)
 			r.br.y += getPinSpacingGrowth() * (pinCount - pinGrowthThresh);
 	}

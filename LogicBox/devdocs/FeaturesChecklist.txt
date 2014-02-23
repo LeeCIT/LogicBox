@@ -1,0 +1,33 @@
+Provide a tutorial(Tooltips and documentation)									Not done
+Save Circuits																	Not done
+Load Circuits																	Not done
+File association																Not done
+Share circuits with students													Not done
+Allow MCQs to be taken															Not done
+Allow printing																	Not done
+Enable simulation																Not done
+Allow the simulation to be powered on and off									Not done
+Enable components to be placed													Not done
+Allow intersecting traces to be switched between solder points and crossings	Not done
+Enable black boxes from scratch													Not done
+enable black boxes to be created from a group of components						Not done
+Enable group operations on components											Not done
+group of components selection													Not done
+Dragging selections																Not done
+Rotation of 90 degree increments												Done
+Deletion of selections															Not done
+Allow editor to zoom and pan													Done
+Allow undo/redo																	Not done
+Integrated documentation regarding components									Not done
+Implement tooltips																Not done
+Allow online saving																Not done
+Allow online loading															Not done
+Allow online login																Not done
+Allow account creation															Not done
+Allow applicable gates to have more than 2 pins									Done
+Allow lecturer to upload assignments											Not done
+When printing background should turn white										Not done
+Highlight powered on traces														Not done
+Snapping traces																	Not done
+
+

@@ -2,8 +2,8 @@
 
 
 package logicBox.gui;
+import logicBox.util.Bbox2;
 import logicBox.util.Geo;
-import logicBox.util.Region;
 import logicBox.util.Vec2;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -41,7 +41,7 @@ public class Gfx
 	
 	public static void drawCircle( Graphics2D g, Vec2 pos, double radius, Color col, boolean filled ) {
 		pushColorAndSet( g, col );
-		drawCircle( g, pos, radius, filled );
+			drawCircle( g, pos, radius, filled );
 		popColor( g );
 	}
 	
@@ -59,35 +59,29 @@ public class Gfx
 	
 	
 	
-	public static void drawRegion( Graphics2D g, Region r, boolean filled ) {
-		drawOrientedRect( g, r.getCentre(), r.getSize(), 0, filled );
+	public static void drawBbox( Graphics2D g, Bbox2 rect, boolean filled ) {
+		drawOrientedRect( g, rect.getCentre(), rect.getSize(), 0, filled );
 	}
 	
 	
 	
-	public static void drawRegionRounded( Graphics2D g, Region region, double radius, boolean filled ) {
-		int w = (int) region.getSize().x;
-		int h = (int) region.getSize().y;
+	public static void drawRegionRounded( Graphics2D g, Bbox2 rect, double radius, boolean filled ) {
+		int w = (int) rect.getSize().x;
+		int h = (int) rect.getSize().y;
 		int r = (int) radius;
 		
 		Gfx.pushMatrix( g );
-			Gfx.translate( g, region.getTopLeft() );
+			Gfx.translate( g, rect.getTopLeft() );
 			
 			if (filled)
 				 g.fillRoundRect( 0,0, w,h, r,r );
 			else g.drawRoundRect( 0,0, w,h, r,r );
-			
 		Gfx.popMatrix( g );
 	}
 	
 	
 	
 	private static void drawThickLineImpl( Graphics2D g, Vec2 a, Vec2 b, double thickness, boolean rounded ) {
-		if (thickness < 2.0) {
-			g.drawLine( (int) a.x, (int) a.y, (int) b.x, (int) b.y );
-			return;
-		}
-		
 		Stroke stroke;
 		
 		if ( ! rounded)
@@ -138,18 +132,18 @@ public class Gfx
 	
 	
 	
-	public static void drawGrid( Graphics2D g, Region region, Vec2 offset, Vec2 cellSize, double thickness ) {
-		double left   = region.getLeft()   + offset.x;
-		double right  = region.getRight()  + offset.x;
-		double top    = region.getTop()    + offset.y;
-		double bottom = region.getBottom() + offset.y;
+	public static void drawGrid( Graphics2D g, Bbox2 rect, Vec2 offset, Vec2 cellSize, double thickness ) {
+		double left   = rect.getLeft()   + offset.x;
+		double right  = rect.getRight()  + offset.x;
+		double top    = rect.getTop()    + offset.y;
+		double bottom = rect.getBottom() + offset.y;
 		
 		Vec2 xt = new Vec2( 0,     top    );
 		Vec2 xb = new Vec2( 0,     bottom );
 		Vec2 ly = new Vec2( left,  0      );
 		Vec2 ry = new Vec2( right, 0      );
 		
-		Stroke  stroke = new BasicStroke( (float) thickness );
+		Stroke  stroke = (thickness > 1) ? new BasicStroke((float) thickness) : g.getStroke();
 		VecPath poly   = new VecPath();
 		
 		Gfx.pushStrokeAndSet( g, stroke );
@@ -219,8 +213,7 @@ public class Gfx
 	 * Enable/disable sub-pixel precision when rendering.
 	 */
 	public static void setAntialiasingState( Graphics2D g, boolean state ) {
-		g.setRenderingHint(
-			RenderingHints.KEY_ANTIALIASING,
+		g.setRenderingHint( RenderingHints.KEY_ANTIALIASING,
 			state ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF
 		);
 	}

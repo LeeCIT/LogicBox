@@ -3,6 +3,9 @@
 
 package logicBox.sim;
 
+import logicBox.sim.component.Gate;
+import logicBox.sim.component.GateXor;
+
 
 
 public class TestGate

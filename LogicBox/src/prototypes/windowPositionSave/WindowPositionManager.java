@@ -1,30 +1,48 @@
 package prototypes.windowPositionSave;
 
-import java.awt.Frame;
+
 import java.awt.Rectangle;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.*;
 import java.util.Properties;
 
-public class WindowPositionManager {
+import javax.swing.JFrame;
+
+public class WindowPositionManager extends WindowAdapter{
 	
 	 // Might want to save somewhere else
     public static final String fileName = "options.prop";
+    private JFrame frame;
+    
+    
+    public WindowPositionManager(JFrame frame) {
+    	this.frame = frame;
+    }
+    
+    
+   /**
+    * Override the window closing event to save the details
+    */
+    public void windowClosing(WindowEvent we) {
+        try {
+           storeOptions(frame);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
+    }    
 
     /**
      * Store location of the window
-     * @param frame the frame to save
+     * @param frame 	The frame to save
      */
-    public static void storeOptions(Frame f){
+    private void storeOptions(JFrame f){
         File       file       = new File(fileName);
         Properties properties = new Properties();
         
         // restore the frame from 'full screen' first!
-        f.setExtendedState(Frame.NORMAL);
+        f.setExtendedState(JFrame.NORMAL);
         Rectangle r = f.getBounds();
         int x = (int)r.getX();
         int y = (int)r.getY();
@@ -47,13 +65,37 @@ public class WindowPositionManager {
     }
 
     
+    /**
+     * Restores the window position if the file is found otherwise it doesn't.
+     */
+    public static void restoreWindowPosition(JFrame frame) {
+    	File optionsFile = new File(WindowPositionManager.fileName);
+    	
+    	 if (optionsFile.exists()) {
+             WindowPositionManager.restoreOptions(frame);
+         } else {
+        	 frame.setLocationByPlatform(true);
+         }
+    }
+    
+    
     
     /** Restore location & size of UI */
-    public static void restoreOptions(Frame f) throws IOException {
+    private static void restoreOptions(JFrame f) {
         File           file = new File(fileName);
         Properties     prop = new Properties();
-        BufferedReader br   = new BufferedReader(new FileReader(file));
-        prop.load(br);
+        BufferedReader br   = null;
+		
+        try {
+			br = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}
+        try {
+			prop.load(br);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
         int x = Integer.parseInt(prop.getProperty("x"));
         int y = Integer.parseInt(prop.getProperty("y"));

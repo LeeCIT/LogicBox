@@ -4,8 +4,11 @@
 package logicBox.util;
 
 import java.awt.Color;
-
-
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.awt.geom.AffineTransform;
+import java.util.List;
 
 
 
@@ -16,7 +19,7 @@ import java.awt.Color;
  * East is 0 degrees, increases anticlockwise
  * @author Lee Coakley
  */
-public class Geo
+public abstract class Geo
 {
 	/**
 	 * Get the base-2 logarithm of x.
@@ -200,7 +203,7 @@ public class Geo
 	 */
 	public static double dot( Vec2 a, Vec2 b ) {
 		return (a.x * b.x) 
-		     + (b.y * b.y);
+		     + (a.y * b.y);
 	}
 	
 	
@@ -234,7 +237,6 @@ public class Geo
 		double r = Math.toRadians( angle );
 	    double c = Math.cos( r );
 	    double s = Math.sin( r );
-
 	    return new Vec2( c, -s );
 	}
 	
@@ -249,6 +251,29 @@ public class Geo
 	    double diff   = a - b;
 	    double mod360 = diff % 360;
 	    return ((mod360 + 540.0) % 360.0) - 180.0;
+	}
+	
+	
+	
+	public static Vec2 normalise( Vec2 v ) {
+		double rcpSqrt = 1.0 / Math.sqrt( lengthSqr(v) );
+		return v.multiply( rcpSqrt );
+	}
+	
+	
+	
+	public static AffineTransform createTransform( Vec2 trans, double rotate ) {
+		return createTransform( trans, new Vec2(1,1), rotate );
+	}
+	
+	
+	
+	public static AffineTransform createTransform( Vec2 trans, Vec2 scale, double rotate ) {
+		AffineTransform t = new AffineTransform();
+		t.translate( trans.x, trans.y );
+		t.scale( scale.x, scale.y );
+		t.rotate( Math.toRadians(-rotate) );
+		return t;
 	}
 	
 	
@@ -391,6 +416,15 @@ public class Geo
 	
 	
 	/**
+	 * Round upwards to nearest multiple.
+	 */
+	public static double ceilToMultiple( double x, double mult ) {
+		return Math.ceil( x / mult ) * mult;
+	}
+	
+	
+	
+	/**
 	 * Round to next highest power of two.
 	 * Source: http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
 	 */
@@ -415,24 +449,90 @@ public class Geo
 	public static boolean isPowerOfTwo( int x ) {
 		return (x & (x-1)) == 0;
 	}
+
+
+
+	/**
+	 * Get a random integer in the given half-open range.
+	 * @param low
+	 * @param highex (exclusive)
+	 * @return int
+	 */
+	public static int randomIntRange( int low, int highex ) {
+		return low + ((int) Math.floor(Math.random() * (highex-low)));
+	}
+	
+	
+	
+	/** Apply a function to a list, accumulating the result.
+	 *  Example: reduce() a list of numbers [0,1,2,3] using addition.
+	 * 			 The result is 6: ((0+1)+2)+3).
+	 * @param list
+	 * @param functor
+	 * @return T, or null if the list is empty.
+	 */
+	public static <T> T reduce( List<T> list, BinaryFunctor<T> functor ) {
+		if (list.isEmpty())
+			return null;
+		
+		T reduced = list.get( 0 );
+		
+		for (int i=1; i<list.size(); i++)
+			reduced = functor.call( reduced, list.get(i) );
+		
+		return reduced;
+	}
+	
+	
+	
+	/**
+	 * Find the least member of a sequence according to a user-defined comparator.
+	 * See main() below for an example usage. 
+	 * @param iterable Iterable<T>
+	 * @return T, or null if the sequence is empty.
+	 */
+	public static <T> T findLeast( Iterable<T> iterable, Comparator<T> comp ) {
+		Iterator<T> iter = iterable.iterator();
+		
+		if ( ! iter.hasNext())
+			return null;
+		
+		T best = iter.next();
+		
+		while (iter.hasNext()) {
+			T cur = iter.next();
+			
+			if (comp.compare(cur,best) < 0)
+				best = cur;
+		}
+		
+		return best;
+	}
+	
+	
+	
+	
+	
+	public static void main( String[] args ) {
+		List<Vec2> otherPoints = new ArrayList<>();
+		otherPoints.add( new Vec2(10,0) );
+		otherPoints.add( new Vec2(20,0) );
+		otherPoints.add( new Vec2(30,0) );
+		otherPoints.add( new Vec2(40,0) );
+		
+		final Vec2 point = new Vec2( 21, 0 );
+		
+		Vec2 closest = findLeast( otherPoints, new Comparator<Vec2>() {
+			public int compare( Vec2 a, Vec2 b ) {
+				double aDist = Geo.distanceSqr( a, point );
+				double bDist = Geo.distanceSqr( b, point );
+				return (aDist<bDist) ? -1 : +1;
+			}
+		});
+		
+		System.out.println( "Closest to " + point + " is " + closest );
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
