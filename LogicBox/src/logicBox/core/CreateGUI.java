@@ -14,14 +14,18 @@ import logicBox.gui.editor.EditorPanel;
 public class CreateGUI extends EditorFrame
 {
 	// Reference to main frame
-	public static CreateGUI currentInstance; 
+	public static CreateGUI currentInstance;
+	
+	private EditorPanel editorPane;
 	
 	public CreateGUI() {
 		currentInstance = this;
-		
+				
 		add( new CreateMenubar(),    "north" );
 		add( new ToolboxFrame(this), "west" );
-		add( new EditorPanel() );	
+		
+		editorPane = new EditorPanel();
+		add( editorPane );	
 		setUpFrameSettings();
 	}
 	
@@ -40,6 +44,11 @@ public class CreateGUI extends EditorFrame
 		setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}
 	
+	
+	
+	public EditorPanel getEditorPane() {
+		return editorPane;
+	}
 	
 	
 	
