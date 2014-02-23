@@ -53,6 +53,26 @@ public class Vec2 extends Point2D implements Serializable
 	
 	
 	
+	public Vec2( double[] array ) {
+		this.x = array[0];
+		this.y = array[1];
+	}
+	
+	
+	
+	public double get( int i ) {
+		return (i==0) ? x : y;
+	}
+	
+	
+	
+	public double[] toArray() {
+		double[] array = { x, y };
+		return array;
+	}
+	
+	
+	
 	public Vec2 add( Vec2 v ) {
 		return new Vec2( x + v.x, y + v.y );
 	}

@@ -173,9 +173,12 @@ public class SpatialGrid<T>
 	
 	
 	
-	private <TF extends TraversalFunctor> TF traverse( Line2 line, TF trav ) {
-		// TODO need DDA line algo here
-		traverse( line.getBbox(), trav );
+	private <TF extends TraversalFunctor> TF traverse( Line2 line, final TF trav ) {
+		LineDDA.traverseDdaLine( line.a, line.b, cellSize, new CallbackParam<int[]>() {
+			public void execute( int[] cell ) {
+				trav.process( coordToIndex(cell[0],cell[1]) );
+			}
+		});
 		return trav;
 	}
 	
@@ -231,10 +234,11 @@ public class SpatialGrid<T>
 	public static void main( String[] args ) {
 		SpatialGrid<String> sg = new SpatialGrid<>( 640, 480, 16 );
 		
-		sg.add( new Vec2(197,261),           "Vec2" );
+		sg.add( new Vec2(197,61),            "Vec2"  );
 		sg.add( new Bbox2(64,129,  256,512), "BboxA" );
 		sg.add( new Bbox2(199,219, 320,512), "BboxB" );
 		sg.add( new Bbox2(199,229, 480,512), "BboxC" );
+		sg.add( new Line2(480,0,0,480),      "Line2" );
 		
 		for (String s: sg.findPotentials( new Vec2(256,256) ))
 			System.out.println( "\t" + s );
