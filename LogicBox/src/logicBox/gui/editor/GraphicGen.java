@@ -3,6 +3,7 @@
 
 package logicBox.gui.editor;
 
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.VecPath;
@@ -298,7 +299,10 @@ public class GraphicGen
 			genPinMappings( pinLines, outputs )
 		);
 		
-		// TODO recentre on [0,0]
+		Vec2            trans  = Bbox2.createFromPoints(tl,bl,tr,br).getCentre().negate();
+		Vec2            scale  = new Vec2( 1, 1 ); // TODO flip if demux, and reverse the pin order 
+		AffineTransform matrix = Geo.createTransform( trans, scale, 0 );
+		graphic.transform( matrix, true );
 		
 		return graphic;
 	}
