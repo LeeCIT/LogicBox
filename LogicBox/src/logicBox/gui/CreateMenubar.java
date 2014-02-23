@@ -75,7 +75,7 @@ public class CreateMenubar extends CoolMenuBar{
 	protected Callback print() {
 		Callback callback = new Callback() {
 			public void execute() {
-				new Printing().setUpPrintJob(CreateGUI.currentInstance);;				
+				new Printing().setUpPrintJob(CreateGUI.currentInstance.getEditorPane());;				
 			}
 		};
 		return callback;
