@@ -17,6 +17,8 @@ public class CreateGUI extends EditorFrame
 	public static CreateGUI currentInstance; 
 	
 	public CreateGUI() {
+		currentInstance = this;
+		
 		add( new MenubarCreate(),    "north" );
 		add( new ToolboxFrame(this), "west" );
 		add( new EditorPanel() );	
