@@ -34,6 +34,6 @@ class AuthController extends Controller
         if(!Auth::attempt($data))
             return Response::json(Error::data(array('invalid' => array('Invalid email or password'))));
         
-        return Response::json(array('success' => true));
+        return Auth::getUser()->getUserInfo();
     }
 }
