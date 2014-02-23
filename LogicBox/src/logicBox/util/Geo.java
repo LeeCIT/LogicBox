@@ -279,8 +279,8 @@ public abstract class Geo
 	
 	public static AffineTransform createTransform( Vec2 trans, Vec2 scale, double rotate ) {
 		AffineTransform t = new AffineTransform();
+		t.scale    ( scale.x, scale.y );
 		t.translate( trans.x, trans.y );
-		t.scale( scale.x, scale.y );
 		t.rotate( Math.toRadians(-rotate) );
 		return t;
 	}
