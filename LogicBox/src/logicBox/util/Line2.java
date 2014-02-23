@@ -3,7 +3,10 @@
 
 package logicBox.util;
 
+import java.awt.geom.AffineTransform;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -11,7 +14,7 @@ import java.io.Serializable;
  * Represents a 2D line segment.
  * @author Lee Coakley
  */
-public class Line2 implements Serializable
+public class Line2 implements Transformable, Serializable
 {
 	private static final long serialVersionUID = 1L;
 	public Vec2 a,b;
@@ -25,6 +28,13 @@ public class Line2 implements Serializable
 	
 	
 	
+	public Line2( double x1, double y1, double x2, double y2) {
+		this.a = new Vec2( x1, y1 );
+		this.b = new Vec2( x2, y2 );
+	}
+	
+	
+	
 	/**
 	 * Find the point on the line which lies closest to the parameter.
 	 */
@@ -33,7 +43,7 @@ public class Line2 implements Serializable
 	    double lenSqr = Geo.distanceSqr( a, b );
 
 	    if (lenSqr == 0)
-	        return a;
+	        return a.copy();
 
 	    Vec2   offset = point.subtract( a );
 	    double t      = Geo.dot( offset, delta ) / lenSqr;
@@ -44,7 +54,7 @@ public class Line2 implements Serializable
 	
 	
 	
-	class IntersectResult {
+	public class IntersectResult {
 		public boolean intersects;
 		public Vec2    pos;
 	}
@@ -82,8 +92,36 @@ public class Line2 implements Serializable
 	
 	
 	
+	public Bbox2 getBbox() {
+		List<Vec2> points = new ArrayList<>();
+		points.add( a  );
+		points.add( b  );
+		return Bbox2.createFromPoints( points );
+	}
+	
+	
+	
+	public Line2 swapEndpoints() {
+		return new Line2( b, a );
+	}
+	
+	
+	
+	public void transform( AffineTransform matrix ) {
+		matrix.transform( a, a );
+		matrix.transform( b, b );
+	}
+	
+	
+	
 	private Vec2 delta() {
 		return b.subtract( a );
+	}
+	
+	
+	
+	public String toString() {
+		return "" + a + " -> " + b;
 	}
 }
 

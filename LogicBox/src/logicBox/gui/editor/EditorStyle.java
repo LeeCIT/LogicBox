@@ -10,7 +10,7 @@ import logicBox.util.Geo;
 
 
 /**
- * Defines the colour palette used by the editor.
+ * Defines the colour palette and line styles used by the editor.
  * @author Lee Coakley
  */
 public class EditorStyle
@@ -23,27 +23,31 @@ public class EditorStyle
 	public static Color colJunctionOn      = new Color( 255, 227,  39 );
 	public static Color colComponentStroke = new Color( 243,  75,  99 );
 	public static Color colComponentFill   = new Color( 112,  18,  58 );
-	public static Color colSelection       = new Color( 78,  185, 252 );
+	public static Color colHighlightStroke = new Color( 245, 238, 207 );
+	public static Color colHighlightFill   = new Color( 183, 117, 126 );
+	public static Color colSelectionStroke = new Color(  78, 185, 252 );
+	public static Color colSelectionFill   = new Color(   0,  95, 192 );
 	
 	public static double gridThickness = 3.0;
 	public static float  compThickness = 5.0f;
 	
 	public static Stroke strokeBody   = new BasicStroke( compThickness );
 	public static Stroke strokePin    = new BasicStroke( compThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+	public static Stroke strokeTrace  = new BasicStroke( compThickness, BasicStroke.CAP_BUTT,  BasicStroke.JOIN_ROUND );
 	public static Stroke strokeBubble = new BasicStroke( compThickness * 0.5f );
 	
-	private static double highlightFrac = 0.125;
-	private static double selectFrac    = 0.5;
 	
 	
-	
-	public static Color makeHighlight( Color col ) {
-		return Geo.lerp( col, Color.white, highlightFrac );
-	}
-	
-	
-	
-	public static Color makeSelect( Color col ) {
-		return Geo.lerp( col, colSelection, selectFrac );
+	public static Stroke makeSelectionStroke( float thickness ) {
+		float[] dashPattern = { thickness };
+		
+		return new BasicStroke(
+			thickness * 0.5f,
+			BasicStroke.CAP_ROUND,
+			BasicStroke.JOIN_ROUND,
+			1.0f,
+			dashPattern,
+			0
+		);
 	}
 }

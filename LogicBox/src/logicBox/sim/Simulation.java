@@ -4,11 +4,19 @@
 package logicBox.sim;
 import java.util.ArrayList;
 import java.util.List;
+import logicBox.sim.component.Component;
+import logicBox.sim.component.Junction;
+import logicBox.sim.component.Pin;
+import logicBox.sim.component.PinIo;
+import logicBox.sim.component.Source;
+import logicBox.sim.component.Trace;
+import logicBox.sim.component.Updateable;
 
 
 
 /**
  * Performs the logic simulation.
+ * Note: This is just a placeholder implementation and only works in trivial cases.
  * @author Lee Coakley
  */
 public class Simulation
@@ -64,10 +72,10 @@ public class Simulation
 				System.out.println( "\tUpdated " + com );
 			}
 			
-			if (com instanceof PinOut) {
-				PinOut out = ((PinOut) com);
+			if (com instanceof PinIo) {
+				PinIo pinIo = ((PinIo) com);
 				
-				for (Pin pin: out.getPinOutputs()) {
+				for (Pin pin: pinIo.getPinOutputs()) {
 					if (pin.getState()) {
 						AffectedPathSet set = getAffectedPath( pin );
 						set.setStates( true );
@@ -167,7 +175,7 @@ public class Simulation
 	
 	
 	
-	public static Trace connect( PinOut outComp, int outPinIndex, PinIn inComp, int inPinIndex ) {
+	public static Trace connect( PinIo outComp, int outPinIndex, PinIo inComp, int inPinIndex ) {
 		Pin pinOut = outComp.getPinOutputs().get( outPinIndex );
 		Pin pinIn  = inComp .getPinInputs() .get( inPinIndex  );
 		return connectPins( pinOut, pinIn );
@@ -175,7 +183,7 @@ public class Simulation
 
 
 
-	public static Trace connect( Junction outJunc, PinIn inComp, int inPinIndex ) {
+	public static Trace connect( Junction outJunc, PinIo inComp, int inPinIndex ) {
 		Pin pinOut = outJunc.createPin();
 		Pin pinIn  = inComp.getPinInputs().get( inPinIndex );
 		return connectPins( pinOut, pinIn );

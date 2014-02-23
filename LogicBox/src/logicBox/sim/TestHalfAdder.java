@@ -3,19 +3,28 @@
 
 package logicBox.sim;
 
+import logicBox.sim.component.DisplayLed;
+import logicBox.sim.component.Gate;
+import logicBox.sim.component.GateAnd;
+import logicBox.sim.component.GateXor;
+import logicBox.sim.component.Junction;
+import logicBox.sim.component.Source;
+import logicBox.sim.component.SourceFixed;
+import logicBox.sim.component.Trace;
+
 
 
 public class TestHalfAdder
 {
 	public static void main( String[] args ) {
 		Source sourceA = new SourceFixed( false );
-		Source sourceB = new SourceFixed( false );
+		Source sourceB = new SourceFixed( true  );
 		
 		Gate gateXor = new GateXor();
 		Gate gateAnd = new GateAnd( 2 );
 		
-		Led ledSum   = new Led();
-		Led ledCarry = new Led();
+		DisplayLed ledSum   = new DisplayLed();
+		DisplayLed ledCarry = new DisplayLed();
 		
 		Trace aToXor   = Simulation.connect( sourceA, 0, gateXor, 0 );
 		Trace bToXor   = Simulation.connect( sourceB, 0, gateXor, 1 );

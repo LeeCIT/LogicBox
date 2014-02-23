@@ -15,6 +15,6 @@ public class EditorFrame extends JFrame
 {
 	public EditorFrame() {
 		super();
-		setLayout( new MigLayout( "", "[grow,fill]", "[grow,fill]" ) );
+		setLayout( new MigLayout( "debug", "[grow,fill]", "[grow,fill]" ) );
 	}
 }

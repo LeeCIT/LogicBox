@@ -4,8 +4,11 @@
 package logicBox.util;
 
 import java.awt.Color;
-
-
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.awt.geom.AffineTransform;
+import java.util.List;
 
 
 
@@ -16,8 +19,18 @@ import java.awt.Color;
  * East is 0 degrees, increases anticlockwise
  * @author Lee Coakley
  */
-public class Geo
+public abstract class Geo
 {
+	/**
+	 * Get the base-2 logarithm of x.
+	 * In other words, get which power of 2 the number is.
+	 */
+	public static double log2( double x ) {
+		return Math.log(x) / Math.log(2);
+	}
+	
+	
+	
 	/**
 	 * Linear interpolate from A to B by fraction F.
 	 */
@@ -122,10 +135,47 @@ public class Geo
 	
 	
 	/**
+	 * Get the vector needed to go from A to B.
+	 */
+	public static Vec2 delta( Vec2 a, Vec2 b ) {
+		return b.subtract( a );
+	}
+	
+	
+	
+	/**
+	 * Snap to nearest multiple of S.
+	 */
+	public static Vec2 snapNear( Vec2 v, double s ) {
+		return new Vec2( roundToMultiple( v.x, s ),
+						 roundToMultiple( v.y, s ) );
+	}
+	
+	
+	
+	/**
+	 * Get the length of a vector squared.
+	 */
+	public static double lengthSqr( Vec2 v ) {
+		return dot( v, v );
+	}
+	
+	
+	
+	/**
+	 * Get the length of a vector.
+	 */
+	public static double length( Vec2 v ) {
+		return Math.sqrt( lengthSqr(v) );
+	}
+	
+	
+	
+	/**
 	 * Get the euclidean distance squared between two points.
 	 */
 	public static double distanceSqr( Vec2 a, Vec2 b ) {
-		return sqr(b.x-a.x) + sqr(b.y-a.y);
+		return lengthSqr( delta(a,b) );
 	}
 	
 	
@@ -134,13 +184,13 @@ public class Geo
 	 * Get the euclidean distance between two points.
 	 */
 	public static double distance( Vec2 a, Vec2 b ) {
-		return Math.sqrt( distanceSqr(a,b) );
+		return length( delta(a,b) );
 	}
 	
 	
 	
 	/**
-	 * Find the square of X.
+	 * Get the square of X.
 	 */
 	public static double sqr( double x ) {
 		return x * x;
@@ -149,11 +199,11 @@ public class Geo
 	
 	
 	/**
-	 * Get A dot B.
+	 * Get the dot product of A and B.
 	 */
 	public static double dot( Vec2 a, Vec2 b ) {
 		return (a.x * b.x) 
-		     + (b.x * b.y);
+		     + (a.y * b.y);
 	}
 	
 	
@@ -181,6 +231,18 @@ public class Geo
 	
 	
 	/**
+	 * Express an angle as a unit vector.
+	 */
+	public static Vec2 angleToVector( double angle ) {
+		double r = Math.toRadians( angle );
+	    double c = Math.cos( r );
+	    double s = Math.sin( r );
+	    return new Vec2( c, -s );
+	}
+	
+	
+	
+	/**
 	 * Normalised angular difference in range (-180,+180).
 	 * Result is negative if B is anticlockwise with respect to A.
 	 * Order of comparison affects the sign, but the absolute value is the same either way.
@@ -189,6 +251,29 @@ public class Geo
 	    double diff   = a - b;
 	    double mod360 = diff % 360;
 	    return ((mod360 + 540.0) % 360.0) - 180.0;
+	}
+	
+	
+	
+	public static Vec2 normalise( Vec2 v ) {
+		double rcpSqrt = 1.0 / Math.sqrt( lengthSqr(v) );
+		return v.multiply( rcpSqrt );
+	}
+	
+	
+	
+	public static AffineTransform createTransform( Vec2 trans, double rotate ) {
+		return createTransform( trans, new Vec2(1,1), rotate );
+	}
+	
+	
+	
+	public static AffineTransform createTransform( Vec2 trans, Vec2 scale, double rotate ) {
+		AffineTransform t = new AffineTransform();
+		t.translate( trans.x, trans.y );
+		t.scale( scale.x, scale.y );
+		t.rotate( Math.toRadians(-rotate) );
+		return t;
 	}
 	
 	
@@ -274,6 +359,19 @@ public class Geo
 	
 	
 	/**
+	 * Compute the scaling factor needed to fit a given rectangle into another while preserving aspect.
+	 */
+	public static double getAspectScaleFactor( Vec2 size, Vec2 fitIn, boolean inside ) {
+		Vec2 ratios = fitIn.divide( size );
+        
+        if (inside)
+        	 return ratios.getSmallest();
+        else return ratios.getBiggest();
+	}
+	
+	
+	
+	/**
 	 * Get the absolute difference between two numbers.
 	 */
 	public static double absDiff( double x, double y ) {
@@ -314,24 +412,127 @@ public class Geo
 	public static double roundToMultiple( double x, double mult ) {
 		return roundArith( x / mult ) * mult;
 	}
+	
+	
+	
+	/**
+	 * Round upwards to nearest multiple.
+	 */
+	public static double ceilToMultiple( double x, double mult ) {
+		return Math.ceil( x / mult ) * mult;
+	}
+	
+	
+	
+	/**
+	 * Round to next highest power of two.
+	 * Source: http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
+	 */
+	public static int roundToNextPowerOfTwo( int x ) {
+		x--;
+	    x |= x >>  1;
+	    x |= x >>  2;
+	    x |= x >>  4;
+	    x |= x >>  8;
+	    x |= x >> 16;
+	    x++;
+
+	    return x;
+	}
+	
+	
+	
+	/**
+	 * Check if number is a power of two.
+	 * Source: http://graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2
+	 */
+	public static boolean isPowerOfTwo( int x ) {
+		return (x & (x-1)) == 0;
+	}
+
+
+
+	/**
+	 * Get a random integer in the given half-open range.
+	 * @param low
+	 * @param highex (exclusive)
+	 * @return int
+	 */
+	public static int randomIntRange( int low, int highex ) {
+		return low + ((int) Math.floor(Math.random() * (highex-low)));
+	}
+	
+	
+	
+	/** Apply a function to a list, accumulating the result.
+	 *  Example: reduce() a list of numbers [0,1,2,3] using addition.
+	 * 			 The result is 6: ((0+1)+2)+3).
+	 * @param list
+	 * @param functor
+	 * @return T, or null if the list is empty.
+	 */
+	public static <T> T reduce( List<T> list, BinaryFunctor<T> functor ) {
+		if (list.isEmpty())
+			return null;
+		
+		T reduced = list.get( 0 );
+		
+		for (int i=1; i<list.size(); i++)
+			reduced = functor.call( reduced, list.get(i) );
+		
+		return reduced;
+	}
+	
+	
+	
+	/**
+	 * Find the least member of a sequence according to a user-defined comparator.
+	 * See main() below for an example usage. 
+	 * @param iterable Iterable<T>
+	 * @return T, or null if the sequence is empty.
+	 */
+	public static <T> T findLeast( Iterable<T> iterable, Comparator<T> comp ) {
+		Iterator<T> iter = iterable.iterator();
+		
+		if ( ! iter.hasNext())
+			return null;
+		
+		T best = iter.next();
+		
+		while (iter.hasNext()) {
+			T cur = iter.next();
+			
+			if (comp.compare(cur,best) < 0)
+				best = cur;
+		}
+		
+		return best;
+	}
+	
+	
+	
+	
+	
+	public static void main( String[] args ) {
+		List<Vec2> otherPoints = new ArrayList<>();
+		otherPoints.add( new Vec2(10,0) );
+		otherPoints.add( new Vec2(20,0) );
+		otherPoints.add( new Vec2(30,0) );
+		otherPoints.add( new Vec2(40,0) );
+		
+		final Vec2 point = new Vec2( 21, 0 );
+		
+		Vec2 closest = findLeast( otherPoints, new Comparator<Vec2>() {
+			public int compare( Vec2 a, Vec2 b ) {
+				double aDist = Geo.distanceSqr( a, point );
+				double bDist = Geo.distanceSqr( b, point );
+				return (aDist<bDist) ? -1 : +1;
+			}
+		});
+		
+		System.out.println( "Closest to " + point + " is " + closest );
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

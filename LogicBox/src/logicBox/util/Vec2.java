@@ -2,6 +2,7 @@
 
 
 package logicBox.util;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 
@@ -52,64 +53,145 @@ public class Vec2 extends Point2D implements Serializable
 	
 	
 	
+	public Vec2( double[] array ) {
+		this.x = array[0];
+		this.y = array[1];
+	}
+	
+	
+	
+	public double get( int i ) {
+		return (i==0) ? x : y;
+	}
+	
+	
+	
+	public double[] toArray() {
+		double[] array = { x, y };
+		return array;
+	}
+	
+	
+	
 	public Vec2 add( Vec2 v ) {
-		return new Vec2( x + v.x,
-						 y + v.y );
+		return new Vec2( x + v.x, y + v.y );
 	}
 	
 	
 	
 	public Vec2 subtract( Vec2 v ) {
-		return new Vec2( x - v.x,
-						 y - v.y );
+		return new Vec2( x - v.x, y - v.y );
 	}
 	
 	
 	
 	public Vec2 multiply( Vec2 v ) {
-		return new Vec2( x * v.x,
-						 y * v.y );
+		return new Vec2( x * v.x, y * v.y );
+	}
+	
+	
+	
+	public Vec2 divide( Vec2 v ) {
+		return new Vec2( x / v.x, y / v.y );
 	}
 	
 	
 	
 	public Vec2 modulo( Vec2 v ) {
-		return new Vec2( x % v.x,
-						 y % v.y );
+		return new Vec2( x % v.x, y % v.y );
 	}
 	
 	
 	
 	public Vec2 add( double v ) {
-		return new Vec2( x + v,
-						 y + v );
+		return new Vec2( x + v, y + v );
 	}
 	
 	
 	
-	public Vec2 substract( double v ) {
-		return new Vec2( x - v,
-						 y - v );
+	public Vec2 subtract( double v ) {
+		return new Vec2( x - v, y - v );
 	}
 	
 	
 	
 	public Vec2 multiply( double v ) {
-		return new Vec2( x * v,
-						 y * v );
+		return new Vec2( x * v, y * v );
+	}
+	
+	
+	
+	public Vec2 divide( double v ) {
+		return new Vec2( x / v, y / v );
 	}
 	
 	
 	
 	public Vec2 modulo( double v ) {
-		return new Vec2( x % v,
-						 y % v );
+		return new Vec2( x % v, y % v );
+	}
+	
+	
+	
+	public Vec2 add( double vx, double vy ) {
+		return new Vec2( x + vx, y + vy );
+	}
+	
+	
+	
+	public Vec2 subtract( double vx, double vy ) {
+		return new Vec2( x - vx, y - vy );
+}
+	
+	
+	
+	public Vec2 multiply( double vx, double vy ) {
+		return new Vec2( x * vx, y * vy );
+	}
+	
+	
+	
+	public Vec2 divide( double vx, double vy ) {
+		return new Vec2( x / vx, y / vy );
+	}
+	
+	
+	
+	public Vec2 modulo( double vx, double vy ) {
+		return new Vec2( x % vx, y % vy );
 	}
 	
 	
 	
 	public Vec2 negate() {
 		return new Vec2( -x, -y );
+	}
+	
+	
+	
+	public Vec2 rotate( double angle ) {
+	    double r = Math.toRadians( angle );
+	    double c = Math.cos( r );
+	    double s = Math.sin( r );
+
+	    return new Vec2( x* c  +  y*s,
+	                     x*-s  +  y*c );
+	}
+	
+	
+	
+	public Vec2 rotate( Vec2 uv ) {
+	    double c = uv.x;
+	    double s = uv.y;
+
+	    return new Vec2( x*c  +  y*-s,
+	                     x*s  +  y* c );
+	}
+	
+	
+	
+	public void transform( AffineTransform matrix ) {
+		matrix.transform( this, this );
 	}
 	
 	

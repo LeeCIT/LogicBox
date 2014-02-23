@@ -7,9 +7,9 @@ import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import javax.swing.SwingUtilities;
+import logicBox.util.Bbox2;
 import logicBox.util.Callback;
 import logicBox.util.Geo;
-import logicBox.util.Region;
 import logicBox.util.Vec2;
 
 
@@ -22,10 +22,10 @@ public class Camera
 {
 	private Component component;
 	
-	private double zoomRate  = 1.0 + (1.0 / 3.0);
-	private double zoomRange = 8.0;
-	private double zoomMin   = 1.0 / zoomRange;
-	private double zoomMax   = zoomRange;
+	private double zoomRate;
+	private double zoomRange;
+	private double zoomMin;
+	private double zoomMax;
 	private double zoom;
 	
 	private boolean panningActive;
@@ -33,7 +33,7 @@ public class Camera
 	private Vec2    pan;
 	
 	private AffineTransform matrix;
-	private Callback       onTransform;
+	private Callback        onTransform;
 	
 	
 	
@@ -45,10 +45,10 @@ public class Camera
 		zoomRate  = 1.0 + (1.0 / 3.0);
 		zoomRange = 8.0;
 		zoomMin   = 1.0 / zoomRange;
-		zoomMax   = zoomRange;
+		zoomMax   =       zoomRange;
 		zoom      = 1.0;
 		
-		pan       = new Vec2( 0 );
+		pan       = new Bbox2( attachTo ).getCentre();
 		matrix    = new AffineTransform();
 		
 		onTransform = onTransformChange;
@@ -77,7 +77,7 @@ public class Camera
 		Vec2 out = new Vec2();
 		
 		try {
-			AffineTransform inv = matrix.createInverse();
+			AffineTransform inv = matrix.createInverse(); // TODO consider caching this
 			inv.transform( pos, out );
 		}
 		catch (NoninvertibleTransformException ex) {
@@ -89,11 +89,11 @@ public class Camera
 	
 	
 	
-	public Region getWorldViewableArea() {
-		Region r = new Region( component );
-		r.tl = mapScreenToWorld( r.tl );
-		r.br = mapScreenToWorld( r.br );
-		return r;
+	public Bbox2 getWorldViewableArea() {
+		Bbox2 b = new Bbox2( component );
+		b.tl = mapScreenToWorld( b.tl );
+		b.br = mapScreenToWorld( b.br );
+		return b;
 	}
 	
 	
@@ -105,13 +105,13 @@ public class Camera
 	
 	
 	public void zoomIn() {
-		zoomLogarithmic( -1 );
+		zoomLogarithmic( -1, false );
 	}
 	
 	
 	
 	public void zoomOut() {
-		zoomLogarithmic( 1 );
+		zoomLogarithmic( 1, false );
 	}
 	
 	
@@ -140,7 +140,7 @@ public class Camera
 	
 	
 	
-	private void zoomLogarithmic( double wheelInput ) {
+	private void zoomLogarithmic( double wheelInput, boolean isMouseInput ) {
 		double  delta = -wheelInput;
 		boolean in    = delta > 0.0;
 		double  mod   = zoomRate * Math.abs( delta );
@@ -154,14 +154,21 @@ public class Camera
 		if (Geo.absDiff( zoom, 1.0 ) < roundingSnapThresh)
 			zoom = 1.0;
 		
+		// TODO account for mouse position
 		updateTransform();
 	}
 	
 	
 	
 	private void updateTransform() {
-		Region region = new Region( component );
-		Vec2   half   = region.getSize().multiply( 0.5 );
+		updateTransform( new Vec2(0.5) );
+	}
+	
+	
+	
+	private void updateTransform( Vec2 normalisedRelativePointer ) {
+		Bbox2 region = new Bbox2( component );
+		Vec2  half   = region.getSize().multiply( 0.5 );
 		
 		matrix = new AffineTransform();
 		matrix.translate(  half.x,  half.y );
@@ -178,7 +185,7 @@ public class Camera
 	private void setupActions() {
 		component.addMouseWheelListener( new MouseWheelListener() {
 			public void mouseWheelMoved( MouseWheelEvent ev ) {
-				zoomLogarithmic( ev.getPreciseWheelRotation() );
+				zoomLogarithmic( ev.getPreciseWheelRotation(), true );
 			}
 		});
 		
