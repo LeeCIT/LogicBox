@@ -3,7 +3,6 @@
 
 package logicBox.gui.editor;
 
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.VecPath;
