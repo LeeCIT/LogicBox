@@ -78,15 +78,14 @@ public class GraphicGen
 	private static final double pinLenFrac      = 0.5;
 	private static final double bubbleFrac      = 0.1;
 	private static final int    pinGrowthThresh = 4;
+	private static final double pinLength       = baseSize * pinLenFrac;
+	private static final double bubbleRadius    = baseSize * bubbleFrac;
+	private static final double thickness       = EditorStyle.compThickness;
 	
 	
 	
 	private static GraphicComActive generateGateBuffer( boolean invert ) {
-		Bbox2  r            = getBaseRegion();
-		Vec2   size         = r.getSize();
-		double pinLength    = size.x * pinLenFrac;
-		double bubbleRadius = size.x * bubbleFrac;
-		double thickness    = EditorStyle.compThickness;
+		Bbox2 r = getBaseRegion();
 		
 		Vec2 pinOutPos = r.getRightMiddle();
 		Vec2 pinOutEnd = pinOutPos.add( pinLength, 0 );
@@ -118,12 +117,8 @@ public class GraphicGen
 	
 	
 	private static GraphicComActive generateGateAnd( int pinCount, boolean invert ) {
-		Bbox2  r            = getBaseRegion();
-		Vec2   size         = r.getSize();
-		double pinLength    = size.x * pinLenFrac;
-		double bubbleRadius = size.x * bubbleFrac;
-		double thickness    = EditorStyle.compThickness;
-		double flatFrac     = 0.5;
+		Bbox2  r        = getBaseRegion();
+		double flatFrac = 0.5;
 		
 		applyPinGrowth( r, pinCount );
 		
@@ -162,15 +157,9 @@ public class GraphicGen
 		polyBody.lineTo ( botLeft );
 		polyBody.closePath();
 		
-		VecPath polyPins = new VecPath();
-		for (Line2 pin: pinLines) {
-			polyPins.moveTo( pin.a );
-			polyPins.lineTo( pin.b );
-		}
-		
 		GraphicComActive gate = new GraphicComActive(
 			polyBody,
-			polyPins,
+			genPolyPins( pinLines ),
 			null,
 			genPinMappings( pinLines, 1 )
 		);
@@ -184,12 +173,8 @@ public class GraphicGen
 	
 	
 	private static GraphicComActive generateGateOr( int pinCount, boolean isXor, boolean invert ) {
-		Bbox2  r            = getBaseRegion();
-		Vec2   size         = r.getSize();
-		double pinLength    = size.x * pinLenFrac;
-		double bubbleRadius = size.x * bubbleFrac;
-		double thickness    = EditorStyle.compThickness;
-		double flatFrac     = 1.0 / 8.0;
+		Bbox2  r        = getBaseRegion();
+		double flatFrac = 1.0 / 8.0;
 		
 		applyPinGrowth( r, pinCount );
 		
@@ -210,7 +195,7 @@ public class GraphicGen
 		Vec2 botBezC1   = Geo.lerp( botFlatEnd, bezRefBr, 0.5      );
 		Vec2 botBezC2   = pinOutPos;
 		
-		double rearConOffs = size.x * 0.33;
+		double rearConOffs = r.getSize().x * 0.33;
 		Vec2   rearC1      = topLeft.add( rearConOffs,  rearConOffs );
 		Vec2   rearC2      = botLeft.add( rearConOffs, -rearConOffs );
 		
@@ -262,9 +247,8 @@ public class GraphicGen
 	
 	
 	public static GraphicComActive generatePlexer( int inputs, int selects, int outputs, boolean isDemux ) {
-		Bbox2  r         = getBaseRegion();
+		Bbox2  r = getBaseRegion();
 			   r.transform( Geo.createTransform( new Vec2(0), new Vec2(2,2), 0) );
-		double pinLength = baseSize * pinLenFrac;
 		
 		applyPinGrowth( r, Math.max(inputs,outputs) );
 		
@@ -309,7 +293,7 @@ public class GraphicGen
 		);
 		
 		Vec2            trans  = Bbox2.createFromPoints(tl,bl,tr,br).getCentre().negate();
-		Vec2            scale  = new Vec2( isDemux?-1:1, 1 ); // TODO flip if demux, and reverse the pin order 
+		Vec2            scale  = new Vec2( isDemux?-1:1, 1 ); 
 		AffineTransform matrix = Geo.createTransform( trans, scale, 0 );
 		graphic.transform( matrix, true );
 		
