@@ -5,21 +5,8 @@ class FileController extends Controller
     function index()
     {
         $u = Auth::getUser();
-        
-        $path = public_path('files/'.$u->id);
-		$files = scandir($path);
-        
-		$circuits = array();
-        
-		foreach ($files as $key => $file)
-        {
-			$filedata = pathinfo($file);
-			
-            if($filedata['extension'] == '.lb')
-                $circuits[] = $files[$key];
-		}
-        
-        return Response::json($circuits);
+
+        return Response::json($u->getFiles());
     }
     
     function upload()
@@ -35,14 +22,12 @@ class FileController extends Controller
         
         $u = Auth::getUser();
         
-        $path = public_path('files/'.$u->id);
-		
 		if(!Input::hasFile('file'))
 			return Error::data(array('file' => 'A valid file was not uploaded'));
 		
 		$f = Input::file('file');
 		
-		$f->move($path, $f->getClientOriginalName());
+		$u->addFile($f);
 		
 		return Response::json(array('success' => 'File was uploaded to user\'s account!'));
     }

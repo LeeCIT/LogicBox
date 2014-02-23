@@ -25,6 +25,31 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 		return $this->email;
 	}
 	
+	public function getFiles()
+	{
+        $path = public_path('files/'.$this->id);
+		$files = scandir($path);
+        
+		$circuits = array();
+        
+		foreach ($files as $key => $file)
+        {
+			$filedata = pathinfo($file);
+			
+            if($filedata['extension'] == 'lb')
+                $circuits[] = $files[$key];
+		}
+		
+		return $circuits;
+	}
+	
+	public function addFile($f)
+	{
+		$path = public_path('files/'.$this->id);
+		
+		$f->move($path, $f->getClientOriginalName());
+	}
+	
 	public static function getRegistrationRules()
 	{
 		return array(
