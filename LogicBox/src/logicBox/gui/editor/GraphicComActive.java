@@ -14,6 +14,7 @@ import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.util.Bbox2;
 import logicBox.util.Geo;
+import logicBox.util.Transformable;
 import logicBox.util.Vec2;
 
 
@@ -184,14 +185,14 @@ public class GraphicComActive extends Graphic
 		this.pos   = pos;
 		this.angle = angle;
 		unTransform();		
-		transform( Geo.createTransform(pos,angle) );
+		transform( Geo.createTransform(pos,angle), false );
 	}
 	
 	
 	
 	private void unTransform() {
 		try {
-			transform( matrix.createInverse() );
+			transform( matrix.createInverse(), false );
 		}
 		catch (NoninvertibleTransformException ex) {
 			ex.printStackTrace();
@@ -200,20 +201,33 @@ public class GraphicComActive extends Graphic
 	
 	
 	
-	private void transform( AffineTransform mat ) {
-		matrix = mat;
+	protected void transform( AffineTransform mat, boolean permanent ) {
+		if (permanent)
+			 matrix = new AffineTransform();
+		else matrix = mat;
 		
-		polyBody .transform( mat );
-		polyPins .transform( mat );
-		bubblePos.transform( mat );
-		
-		if (polyAux != null)
-			polyAux.transform( mat );
-		
-		for (GraphicPinMapping gpm: pinMap)
-			gpm.line.transform( mat );
+		for (Transformable trans: getTransformables())
+			trans.transform( mat );
 		
 		bbox = computeBbox();
+	}
+	
+	
+	
+	private List<Transformable> getTransformables() {
+		List<Transformable> trans = new ArrayList<>();
+		
+		trans.add( polyBody );
+		trans.add( polyPins );
+		trans.add( bubblePos );
+		
+		if (polyAux != null)
+			trans.add( polyAux );
+		
+		for (GraphicPinMapping gpm: pinMap)
+			trans.add( gpm.line );
+		
+		return trans;
 	}
 	
 	
