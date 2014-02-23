@@ -1,6 +1,6 @@
 package logicBox.web;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -36,10 +36,8 @@ public class WebClient
 		h.asJsonAsync(new Callback<JsonNode>() 
 		{
 		    public void failed(UnirestException e) 
-		    {
+		    {	
 	    		ri.onRequestResponse(null, req, RequestInterface.status.FAILED);
-	    		
-	    		endRequest();
 		    }
 
 		    public void completed(HttpResponse<JsonNode> response) 
@@ -48,15 +46,11 @@ public class WebClient
 		    	parseErrors(response.getBody().getObject(), req.getErrors());
 		    	
 		    	ri.onRequestResponse(response, req, RequestInterface.status.COMPLETED);
-		    	
-		    	endRequest();
 		    }
 
 		    public void cancelled() 
 		    {
 		    	ri.onRequestResponse(null, req, RequestInterface.status.CANCELLED);
-		    	
-		    	endRequest();
 		    }
 		});	
 	}
@@ -70,8 +64,6 @@ public class WebClient
 		    public void failed(UnirestException e) 
 		    {
 	    		ri.onRequestResponse(null, req, RequestInterface.status.FAILED);
-	    		
-	    		endRequest();
 		    }
 
 		    public void completed(HttpResponse<JsonNode> response) 
@@ -80,17 +72,31 @@ public class WebClient
 		    	parseErrors(response.getBody().getObject(), req.getErrors());
 		    	
 		    	ri.onRequestResponse(response, req, RequestInterface.status.COMPLETED);
-		    	
-		    	endRequest();
 		    }
 
 		    public void cancelled() 
 		    {
 		    	ri.onRequestResponse(null, req, RequestInterface.status.CANCELLED);
-		    	
-		    	endRequest();
 		    }
 		});	
+	}
+	
+	public void upload(File f, Request req)
+	{
+		try 
+		{
+			HttpResponse<JsonNode> response = 
+				Unirest.post(url + "user/files/upload")
+				  .field("file", f)
+	              .asJson();
+			
+			parseHeaders(response.getHeaders());
+	    	parseErrors(response.getBody().getObject(), req.getErrors());
+		} 
+		catch (UnirestException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	private void parseHeaders(Map<String, String> headers)
@@ -98,18 +104,6 @@ public class WebClient
 		if(headers.containsKey("set-cookie"))
 		{
 			Unirest.setDefaultHeader("Cookie", headers.get("set-cookie"));
-		}
-	}
-	
-	private void endRequest()
-	{
-		try 
-		{
-			Unirest.shutdown();
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
 		}
 	}
 	

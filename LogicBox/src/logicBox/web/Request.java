@@ -1,5 +1,6 @@
 package logicBox.web;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,6 +33,11 @@ public class Request
 		map.put("password", password);
 		
 		wc.post("login", map, this, ri);
+	}
+	
+	public void upload(File f)
+	{
+		wc.upload(f, this);
 	}
 	
 	public void requestInfo(RequestInterface ri)
