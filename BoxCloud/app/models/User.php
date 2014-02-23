@@ -46,7 +46,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	public function getUserInfo()
 	{
 		$data = array(
-			$this->toArray(),
+			'user' => $this->toArray(),
 			'files' => $this->getFiles()
 		);
 		
