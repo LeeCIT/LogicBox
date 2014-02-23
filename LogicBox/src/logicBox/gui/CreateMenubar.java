@@ -15,8 +15,8 @@ import logicBox.util.Callback;
  * @author John
  *
  */
-public class MenubarCreate extends CoolMenuBar{
-	public MenubarCreate() {
+public class CreateMenubar extends CoolMenuBar{
+	public CreateMenubar() {
 		// File
 		CoolMenuItem fileH	= new CoolMenuItem(null,        "File",null,         '0', null, false);
 		CoolMenuItem save   = new CoolMenuItem("Save", 		 null, null,         's', null, false);
