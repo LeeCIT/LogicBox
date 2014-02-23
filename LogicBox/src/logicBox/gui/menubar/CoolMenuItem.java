@@ -52,10 +52,15 @@ public class CoolMenuItem extends JMenuItem
 		this.heading 	 = heading;
 	}
 
+	
+	
+	
 	public String getHeading() {
 		return heading;
 	}
 
+	
+	
 	public boolean isSeparator() {
 		return isSeparator;
 	}

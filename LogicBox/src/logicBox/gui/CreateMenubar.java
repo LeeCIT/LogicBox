@@ -32,8 +32,7 @@ public class CreateMenubar extends CoolMenuBar{
 		CoolMenuItem logIn      = new CoolMenuItem("Log In",      null,      null, 'i', null, false);
 		CoolMenuItem logout     = new CoolMenuItem("Log Out",     null,      null, 'u', null, false);
 
-
-		
+		// File add
 		List<CoolMenuItem> fileList = new ArrayList<>();
 		fileList.add(fileH);
 		fileList.add(save);
@@ -45,11 +44,15 @@ public class CreateMenubar extends CoolMenuBar{
 		fileList.add(sep);
 		fileList.add(exit);
 		
+		// Logicbox add
 		List<CoolMenuItem> logicBoxList = new ArrayList<>();
 		logicBoxList.add(logicBoxH);
 		logicBoxList.add(newAccount);
 		logicBoxList.add(logIn);
 		logicBoxList.add(logout);
+		
+		// Default if enabled or not
+		logout.setEnabled(false);
 		
 		this.addHeadingAndSubHeadings(fileList);
 		this.addHeadingAndSubHeadings(logicBoxList);
