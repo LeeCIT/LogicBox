@@ -25,20 +25,34 @@ public class CreateMenubar extends CoolMenuBar{
 		CoolMenuItem open   = new CoolMenuItem("Open", 		 null, null,         'o', null, false);
 		CoolMenuItem print  = new CoolMenuItem("Print",		 null, print(),      'p', null, false);
 		CoolMenuItem exit   = new CoolMenuItem("Exit",		 null, exitProgram(),'e', null, false);
+		
+		// LogicBox
+		CoolMenuItem logicBoxH  = new CoolMenuItem(null,         "LogicBox", null, '0', null, false);
+		CoolMenuItem newAccount = new CoolMenuItem("New Account", null,      null, '0', null, false);
+		CoolMenuItem logIn      = new CoolMenuItem("Log In",      null,      null, 'i', null, false);
+		CoolMenuItem logout     = new CoolMenuItem("Log Out",     null,      null, 'u', null, false);
+
 
 		
-		List<CoolMenuItem> list = new ArrayList<>();
-		list.add(fileH);
-		list.add(save);
-		list.add(saveAs);
-		list.add(sep);
-		list.add(open);
-		list.add(sep);
-		list.add(print);
-		list.add(sep);
-		list.add(exit);
+		List<CoolMenuItem> fileList = new ArrayList<>();
+		fileList.add(fileH);
+		fileList.add(save);
+		fileList.add(saveAs);
+		fileList.add(sep);
+		fileList.add(open);
+		fileList.add(sep);
+		fileList.add(print);
+		fileList.add(sep);
+		fileList.add(exit);
 		
-		this.addHeadingAndSubHeadings(list);
+		List<CoolMenuItem> logicBoxList = new ArrayList<>();
+		logicBoxList.add(logicBoxH);
+		logicBoxList.add(newAccount);
+		logicBoxList.add(logIn);
+		logicBoxList.add(logout);
+		
+		this.addHeadingAndSubHeadings(fileList);
+		this.addHeadingAndSubHeadings(logicBoxList);
 	}
 	
 	
