@@ -5,6 +5,7 @@ package logicBox.gui.editor;
 
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import logicBox.gui.VecPath;
 import logicBox.sim.component.PinIoMode;
@@ -287,6 +288,14 @@ public class GraphicGen
 		Line2       pinOutContact  = new Line2( tr, br );
 		List<Line2> pinOutLines    = genPinLines( pinOutTerminal, pinOutContact, new Vec2(-1,0), outputs, true );
 		
+		if (isDemux) { // Swap in/out and reverse selects.
+			Collections.reverse( pinSelLines );
+			
+			List<Line2> swap = pinOutLines;
+			pinOutLines = pinInLines;
+			pinInLines  = swap;
+		}
+		
 		List<Line2> pinLines = new ArrayList<>();
 		pinLines.addAll( pinOutLines );
 		pinLines.addAll( pinInLines  );
@@ -296,11 +305,11 @@ public class GraphicGen
 			genPolyBody( true, tl, tr, br, bl ),
 			genPolyPins( pinLines ),
 			null,
-			genPinMappings( pinLines, outputs )
+			genPinMappings( pinLines, pinOutLines.size() )
 		);
 		
 		Vec2            trans  = Bbox2.createFromPoints(tl,bl,tr,br).getCentre().negate();
-		Vec2            scale  = new Vec2( 1, 1 ); // TODO flip if demux, and reverse the pin order 
+		Vec2            scale  = new Vec2( isDemux?-1:1, 1 ); // TODO flip if demux, and reverse the pin order 
 		AffineTransform matrix = Geo.createTransform( trans, scale, 0 );
 		graphic.transform( matrix, true );
 		
