@@ -85,7 +85,7 @@ public class EditorPanel extends JPanel
 		world.add( new EditorComponent(
 			world,
 			new Mux(4),
-			GraphicGen.generatePlexer(4,2,1),new Vec2(-256,-256) ) );
+			GraphicGen.generatePlexer(4,2,1,true),new Vec2(-256,-256) ) );
 		
 		addMouseOverTest();
 		setupActions();

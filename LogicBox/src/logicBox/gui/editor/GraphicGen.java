@@ -96,25 +96,13 @@ public class GraphicGen
 		Vec2 topLeft = r.getTopLeft();
 		Vec2 botLeft = r.getBottomLeft();
 		
-		VecPath polyBody = new VecPath();
-		polyBody.moveTo( botLeft );
-		polyBody.lineTo( pinOutPos );
-		polyBody.lineTo( topLeft );
-		polyBody.closePath();
-		
 		List<Line2> pinLines = new ArrayList<>();
 		pinLines.add( new Line2(pinOutPos, pinOutEnd) );
 		pinLines.add( new Line2(pinInPos,  pinInEnd ) );
 		
-		VecPath polyPins = new VecPath();
-		for (Line2 pin: pinLines) {
-			polyPins.moveTo( pin.a );
-			polyPins.lineTo( pin.b );
-		}
-		
 		GraphicComActive gate = new GraphicComActive(
-			polyBody,
-			polyPins,
+			genPolyBody( true, botLeft, pinOutPos, topLeft ),
+			genPolyPins( pinLines ),
 			null,
 			genPinMappings( pinLines, 1 )
 		);
@@ -224,7 +212,7 @@ public class GraphicGen
 		Vec2   rearC1      = topLeft.add( rearConOffs,  rearConOffs );
 		Vec2   rearC2      = botLeft.add( rearConOffs, -rearConOffs );
 		
-		List<Line2>  pinLines         = new ArrayList<>(); 
+		List<Line2>  pinLines         = new ArrayList<>();
 		double       pinOutExtentLeft = topLeft.x - pinLength;
 		Line2        pinOutTerminal   = new Line2( pinOutExtentLeft, topLeft.y, pinOutExtentLeft, botLeft.y );
 		BezierCubic2 pinOutContact    = new BezierCubic2( topLeft, rearC1, rearC2, botLeft );
@@ -242,12 +230,6 @@ public class GraphicGen
 		polyBody.curveTo( rearC2, rearC1, topLeft );
 		polyBody.closePath();
 		
-		VecPath polyPins = new VecPath();
-		for (Line2 pin: pinLines) {
-			polyPins.moveTo( pin.a );
-			polyPins.lineTo( pin.b );
-		}
-		
 		VecPath polyXor = null;
 		if (isXor) {
 			Vec2 xorOffset    = new Vec2( -thickness*2, 0 );
@@ -264,7 +246,7 @@ public class GraphicGen
 		
 		GraphicComActive gate = new GraphicComActive(
 			polyBody,
-			polyPins,
+			genPolyPins( pinLines ),
 			polyXor,
 			genPinMappings( pinLines, 1 )
 		);
@@ -277,12 +259,10 @@ public class GraphicGen
 	
 	
 	
-	public static GraphicComActive generatePlexer( int inputs, int selects, int outputs ) {
-		Bbox2 r = getBaseRegion();
-			  
-		Vec2   size      = r.getSize();
-		double pinLength = size.x * pinLenFrac;
-		double thickness = EditorStyle.compThickness;
+	public static GraphicComActive generatePlexer( int inputs, int selects, int outputs, boolean isDemux ) {
+		Bbox2  r         = getBaseRegion();
+			   r.transform( Geo.createTransform( new Vec2(0), new Vec2(2,2), 0) );
+		double pinLength = baseSize * pinLenFrac;
 		
 		applyPinGrowth( r, Math.max(inputs,outputs) );
 		
@@ -296,7 +276,7 @@ public class GraphicGen
 		Line2       pinInContact  = new Line2( tl, bl );
 		List<Line2> pinInLines    = genPinLines( pinInTerminal, pinInContact, new Vec2(1,0), inputs, true );
 		
-		double      pinSelY        = bl.y + (thickness * 0.5);
+		double      pinSelY        = bl.y + pinLength;
 		Line2       pinSelTerminal = new Line2( bl.x, pinSelY, br.x, pinSelY );
 		Line2       pinSelContact  = new Line2( bl, br );
 		List<Line2> pinSelLines    = genPinLines( pinSelTerminal, pinSelContact, new Vec2(0,-1), selects, true );
@@ -311,27 +291,45 @@ public class GraphicGen
 		pinLines.addAll( pinInLines  );
 		pinLines.addAll( pinSelLines );
 		
-		VecPath polyBody = new VecPath();
-		polyBody.moveTo ( tl );
-		polyBody.lineTo ( tr );
-		polyBody.lineTo ( br );
-		polyBody.lineTo ( bl );
-		polyBody.closePath();
+		GraphicComActive graphic = new GraphicComActive(
+			genPolyBody( true, tl, tr, br, bl ),
+			genPolyPins( pinLines ),
+			null,
+			genPinMappings( pinLines, outputs )
+		);
 		
+		// TODO recentre on [0,0]
+		
+		return graphic;
+	}
+	
+	
+	
+	private static VecPath genPolyBody( boolean close, Vec2...points ) {	
+		VecPath polyBody = new VecPath();
+		
+		polyBody.moveTo( points[0] );
+		
+		for (int i=1; i<points.length; i++)
+			polyBody.lineTo ( points[i] );
+		
+		if (close)
+			polyBody.closePath();
+		
+		return polyBody;
+	}
+	
+	
+	
+	private static VecPath genPolyPins( List<Line2> pinLines ) {
 		VecPath polyPins = new VecPath();
+		
 		for (Line2 pin: pinLines) {
 			polyPins.moveTo( pin.a );
 			polyPins.lineTo( pin.b );
 		}
 		
-		GraphicComActive gate = new GraphicComActive(
-			polyBody,
-			polyPins,
-			null,
-			genPinMappings( pinLines, outputs )
-		);
-		
-		return gate;
+		return polyPins;
 	}
 	
 	
