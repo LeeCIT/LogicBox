@@ -174,8 +174,9 @@ public class ToolDragger extends Tool
 	
 	
 	private void dragFinishedCommon() {
-		dragInitiated = false;
-		dragging      = false;
+		dragInitiated    = false;
+		dragging         = false;
+		draggedComponent = null;
 		panel.setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
 		panel.repaint();
 	}

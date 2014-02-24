@@ -5,6 +5,8 @@ package logicBox.sim.component;
 
 import java.util.ArrayList;
 import java.util.List;
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
 import logicBox.sim.SimUtil;
 import logicBox.util.Geo;
 

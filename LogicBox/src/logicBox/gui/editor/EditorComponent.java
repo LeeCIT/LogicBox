@@ -13,16 +13,15 @@ import logicBox.util.Vec2;
  * Not sure if traces will be classified this way.  They may be a special case.
  * @author Lee Coakley
  */
-public class EditorComponent
+public class EditorComponent implements Drawable
 {
 	protected Component        com;
 	protected GraphicComActive graphic;
-	protected EditorWorld      world;
+	private   EditorWorld      world;
 	
 	
 	
-	public EditorComponent( EditorWorld world, Component com, GraphicComActive gca, Vec2 pos ) {
-		this.world   = world;
+	public EditorComponent( Component com, GraphicComActive gca, Vec2 pos ) {
 		this.com     = com;
 		this.graphic = gca;
 		setPos( pos );
@@ -38,14 +37,14 @@ public class EditorComponent
 	
 	public void setPos( Vec2 pos ) {
 		graphic.transformTo( pos, getAngle() );
-		world.onComponentTransform( this );
-	}
+		signalTransformChange();
+	}	
 	
 	
 	
 	public void setAngle( double angle ) {
 		graphic.transformTo( getPos(), angle );
-		world.onComponentTransform( this );
+		signalTransformChange();
 	}
 	
 	
@@ -58,5 +57,27 @@ public class EditorComponent
 	
 	public double getAngle() {
 		return graphic.getAngle();
+	}
+	
+	
+	
+	/**
+	 * Link with a world.  Only one world may be linked.  Only EditorWorld may call this method.
+	 */
+	protected void linkToWorld( EditorWorld world ) {
+		this.world = world;
+	}
+	
+	
+	
+	protected void unlinkFromWorld() {
+		this.world = null;
+	}
+	
+	
+	
+	private void signalTransformChange() {
+		if (world != null)
+			world.onComponentTransform( this );
 	}
 }

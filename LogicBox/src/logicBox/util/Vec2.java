@@ -12,7 +12,7 @@ import java.io.Serializable;
  * 2D vector.
  * @author Lee Coakley
  */
-public class Vec2 extends Point2D implements Serializable
+public class Vec2 extends Point2D implements Serializable, Transformable
 {
 	private static final long serialVersionUID = 1L;
 	public double x,y;
