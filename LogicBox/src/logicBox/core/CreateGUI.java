@@ -2,13 +2,12 @@
 package logicBox.core;
 
 import java.awt.Dimension;
-
 import javax.swing.JFrame;
-
 import logicBox.gui.CreateMenubar;
 import logicBox.gui.ToolboxFrame;
 import logicBox.gui.editor.EditorFrame;
 import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.windowPosition.WindowPositionManager;
 
 
 public class CreateGUI extends EditorFrame
@@ -20,12 +19,19 @@ public class CreateGUI extends EditorFrame
 	
 	public CreateGUI() {
 		currentInstance = this;
-				
+		
+		// Save the window position
+		this.addWindowListener(new WindowPositionManager(this));
+		
 		add( new CreateMenubar(),    "north" );
 		add( new ToolboxFrame(this), "west" );
 		
 		editorPane = new EditorPanel();
-		add( editorPane );	
+		add( editorPane );
+		
+		// Restore the position of the frame
+		//WindowPositionManager.restoreWindowPosition(this);
+		
 		setUpFrameSettings();
 	}
 	
