@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 /**
@@ -35,5 +38,11 @@ public class GateNor extends GateOr
 	
 	public String getName() {
 		return "NOR gate";
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateGateNor( getPinInputCount() );
 	}
 }

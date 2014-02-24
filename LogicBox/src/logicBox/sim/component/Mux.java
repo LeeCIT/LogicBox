@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 /**
@@ -36,6 +39,12 @@ public class Mux extends Plexer
 	
 	public String getName() {
 		return getPinInputCount() + "-to-1 Multiplexer";
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateMux( getPinInputCount(), pinSelects.size(), getPinOutputCount() );
 	}
 	
 	

@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 
@@ -41,5 +44,11 @@ public class GateAnd extends Gate
 	
 	public String getName() {
 		return "AND gate";
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateGateAnd( getPinInputCount() );
 	}
 }

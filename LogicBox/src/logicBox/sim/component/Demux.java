@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 /**
@@ -36,6 +39,12 @@ public class Demux extends Plexer
 	
 	public String getName() {
 		return "1-to-" + getPinOutputCount() + " Demultiplexer";
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateDemux( getPinInputCount(), pinSelects.size(), getPinOutputCount() );
 	}
 	
 	
