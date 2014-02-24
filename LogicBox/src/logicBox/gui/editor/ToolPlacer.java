@@ -124,7 +124,7 @@ public class ToolPlacer extends Tool
 	 * @param graphic The graphic used to show where the component will be placed.  
 	 * 				  The graphic will be modified by the tool, so don't reuse it.
 	 */
-	public void placementStart( CallbackParam<Vec2> createCallback, GraphicComActive graphic ) {
+	public void placementStart( GraphicComActive graphic, CallbackParam<Vec2> createCallback ) {
 		placementCallback  = createCallback;
 		placementGraphic   = graphic;
 		placementInitiated = true;
