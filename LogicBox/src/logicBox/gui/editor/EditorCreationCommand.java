@@ -9,7 +9,6 @@ import logicBox.sim.component.ComponentActive;
 
 /**
  * Specifies a creation command for the editor panel.
- * Carries a payload and allows a graphic to be retreived.
  * The preview graphic is used during placement of the component.
  * @author Lee Coakley
  */
