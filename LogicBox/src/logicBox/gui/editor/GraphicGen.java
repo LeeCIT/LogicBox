@@ -26,48 +26,42 @@ public class GraphicGen
 {
 	public static GraphicComActive generateGateBuffer() {
 		return generateGateBuffer( false );
-	}
-	
-	
+	}	
 	
 	public static GraphicComActive generateGateNot() {
 		return generateGateBuffer( true );
 	}
 	
-	
-	
 	public static GraphicComActive generateGateAnd( int pinCount ) {
 		return generateGateAnd( pinCount, false );
 	}
-	
-	
 	
 	public static GraphicComActive generateGateNand( int pinCount ) {
 		return generateGateAnd( pinCount, true );
 	}
 	
-	
-	
 	public static GraphicComActive generateGateOr( int pinCount ) {
 		return generateGateOr( pinCount, false, false );
 	}
-	
-	
 	
 	public static GraphicComActive generateGateNor( int pinCount ) {
 		return generateGateOr( pinCount, false, true );
 	}
 	
-	
-	
 	public static GraphicComActive generateGateXor( int pinCount ) {
 		return generateGateOr( pinCount, true, false );
 	}
 	
-	
-	
 	public static GraphicComActive generateGateXnor( int pinCount ) {
 		return generateGateOr( pinCount, true, true );
+	}
+	
+	public static GraphicComActive generateMux( int pinInputs, int pinSelects, int pinOutputs ) {
+		return generatePlexer( pinInputs, pinSelects, pinOutputs, false );
+	}
+	
+	public static GraphicComActive generateDemux( int pinInputs, int pinSelects, int pinOutputs ) {
+		return generatePlexer( pinInputs, pinSelects, pinOutputs, true );
 	}
 	
 	
@@ -81,6 +75,23 @@ public class GraphicGen
 	private static final double pinLength       = baseSize * pinLenFrac;
 	private static final double bubbleRadius    = baseSize * bubbleFrac;
 	private static final double thickness       = EditorStyle.compThickness;
+	
+	
+	
+	public static GraphicComActive generatePlaceholder() {
+		Bbox2 r = getBaseRegion();
+		Vec2  a = r.getNorm( 0.5, 1.0 );
+		Vec2  b = r.getNorm( 1.0, 0.5 );
+		Vec2  c = r.getNorm( 0.5, 0.0 );
+		Vec2  d = r.getNorm( 0.0, 0.5 );
+		
+		return new GraphicComActive(
+			genPolyBody( true, a, b, c, d ),
+			new VecPath(),
+			null,
+			new ArrayList<GraphicPinMapping>()
+		);
+	}
 	
 	
 	
@@ -246,7 +257,7 @@ public class GraphicGen
 	
 	
 	
-	public static GraphicComActive generatePlexer( int inputs, int selects, int outputs, boolean isDemux ) {
+	private static GraphicComActive generatePlexer( int inputs, int selects, int outputs, boolean isDemux ) {
 		Bbox2  r = getBaseRegion();
 			   r.transform( Geo.createTransform( new Vec2(0), new Vec2(2,2), 0) );
 		
