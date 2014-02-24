@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
+import logicBox.sim.component.ComponentActive;
 import logicBox.sim.component.ComponentType;
 import logicBox.sim.component.GateAnd;
 import logicBox.sim.component.GateBuffer;
@@ -70,7 +71,7 @@ public class EditorPanel extends JPanel
 		
 		//new ToolSelector( this, world, cam ).attach();
 		
-		//addRepaintListener( world.getSpatialGridDebugRepainter() );
+		addRepaintListener( world.getSpatialGridDebugRepainter() );
 		
 		world.add( new EditorComponent( world, new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, 0  ) ) );
 		world.add( new EditorComponent( world, new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, 128) ) );
@@ -81,11 +82,11 @@ public class EditorPanel extends JPanel
 		world.add( new EditorComponent( world, new GateXor(),    GraphicGen.generateGateXor(2),   new Vec2(192, 256) ) );
 		world.add( new EditorComponent( world, new GateXnor(),   GraphicGen.generateGateXnor(2),  new Vec2(192, 384) ) );
 		
-		
 		world.add( new EditorComponent(
 			world,
 			new Mux(4),
-			GraphicGen.generatePlexer(4,2,1,true),new Vec2(-256,-256) ) );
+			GraphicGen.generateMux(4,2,1),new Vec2(-256,-256) )
+		);
 		
 		addMouseOverTest();
 		setupActions();
@@ -93,24 +94,15 @@ public class EditorPanel extends JPanel
 	
 	
 	
-	public void createComponent( ComponentType type ) {
-		if (type == ComponentType.gateNand) {
-			toolPlacer.placementStart(
-				new CallbackParam<Vec2>() {
-					public void execute( Vec2 pos ) {
-						world.add(
-							new EditorComponent(
-								world,
-								new GateNand(2),
-								GraphicGen.generateGateNand(2),
-								pos 
-							)
-						);
-					}
-				},
-				GraphicGen.generateGateNand(2)
-			);
-		}
+	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
+		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<Vec2>() {
+			public void execute( Vec2 pos ) {
+				ComponentActive  scom = ecc.getComponentPayload();
+				GraphicComActive gca  = scom.getGraphic();
+				EditorComponent  ecom = new EditorComponent( world, scom, gca, pos );
+				world.add( ecom );
+			}
+		});
 	}
 	
 	
