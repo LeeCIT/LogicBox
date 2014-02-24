@@ -43,6 +43,7 @@ public class EditorWorld
 		
 		ecoms.add( ecom );
 		grid.add( bbox, ecom );
+		ecom.linkToWorld( this );
 	}
 	
 	
@@ -56,6 +57,7 @@ public class EditorWorld
 	public void remove( EditorComponent ecom ) {
 		ecoms.remove( ecom );
 		grid .remove( ecom );
+		ecom.unlinkFromWorld();
 	}
 	
 	
@@ -63,6 +65,7 @@ public class EditorWorld
 	/**
 	 * Update the underlying world structures in response to
 	 * a component orientation or position change.
+	 * EditorComponents should call this method automatically.
 	 */
 	public void onComponentTransform( EditorComponent ecom ) {
 		remove( ecom );
@@ -72,7 +75,8 @@ public class EditorWorld
 	
 	
 	/**
-	 * Find the component most recently added at the given position.
+	 * Find one component at the given position.
+	 * It is always the most recently modified or moved component.
 	 * Returns null if no component is found.
 	 */
 	public EditorComponent findTopmostAt( Vec2 pos ) {
@@ -152,7 +156,7 @@ public class EditorWorld
 		
 		List<EditorComponent> list = new ArrayList<>();
 		
-		for (EditorComponent ecom: ecoms) 
+		for (EditorComponent ecom: grid.findPotentials( cam.getWorldViewableArea() ))
 			if (ecom.graphic.getBbox().overlaps( bbox ))
 				list.add( ecom );
 		
@@ -174,7 +178,7 @@ public class EditorWorld
 					if (count <= 0)
 						continue;
 					
-					double colF  = Geo.boxStep( count, 0, 4 );
+					double colF  = Geo.boxStep( count, 0, 6 );
 					Color  col   = Geo.lerp( Color.green, Color.red, colF );
 					Vec2   tl    = new Vec2(x,y).multiply( size );
 					Bbox2  bbox  = new Bbox2( tl, tl.add(size) ); 
