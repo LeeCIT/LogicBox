@@ -1,10 +1,13 @@
 package logicBox.gui;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import prototypes.printingProto.Printing;
 import logicBox.core.CreateGUI;
+import logicBox.fileManager.FileOpen;
+import logicBox.fileManager.SaveFile;
 import logicBox.gui.menubar.CoolMenuBar;
 import logicBox.gui.menubar.CoolMenuItem;
 import logicBox.util.Callback;
@@ -22,7 +25,7 @@ public class CreateMenubar extends CoolMenuBar{
 		CoolMenuItem save   = new CoolMenuItem("Save", 		 null, null,         's', null, false);
 		CoolMenuItem saveAs = new CoolMenuItem("Save As...", null, null,         '0', null, false);
 		CoolMenuItem sep    = new CoolMenuItem(null, 		 null, null,         '0', null, true);
-		CoolMenuItem open   = new CoolMenuItem("Open", 		 null, null,         'o', null, false);
+		CoolMenuItem open   = new CoolMenuItem("Open", 		 null, openFile(),   'o', null, false);
 		CoolMenuItem print  = new CoolMenuItem("Print",		 null, print(),      'p', null, false);
 		CoolMenuItem exit   = new CoolMenuItem("Exit",		 null, exitProgram(),'e', null, false);
 		
@@ -60,7 +63,7 @@ public class CreateMenubar extends CoolMenuBar{
 	
 	
 	
-	
+	// Simply exit the program
 	protected Callback exitProgram() {
 		Callback callback = new Callback() {
 			public void execute() {
@@ -71,7 +74,7 @@ public class CreateMenubar extends CoolMenuBar{
 	}
 	
 	
-	
+	// Opens the print dialog. TODO Needs to be sorted out
 	protected Callback print() {
 		Callback callback = new Callback() {
 			public void execute() {
@@ -79,5 +82,30 @@ public class CreateMenubar extends CoolMenuBar{
 			}
 		};
 		return callback;
+	}
+	
+	
+	
+	// Open the file open dialog
+	protected Callback openFile() {
+		Callback callback = new Callback() {
+			public void execute() {
+				FileOpen fileopen = new FileOpen(CreateGUI.currentInstance);
+				File file = fileopen.getPickedFile(); //TODO do something with the file
+			}
+		};
+		return callback;
+	}
+	
+	
+	
+	// Open the save dialog
+	protected Callback saveAs() {
+		Callback callback = new Callback() {
+			public void execute() {
+				new SaveFile(CreateGUI.currentInstance); // TODO actually save something				
+			}
+		};
+		return saveAs();
 	}
 }
