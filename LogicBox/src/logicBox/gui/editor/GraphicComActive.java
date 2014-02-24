@@ -115,10 +115,9 @@ public class GraphicComActive extends Graphic
 	public boolean overlaps( Bbox2 bbox ) {
 		Vec2 size = bbox.getSize();
 		
-		return (polyAux != null
-			&&  polyAux.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ))
-			|| polyBody.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y )
-			|| polyPins.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ); 
+		return                      polyBody.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y )
+		    || (polyAux  != null && polyAux .intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ))
+			|| (polyPins != null && polyPins.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ));
 	}
 	
 	
@@ -160,7 +159,10 @@ public class GraphicComActive extends Graphic
 		List<VecPath> polys  = new ArrayList<>();
 		
 		polys.add( polyBody );
-		polys.add( polyPins );
+		
+		if (polyPins != null)
+			polys.add( polyPins );
+		
 		if (polyAux != null)
 			polys.add( polyAux );
 		
@@ -218,11 +220,15 @@ public class GraphicComActive extends Graphic
 		List<Transformable> trans = new ArrayList<>();
 		
 		trans.add( polyBody );
-		trans.add( polyPins );
-		trans.add( bubblePos );
+		
+		if (polyPins != null)
+			trans.add( polyPins );
 		
 		if (polyAux != null)
 			trans.add( polyAux );
+		
+		if (hasBubble)
+			trans.add( bubblePos );
 		
 		for (GraphicPinMapping gpm: pinMap)
 			trans.add( gpm.line );
@@ -238,8 +244,8 @@ public class GraphicComActive extends Graphic
 		
 		Gfx.pushColorAndSet( g, colStroke );
 			Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
-				g.draw( polyPins );
-				if (polyAux != null) g.draw( polyAux );
+				if (polyPins != null) g.draw( polyPins );
+				if (polyAux  != null) g.draw( polyAux );
 			Gfx.popStroke( g );
 				
 			Gfx.pushColorAndSet( g, colFill );
