@@ -3,6 +3,7 @@
 
 package logicBox.gui;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import logicBox.gui.editor.EditorFrame;
 import logicBox.gui.editor.EditorPanel;
@@ -36,8 +37,18 @@ public class GUI
 	 * Create the main GUI components and link them together.
 	 */
 	public static void create() {
-		JFrame        frame = new EditorFrame();
+		SwingUtilities.invokeLater( new Runnable() {
+			public void run() {
+				constructGUI();
+			}
+		});
+	}
+
+
+
+	private static void constructGUI() {
 		EditorPanel   panel = new EditorPanel();
+		JFrame        frame = new EditorFrame( panel );
 		EditorMenuBar menu  = new EditorMenuBar();
 		Toolbox       box   = new Toolbox();
 		
@@ -47,7 +58,6 @@ public class GUI
 		frame.pack();
 		frame.setSize( 720, 640 );
 		frame.add( box, "west" );
-		frame.add( panel );
 		frame.setVisible( true );
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}
