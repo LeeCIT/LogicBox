@@ -3,11 +3,9 @@ package logicBox.gui;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import prototypes.printingProto.Printing;
 import logicBox.core.CreateGUI;
-import logicBox.fileManager.FileOpen;
-import logicBox.fileManager.SaveFile;
+import logicBox.fileManager.*;
 import logicBox.gui.menubar.CoolMenuBar;
 import logicBox.gui.menubar.CoolMenuItem;
 import logicBox.util.Callback;
@@ -72,6 +70,7 @@ public class CreateMenubar extends CoolMenuBar{
 		};
 		return callback;
 	}
+	
 	
 	
 	// Opens the print dialog. TODO Needs to be sorted out
