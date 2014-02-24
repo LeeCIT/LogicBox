@@ -1,4 +1,5 @@
-package prototypes.fileOpen;
+
+package logicBox.fileManager;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,8 +9,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import logicBox.gui.GUI;
 
 
-public class FileOpen {
-	
+public class FileOpen 
+{	
 	private File loadFile;
 	
 	/**
