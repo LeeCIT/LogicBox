@@ -268,28 +268,42 @@ public class GraphicGen
 		Vec2 tr = r.getNorm( 0.5, 0.25 );
 		Vec2 br = r.getNorm( 0.5, 0.75 );
 		
-		double      pinInX        = tl.x - pinLength;
-		Line2       pinInTerminal = new Line2( pinInX, tl.y, pinInX, bl.y );
-		Line2       pinInContact  = new Line2( tl, bl );
-		List<Line2> pinInLines    = genPinLines( pinInTerminal, pinInContact, new Vec2(1,0), inputs, true );
+		double pinInX        = tl.x - pinLength;
+		Line2  pinInTerminal = new Line2( pinInX, tl.y, pinInX, bl.y );
+		Line2  pinInContact  = new Line2( tl, bl );
+		Vec2   pinInUV       = new Vec2(1, 0);
 		
-		double      pinSelY        = bl.y + pinLength;
-		Line2       pinSelTerminal = new Line2( bl.x, pinSelY, br.x, pinSelY );
-		Line2       pinSelContact  = new Line2( bl, br );
-		List<Line2> pinSelLines    = genPinLines( pinSelTerminal, pinSelContact, new Vec2(0,-1), selects, true );
+		double pinSelY        = bl.y + pinLength;
+		Line2  pinSelTerminal = new Line2( bl.x, pinSelY, br.x, pinSelY );
+		Line2  pinSelContact  = new Line2( bl, br );
+		Vec2   pinSelUV       = new Vec2(0, -1);
 		
-		double      pinOutX        = tr.x + pinLength;
-		Line2       pinOutTerminal = new Line2( pinOutX, tr.y, pinOutX, br.y );
-		Line2       pinOutContact  = new Line2( tr, br );
-		List<Line2> pinOutLines    = genPinLines( pinOutTerminal, pinOutContact, new Vec2(-1,0), outputs, true );
+		double pinOutX        = tr.x + pinLength;
+		Line2  pinOutTerminal = new Line2( pinOutX, tr.y, pinOutX, br.y );
+		Line2  pinOutContact  = new Line2( tr, br );
+		Vec2   pinOutUV       = new Vec2(-1, 0);
 		
-		if (isDemux) { // Swap in/out and reverse selects.
-			Collections.reverse( pinSelLines );
-			
-			List<Line2> swap = pinOutLines;
-			pinOutLines = pinInLines;
-			pinInLines  = swap;
+		if (isDemux) { // Swap In/Out.  std:swap this ain't.
+			double swapInX        = pinInX;
+			Line2  swapInTerminal = pinInTerminal;
+			Line2  swapInContact  = pinInContact;
+			Vec2   swapUV         = pinInUV;
+				   pinInX         = pinOutX;
+				   pinInTerminal  = pinOutTerminal;
+				   pinInContact   = pinOutContact ;
+				   pinInUV        = pinOutUV;
+			       pinOutX        = swapInX;
+			       pinOutTerminal = swapInTerminal;
+				   pinOutContact  = swapInContact;
+				   pinOutUV       = swapUV;
 		}
+		
+		List<Line2> pinInLines  = genPinLines( pinInTerminal,  pinInContact,  pinInUV,  inputs,  true );
+		List<Line2> pinSelLines = genPinLines( pinSelTerminal, pinSelContact, pinSelUV, selects, true );
+		List<Line2> pinOutLines = genPinLines( pinOutTerminal, pinOutContact, pinOutUV, outputs, true );
+		
+		if (isDemux)
+			Collections.reverse( pinSelLines );
 		
 		List<Line2> pinLines = new ArrayList<>();
 		pinLines.addAll( pinOutLines );
