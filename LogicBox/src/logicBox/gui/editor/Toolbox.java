@@ -12,7 +12,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.*;
 import logicBox.gui.GUI;
-import logicBox.sim.component.ComponentType;
 import prototypes.snappingProto.SnappingPrototype;
 
 
@@ -121,23 +120,10 @@ public class Toolbox extends JToolBar
 		final JFrame      frame = new EditorFrame();
 		final EditorPanel panel = new EditorPanel();
 		
-		ToolboxButton button = new ToolboxButton(
-			GraphicGen.generateGateNand( 2 ),
-			"2-input NAND gate",
-			null
-		);
-		
-		button.addActionListener( new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {
-				panel.createComponent( ComponentType.gateNand );
-			}
-		});
-		
-		Toolbox toolbox = new Toolbox( frame );
-		toolbox.addCategory( "Gates", button );
+		Toolbox box = EditorToolboxLinker.createLinkedToolbox( panel );
 		
 		frame.setSize( new Dimension(600,600) );
-		frame.add( toolbox, "west" );
+		frame.add( box, "west" );
 		frame.add( panel );
 		frame.setVisible( true );
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );

@@ -73,20 +73,19 @@ public class EditorPanel extends JPanel
 		
 		addRepaintListener( world.getSpatialGridDebugRepainter() );
 		
-		world.add( new EditorComponent( world, new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, 0  ) ) );
-		world.add( new EditorComponent( world, new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, 128) ) );
-		world.add( new EditorComponent( world, new GateAnd(),    GraphicGen.generateGateAnd(2),   new Vec2(  0, 256) ) );
-		world.add( new EditorComponent( world, new GateNand(),   GraphicGen.generateGateNand(2),  new Vec2(  0, 384) ) );
-		world.add( new EditorComponent( world, new GateOr(),     GraphicGen.generateGateOr(2),    new Vec2(192,   0) ) );
-		world.add( new EditorComponent( world, new GateNor(),    GraphicGen.generateGateNor(2),   new Vec2(192, 128) ) );
-		world.add( new EditorComponent( world, new GateXor(),    GraphicGen.generateGateXor(2),   new Vec2(192, 256) ) );
-		world.add( new EditorComponent( world, new GateXnor(),   GraphicGen.generateGateXnor(2),  new Vec2(192, 384) ) );
+		new EditorComponent( world, new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, 0  ) );
+		new EditorComponent( world, new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, 128) );
+		new EditorComponent( world, new GateAnd(),    GraphicGen.generateGateAnd(2),   new Vec2(  0, 256) );
+		new EditorComponent( world, new GateNand(),   GraphicGen.generateGateNand(2),  new Vec2(  0, 384) );
+		new EditorComponent( world, new GateOr(),     GraphicGen.generateGateOr(2),    new Vec2(192,   0) );
+		new EditorComponent( world, new GateNor(),    GraphicGen.generateGateNor(2),   new Vec2(192, 128) );
+		new EditorComponent( world, new GateXor(),    GraphicGen.generateGateXor(2),   new Vec2(192, 256) );
+		new EditorComponent( world, new GateXnor(),   GraphicGen.generateGateXnor(2),  new Vec2(192, 384) );
 		
-		world.add( new EditorComponent(
+		new EditorComponent(
 			world,
 			new Mux(4),
-			GraphicGen.generateMux(4,2,1),new Vec2(-256,-256) )
-		);
+			GraphicGen.generateMux(4,2,1),new Vec2(-256,-256) );
 		
 		addMouseOverTest();
 		setupActions();
@@ -100,7 +99,6 @@ public class EditorPanel extends JPanel
 				ComponentActive  scom = ecc.getComponentPayload();
 				GraphicComActive gca  = scom.getGraphic();
 				EditorComponent  ecom = new EditorComponent( world, scom, gca, pos );
-				world.add( ecom );
 			}
 		});
 	}
