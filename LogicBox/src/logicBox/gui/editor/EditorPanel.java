@@ -3,7 +3,6 @@
 
 package logicBox.gui.editor;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
@@ -15,13 +14,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.sim.component.ComponentActive;
-import logicBox.sim.component.ComponentType;
 import logicBox.sim.component.GateAnd;
 import logicBox.sim.component.GateBuffer;
 import logicBox.sim.component.GateNand;
@@ -343,32 +339,6 @@ public class EditorPanel extends JPanel
 				repaint();
 			}
 		};
-	}
-	
-	
-	
-	
-	
-	public static void main( String[] args ) {
-		SwingUtilities.invokeLater( new Runnable() {
-			public void run() {
-				test();
-			}
-		});
-	}
-	
-	
-	
-	public static void test() {
-		EditorFrame frame = new EditorFrame();
-		EditorPanel panel = new EditorPanel();
-		
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		frame.setSize( new Dimension(600,600) );
-		frame.add( panel );
-		frame.setVisible( true );
-		
-		// TODO use the toolbox
 	}
 }
 
