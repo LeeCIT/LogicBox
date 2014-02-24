@@ -87,7 +87,7 @@ public class GraphicGen
 		
 		return new GraphicComActive(
 			genPolyBody( true, a, b, c, d ),
-			new VecPath(),
+			null,
 			null,
 			new ArrayList<GraphicPinMapping>()
 		);
