@@ -6,8 +6,19 @@ package logicBox.gui.editor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 import logicBox.gui.GUI;
+import logicBox.sim.component.ComponentActive;
+import logicBox.sim.component.GateAnd;
+import logicBox.sim.component.GateBuffer;
+import logicBox.sim.component.GateNand;
+import logicBox.sim.component.GateNor;
+import logicBox.sim.component.GateNot;
+import logicBox.sim.component.GateOr;
+import logicBox.sim.component.GateXnor;
+import logicBox.sim.component.GateXor;
 import logicBox.util.Evaluator;
 
 
@@ -29,11 +40,60 @@ public class Toolbox extends JToolBar
 		setMargin( new Insets(0, 2, 0, 0) );
 		setOrientation( JToolBar.VERTICAL );
 		
+		setupEvaluator();
+		addGateButtons();
+	}
+	
+	
+	
+	private void setupEvaluator() {
 		evaluator = new Evaluator<EditorPanel>() {
 			public EditorPanel evaluate() {
 				return activeEditorPanel;
 			}
 		};
+	}
+
+
+
+	private void addGateButtons() {
+		ToolboxButton[] gateButts = {
+			genButton( new GateBuffer() ),
+			genButton( new GateNot   () ),
+			genButton( new GateAnd   () ),
+			genButton( new GateNand  () ),
+			genButton( new GateOr    () ),
+			genButton( new GateNor   () ),
+			genButton( new GateXor   () ),
+			genButton( new GateXnor  () )
+		};
+		
+		addCategory( "Gates", gateButts );
+	}
+	
+	
+	
+	private ToolboxButton genButton( final ComponentActive com ) {
+		ToolboxButton butt = new ToolboxButton( com.getGraphic(), com.getName(), null );
+		attachListener( butt, com );
+		return butt;
+	}
+	
+	
+	
+	private void attachListener( final ToolboxButton butt, final ComponentActive com ) {
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {		
+				EditorPanel ed = butt.getEditorPanelEvaluator().evaluate();
+				ed.initiateComponentCreation( genCommand(com) );
+			}
+		});
+	}
+	
+	
+	
+	private EditorCreationCommand genCommand( ComponentActive com ) {
+		return new EditorCreationCommand( com, com.getGraphic() );
 	}
 	
 	
@@ -102,7 +162,8 @@ public class Toolbox extends JToolBar
 		final JFrame      frame = new EditorFrame();
 		final EditorPanel panel = new EditorPanel();
 		
-		Toolbox box = EditorToolboxLinker.createLinkedToolbox( panel );
+		Toolbox box = new Toolbox();
+		box.setActiveEditorPanel( panel );
 		
 		frame.setSize( new Dimension(600,600) );
 		frame.add( box, "west" );
