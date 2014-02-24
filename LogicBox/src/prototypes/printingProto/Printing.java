@@ -21,6 +21,7 @@ public class Printing implements Printable{
 		
 		// Turn of double buffering for better image quality
 		setDoubleBuffereing(false);
+		
 		comp.printAll(g2d);
 	    
 	    // Turn it back on
