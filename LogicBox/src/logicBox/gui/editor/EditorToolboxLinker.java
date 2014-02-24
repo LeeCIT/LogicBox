@@ -14,9 +14,6 @@ import logicBox.sim.component.*;
 /**
  * Interfaces an EditorPanel with a Toolbox.
  * The expected usage is multiple EditorPanels linked to a single Toolbox.
- * 
- * TODO: This is an experimental class and must be redesigned to non-horror code standards
- * TODO: Use CallbackParam<EditorPanel> as the interface for button actions.  Will simplify a lot
  * @author Lee Coakley
  */
 public abstract class EditorToolboxLinker
@@ -28,37 +25,25 @@ public abstract class EditorToolboxLinker
 	
 	
 	public static Toolbox createLinkedToolbox( EditorPanel ed ) {
-		Toolbox box = new Toolbox( null );
-		
-		link( ed, box );
-		
-		box.addCategory( "Gates",
-			mapButton.get( ComponentType.gateBuffer ),
-			mapButton.get( ComponentType.gateNot    ),
-			mapButton.get( ComponentType.gateAnd    ),
-			mapButton.get( ComponentType.gateNand   )
-		);
-		
+		Toolbox box = new Toolbox();
+		link( box );
+		box.setActiveEditorPanel( ed );
 		return box;
 	}
 	
 	
 	
-	public static void link( final EditorPanel ed, final Toolbox box ) {
-		mapButton.get( ComponentType.gateBuffer ).addActionListener( genListener( ed, new GateBuffer() ));
-		mapButton.get( ComponentType.gateNot    ).addActionListener( genListener( ed, new GateNot   () ));
-		mapButton.get( ComponentType.gateAnd    ).addActionListener( genListener( ed, new GateAnd   () ));
-		mapButton.get( ComponentType.gateNand   ).addActionListener( genListener( ed, new GateNand  () ));
-	}
-	
-	
-	
-	private static ActionListener genListener( final EditorPanel ed, final ComponentActive com ) {
-		return new ActionListener() {
-			public void actionPerformed( ActionEvent ev ) {
-				ed.initiateComponentCreation( genCommand(com) );
+	public static void link( final Toolbox box ) {
+		final ToolboxButton butt = mapButton.get( ComponentType.gateBuffer );
+		
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {		
+				EditorPanel ed = butt.getEditorPanelEvaluator().evaluate();
+				ed.initiateComponentCreation( genCommand( new GateBuffer()) );
 			}
-		};
+		});
+		
+		box.addCategory( "Gates", butt );
 	}
 	
 	
