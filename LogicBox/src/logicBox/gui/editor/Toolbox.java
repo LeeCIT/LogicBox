@@ -10,21 +10,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import logicBox.gui.GUI;
-import logicBox.sim.component.ComponentActive;
-import logicBox.sim.component.GateAnd;
-import logicBox.sim.component.GateBuffer;
-import logicBox.sim.component.GateNand;
-import logicBox.sim.component.GateNor;
-import logicBox.sim.component.GateNot;
-import logicBox.sim.component.GateOr;
-import logicBox.sim.component.GateXnor;
-import logicBox.sim.component.GateXor;
+import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
 
 
 
 /**
  * The editor toolbox, where components are displayed in a palette for easy creation.
+ * TODO: BUG: Creating one object and reusing it many times!  New instances must be created.
  * @author John Murphy
  * @author Lee Coakley
  */
@@ -41,11 +34,20 @@ public class Toolbox extends JToolBar
 		setOrientation( JToolBar.VERTICAL );
 		
 		setupEvaluator();
-		addGateButtons();
+		addButtons();
 	}
 	
 	
 	
+	private void addButtons() {
+		addGateButtons();
+		addDisplayButtons();
+		addSourceButtons();
+		addComplexButtons();
+	}
+
+
+
 	private void setupEvaluator() {
 		evaluator = new Evaluator<EditorPanel>() {
 			public EditorPanel evaluate() {
@@ -57,7 +59,7 @@ public class Toolbox extends JToolBar
 
 
 	private void addGateButtons() {
-		ToolboxButton[] gateButts = {
+		ToolboxButton[] butts = {
 			genButton( new GateBuffer() ),
 			genButton( new GateNot   () ),
 			genButton( new GateAnd   () ),
@@ -68,7 +70,44 @@ public class Toolbox extends JToolBar
 			genButton( new GateXnor  () )
 		};
 		
-		addCategory( "Gates", gateButts );
+		addCategory( "Gates", butts );
+	}
+	
+	
+	
+	private void addDisplayButtons() {
+		ToolboxButton[] butts = {
+			genButton( new DisplayLed()      ),
+			genButton( new DisplaySevenSeg() )
+		};
+		
+		addCategory( "Displays", butts );
+	}
+	
+	
+	
+	private void addSourceButtons() {
+		ToolboxButton[] butts = {
+			genButton( new SourceFixed(false)  ),
+			genButton( new SourceFixed(true)   ),
+			genButton( new SourceToggle(false) )
+		};
+		
+		addCategory( "Sources", butts );
+	}
+	
+	
+	
+	private void addComplexButtons() {
+		ToolboxButton[] butts = {
+			genButton( new Decoder   (2) ),
+			genButton( new Mux       (2) ),
+			genButton( new Demux     (2) ),
+			genButton( new FlipFlopD ()  ),
+			genButton( new FlipFlopJK()  )
+		};
+		
+		addCategory( "Components", butts );
 	}
 	
 	
@@ -150,26 +189,6 @@ public class Toolbox extends JToolBar
 		label.setFont( bold );
 		
 		return label;
-	}
-	
-	
-	
-	
-	
-	public static void main( String[] args ) {
-		GUI.setNativeStyle();
-		
-		final JFrame      frame = new EditorFrame();
-		final EditorPanel panel = new EditorPanel();
-		
-		Toolbox box = new Toolbox();
-		box.setActiveEditorPanel( panel );
-		
-		frame.setSize( new Dimension(600,600) );
-		frame.add( box, "west" );
-		frame.add( panel );
-		frame.setVisible( true );
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}
 }
 
