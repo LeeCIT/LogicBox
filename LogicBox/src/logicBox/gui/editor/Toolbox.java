@@ -6,13 +6,9 @@ package logicBox.gui.editor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Insets;
-import java.awt.Window;
-import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.*;
 import logicBox.gui.GUI;
-import prototypes.snappingProto.SnappingPrototype;
+import logicBox.util.Evaluator;
 
 
 
@@ -23,24 +19,53 @@ import prototypes.snappingProto.SnappingPrototype;
  */
 public class Toolbox extends JToolBar
 {
-	public Toolbox( JFrame attachedFrame ) {
-		super("Toolbox");
+	private EditorPanel            activeEditorPanel;
+	private Evaluator<EditorPanel> evaluator;
+	
+	
+	
+	public Toolbox() {
+		super( "Toolbox" );
 		setMargin( new Insets(0, 2, 0, 0) );
 		setOrientation( JToolBar.VERTICAL );
-		makeSnappable( attachedFrame );
+		
+		evaluator = new Evaluator<EditorPanel>() {
+			public EditorPanel evaluate() {
+				return activeEditorPanel;
+			}
+		};
 	}
 	
 	
 	
 	/**
-	 * Add a category of buttons.then the list that will appear under the category
+	 * Set the focused editor panel.
+	 * Should be called whenever the user focuses on an editor panel.
+	 * It determines where the button events will be sent. 
+	 */
+	public void setActiveEditorPanel( EditorPanel ed ) {
+		this.activeEditorPanel = ed;
+	}
+	
+	
+	
+	/**
+	 * Add a logical group of buttons.  IE gates, components, etc.
 	 * @param category
 	 * @param items
 	 */
 	public void addCategory( String title, ToolboxButton...buttons ) {
+		setButtonEvaluators( buttons );
 		addCategory( title );
 		JPanel panel = new ToolboxCategoryPanel( buttons );
 		add( panel );
+	}
+	
+	
+	
+	private void setButtonEvaluators( ToolboxButton...buttons ) {
+		for (ToolboxButton butt: buttons)
+			butt.setEditorPanelEvaluator( evaluator );
 	}
 	
 	
@@ -65,49 +90,6 @@ public class Toolbox extends JToolBar
 		label.setFont( bold );
 		
 		return label;
-	}
-	
-	
-	
-	/**
-	 * Add the snapping ability to the toolbox
-	 * @param toolbar The toolbox to snap
-	 * @param frame	  If you want to snap to other frames
-	 * TODO this adds a component listener but never removes it.  Is this safe?
-	 */
-	private void makeSnappable( final JFrame frame ) {
-		// Fix to a terrible flaw in JToolbar (what flaw?)
-		this.addHierarchyListener(new HierarchyListener() {			
-			public void hierarchyChanged( HierarchyEvent ev ) {
-				final Window topLevel = SwingUtilities.windowForComponent( Toolbox.this );
-				
-				if (topLevel instanceof JDialog)
-					((JDialog) topLevel).addComponentListener(new SnappingPrototype(frame)); // TODO
-			}
-		});
-	}
-	
-	
-	
-	/**
-	 * Prevent the toolbox from going horizontal
-	 * TODO test
-	 * @param toolbox
-	 */
-	private void preventToolBoxhorizontalOrientation() {
-		addPropertyChangeListener( new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				String propName = evt.getPropertyName();
-				
-				if (propName != null
-				&&  propName.equals("orientation")) {
-					Integer newValue = (Integer) evt.getNewValue();
-					
-					if (newValue.intValue() == JToolBar.HORIZONTAL)
-						newValue = JToolBar.VERTICAL;
-				}
-			}
-		});
 	}
 	
 	
