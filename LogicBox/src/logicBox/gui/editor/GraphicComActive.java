@@ -14,6 +14,7 @@ import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.util.Bbox2;
 import logicBox.util.Geo;
+import logicBox.util.Transformable;
 import logicBox.util.Vec2;
 
 
@@ -114,10 +115,9 @@ public class GraphicComActive extends Graphic
 	public boolean overlaps( Bbox2 bbox ) {
 		Vec2 size = bbox.getSize();
 		
-		return (polyAux != null
-			&&  polyAux.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ))
-			|| polyBody.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y )
-			|| polyPins.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ); 
+		return                      polyBody.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y )
+		    || (polyAux  != null && polyAux .intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ))
+			|| (polyPins != null && polyPins.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y ));
 	}
 	
 	
@@ -159,7 +159,10 @@ public class GraphicComActive extends Graphic
 		List<VecPath> polys  = new ArrayList<>();
 		
 		polys.add( polyBody );
-		polys.add( polyPins );
+		
+		if (polyPins != null)
+			polys.add( polyPins );
+		
 		if (polyAux != null)
 			polys.add( polyAux );
 		
@@ -184,14 +187,14 @@ public class GraphicComActive extends Graphic
 		this.pos   = pos;
 		this.angle = angle;
 		unTransform();		
-		transform( Geo.createTransform(pos,angle) );
+		transform( Geo.createTransform(pos,angle), false );
 	}
 	
 	
 	
 	private void unTransform() {
 		try {
-			transform( matrix.createInverse() );
+			transform( matrix.createInverse(), false );
 		}
 		catch (NoninvertibleTransformException ex) {
 			ex.printStackTrace();
@@ -200,20 +203,37 @@ public class GraphicComActive extends Graphic
 	
 	
 	
-	private void transform( AffineTransform mat ) {
-		matrix = mat;
+	protected void transform( AffineTransform mat, boolean permanent ) {
+		if (permanent)
+			 matrix = new AffineTransform();
+		else matrix = mat;
 		
-		polyBody .transform( mat );
-		polyPins .transform( mat );
-		bubblePos.transform( mat );
-		
-		if (polyAux != null)
-			polyAux.transform( mat );
-		
-		for (GraphicPinMapping gpm: pinMap)
-			gpm.line.transform( mat );
+		for (Transformable trans: getTransformables())
+			trans.transform( mat );
 		
 		bbox = computeBbox();
+	}
+	
+	
+	
+	private List<Transformable> getTransformables() {
+		List<Transformable> trans = new ArrayList<>();
+		
+		trans.add( polyBody );
+		
+		if (polyPins != null)
+			trans.add( polyPins );
+		
+		if (polyAux != null)
+			trans.add( polyAux );
+		
+		if (hasBubble)
+			trans.add( bubblePos );
+		
+		for (GraphicPinMapping gpm: pinMap)
+			trans.add( gpm.line );
+		
+		return trans;
 	}
 	
 	
@@ -224,8 +244,8 @@ public class GraphicComActive extends Graphic
 		
 		Gfx.pushColorAndSet( g, colStroke );
 			Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
-				g.draw( polyPins );
-				if (polyAux != null) g.draw( polyAux );
+				if (polyPins != null) g.draw( polyPins );
+				if (polyAux  != null) g.draw( polyAux );
 			Gfx.popStroke( g );
 				
 			Gfx.pushColorAndSet( g, colFill );
@@ -249,11 +269,6 @@ public class GraphicComActive extends Graphic
 					Gfx.drawCircle( g, bubblePos, bubbleRadius, false );
 				Gfx.popStroke( g );
 			}
-		Gfx.popColor( g );
-		
-		Gfx.pushColorAndSet( g, Color.white );
-			for (GraphicPinMapping gpm: pinMap)
-				Gfx.drawThickLine( g, gpm.getPinPosBody(), gpm.getPinPosEnd(), 1 );
 		Gfx.popColor( g );
 	}
 }

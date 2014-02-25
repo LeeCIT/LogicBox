@@ -9,20 +9,21 @@ import javax.swing.JButton;
 import logicBox.gui.Gfx;
 import logicBox.gui.contextMenu.ContextMenu;
 import logicBox.util.Bbox2;
+import logicBox.util.Evaluator;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
 
 
 /**
- * A button specialised for displaying component graphics.
- * For use in the ToolBox class.
+ * A button specialised for use in the Toolbox class.
  * @author Lee Coakley
  */
 public class ToolboxButton extends JButton
 {
-	private GraphicComActive gca;
-	private ContextMenu      contextMenu;
+	private GraphicComActive       gca;
+	private ContextMenu            contextMenu;
+	private Evaluator<EditorPanel> targetEvaluator;
 	
 	
 	
@@ -41,6 +42,18 @@ public class ToolboxButton extends JButton
 	    setRolloverEnabled( true );
 	    gca.setInverted( true );
 	    gca.setFillAntialias( true );
+	}
+	
+	
+	
+	protected void setEditorPanelEvaluator( Evaluator<EditorPanel> targetEvaluator ) {
+		this.targetEvaluator = targetEvaluator;
+	}
+	
+	
+	
+	protected Evaluator<EditorPanel> getEditorPanelEvaluator() {
+		return targetEvaluator;
 	}
 	
 	

@@ -44,9 +44,18 @@ public abstract class Geo
 	 * Linear interpolate from A to B by fraction F.
 	 */
 	public static Vec2 lerp( Vec2 a, Vec2 b, double f ) {
+		return lerp( a, b, new Vec2(f) );
+	}
+	
+	
+	
+	/**
+	 * Linear interpolate from A to B by fraction F.
+	 */
+	public static Vec2 lerp( Vec2 a, Vec2 b, Vec2 f ) {
 		return new Vec2( 
-			lerp( a.x, b.x, f ),
-			lerp( a.y, b.y, f )
+			lerp( a.x, b.x, f.x ),
+			lerp( a.y, b.y, f.y )
 		);
 	}
 	
@@ -270,8 +279,8 @@ public abstract class Geo
 	
 	public static AffineTransform createTransform( Vec2 trans, Vec2 scale, double rotate ) {
 		AffineTransform t = new AffineTransform();
+		t.scale    ( scale.x, scale.y );
 		t.translate( trans.x, trans.y );
-		t.scale( scale.x, scale.y );
 		t.rotate( Math.toRadians(-rotate) );
 		return t;
 	}

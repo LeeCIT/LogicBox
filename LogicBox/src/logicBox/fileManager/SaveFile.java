@@ -1,24 +1,22 @@
 
-package prototypes.saveFile;
+package logicBox.fileManager;
 
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import logicBox.gui.GUI;
 
 
 
-public class SaveFile {
-
-	private File   saveFile;
-	private File   fileToSave;
-	private String demoText   = "demo output";
-
-	public SaveFile(JFrame frame, File fileTosave) {
-		this.fileToSave = fileTosave;
-		
+public class SaveFile 
+{
+	/**
+	 * Saves chooses a location to save the program state
+	 * TODO Must save
+	 * @param frame
+	 */
+	public SaveFile(JFrame frame) {		
 		JFileChooser chooser = new JFileChooser();
 
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Logicbox", "lbx");
@@ -26,11 +24,9 @@ public class SaveFile {
 
 		int returnVal = chooser.showSaveDialog(frame);
 		if(returnVal == JFileChooser.APPROVE_OPTION) {
-			System.out.println("You chose to save this file: " + chooser.getSelectedFile().getName());
-			saveFile = chooser.getSelectedFile();
 			try {
 				FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".lbx");
-				fw.write(demoText);
+				//fw.write(); TODO receive input to print something out to the file
 				fw.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -40,9 +36,25 @@ public class SaveFile {
 
 
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 
 
+	
+	
+	
+	
+	
+	
+	
 	public static void main(String[] args) {
 		GUI.setNativeStyle();
 		final JFrame frame = new JFrame("Save file demo");
@@ -51,7 +63,7 @@ public class SaveFile {
 
 		saveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new SaveFile(frame, null);
+				new SaveFile(frame);
 			}
 		});
 

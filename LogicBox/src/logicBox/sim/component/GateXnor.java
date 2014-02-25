@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 /**
@@ -35,5 +38,11 @@ public class GateXnor extends GateXor
 	
 	public String getName() {
 		return "XNOR gate";
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateGateXnor( getPinInputCount() );
 	}
 }

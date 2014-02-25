@@ -64,6 +64,15 @@ public class Bbox2 implements Transformable, Serializable
 	
 	
 	
+	/**
+	 * Access by normalised coordinates (0:1 inclusive on each axis)
+	 */
+	public Vec2 getNorm( double xn, double yn ) {
+		return Geo.lerp( tl, br, new Vec2(xn,yn) );
+	}
+	
+	
+	
 	public double getLeft() {
 		return tl.x;
 	}
@@ -186,7 +195,7 @@ public class Bbox2 implements Transformable, Serializable
 	
 	/**
 	 * WARNING: This is an axis-aligned region.
-	 *  		A matrix with rotation will produce incorrect results!
+	 *  		A matrix with rotations other than multiples of 90 will produce incorrect results!
 	 */
 	public void transform( AffineTransform matrix ) {
 		matrix.transform( tl, tl );
