@@ -28,6 +28,9 @@ public class Camera
 	private double zoomMax;
 	private double zoom;
 	
+	private double zoomDirIn  = -1;
+	private double zoomDirOut = +1;
+	
 	private boolean panningActive;
 	private Vec2    panningOrigin;
 	private Vec2    pan;
@@ -42,22 +45,22 @@ public class Camera
 	public Camera( Component attachTo, Callback onTransformChange ) {
 		component = attachTo;
 		
-		zoomRate  = 1.0 + (1.0 / 3.0);
+		zoomRate  = 1.0 + (1.0 / 4.0);
 		zoomRange = 8.0;
 		zoomMin   = 1.0 / zoomRange;
 		zoomMax   =       zoomRange;
 		zoom      = 1.0;
 		
-		pan       = new Bbox2( attachTo ).getCentre();
+		pan       = new Vec2( 0 );
 		matrix    = new AffineTransform();
 		
 		onTransform = onTransformChange;
 		
 		setupActions();
 	}
-	
-	
-	
+
+
+
 	public Vec2 getMousePosScreen() {
 		return new Vec2( MouseInfo.getPointerInfo().getLocation() );
 	}
@@ -98,20 +101,68 @@ public class Camera
 	
 	
 	
+	public Vec2 getCentre() {
+		return getWorldViewableArea().getCentre();
+	}
+	
+	
+	
 	public AffineTransform getTransform() {
 		return matrix;
 	}
 	
 	
 	
+	/**
+	 * Move the camera so it is centred on the given position.
+	 */
+	public void panTo( Vec2 pos ) {
+		pan = pos.copy();
+		updateTransform();
+	}
+	
+	
+	
+	/**
+	 * Set the zoom level of the camera.
+	 * The level is automatically clamped to min/max.
+	 * > 1 magnifies
+	 * < 1 minifies
+	 */
+	public void zoomTo( double zoomLevel ) {
+		zoom = Geo.clamp( zoomLevel, zoomMin, zoomMax );
+		
+		double thresh = 0.10;
+		if (zoom < 1  &&  zoom > 1-thresh
+		||  zoom > 1  &&  zoom < 1+thresh)
+			zoom = 1.0;
+		
+		updateTransform();
+	}
+	
+	
+	
+	private void zoomLogarithmic( double wheelInput, boolean isMouseInput ) {
+		double  delta = -wheelInput;
+		boolean in    = delta > 0.0;
+		double  mod   = zoomRate * Math.abs( delta );
+		
+		if ( ! in)
+			 mod = 1.0 / mod;
+		
+		zoomTo( zoom * mod );
+	}
+	
+	
+	
 	public void zoomIn() {
-		zoomLogarithmic( -1, false );
+		zoomLogarithmic( zoomDirIn, false );
 	}
 	
 	
 	
 	public void zoomOut() {
-		zoomLogarithmic( 1, false );
+		zoomLogarithmic( zoomDirOut, false );
 	}
 	
 	
@@ -134,48 +185,23 @@ public class Camera
 	
 	
 	
-	public Vec2 getCentre() {
-		return getWorldViewableArea().getCentre();
-	}
-	
-	
-	
-	private void zoomLogarithmic( double wheelInput, boolean isMouseInput ) {
-		double  delta = -wheelInput;
-		boolean in    = delta > 0.0;
-		double  mod   = zoomRate * Math.abs( delta );
-		
-		if ( ! in)
-			 mod = 1.0 / mod;
-		
-		zoom = Geo.clamp( zoom * mod, zoomMin, zoomMax );
-		
-		double roundingSnapThresh = 1.0 / 32.0;
-		if (Geo.absDiff( zoom, 1.0 ) < roundingSnapThresh)
-			zoom = 1.0;
-		
-		// TODO account for mouse position
-		updateTransform();
-	}
-	
-	
-	
 	private void updateTransform() {
 		updateTransform( new Vec2(0.5) );
 	}
 	
 	
 	
-	private void updateTransform( Vec2 normalisedRelativePointer ) {
+	private void updateTransform( Vec2 relativeCentre ) {
 		Bbox2 region = new Bbox2( component );
-		Vec2  half   = region.getSize().multiply( 0.5 );
+		Vec2  centre = region.getSize().multiply( 0.5 );
 		
 		matrix = new AffineTransform();
-		matrix.translate(  half.x,  half.y );
-		matrix.scale    (  zoom,    zoom   );
-		matrix.translate( -half.x, -half.y );
-		matrix.translate(  pan.x,   pan.y  );
-		matrix.translate(  0.5,     0.5    );
+		matrix.translate(  centre.x,  centre.y );
+		matrix.scale    (  zoom,      zoom     );
+		matrix.translate( -centre.x, -centre.y );
+		matrix.translate(  pan.x,     pan.y    );
+		matrix.translate(  centre.x,  centre.y );
+		matrix.translate(  0.5,       0.5      );
 		
 		onTransform.execute();
 	}
@@ -194,6 +220,9 @@ public class Camera
 			public void mousePressed( MouseEvent ev ) {
 				if (SwingUtilities.isMiddleMouseButton( ev ))
 					panBegin();
+				
+				if (SwingUtilities.isRightMouseButton( ev ))
+					panTo( new Vec2(0,0) );
 			}
 			
 			public void mouseReleased( MouseEvent ev ) {
