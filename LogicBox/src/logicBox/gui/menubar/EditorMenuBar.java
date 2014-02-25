@@ -17,6 +17,7 @@ public class EditorMenuBar extends JMenuBar
 {
 	public JMenu     menuFile;
 	public JMenuItem itemFileNew;
+	public JMenuItem itemFileOpen;
 	public JMenuItem itemFileSave;
 	public JMenuItem itemFileSaveAs;
 	public JMenuItem itemFilePrint;
@@ -43,6 +44,7 @@ public class EditorMenuBar extends JMenuBar
 		setupFileMenu();
 		setupCloudMenu();
 		setupHelpMenu();
+		setupMnemonics();
 	}
 	
 	
@@ -50,6 +52,7 @@ public class EditorMenuBar extends JMenuBar
 	private void setupFileMenu() {
 		menuFile = new JMenu( "File" );
 		itemFileNew    = add( menuFile, "New" );
+		itemFileOpen   = add( menuFile, "Open" );
 		itemFileSave   = add( menuFile, "Save" );
 		itemFileSaveAs = add( menuFile, "Save as..." );
 		menuFile.addSeparator();
@@ -89,7 +92,17 @@ public class EditorMenuBar extends JMenuBar
 	
 	
 	private void setupMnemonics() {
-		// TODO
+		menuFile.setMnemonic( 'F' );
+		itemFileNew   .setMnemonic( 'N' );
+		itemFileOpen  .setMnemonic( 'O' );
+		itemFileSave  .setMnemonic( 'S' );
+		itemFileSaveAs.setMnemonic( 'A' );
+		itemFilePrint .setMnemonic( 'P' );
+		itemFileExit  .setMnemonic( 'X' );
+		
+		menuHelp.setMnemonic( 'H' );
+		itemHelpHelp .setMnemonic( 'H' );
+		itemHelpAbout.setMnemonic( 'A' );
 	}
 }
 
