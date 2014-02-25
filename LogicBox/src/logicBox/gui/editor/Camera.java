@@ -220,9 +220,6 @@ public class Camera
 			public void mousePressed( MouseEvent ev ) {
 				if (SwingUtilities.isMiddleMouseButton( ev ))
 					panBegin();
-				
-				if (SwingUtilities.isRightMouseButton( ev ))
-					panTo( new Vec2(0,0) );
 			}
 			
 			public void mouseReleased( MouseEvent ev ) {
