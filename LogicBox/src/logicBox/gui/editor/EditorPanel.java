@@ -104,6 +104,12 @@ public class EditorPanel extends JPanel
 	
 	
 	
+	public Camera getCamera() {
+		return cam;
+	}
+	
+	
+	
 	public void setAntialiasingEnabled( boolean state ) {
 		enableAntialiasing = state;
 	}
