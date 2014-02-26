@@ -123,6 +123,12 @@ public class Camera
 	
 	
 	
+	public Vec2 getPan() {
+		return pan.copy();
+	}
+	
+	
+	
 	/**
 	 * Set the zoom level of the camera.
 	 * The level is automatically clamped to min/max.
@@ -193,7 +199,7 @@ public class Camera
 	
 	private void updateTransform( Vec2 relativeCentre ) {
 		Bbox2 region = new Bbox2( component );
-		Vec2  centre = region.getSize().multiply( 0.5 );
+		Vec2  centre = region.getSize().multiply( relativeCentre );
 		
 		matrix = new AffineTransform();
 		matrix.translate(  centre.x,  centre.y );
@@ -220,9 +226,6 @@ public class Camera
 			public void mousePressed( MouseEvent ev ) {
 				if (SwingUtilities.isMiddleMouseButton( ev ))
 					panBegin();
-				
-				if (SwingUtilities.isRightMouseButton( ev ))
-					panTo( new Vec2(0,0) );
 			}
 			
 			public void mouseReleased( MouseEvent ev ) {
@@ -237,6 +240,14 @@ public class Camera
 				if (SwingUtilities.isMiddleMouseButton( ev ))
 					panMove();
 			}
+		});
+		
+		
+		component.addComponentListener( new ComponentListener() {
+			public void componentShown  ( ComponentEvent ev ) { updateTransform(); }
+			public void componentResized( ComponentEvent ev ) { updateTransform(); }
+			public void componentMoved  ( ComponentEvent ev ) { updateTransform(); }
+			public void componentHidden ( ComponentEvent ev ) { updateTransform(); }
 		});
 	}
 	
