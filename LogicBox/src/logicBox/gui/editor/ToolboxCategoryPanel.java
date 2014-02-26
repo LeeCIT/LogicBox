@@ -4,9 +4,7 @@
 package logicBox.gui.editor;
 
 import java.awt.Font;
-
 import javax.swing.*;
-
 import net.miginfocom.swing.MigLayout;
 
 
@@ -29,7 +27,7 @@ public class ToolboxCategoryPanel extends JPanel
 	 * @param items
 	 */
 	private void addCategory( String title ) {
-		add( createCategoryLabel( title ), "wrap" );
+		add( createCategoryLabel( title ), "span 3" );
 	}
 	
 	
