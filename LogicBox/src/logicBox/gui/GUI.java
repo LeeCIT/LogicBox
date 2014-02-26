@@ -50,14 +50,13 @@ public class GUI
 		EditorPanel   panel = new EditorPanel();
 		JFrame        frame = new EditorFrame( panel );
 		EditorMenuBar menu  = new EditorMenuBar();
-		Toolbox       box   = new Toolbox();
+		Toolbox       box   = new Toolbox(frame);
 		
 		frame.setJMenuBar( menu );
 		box.setActiveEditorPanel( panel );
 		
 		frame.pack();
 		frame.setSize( 720, 640 );
-		frame.add( box, "west" );
 		frame.setVisible( true );
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 	}

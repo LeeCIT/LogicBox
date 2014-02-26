@@ -8,7 +8,10 @@ import java.awt.Font;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.*;
+
+import net.miginfocom.swing.MigLayout;
 import logicBox.gui.GUI;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
@@ -21,17 +24,20 @@ import logicBox.util.Evaluator;
  * @author John Murphy
  * @author Lee Coakley
  */
-public class Toolbox extends JToolBar
+public class Toolbox extends JDialog
 {
 	private EditorPanel            activeEditorPanel;
 	private Evaluator<EditorPanel> evaluator;
 	
 	
 	
-	public Toolbox() {
-		super( "Toolbox" );
-		setMargin( new Insets(0, 2, 0, 0) );
-		setOrientation( JToolBar.VERTICAL );
+	public Toolbox(JFrame parent) {
+		super(parent);
+		
+		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		this.setVisible(true);
+		
+		this.setLayout(new MigLayout("wrap 1"));
 		
 		setupEvaluator();
 		addButtons();
