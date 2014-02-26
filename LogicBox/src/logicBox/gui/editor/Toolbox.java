@@ -4,15 +4,10 @@
 package logicBox.gui.editor;
 
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
-
 import net.miginfocom.swing.MigLayout;
-import logicBox.gui.GUI;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
 
