@@ -34,15 +34,15 @@ public class Toolbox extends JDialog
 	public Toolbox(JFrame parent) {
 		super(parent);
 		
-		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		this.setVisible(true);
-		
-		this.setLayout(new MigLayout("wrap 1"));
-		
+		setTitle("Toolbox");
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		setVisible(true);
+		setLayout(new MigLayout("wrap 1"));		
+		setSize(new Dimension(200, 600));
 		setupEvaluator();
 		addButtons();
 	}
-	
+		
 	
 	
 	private void addButtons() {
@@ -161,8 +161,7 @@ public class Toolbox extends JDialog
 	 */
 	public void addCategory( String title, ToolboxButton...buttons ) {
 		setButtonEvaluators( buttons );
-		addCategory( title );
-		JPanel panel = new ToolboxCategoryPanel( buttons );
+		JPanel panel = new ToolboxCategoryPanel( title, buttons );
 		add( panel );
 	}
 	
@@ -173,29 +172,6 @@ public class Toolbox extends JDialog
 			butt.setEditorPanelEvaluator( evaluator );
 	}
 	
-	
-	
-	/**
-	 * Add a the category heading and separator.
-	 * @param heading
-	 * @param items
-	 */
-	private void addCategory( String title ) {
-		add( createCategoryLabel( title ) );
-		add( new JToolBar.Separator() );
-	}
-	
-	
-	
-	private JLabel createCategoryLabel( String title ) {
-		JLabel label = new JLabel( title );
-		Font   font  = label.getFont();
-		Font   bold  = new Font( font.getName(), Font.BOLD, font.getSize() );
-		
-		label.setFont( bold );
-		
-		return label;
-	}
 }
 
 
