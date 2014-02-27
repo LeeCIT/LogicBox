@@ -4,7 +4,9 @@
 package logicBox.sim.component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import logicBox.sim.LogicLevel;
 import logicBox.sim.SimUtil;
 
 
@@ -29,6 +31,7 @@ public class FlipFlopJK extends ComponentActive
 {
 	private List<Pin> pinInputs;
 	private List<Pin> pinOutputs;
+	private boolean   lastClock;
 	
 	
 	
@@ -38,6 +41,8 @@ public class FlipFlopJK extends ComponentActive
 		pinOutputs = new ArrayList<>();
 		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  3 );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, 2 );
+		
+		lastClock = false;
 		getPinQinv().setState( true ); // Ensure valid initial state
 	}
 	
@@ -86,7 +91,11 @@ public class FlipFlopJK extends ComponentActive
 	
 	
 	public void update() {
-		if ( ! getPinC().getState())
+		boolean clock     = getPinC().getState();
+		boolean isEdgePos = LogicLevel.edgePos == LogicLevel.toLogicLevel( lastClock, clock );
+		lastClock = clock;
+		
+		if ( ! isEdgePos)
 			return;
 		
 		boolean j = getPinJ().getState();
@@ -114,7 +123,45 @@ public class FlipFlopJK extends ComponentActive
 	public static void main( String[] args ) {
 		FlipFlopJK f = new FlipFlopJK();
 		
-		// TODO test
+		int[] patternExpected = {
+			1,1,0,0,1,1,0,0, // Toggle
+			0,0,0,0,0,0,0,0, // Set 0
+			1,1,1,1,1,1,1,1, // Set 1
+			1,1,1,1,1,1,1,1  // No change
+		};
+		
+		int[] patternActual = new int[ patternExpected.length ];
+		
+		cycle( f, patternActual,  0, true,  true,  true,  4 );
+		cycle( f, patternActual,  8, false, true,  true,  4 );
+		cycle( f, patternActual, 16, true,  false, true,  4 );
+		cycle( f, patternActual, 24, true,  false, false, 4 );
+		
+		boolean good = Arrays.equals( patternExpected, patternActual );
+		
+		System.out.print( "\nTest " + (good ? "OK" : "Failed") );
+	}
+	
+	
+	
+	private static void cycle( FlipFlopJK f, int[] pattern, int offset, boolean J, boolean K, boolean clockIO, int cycles ) {
+		System.out.print( "\nQ: " );
+		
+		f.getPinJ().setState( J );
+		f.getPinK().setState( K );
+		
+		for (int i=0; i<cycles*2; i++) {
+			boolean clockSignal = (i & 0b1) == 0;
+			
+			if (clockIO)
+				f.getPinC().setState( clockSignal );
+			
+			f.update();
+			
+			int v = f.getPinQ().getState() ? 1 : 0;
+			pattern[ offset + i ] = v;
+			System.out.print( v );
+		}
 	}
 }
 

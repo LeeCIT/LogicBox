@@ -34,4 +34,10 @@ public enum LogicLevel
 		else if (!prev &&  cur) return edgePos;
 		else 					return edgeNeg;
 	}
+	
+	
+	
+	public boolean isEdgePos( boolean prev, boolean cur ) {
+		return edgePos == toLogicLevel( prev, cur );
+	}
 }
