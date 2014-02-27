@@ -55,7 +55,7 @@ public class EditorStyle
 	
 	
 	private static Stroke makeTracePlaceStroke() {
-		float[] dashPattern = { compThickness };
+		float[] dashPattern = { compThickness * 2 };
 		
 		return new BasicStroke(
 			compThickness,
