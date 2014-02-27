@@ -106,6 +106,8 @@ public class ToolTraceDrawer extends Tool
 		if ( (!traceInitiated) || tracePoints.isEmpty())
 			return;
 		
+		Gfx.drawCircle( g, tracePosNext, 5, EditorStyle.colTraceOff, true );
+		
 		Gfx.pushStrokeAndSet( g, EditorStyle.strokeTrace );
 			Gfx.pushColorAndSet ( g, EditorStyle.colTraceOff );
 				drawExistingLines( g );
