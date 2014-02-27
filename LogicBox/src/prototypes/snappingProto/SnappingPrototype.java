@@ -4,6 +4,7 @@
 package prototypes.snappingProto;
 
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -19,6 +20,7 @@ import logicBox.util.Vec2;
 public class SnappingPrototype extends ComponentAdapter {
 	private boolean   motionInterlock;
 	private Component snapTo; // Ignore for now, just snap to desktop
+	private int snappingDistance = 16;
 	
 	
 	
@@ -35,7 +37,7 @@ public class SnappingPrototype extends ComponentAdapter {
 		//Rectangle      desk  =//GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		Rectangle      ref   = snapTo.getBounds();
 		Rectangle      com   = ev.getComponent().getBounds();
-		List<EdgePair> edges = getSnappableEdgePairs( ref, com, 16);
+		List<EdgePair> edges = getSnappableEdgePairs( ref, com, snappingDistance);
 		
 		for (EdgePair pair: edges) {
 			System.out.println( "C-" + pair.com.edge + " to R-" + pair.ref.edge + " (" + pair.dist +"px)" );
@@ -49,7 +51,13 @@ public class SnappingPrototype extends ComponentAdapter {
 		Vec2 pos  = new Vec2( comp.getLocation() );
 		Vec2 size = new Vec2( comp.getWidth(), comp.getHeight() );
 		
-		switch (edgePair.ref.edge) {
+		Rectangle compRect = comp.getBounds();
+		Rectangle snapRect = snapTo.getBounds();
+		
+		
+		// TODO limit the area to check
+		if( true ) {
+			switch (edgePair.ref.edge) {
 			case left:
 			case right:
 				switch (edgePair.com.edge) {
@@ -62,7 +70,10 @@ public class SnappingPrototype extends ComponentAdapter {
 					case top:    pos.y = edgePair.ref.pos;           break;
 					case bottom: pos.y = edgePair.ref.pos - size.y;  break;
 				} break;
+			}
 		}
+		
+			
 
 		motionInterlock = true;
 		comp.setLocation( (int) pos.x, (int) pos.y );
