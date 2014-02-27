@@ -193,23 +193,21 @@ public class Camera
 	
 	
 	
-	public void interpolateTo( final Vec2 pan, final double zoom, final double timeInSeconds ) {
+	public void interpolateTo( final Vec2 pos, final double zoom, final double timeInSeconds ) {
 		interpolateStop();
 		
 		mover = new CallbackRepeater( 1000 / 60,
 			new Callback() {
 				private Vec2   panStart   = Camera.this.pan.copy();
 				private double zoomStart  = Camera.this.zoom;
-				private Vec2   panTarget  = pan;
+				private Vec2   panTarget  = pos;
 				private double zoomTarget = zoom;
 				private double frac       = 0;
 				private double step       = (1.0 / timeInSeconds) / (1000/60);
 				
 				public void execute() {
-					Vec2   p = Geo.herp(  panStart,  panTarget, frac );
+					Vec2   p = Geo.herp( panStart,  panTarget,  frac );
 					double z = Geo.herp( zoomStart, zoomTarget, frac );
-					
-					directZoomAndPan( p, z );
 					
 					if (frac < 1)
 						frac += step;
@@ -219,6 +217,8 @@ public class Camera
 						zoomTo( zoomTarget );
 						
 						mover.softStop();
+					} else {
+						directZoomAndPan( p, z );
 					}
 				}
 			}
