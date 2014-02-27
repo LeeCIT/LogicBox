@@ -9,6 +9,7 @@ import java.awt.geom.NoninvertibleTransformException;
 import javax.swing.SwingUtilities;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
+import logicBox.util.CallbackRepeater;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
@@ -35,8 +36,9 @@ public class Camera
 	private Vec2    panningOrigin;
 	private Vec2    pan;
 	
-	private AffineTransform matrix;
-	private Callback        onTransform;
+	private AffineTransform  matrix;
+	private Callback         onTransform;
+	private CallbackRepeater mover;
 	
 	
 	
@@ -188,6 +190,62 @@ public class Camera
 	public double getZoomMax() {
 		return zoomMax;
 	}
+	
+	
+	
+	public void interpolateTo( final Vec2 pan, final double zoom, final double timeInSeconds ) {
+		interpolateStop();
+		
+		mover = new CallbackRepeater( 1000 / 60,
+			new Callback() {
+				private Vec2   panStart   = Camera.this.pan.copy();
+				private double zoomStart  = Camera.this.zoom;
+				private Vec2   panTarget  = pan;
+				private double zoomTarget = zoom;
+				private double frac       = 0;
+				private double step       = (1.0 / timeInSeconds) / (1000/60);
+				
+				public void execute() {
+					Vec2   p = Geo.herp(  panStart,  panTarget, frac );
+					double z = Geo.herp( zoomStart, zoomTarget, frac );
+					
+					directZoomAndPan( p, z );
+					
+					if (frac < 1)
+						frac += step;
+					
+					if (frac >= 1) {
+						panTo ( panTarget );
+						zoomTo( zoomTarget );
+						
+						mover.softStop();
+					}
+					
+					System.out.println( frac );
+				}
+			}
+		);
+	}
+	
+	
+	
+	public void interpolateStop() {
+		if (mover != null)
+			mover.join();
+	}
+	
+	
+	
+	
+	
+	private void directZoomAndPan( Vec2 pan, double zoom ) {
+		this.zoom = Geo.clamp( zoom, zoomMin, zoomMax );
+		this.pan  = pan.copy();
+		
+		updateTransform();
+	}
+	
+	
 	
 	
 	
