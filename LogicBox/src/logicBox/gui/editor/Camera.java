@@ -220,8 +220,6 @@ public class Camera
 						
 						mover.softStop();
 					}
-					
-					System.out.println( frac );
 				}
 			}
 		);
