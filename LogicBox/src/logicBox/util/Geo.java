@@ -92,6 +92,15 @@ public abstract class Geo
 	
 	
 	
+	public static Vec2 herp( Vec2 a, Vec2 b, double f ) {
+		return new Vec2( 
+			herp( a.x, b.x, f ),
+			herp( a.y, b.y, f )
+		);
+	}
+	
+	
+	
 	/**
 	 * Normalise given current value and min/max.
 	 */

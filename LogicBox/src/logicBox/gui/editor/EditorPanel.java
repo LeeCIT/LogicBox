@@ -59,11 +59,12 @@ public class EditorPanel extends JPanel
 		world            = new EditorWorld();
 		repaintListeners = new ArrayList<>();
 		
-		new ToolDragger    ( this, world, cam ).attach();
-		new ToolHighlighter( this, world, cam ).attach();
+		//new ToolDragger    ( this, world, cam ).attach();
+		//new ToolHighlighter( this, world, cam ).attach();
+		new ToolTraceDrawer( this, world, cam ).attach();
 		
-		toolPlacer = new ToolPlacer( this, world, cam );
-		toolPlacer.attach();
+		//toolPlacer = new ToolPlacer( this, world, cam );
+		//toolPlacer.attach();
 		
 		//new ToolSelector( this, world, cam ).attach();
 		

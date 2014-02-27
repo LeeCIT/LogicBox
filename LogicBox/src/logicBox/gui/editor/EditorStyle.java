@@ -31,10 +31,11 @@ public class EditorStyle
 	public static double gridThickness = 3.0;
 	public static float  compThickness = 5.0f;
 	
-	public static Stroke strokeBody   = new BasicStroke( compThickness );
-	public static Stroke strokePin    = new BasicStroke( compThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
-	public static Stroke strokeTrace  = new BasicStroke( compThickness, BasicStroke.CAP_BUTT,  BasicStroke.JOIN_ROUND );
-	public static Stroke strokeBubble = new BasicStroke( compThickness * 0.5f );
+	public static Stroke strokeBody       = new BasicStroke( compThickness );
+	public static Stroke strokePin        = new BasicStroke( compThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );
+	public static Stroke strokeTrace      = new BasicStroke( compThickness, BasicStroke.CAP_BUTT,  BasicStroke.JOIN_ROUND );
+	public static Stroke strokeTracePlace = makeTracePlaceStroke();
+	public static Stroke strokeBubble     = new BasicStroke( compThickness * 0.5f );
 	
 	
 	
@@ -43,6 +44,21 @@ public class EditorStyle
 		
 		return new BasicStroke(
 			thickness * 0.5f,
+			BasicStroke.CAP_ROUND,
+			BasicStroke.JOIN_ROUND,
+			1.0f,
+			dashPattern,
+			0
+		);
+	}
+	
+	
+	
+	private static Stroke makeTracePlaceStroke() {
+		float[] dashPattern = { compThickness };
+		
+		return new BasicStroke(
+			compThickness,
 			BasicStroke.CAP_ROUND,
 			BasicStroke.JOIN_ROUND,
 			1.0f,
