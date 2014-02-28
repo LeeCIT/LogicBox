@@ -25,7 +25,7 @@ public class McqPanel extends JPanel
 	private ArrayList<JRadioButton> buttons = new ArrayList<>();
 	private String correctAnswer, question;
 	private ButtonGroup options = new ButtonGroup();
-	
+	private int questionNum;
 	
 	
 	
@@ -41,7 +41,7 @@ public class McqPanel extends JPanel
 		this.answers = mcq.getAnswers();
 		this.correctAnswer = mcq.getCorrectAnswer();
 		this.question = mcq.getQuestion();
-		
+		this.questionNum = McqQuestion.getQuestionNum();
 		
 		displayQuestion();
 		
@@ -56,7 +56,7 @@ public class McqPanel extends JPanel
 		
 		int j = 0;
 		
-		
+		add( new JLabel("(Q" + questionNum + ")"), "wrap");
 		add( new JLabel(question), "wrap" ); //Add the question to the panel.
 		
 		
