@@ -3,9 +3,7 @@
 
 package logicBox.sim.component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import logicBox.sim.LogicLevel;
 import logicBox.sim.SimUtil;
 
@@ -29,33 +27,24 @@ import logicBox.sim.SimUtil;
  */
 public class FlipFlopJK extends ComponentActive
 {
-	private List<Pin> pinInputs;
-	private List<Pin> pinOutputs;
-	private boolean   lastClock;
+	private boolean lastClock;
 	
 	
 	
 	public FlipFlopJK() {
 		super();
-		pinInputs  = new ArrayList<>();
-		pinOutputs = new ArrayList<>();
 		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  3 );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, 2 );
 		
+		reset();
+	}
+	
+	
+	
+	public void reset() {
+		super.reset();
 		lastClock = false;
-		getPinQinv().setState( true ); // Ensure valid initial state
-	}
-	
-	
-	
-	public List<Pin> getPinInputs() {
-		return pinInputs;
-	}
-	
-	
-	
-	public List<Pin> getPinOutputs() {
-		return pinOutputs;
+		getPinQinv().setState( true );
 	}
 	
 	
@@ -92,7 +81,7 @@ public class FlipFlopJK extends ComponentActive
 	
 	public void update() {
 		boolean clock     = getPinC().getState();
-		boolean isEdgePos = LogicLevel.edgePos == LogicLevel.toLogicLevel( lastClock, clock );
+		boolean isEdgePos = LogicLevel.isEdgePos( lastClock, clock );
 		lastClock = clock;
 		
 		if ( ! isEdgePos)
@@ -117,6 +106,12 @@ public class FlipFlopJK extends ComponentActive
 	
 	public String getName() {
 		return "JK flip-flop";
+	}
+	
+	
+	
+	public boolean isCombinational() {
+		return false;
 	}
 	
 	
