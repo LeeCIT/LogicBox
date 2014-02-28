@@ -56,7 +56,13 @@ public class SnappingPrototype extends ComponentAdapter {
 		// Increase the size of the component box so it snaps within the distance required only
 		compRect.x += snappingDistance;
 		compRect.y += snappingDistance;
-
+		
+		// Increase the opposite side of the frame to snap to by twice the snapping distance 
+		// This is due to increasing the box of the first frame so the second ones opposite edge needs to be doubled by that
+		snapRect.width  += (snappingDistance * 2);
+		snapRect.height += (snappingDistance * 2);
+		
+		
 		if( snapRect.intersects(compRect) ) {
 			switch (edgePair.ref.edge) {
 			case left:
