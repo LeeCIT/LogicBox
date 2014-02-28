@@ -2,6 +2,7 @@
 
 
 package logicBox.gui;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -9,6 +10,7 @@ import logicBox.gui.editor.EditorFrame;
 import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.Toolbox;
 import logicBox.gui.menubar.EditorMenuBar;
+import logicBox.gui.snapping.ComponentSnapper;
 
 
 
@@ -51,6 +53,8 @@ public class GUI
 		JFrame        frame = new EditorFrame( panel );
 		EditorMenuBar menu  = new EditorMenuBar();
 		Toolbox       box   = new Toolbox(frame);
+		
+		box.addComponentListener(new ComponentSnapper(frame));
 		
 		frame.setJMenuBar( menu );
 		box.setActiveEditorPanel( panel );
