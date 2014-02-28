@@ -22,14 +22,13 @@ public class McqQuestion {
 		this.answers = answers;
 		this.correctAnswer = correctAnswer;
 		this.question = question;
-		
-		questionNum++;
+		questionNum++; //Increase the number of questions for every new instance.
 	}
 	
 	
 	
 	/**
-	 * Return the ArrayList of possible answers
+	 * Return the ArrayList of possible answers.
 	 * to the question.
 	 * @return
 	 */
@@ -58,6 +57,11 @@ public class McqQuestion {
 	}
 	
 	
+	
+	/**
+	 * Return the number of questions added.
+	 * @return
+	 */
 	public static int getQuestionNum() {
 		return questionNum;
 	}
