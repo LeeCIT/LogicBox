@@ -18,7 +18,7 @@ public class SourceToggle extends SourceFixed
 	
 	
 	public void toggleState() {
-		pinOut.setState( ! pinOut.getState() );
+		setState( ! getState() );
 	}
 	
 	
