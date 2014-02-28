@@ -31,7 +31,7 @@ public class GateXnor extends GateXor
 	
 	
 	public boolean evaluate() {
-		return ! evaluate();
+		return ! super.evaluate();
 	}
 	
 	
