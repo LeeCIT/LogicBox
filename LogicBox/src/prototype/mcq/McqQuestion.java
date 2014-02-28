@@ -15,7 +15,7 @@ public class McqQuestion {
 	
 	private ArrayList<String> answers;
 	private String question, correctAnswer;
-	
+	private static int questionNum = 0;
 	
 	
 	public McqQuestion( String question, ArrayList<String> answers, String correctAnswer ) {
@@ -23,6 +23,7 @@ public class McqQuestion {
 		this.correctAnswer = correctAnswer;
 		this.question = question;
 		
+		questionNum++;
 	}
 	
 	
@@ -57,4 +58,7 @@ public class McqQuestion {
 	}
 	
 	
+	public static int getQuestionNum() {
+		return questionNum;
+	}
 }
