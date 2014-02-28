@@ -19,9 +19,11 @@ public class CreateMCQPanel extends JPanel
 	
 	
 	
-	private ArrayList<JTextField> quesionFields = new ArrayList<>();
+	private ArrayList<JTextField> answerFields = new ArrayList<>();
 	private JTextField questionField = new JTextField(); 
 	private int numOfAnswers = 4;
+	private JButton addQuestion = new JButton("Add Question");
+	
 	
 	
 	public CreateMCQPanel() {
@@ -51,20 +53,43 @@ public class CreateMCQPanel extends JPanel
 		
 		addAnswerFields();
 		
-		
+		add( addQuestion );
 	}
 	
 	
 	
+	/**
+	 * Add JTextFields to allow the user to fill in answers
+	 * to the question.
+	 */
 	private void addAnswerFields() {
 		
 		for ( int i = 0; i < numOfAnswers; i++ )
 		{
-			quesionFields.add( new JTextField() );
-			add( quesionFields.get(i), "wrap" );
-			quesionFields.get(i).setPreferredSize( new Dimension(100, 10));
+			answerFields.add( new JTextField() ); //Store the JTextField in the ArrayList.
+			add( answerFields.get(i), "wrap" ); //Add the JTextField to the panel.
+			answerFields.get(i).setPreferredSize( new Dimension(100, 10)); //Set the dimensions.
 		}
 		
 	}
 	
+	
+	
+	/**
+	 * Return the JTextFields holding the answers. 
+	 * @return
+	 */
+	public ArrayList<JTextField> getAnswerFields() {
+		return answerFields;
+	}
+	
+	
+	
+	/**
+	 * Return the JButton to submit a question.
+	 * @return
+	 */
+	public JButton getAddQuestionButton() {
+		return addQuestion;
+	}
 }
