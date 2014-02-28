@@ -37,7 +37,7 @@ public enum LogicLevel
 	
 	
 	
-	public boolean isEdgePos( boolean prev, boolean cur ) {
+	public static boolean isEdgePos( boolean prev, boolean cur ) {
 		return edgePos == toLogicLevel( prev, cur );
 	}
 }
