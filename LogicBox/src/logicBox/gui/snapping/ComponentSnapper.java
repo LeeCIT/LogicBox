@@ -39,7 +39,7 @@ public class ComponentSnapper extends ComponentAdapter {
 		List<EdgePair> edges = getSnappableEdgePairs( ref, com, snappingDistance);
 		
 		for (EdgePair pair: edges) {
-			System.out.println( "C-" + pair.com.edge + " to R-" + pair.ref.edge + " (" + pair.dist +"px)" );
+			//System.out.println( "C-" + pair.com.edge + " to R-" + pair.ref.edge + " (" + pair.dist +"px)" );
 			snapToEdge( ev.getComponent(), com, pair );
 		}
 	}
