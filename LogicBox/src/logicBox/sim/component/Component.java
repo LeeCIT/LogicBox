@@ -16,4 +16,8 @@ public abstract class Component
 	
 	
 	public abstract String getName();
+	
+	
+	
+	public abstract void reset();
 }
