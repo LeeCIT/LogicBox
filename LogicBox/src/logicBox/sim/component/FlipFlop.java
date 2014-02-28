@@ -23,7 +23,6 @@ public abstract class FlipFlop extends ComponentActive
 		super();
 		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  inputPinCount );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, 2             );
-		
 		reset();
 	}
 	
