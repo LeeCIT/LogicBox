@@ -4,12 +4,10 @@
 package logicBox.gui.editor;
 
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import logicBox.gui.GUI;
+import net.miginfocom.swing.MigLayout;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
 
@@ -21,22 +19,25 @@ import logicBox.util.Evaluator;
  * @author John Murphy
  * @author Lee Coakley
  */
-public class Toolbox extends JToolBar
+public class Toolbox extends JDialog
 {
 	private EditorPanel            activeEditorPanel;
 	private Evaluator<EditorPanel> evaluator;
 	
 	
 	
-	public Toolbox() {
-		super( "Toolbox" );
-		setMargin( new Insets(0, 2, 0, 0) );
-		setOrientation( JToolBar.VERTICAL );
+	public Toolbox(JFrame parent) {
+		super(parent);
 		
+		setTitle("Toolbox");
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+		setVisible(true);
+		setLayout(new MigLayout("wrap 1"));		
+		setSize(new Dimension(200, 600));
 		setupEvaluator();
 		addButtons();
 	}
-	
+		
 	
 	
 	private void addButtons() {
@@ -155,8 +156,7 @@ public class Toolbox extends JToolBar
 	 */
 	public void addCategory( String title, ToolboxButton...buttons ) {
 		setButtonEvaluators( buttons );
-		addCategory( title );
-		JPanel panel = new ToolboxCategoryPanel( buttons );
+		JPanel panel = new ToolboxCategoryPanel( title, buttons );
 		add( panel );
 	}
 	
@@ -167,29 +167,6 @@ public class Toolbox extends JToolBar
 			butt.setEditorPanelEvaluator( evaluator );
 	}
 	
-	
-	
-	/**
-	 * Add a the category heading and separator.
-	 * @param heading
-	 * @param items
-	 */
-	private void addCategory( String title ) {
-		add( createCategoryLabel( title ) );
-		add( new JToolBar.Separator() );
-	}
-	
-	
-	
-	private JLabel createCategoryLabel( String title ) {
-		JLabel label = new JLabel( title );
-		Font   font  = label.getFont();
-		Font   bold  = new Font( font.getName(), Font.BOLD, font.getSize() );
-		
-		label.setFont( bold );
-		
-		return label;
-	}
 }
 
 

@@ -3,6 +3,7 @@
 /app/database/production.sqlite
 /app/config/app.php
 /app/config/database.php
+/public/files
 composer.phar
 composer.lock
 .env.local.php

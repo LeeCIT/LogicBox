@@ -24,5 +24,20 @@ public enum LogicLevel
 	low,
 	high,
 	edgePos,
-	edgeNeg
+	edgeNeg;
+	
+	
+	
+	public static LogicLevel toLogicLevel( boolean prev, boolean cur ) {
+		if      (!prev && !cur) return low;
+		else if ( prev &&  cur) return high;
+		else if (!prev &&  cur) return edgePos;
+		else 					return edgeNeg;
+	}
+	
+	
+	
+	public boolean isEdgePos( boolean prev, boolean cur ) {
+		return edgePos == toLogicLevel( prev, cur );
+	}
 }

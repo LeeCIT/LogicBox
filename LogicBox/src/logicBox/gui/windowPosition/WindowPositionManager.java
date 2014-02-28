@@ -1,4 +1,4 @@
-package prototypes.windowPositionSave;
+package logicBox.gui.windowPosition;
 
 
 import java.awt.Rectangle;
