@@ -203,7 +203,7 @@ public class Camera
 				private Vec2   panTarget  = pos;
 				private double zoomTarget = zoom;
 				private double frac       = 0;
-				private double step       = (1.0 / timeInSeconds) / (1000/60);
+				private double step       = (1.0 / timeInSeconds) / (1000/60.0);
 				
 				public void execute() {
 					Vec2   p = Geo.herp( panStart,  panTarget,  frac );
