@@ -100,14 +100,17 @@ public class FlipFlopJK extends ComponentActive
 		
 		boolean j = getPinJ().getState();
 		boolean k = getPinK().getState();
-		boolean state;
 		
-		if      (j && k) state = ! getPinQ().getState();
-		else if (j)      state = true;
-		else /*k*/       state = false;
-		
-		getPinQ   ().setState(   state );
-		getPinQinv().setState( ! state );
+		if (j || k) {
+			boolean state;
+			
+			if      (j && k) state = ! getPinQ().getState();
+			else if (j)      state = true;
+			else  /* k */    state = false;
+			
+			getPinQ   ().setState(   state );
+			getPinQinv().setState( ! state );
+		}
 	}
 	
 	
@@ -127,6 +130,7 @@ public class FlipFlopJK extends ComponentActive
 			1,1,0,0,1,1,0,0, // Toggle
 			0,0,0,0,0,0,0,0, // Set 0
 			1,1,1,1,1,1,1,1, // Set 1
+			1,1,1,1,1,1,1,1, // No change
 			1,1,1,1,1,1,1,1  // No change
 		};
 		
@@ -136,6 +140,7 @@ public class FlipFlopJK extends ComponentActive
 		cycle( f, patternActual,  8, false, true,  true,  4 );
 		cycle( f, patternActual, 16, true,  false, true,  4 );
 		cycle( f, patternActual, 24, true,  false, false, 4 );
+		cycle( f, patternActual, 32, false, false, true,  4 );
 		
 		boolean good = Arrays.equals( patternExpected, patternActual );
 		
