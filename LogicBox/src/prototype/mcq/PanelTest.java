@@ -44,11 +44,11 @@ public class PanelTest extends JFrame
 		answers.add(ans5);
 		
 		
-		McqQuestion q1 = new McqQuestion(question, answers, ans4);
 		
-		McqPanel panel = new McqPanel(q1);
-		
-		add( panel );
+		for ( int i = 0; i < 9; i++ )
+		{
+			add( new McqPanel( new McqQuestion(question, answers, ans4) ) );
+		}
 		
 		setVisible(true);
 	}
