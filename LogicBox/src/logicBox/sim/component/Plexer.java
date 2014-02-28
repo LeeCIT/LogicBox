@@ -5,8 +5,6 @@ package logicBox.sim.component;
 
 import java.util.ArrayList;
 import java.util.List;
-import logicBox.gui.editor.GraphicComActive;
-import logicBox.gui.editor.GraphicGen;
 import logicBox.sim.SimUtil;
 import logicBox.util.Geo;
 
@@ -14,21 +12,18 @@ import logicBox.util.Geo;
 
 /**
  * Defines the functionality common to the multiplexer and demultiplexer.
+ * TODO although this works, having three pin groups is incompatible with the graphical pin mapper
  * @author Lee Coakley
  */
 public abstract class Plexer extends ComponentActive
 {
-	protected List<Pin> pinInputs;
 	protected List<Pin> pinSelects;
-	protected List<Pin> pinOutputs;
 	
 	
 	
 	public Plexer() {
 		super();
-		pinInputs  = new ArrayList<>();
 		pinSelects = new ArrayList<>();
-		pinOutputs = new ArrayList<>();
 	}
 	
 	
@@ -41,20 +36,8 @@ public abstract class Plexer extends ComponentActive
 	
 	
 	
-	public List<Pin> getPinInputs() {
-		return pinInputs;
-	}
-	
-	
-	
 	public List<Pin> getPinSelects() {
 		return pinSelects;
-	}
-	
-	
-	
-	public List<Pin> getPinOutputs() {
-		return pinOutputs;
 	}
 	
 	
@@ -66,8 +49,7 @@ public abstract class Plexer extends ComponentActive
 		Pin src  = getSourcePin();
 		Pin dest = getDestinationPin();
 		
-		if (src  != null
-		&&  dest != null)
+		if (src != null  &&  dest != null)
 			dest.setState( src.getState() );
 	}
 	
