@@ -30,8 +30,8 @@ public class GateNand extends GateAnd
 	
 	
 	
-	public void update() {
-		pinOut.setState( ! evaluate() );
+	public boolean evaluate() {
+		return ! super.evaluate();
 	}
 	
 	
