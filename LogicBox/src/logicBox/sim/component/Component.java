@@ -15,9 +15,15 @@ public abstract class Component
 	
 	
 	
+	/**
+	 * Get the human-readable name of the component.
+	 */
 	public abstract String getName();
 	
 	
 	
+	/**
+	 * Reset the component to its initial state, as if the simulation was never run.
+	 */
 	public abstract void reset();
 }
