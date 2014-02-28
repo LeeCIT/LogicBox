@@ -32,12 +32,12 @@ public class GateXor extends Gate
 	
 	// Source: Digital Logic and Computer Design, p59.
 	public boolean evaluate() {
-		boolean a     = pinInputs.get( 0 ).getState();
-		boolean b     = pinInputs.get( 1 ).getState();
+		boolean a     = getPinInputState( 0 );
+		boolean b     = getPinInputState( 1 );
 		boolean state = a ^ b;
 		
 		for (int i=2; i<pinInputs.size(); i++)
-			state ^= pinInputs.get(i).getState();
+			state ^= getPinInputState( i );
 		
 		return state;
 	}
@@ -67,7 +67,7 @@ public class GateXor extends Gate
 		for (int a=0; a<=1; a++)
 		for (int b=0; b<=1; b++)
 		for (int c=0; c<=1; c++)
-		for (int d=0; d<=1; d++){
+		for (int d=0; d<=1; d++) {
 			xor.getPinInputs().get(0).setState( a==1 );
 			xor.getPinInputs().get(1).setState( b==1 );
 			xor.getPinInputs().get(2).setState( c==1 );

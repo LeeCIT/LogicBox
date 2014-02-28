@@ -3,8 +3,6 @@
 
 package logicBox.sim.component;
 
-import java.util.ArrayList;
-import java.util.List;
 import logicBox.sim.SimUtil;
 
 
@@ -15,37 +13,21 @@ import logicBox.sim.SimUtil;
  */
 public abstract class Source extends ComponentActive
 {
-	protected Pin pinOut;
-	
-	
-	
 	public Source( boolean state ) {
 		super();
-		pinOut = new Pin( this, PinIoMode.output );
+		SimUtil.addPins( pinOutputs, this, PinIoMode.output, 1 );
 		setState( state );
 	}
 	
 	
 	
 	public void setState( boolean state ) {
-		pinOut.setState( state );
+		setPinOutputState( 0, state );
 	}
 	
 	
 	
 	public boolean getState() {
-		return pinOut.getState();
-	}
-	
-	
-	
-	public List<Pin> getPinInputs() {
-		return new ArrayList<>();
-	}
-	
-	
-	
-	public List<Pin> getPinOutputs() {
-		return SimUtil.wrapInList( pinOut );
+		return getPinOutputState( 0 );
 	}
 }

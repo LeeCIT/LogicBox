@@ -3,9 +3,7 @@
 
 package logicBox.sim.component;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import logicBox.sim.LogicLevel;
 import logicBox.sim.SimUtil;
 
@@ -29,33 +27,24 @@ import logicBox.sim.SimUtil;
  */
 public class FlipFlopJK extends ComponentActive
 {
-	private List<Pin> pinInputs;
-	private List<Pin> pinOutputs;
-	private boolean   lastClock;
+	private boolean lastClock;
 	
 	
 	
 	public FlipFlopJK() {
 		super();
-		pinInputs  = new ArrayList<>();
-		pinOutputs = new ArrayList<>();
 		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  3 );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, 2 );
 		
+		reset();
+	}
+	
+	
+	
+	public void reset() {
+		super.reset();
 		lastClock = false;
-		getPinQinv().setState( true ); // Ensure valid initial state
-	}
-	
-	
-	
-	public List<Pin> getPinInputs() {
-		return pinInputs;
-	}
-	
-	
-	
-	public List<Pin> getPinOutputs() {
-		return pinOutputs;
+		getPinQinv().setState( true );
 	}
 	
 	
@@ -92,7 +81,7 @@ public class FlipFlopJK extends ComponentActive
 	
 	public void update() {
 		boolean clock     = getPinC().getState();
-		boolean isEdgePos = LogicLevel.edgePos == LogicLevel.toLogicLevel( lastClock, clock );
+		boolean isEdgePos = LogicLevel.isEdgePos( lastClock, clock );
 		lastClock = clock;
 		
 		if ( ! isEdgePos)
@@ -100,20 +89,29 @@ public class FlipFlopJK extends ComponentActive
 		
 		boolean j = getPinJ().getState();
 		boolean k = getPinK().getState();
-		boolean state;
 		
-		if      (j && k) state = ! getPinQ().getState();
-		else if (j)      state = true;
-		else /*k*/       state = false;
-		
-		getPinQ   ().setState(   state );
-		getPinQinv().setState( ! state );
+		if (j || k) {
+			boolean state;
+			
+			if      (j && k) state = ! getPinQ().getState();
+			else if (j)      state = true;
+			else  /* k */    state = false;
+			
+			getPinQ   ().setState(   state );
+			getPinQinv().setState( ! state );
+		}
 	}
 	
 	
 	
 	public String getName() {
 		return "JK flip-flop";
+	}
+	
+	
+	
+	public boolean isCombinational() {
+		return false;
 	}
 	
 	
@@ -127,6 +125,7 @@ public class FlipFlopJK extends ComponentActive
 			1,1,0,0,1,1,0,0, // Toggle
 			0,0,0,0,0,0,0,0, // Set 0
 			1,1,1,1,1,1,1,1, // Set 1
+			1,1,1,1,1,1,1,1, // No change
 			1,1,1,1,1,1,1,1  // No change
 		};
 		
@@ -136,6 +135,7 @@ public class FlipFlopJK extends ComponentActive
 		cycle( f, patternActual,  8, false, true,  true,  4 );
 		cycle( f, patternActual, 16, true,  false, true,  4 );
 		cycle( f, patternActual, 24, true,  false, false, 4 );
+		cycle( f, patternActual, 32, false, false, true,  4 );
 		
 		boolean good = Arrays.equals( patternExpected, patternActual );
 		

@@ -3,8 +3,6 @@
 
 package logicBox.sim.component;
 
-import java.util.ArrayList;
-import java.util.List;
 import logicBox.sim.SimUtil;
 
 
@@ -16,25 +14,8 @@ import logicBox.sim.SimUtil;
  */
 public abstract class Display extends ComponentActive
 {
-	protected ArrayList<Pin> pinInputs;
-	
-	
-	
 	public Display( int inputPinCount ) {
 		super();
-		pinInputs = new ArrayList<>();
 		SimUtil.addPins( pinInputs, this, PinIoMode.input, inputPinCount );
-	}
-	
-	
-	
-	public List<Pin> getPinInputs() {
-		return pinInputs;
-	}
-	
-	
-	
-	public List<Pin> getPinOutputs() {
-		return new ArrayList<>();
 	}
 }

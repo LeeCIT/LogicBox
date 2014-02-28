@@ -3,8 +3,6 @@
 
 package logicBox.sim.component;
 
-import java.util.ArrayList;
-import java.util.List;
 import logicBox.sim.SimUtil;
 
 
@@ -15,34 +13,17 @@ import logicBox.sim.SimUtil;
  * When E is high D determines Q.
  * When E is low the component's state does not change.
  * !Q is always the inverse of Q. 
+ * TODO make edge triggered - maybe make a flipflop base class
+ * TODO override reset()
  * @author Lee Coakley
  */
 public class FlipFlopD extends ComponentActive
 {
-	private List<Pin> pinInputs;
-	private List<Pin> pinOutputs;
-	
-	
-	
 	public FlipFlopD() {
 		super();
-		pinInputs  = new ArrayList<>();
-		pinOutputs = new ArrayList<>();
 		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  2 );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, 2 );
 		getPinQinv().setState( true ); // Ensure valid initial state
-	}
-	
-	
-	
-	public List<Pin> getPinInputs() {
-		return pinInputs;
-	}
-	
-	
-	
-	public List<Pin> getPinOutputs() {
-		return pinOutputs;
 	}
 	
 	
@@ -84,6 +65,12 @@ public class FlipFlopD extends ComponentActive
 	
 	public String getName() {
 		return "D flip-flop";
+	}
+	
+	
+	
+	public boolean isCombinational() {
+		return false;
 	}
 	
 	

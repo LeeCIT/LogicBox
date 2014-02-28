@@ -25,6 +25,6 @@ public class SourceFixed extends Source implements Stateful
 	
 	
 	public String getName() {
-		return "Fixed source (" + (getState()?"1":"0") + ")";
+		return "Fixed source (" + (getState()?1:0) + ")";
 	}
 }

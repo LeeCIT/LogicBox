@@ -220,8 +220,7 @@ public abstract class Geo
 	 * Get the dot product of A and B.
 	 */
 	public static double dot( Vec2 a, Vec2 b ) {
-		return (a.x * b.x) 
-		     + (a.y * b.y);
+		return (a.x * b.x) + (a.y * b.y);
 	}
 	
 	
@@ -230,8 +229,7 @@ public abstract class Geo
 	 * Find the 2D cross product of A,B.
 	 */
 	public static double cross( Vec2 a, Vec2 b ) {
-		return (a.x * b.y) 
-		     - (a.y * b.x);
+		return (a.x * b.y) - (a.y * b.x);
 	}
 	
 	

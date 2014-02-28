@@ -12,8 +12,7 @@ package logicBox.sim.component;
  */
 public class Trace extends ComponentPassive
 {
-	protected Pin     source, dest;
-	protected boolean state;
+	protected Pin source, dest;
 	
 	
 	
@@ -45,18 +44,6 @@ public class Trace extends ComponentPassive
 	
 	public Pin getPinOtherSide( Pin pin ) {
 		return (pin == dest) ? source : dest;
-	}
-	
-	
-	
-	public boolean getState() {
-		return state;
-	}
-
-
-
-	public void setState( boolean state ) {
-		this.state = state;
 	}
 
 

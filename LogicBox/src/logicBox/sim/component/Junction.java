@@ -13,8 +13,7 @@ import java.util.ArrayList;
  */
 public class Junction extends ComponentPassive
 {
-	private List<Pin> pins;
-	private boolean   state;
+	private List<Pin> pins; // Junctions don't really have pins.
 	
 	
 	
@@ -50,19 +49,16 @@ public class Junction extends ComponentPassive
 
 
 
-	public boolean getState() {
-		return state;
-	}
-
-
-
-	public void setState( boolean state ) {
-		this.state = state;
-	}
-
-
-
 	public String getName() {
 		return "Junction";
+	}
+	
+	
+	
+	public void reset() {
+		super.reset();
+		
+		for (Pin p: pins)
+			p.reset();
 	}
 }

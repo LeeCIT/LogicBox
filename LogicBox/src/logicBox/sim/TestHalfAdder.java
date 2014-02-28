@@ -42,7 +42,7 @@ public class TestHalfAdder
 		sim.addSource( sourceB );
 		sim.run();
 		
-		System.out.println( "Sum:   " + ledSum  .getState() );
-		System.out.println( "Carry: " + ledCarry.getState() );
+		System.out.println( "Sum:   " + ledSum  .isLit() );
+		System.out.println( "Carry: " + ledCarry.isLit() );
 	}
 }

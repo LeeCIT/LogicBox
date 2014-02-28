@@ -58,8 +58,15 @@ public class DisplaySevenSeg extends Display
 	
 	
 	
+	public void reset() { // Show zero
+		super.reset();
+		update();
+	}
+	
+	
+	
 	public String getName() {
-		return "7-segment display";
+		return "Seven segment display";
 	}
 	
 	
@@ -67,12 +74,12 @@ public class DisplaySevenSeg extends Display
 	
 	
 	public static void main( String[] args ) {
-		DisplaySevenSeg seg = new DisplaySevenSeg();
+		DisplaySevenSeg ssd = new DisplaySevenSeg();
 		
 		for (int i=0; i<=0xF; i++) {
-			SimUtil.encodeIntToPins( i, seg.getPinInputs() );
-			seg.update();
-			printSegs( seg.getSegmentStates() );
+			SimUtil.encodeIntToPins( i, ssd.getPinInputs() );
+			ssd.update();
+			printSegs( ssd.getSegmentStates() );
 		}
 	}
 	
