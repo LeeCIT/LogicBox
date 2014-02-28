@@ -37,13 +37,13 @@ public class FlipFlopJK extends FlipFlop
 	
 	
 	public Pin getPinJ() {
-		return pinInputs.get( 0 );
+		return getPinInput( 0 );
 	}
 	
 	
 	
 	public Pin getPinK() {
-		return pinInputs.get( 2 );
+		return getPinInput( 2 );
 	}
 	
 	
