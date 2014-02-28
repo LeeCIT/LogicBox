@@ -1,7 +1,7 @@
 
 
 
-package prototypes.snappingProto;
+package logicBox.gui.snapping;
 
 import java.awt.Component;
 import java.awt.Rectangle;
@@ -16,14 +16,14 @@ import logicBox.util.Vec2;
 
 
 
-public class SnappingPrototype extends ComponentAdapter {
+public class ComponentSnapper extends ComponentAdapter {
 	private boolean   motionInterlock;
-	private Component snapTo; // Ignore for now, just snap to desktop
+	private Component snapTo; 
 	private int snappingDistance = 16;
 	
 	
 	
-	public SnappingPrototype( Component snapTo ) {
+	public ComponentSnapper( Component snapTo ) {
 		this.snapTo = snapTo;
 	}
 	
@@ -184,7 +184,7 @@ public class SnappingPrototype extends ComponentAdapter {
 
 		//Second frame
 		secondDemo.getContentPane().add(secondLab);
-		secondDemo.addComponentListener( new SnappingPrototype(frame) );
+		secondDemo.addComponentListener( new ComponentSnapper(frame) );
 		secondDemo.setSize(150, 300);
 		secondDemo.setVisible(true);
 		secondDemo.setLocationRelativeTo(null);
