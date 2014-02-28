@@ -12,5 +12,23 @@ package logicBox.sim.component;
  */
 public abstract class ComponentPassive extends Component implements Stateful
 {
+	protected boolean state;
 	
+	
+	
+	public boolean getState() {
+		return state;
+	}
+	
+	
+	
+	public void setState( boolean state ) {
+		this.state = state;
+	}
+	
+	
+	
+	public void reset() {
+		setState( false );
+	}
 }
