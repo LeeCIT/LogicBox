@@ -4,7 +4,6 @@
 package prototypes.snappingProto;
 
 import java.awt.Component;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -54,9 +53,11 @@ public class SnappingPrototype extends ComponentAdapter {
 		Rectangle compRect = comp.getBounds();
 		Rectangle snapRect = snapTo.getBounds();
 		
-		
-		// TODO limit the area to check
-		if( true ) {
+		// Increase the size of the component box so it snaps within the distance required only
+		compRect.x += snappingDistance;
+		compRect.y += snappingDistance;
+
+		if( snapRect.intersects(compRect) ) {
 			switch (edgePair.ref.edge) {
 			case left:
 			case right:
