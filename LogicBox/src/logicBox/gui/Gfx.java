@@ -2,8 +2,8 @@
 
 
 package logicBox.gui;
+import logicBox.util.Bbox2;
 import logicBox.util.Geo;
-import logicBox.util.Region;
 import logicBox.util.Vec2;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -59,19 +59,19 @@ public class Gfx
 	
 	
 	
-	public static void drawRegion( Graphics2D g, Region r, boolean filled ) {
-		drawOrientedRect( g, r.getCentre(), r.getSize(), 0, filled );
+	public static void drawBbox( Graphics2D g, Bbox2 rect, boolean filled ) {
+		drawOrientedRect( g, rect.getCentre(), rect.getSize(), 0, filled );
 	}
 	
 	
 	
-	public static void drawRegionRounded( Graphics2D g, Region region, double radius, boolean filled ) {
-		int w = (int) region.getSize().x;
-		int h = (int) region.getSize().y;
+	public static void drawRegionRounded( Graphics2D g, Bbox2 rect, double radius, boolean filled ) {
+		int w = (int) rect.getSize().x;
+		int h = (int) rect.getSize().y;
 		int r = (int) radius;
 		
 		Gfx.pushMatrix( g );
-			Gfx.translate( g, region.getTopLeft() );
+			Gfx.translate( g, rect.getTopLeft() );
 			
 			if (filled)
 				 g.fillRoundRect( 0,0, w,h, r,r );
@@ -132,11 +132,11 @@ public class Gfx
 	
 	
 	
-	public static void drawGrid( Graphics2D g, Region region, Vec2 offset, Vec2 cellSize, double thickness ) {
-		double left   = region.getLeft()   + offset.x;
-		double right  = region.getRight()  + offset.x;
-		double top    = region.getTop()    + offset.y;
-		double bottom = region.getBottom() + offset.y;
+	public static void drawGrid( Graphics2D g, Bbox2 rect, Vec2 offset, Vec2 cellSize, double thickness ) {
+		double left   = rect.getLeft()   + offset.x;
+		double right  = rect.getRight()  + offset.x;
+		double top    = rect.getTop()    + offset.y;
+		double bottom = rect.getBottom() + offset.y;
 		
 		Vec2 xt = new Vec2( 0,     top    );
 		Vec2 xb = new Vec2( 0,     bottom );

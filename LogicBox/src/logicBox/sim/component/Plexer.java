@@ -5,8 +5,8 @@ package logicBox.sim.component;
 
 import java.util.ArrayList;
 import java.util.List;
-import logicBox.sim.Pin;
-import logicBox.sim.PinIoMode;
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
 import logicBox.sim.SimUtil;
 import logicBox.util.Geo;
 
@@ -88,6 +88,6 @@ public abstract class Plexer extends ComponentActive
 	
 	
 	protected int decodeSelectPins() {
-		return SimUtil.decodeToInt( pinSelects );
+		return SimUtil.decodePinsToInt( pinSelects );
 	}
 }

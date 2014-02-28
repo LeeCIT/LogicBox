@@ -3,23 +3,21 @@
 
 package logicBox.gui.editor;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
 import java.awt.MultipleGradientPaint.CycleMethod;
 import java.awt.Paint;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
+import logicBox.sim.component.ComponentActive;
+import logicBox.sim.component.Demux;
 import logicBox.sim.component.GateAnd;
 import logicBox.sim.component.GateBuffer;
 import logicBox.sim.component.GateNand;
@@ -28,9 +26,11 @@ import logicBox.sim.component.GateNot;
 import logicBox.sim.component.GateOr;
 import logicBox.sim.component.GateXnor;
 import logicBox.sim.component.GateXor;
+import logicBox.sim.component.Mux;
+import logicBox.util.Bbox2;
 import logicBox.util.Callback;
+import logicBox.util.CallbackParam;
 import logicBox.util.Geo;
-import logicBox.util.Region;
 import logicBox.util.Vec2;
 
 
@@ -46,6 +46,7 @@ public class EditorPanel extends JPanel
 	private Camera      cam;
 	private EditorWorld world;
 	private boolean     enableAntialiasing;
+	private ToolPlacer  toolPlacer;
 	
 	
 	
@@ -58,9 +59,16 @@ public class EditorPanel extends JPanel
 		world            = new EditorWorld();
 		repaintListeners = new ArrayList<>();
 		
-		new ToolDragger    ( this, world, cam ).attach();
-		new ToolHighlighter( this, world, cam ).attach();
-		new ToolSelector   ( this, world, cam ).attach();
+		//new ToolDragger    ( this, world, cam ).attach();
+		//new ToolHighlighter( this, world, cam ).attach();
+		new ToolTraceDrawer( this, world, cam ).attach();
+		
+		//toolPlacer = new ToolPlacer( this, world, cam );
+		//toolPlacer.attach();
+		
+		//new ToolSelector( this, world, cam ).attach();
+		
+		addRepaintListener( world.getSpatialGridDebugRepainter() );
 		
 		world.add( new EditorComponent( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, 0  ) ) );
 		world.add( new EditorComponent( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, 128) ) );
@@ -71,8 +79,41 @@ public class EditorPanel extends JPanel
 		world.add( new EditorComponent( new GateXor(),    GraphicGen.generateGateXor(2),   new Vec2(192, 256) ) );
 		world.add( new EditorComponent( new GateXnor(),   GraphicGen.generateGateXnor(2),  new Vec2(192, 384) ) );
 		
+		world.add(
+			new EditorComponent(
+				new Mux(8),
+				GraphicGen.generateMux(8,3,1),new Vec2(-512,-256)
+			)
+		);
+		
+		world.add(
+			new EditorComponent(
+				new Demux(8),
+				GraphicGen.generateMux(1,3,8),new Vec2(-256,-256)
+			)
+		);
+		
 		addMouseOverTest();
 		setupActions();
+	}
+	
+	
+	
+	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
+		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<Vec2>() {
+			public void execute( Vec2 pos ) {
+				ComponentActive  scom = ecc.getComponentPayload();
+				GraphicComActive gca  = scom.getGraphic();
+				EditorComponent  ecom = new EditorComponent( scom, gca, pos );
+				world.add( ecom );
+			}
+		});
+	}
+	
+	
+	
+	public Camera getCamera() {
+		return cam;
 	}
 	
 	
@@ -96,11 +137,7 @@ public class EditorPanel extends JPanel
 	
 	
 	private void setupActions() {
-		addComponentListener( new ComponentAdapter() {
-			public void componentResized( ComponentEvent e ) {
-				repaint();
-			}
-		});
+		
 	}
 	
 	
@@ -108,8 +145,11 @@ public class EditorPanel extends JPanel
 	private void addMouseOverTest() {
 		addMouseMotionListener( new MouseMotionAdapter() {
 			public void mouseMoved( MouseEvent ev ) {
-				for (EditorComponent ecom: world.find( cam.getMousePosWorld() ))
+				for (EditorComponent ecom: world.find( cam.getMousePosWorld() )) {
+					GraphicPinMapping gpm = ecom.graphic.findClosestPin( cam.getMousePosWorld(), 5 );
 					System.out.println( "Ed: " + ecom.com.getName() );
+					System.out.println( "Ed: " + gpm );					
+				}
 			}
 		});
 	}
@@ -117,8 +157,6 @@ public class EditorPanel extends JPanel
 	
 	
 	protected void paintComponent( Graphics gx ) {
-		super.paintComponent( gx );
-		
 		Graphics2D g = (Graphics2D) gx;
 		
 		Gfx.pushMatrix( g );
@@ -127,17 +165,43 @@ public class EditorPanel extends JPanel
 					fillBackground( g );
 				Gfx.popAntialiasingState( g );
 				
-				g.setTransform( cam.getTransform() );
+				setCameraTransform( g );
 				drawGrid( g );
 				drawDebugCrap( g );
 				
-				for (EditorComponent ecom: world.getComponents())
+				for (EditorComponent ecom: world.getViewableComponents( cam, 64 )) {
 					ecom.draw( g );
+					
+					Gfx.pushColorAndSet( g, Color.RED );
+						Gfx.drawBbox( g, ecom.graphic.getBbox(), false );
+					Gfx.popColor( g );
+				}
 				
 				for (RepaintListener rpl: repaintListeners)
 					rpl.draw( g );
+				
+				Gfx.pushColorAndSet( g, Color.GREEN );
+					Gfx.drawBbox( g, world.getOccupiedWorldExtent(), false );
+				Gfx.popColor( g );
+				
+				Gfx.pushColorAndSet( g, Color.ORANGE );
+					Gfx.drawBbox( g, cam.getWorldViewableArea(), false );
+				Gfx.popColor( g );
+				
 			Gfx.popAntialiasingState( g );
 		Gfx.popMatrix( g );
+	}
+	
+	
+	
+	private void setCameraTransform( Graphics2D g ) {
+		AffineTransform matCam = cam.getTransform();
+		AffineTransform matRef = g.getTransform();
+		AffineTransform mat    = new AffineTransform();
+		mat.concatenate( matRef );
+		mat.concatenate( matCam );
+		
+		g.setTransform( mat );
 	}
 	
 	
@@ -244,25 +308,22 @@ public class EditorPanel extends JPanel
 	
 	private void fillBackground( Graphics2D g ) {
 		Gfx.pushMatrix( g );
-			Gfx.setIdentity( g );
-			
 			Gfx.pushColorAndSet( g, EditorStyle.colBackground );
 				g.fillRect( 0, 0, getWidth(), getHeight() );
 			Gfx.popColor( g );
-		
 		Gfx.popMatrix( g );
 	}
 	
 	
 	
 	private void drawGrid( Graphics2D g ) {
-		Region worldRegion  = cam.getWorldViewableArea();
-		Vec2   cellSize     = new Vec2( 64 );
-		Vec2   cellSizeHalf = cellSize.multiply( 0.5 );
-		Vec2   offset       = worldRegion.tl.modulo( cellSize ).negate().subtract( cellSizeHalf );
+		Bbox2 worldRegion  = cam.getWorldViewableArea();
+		Vec2  cellSize     = new Vec2( 64 );
+		Vec2  cellSizeHalf = cellSize.multiply( 0.5 );
+		Vec2  offset       = worldRegion.tl.modulo( cellSize ).negate().subtract( cellSizeHalf );
 		
-		worldRegion.tl = worldRegion.tl.subtract( cellSize 				 );
-		worldRegion.br = worldRegion.br.add     ( cellSize.multiply( 2 ) );
+		worldRegion.tl = worldRegion.tl.subtract( cellSize             );
+		worldRegion.br = worldRegion.br.add     ( cellSize.multiply(2) );
 		
 		double  zoom        = cam.getZoom();
 		double  zoomMin     = cam.getZoomMin();
@@ -295,32 +356,6 @@ public class EditorPanel extends JPanel
 				repaint();
 			}
 		};
-	}
-	
-	
-	
-	
-	
-	public static void main( String[] args ) {
-		SwingUtilities.invokeLater( new Runnable() {
-			public void run() {
-				test();
-			}
-		});
-	}
-	
-	
-	
-	public static void test() {
-		EditorFrame frame = new EditorFrame();
-		EditorPanel panel = new EditorPanel();
-		
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		frame.setSize( new Dimension(600,600) );
-		frame.add( panel );
-		frame.setVisible( true );
-		
-		// TODO use the toolbox
 	}
 }
 

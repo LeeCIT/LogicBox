@@ -5,6 +5,7 @@ package logicBox.gui;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
+import logicBox.util.Transformable;
 import logicBox.util.Vec2;
 
 
@@ -13,7 +14,7 @@ import logicBox.util.Vec2;
  * Path2D which accepts Vec2 parameters.
  * @author Lee Coakley
  */
-public class VecPath extends Path2D.Float
+public class VecPath extends Path2D.Float implements Transformable
 {
 	public VecPath() {
 		super();

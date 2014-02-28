@@ -3,11 +3,13 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 /**
- * Outputs true if its inputs are different.
- * When there are more than two inputs, the output is true if an odd number of bits are set.
+ * Outputs high if an odd number of inputs are high.
  * 0,0 -> 0
  * 0,1 -> 1
  * 1,0 -> 1
@@ -44,6 +46,12 @@ public class GateXor extends Gate
 	
 	public String getName() {
 		return "XOR gate";
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateGateXor( getPinInputCount() );
 	}
 	
 	

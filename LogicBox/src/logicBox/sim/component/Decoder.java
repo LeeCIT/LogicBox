@@ -5,12 +5,16 @@ package logicBox.sim.component;
 
 import java.util.ArrayList;
 import java.util.List;
-import logicBox.sim.Pin;
-import logicBox.sim.PinIoMode;
 import logicBox.sim.SimUtil;
 
 
 
+/**
+ * Decoder.
+ * Activates one output pin corresponding to the unsigned integer bit-pattern formed by the inputs.
+ * LSB is pin 0.
+ * @author Lee Coakley
+ */
 public class Decoder extends ComponentActive
 {
 	private List<Pin> pinInputs;
@@ -54,11 +58,12 @@ public class Decoder extends ComponentActive
 		for (Pin pin: pinOutputs)
 			pin.setState( false );
 		
-		int activeIndex = SimUtil.decodeToInt( pinInputs );
+		int activeIndex = SimUtil.decodePinsToInt( pinInputs );
 		Pin activePin   = pinOutputs.get( activeIndex );
 		
 		activePin.setState( true );
 	}
+	
 	
 	
 	

@@ -1,11 +1,7 @@
 
 
 
-package logicBox.sim;
-
-import logicBox.sim.component.Component;
-import logicBox.sim.component.ComponentPassive;
-import logicBox.sim.component.Trace;
+package logicBox.sim.component;
 
 
 
@@ -15,10 +11,10 @@ import logicBox.sim.component.Trace;
  */
 public class Pin extends ComponentPassive
 {
-	protected Component comp; // Component this is physically attached to.
-	protected Trace     trace;
-	protected PinIoMode mode;
-	protected boolean   state;
+	private Component comp; // Component this is physically attached to.
+	private Trace     trace;
+	private PinIoMode mode;
+	private boolean   state;
 	
 	
 	
@@ -99,6 +95,17 @@ public class Pin extends ComponentPassive
 	
 	public String getName() {
 		return "Pin";
+	}
+	
+	
+	
+	public String toString() {
+		String onWhat = "";
+		
+		if (comp != null)
+			 onWhat = " [attached: " + comp.getName() + "]";
+		
+		return "Pin [mode: " + mode + "] [level: " + (state?1:0) + "]" + onWhat;
 	}
 }
 

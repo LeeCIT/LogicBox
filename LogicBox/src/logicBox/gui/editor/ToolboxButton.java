@@ -9,21 +9,21 @@ import javax.swing.JButton;
 import logicBox.gui.Gfx;
 import logicBox.gui.contextMenu.ContextMenu;
 import logicBox.util.Bbox2;
+import logicBox.util.Evaluator;
 import logicBox.util.Geo;
-import logicBox.util.Region;
 import logicBox.util.Vec2;
 
 
 
 /**
- * A button specialised for displaying component graphics.
- * For use in the ToolBox class.
+ * A button specialised for use in the Toolbox class.
  * @author Lee Coakley
  */
 public class ToolboxButton extends JButton
 {
-	private GraphicComActive gca;
-	private ContextMenu      contextMenu;
+	private GraphicComActive       gca;
+	private ContextMenu            contextMenu;
+	private Evaluator<EditorPanel> targetEvaluator;
 	
 	
 	
@@ -46,15 +46,27 @@ public class ToolboxButton extends JButton
 	
 	
 	
+	protected void setEditorPanelEvaluator( Evaluator<EditorPanel> targetEvaluator ) {
+		this.targetEvaluator = targetEvaluator;
+	}
+	
+	
+	
+	protected Evaluator<EditorPanel> getEditorPanelEvaluator() {
+		return targetEvaluator;
+	}
+	
+	
+	
 	protected void paintComponent( Graphics gx ) {
 		super.paintComponent( gx );
 		
 		boolean armed      = getModel().isArmed();
 		boolean rollover   = getModel().isRollover();
-		double  borderFrac = 0.0625;
-		Bbox2   bbox       = gca.computeBbox();
+		double  borderFrac = 0.125;
+		Bbox2   bbox       = gca.getBbox();
 		Vec2    sizeBbox   = bbox.getSize();
-		Vec2    sizeComp   = new Region(this).getSize();
+		Vec2    sizeComp   = new Bbox2(this).getSize();
 		double  scaleMul   = Geo.getAspectScaleFactor( sizeBbox, sizeComp, true );
 		Vec2    scale      = new Vec2( scaleMul * (1.0 - borderFrac) );
 		Vec2    trans      = sizeComp.multiply( 0.5 ).add( armed ? 1 : 0 );
@@ -63,11 +75,11 @@ public class ToolboxButton extends JButton
 		
 		Gfx.pushMatrix( g );
 			Gfx.translate( g, trans );
-			Gfx.scale    ( g, scale.multiply( 1.0 - borderFrac ) );
+			Gfx.scale    ( g, scale );
 			
 			Gfx.pushAntialiasingStateAndSet( g, true );
 				gca.setHighlighted( rollover );
-				gca.draw( g, new Vec2(0), 0 );
+				gca.draw( g );
 			Gfx.popAntialiasingState( g );
 		Gfx.popMatrix( g );
 	}

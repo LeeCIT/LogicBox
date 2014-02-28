@@ -2,6 +2,7 @@
 
 
 package logicBox.util;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 
@@ -11,7 +12,7 @@ import java.io.Serializable;
  * 2D vector.
  * @author Lee Coakley
  */
-public class Vec2 extends Point2D implements Serializable
+public class Vec2 extends Point2D implements Serializable, Transformable
 {
 	private static final long serialVersionUID = 1L;
 	public double x,y;
@@ -48,6 +49,26 @@ public class Vec2 extends Point2D implements Serializable
 	public Vec2( Point2D p ) {
 		this.x = p.getX();
 		this.y = p.getY();
+	}
+	
+	
+	
+	public Vec2( double[] array ) {
+		this.x = array[0];
+		this.y = array[1];
+	}
+	
+	
+	
+	public double get( int i ) {
+		return (i==0) ? x : y;
+	}
+	
+	
+	
+	public double[] toArray() {
+		double[] array = { x, y };
+		return array;
 	}
 	
 	
@@ -165,6 +186,12 @@ public class Vec2 extends Point2D implements Serializable
 
 	    return new Vec2( x*c  +  y*-s,
 	                     x*s  +  y* c );
+	}
+	
+	
+	
+	public void transform( AffineTransform matrix ) {
+		matrix.transform( this, this );
 	}
 	
 	

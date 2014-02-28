@@ -3,6 +3,8 @@
 
 package logicBox.util;
 
+import java.awt.geom.AffineTransform;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +15,7 @@ import java.util.List;
  * Provides parametric point finding and line-based intersect and traversal.
  * @author Lee Coakley
  */
-public class BezierCubic2
+public class BezierCubic2 implements Transformable, Serializable
 {
 	public Vec2 a, c1, c2, b;
 	
@@ -110,6 +112,15 @@ public class BezierCubic2
 		points.add( c2 );
 		points.add( b  );
 		return Bbox2.createFromPoints( points );
+	}
+	
+	
+	
+	public void transform( AffineTransform matrix ) {
+		matrix.transform( a,  a  );
+		matrix.transform( c1, c1 );
+		matrix.transform( c2, c2 );
+		matrix.transform( b,  b  );
 	}
 	
 	

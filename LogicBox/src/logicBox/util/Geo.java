@@ -5,9 +5,9 @@ package logicBox.util;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.awt.geom.AffineTransform;
 import java.util.List;
 
 
@@ -44,9 +44,18 @@ public abstract class Geo
 	 * Linear interpolate from A to B by fraction F.
 	 */
 	public static Vec2 lerp( Vec2 a, Vec2 b, double f ) {
+		return lerp( a, b, new Vec2(f) );
+	}
+	
+	
+	
+	/**
+	 * Linear interpolate from A to B by fraction F.
+	 */
+	public static Vec2 lerp( Vec2 a, Vec2 b, Vec2 f ) {
 		return new Vec2( 
-			lerp( a.x, b.x, f ),
-			lerp( a.y, b.y, f )
+			lerp( a.x, b.x, f.x ),
+			lerp( a.y, b.y, f.y )
 		);
 	}
 	
@@ -79,6 +88,15 @@ public abstract class Geo
 	 */
 	public static double herp( double a, double b, double f ) {
 		return lerp( a, b, hermite(f) );
+	}
+	
+	
+	
+	public static Vec2 herp( Vec2 a, Vec2 b, double f ) {
+		return new Vec2( 
+			herp( a.x, b.x, f ),
+			herp( a.y, b.y, f )
+		);
 	}
 	
 	
@@ -203,7 +221,7 @@ public abstract class Geo
 	 */
 	public static double dot( Vec2 a, Vec2 b ) {
 		return (a.x * b.x) 
-		     + (b.y * b.y);
+		     + (a.y * b.y);
 	}
 	
 	
@@ -237,7 +255,6 @@ public abstract class Geo
 		double r = Math.toRadians( angle );
 	    double c = Math.cos( r );
 	    double s = Math.sin( r );
-
 	    return new Vec2( c, -s );
 	}
 	
@@ -252,6 +269,29 @@ public abstract class Geo
 	    double diff   = a - b;
 	    double mod360 = diff % 360;
 	    return ((mod360 + 540.0) % 360.0) - 180.0;
+	}
+	
+	
+	
+	public static Vec2 normalise( Vec2 v ) {
+		double rcpSqrt = 1.0 / Math.sqrt( lengthSqr(v) );
+		return v.multiply( rcpSqrt );
+	}
+	
+	
+	
+	public static AffineTransform createTransform( Vec2 trans, double rotate ) {
+		return createTransform( trans, new Vec2(1,1), rotate );
+	}
+	
+	
+	
+	public static AffineTransform createTransform( Vec2 trans, Vec2 scale, double rotate ) {
+		AffineTransform t = new AffineTransform();
+		t.scale    ( scale.x, scale.y );
+		t.translate( trans.x, trans.y );
+		t.rotate( Math.toRadians(-rotate) );
+		return t;
 	}
 	
 	
@@ -394,6 +434,15 @@ public abstract class Geo
 	
 	
 	/**
+	 * Round upwards to nearest multiple.
+	 */
+	public static double ceilToMultiple( double x, double mult ) {
+		return Math.ceil( x / mult ) * mult;
+	}
+	
+	
+	
+	/**
 	 * Round to next highest power of two.
 	 * Source: http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
 	 */
@@ -429,6 +478,27 @@ public abstract class Geo
 	 */
 	public static int randomIntRange( int low, int highex ) {
 		return low + ((int) Math.floor(Math.random() * (highex-low)));
+	}
+	
+	
+	
+	/** Apply a function to a list, accumulating the result.
+	 *  Example: reduce() a list of numbers [0,1,2,3] using addition.
+	 * 			 The result is 6: ((0+1)+2)+3).
+	 * @param list
+	 * @param functor
+	 * @return T, or null if the list is empty.
+	 */
+	public static <T> T reduce( List<T> list, BinaryFunctor<T> functor ) {
+		if (list.isEmpty())
+			return null;
+		
+		T reduced = list.get( 0 );
+		
+		for (int i=1; i<list.size(); i++)
+			reduced = functor.call( reduced, list.get(i) );
+		
+		return reduced;
 	}
 	
 	
@@ -481,24 +551,6 @@ public abstract class Geo
 		System.out.println( "Closest to " + point + " is " + closest );
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -6,3 +6,11 @@ Route::get('/', function()
 });
 
 Route::post('/register', 'AuthController@register');
+Route::post('/login', 'AuthController@login');
+
+Route::group(array('before' => 'auth', 'prefix' => 'user'), function()
+{
+	Route::get('', 'UserController@index');
+	Route::get('files', 'FileController@index');
+	Route::post('files/upload', 'FileController@upload');
+});

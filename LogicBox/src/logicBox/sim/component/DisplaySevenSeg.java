@@ -41,7 +41,7 @@ public class DisplaySevenSeg extends Display
 	
 	
 	public void update() {
-		int i = SimUtil.decodeToInt( pinInputs );
+		int i = SimUtil.decodePinsToInt( pinInputs );
 		
 		boolean[] states = {
 		    ! (i==2 | i==12 | i==14 | i==15                 ),
@@ -61,4 +61,54 @@ public class DisplaySevenSeg extends Display
 	public String getName() {
 		return "7-segment display";
 	}
+	
+	
+	
+	
+	
+	public static void main( String[] args ) {
+		DisplaySevenSeg seg = new DisplaySevenSeg();
+		
+		for (int i=0; i<=0xF; i++) {
+			SimUtil.encodeIntToPins( i, seg.getPinInputs() );
+			seg.update();
+			printSegs( seg.getSegmentStates() );
+		}
+	}
+	
+	
+	
+	private static void printSegs( boolean[] b ) {
+		for (int i=0; i<b.length; i++)
+			System.out.print( b[i] ? i : "-" );
+		
+		System.out.println();
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

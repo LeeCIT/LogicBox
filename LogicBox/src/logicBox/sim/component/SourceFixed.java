@@ -5,7 +5,6 @@ package logicBox.sim.component;
 
 
 
-
 /**
  * A fixed logic-level source.
  * @author Lee Coakley

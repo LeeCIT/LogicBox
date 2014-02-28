@@ -3,10 +3,13 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 /**
- * Outputs true if its inputs are the same.
+ * Outputs high if an even number of inputs are high.
  * 0,0 -> 1
  * 0,1 -> 0
  * 1,0 -> 0
@@ -35,5 +38,11 @@ public class GateXnor extends GateXor
 	
 	public String getName() {
 		return "XNOR gate";
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateGateXnor( getPinInputCount() );
 	}
 }
