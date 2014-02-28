@@ -14,7 +14,6 @@ public class Pin extends ComponentPassive
 	private Component comp; // Component this is physically attached to.
 	private Trace     trace;
 	private PinIoMode mode;
-	private boolean   state;
 	
 	
 	
@@ -77,18 +76,6 @@ public class Pin extends ComponentPassive
 	
 	public boolean isBidirectional() {
 		return mode == PinIoMode.bidi;
-	}
-	
-	
-	
-	public boolean getState() {
-		return state;
-	}
-	
-	
-	
-	public void setState( boolean state ) {
-		this.state = state;
 	}
 	
 	
