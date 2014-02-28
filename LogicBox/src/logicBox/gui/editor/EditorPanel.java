@@ -89,7 +89,7 @@ public class EditorPanel extends JPanel
 		world.add(
 			new EditorComponent(
 				new Demux(8),
-				GraphicGen.generateMux(1,3,8),new Vec2(-256,-256)
+				GraphicGen.generateDemux(1,3,8),new Vec2(-256,-256)
 			)
 		);
 		
