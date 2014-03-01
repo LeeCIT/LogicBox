@@ -17,25 +17,25 @@ public class Junction extends ComponentPassive
 	 * Junctions don't really have pins.  This is an artifact of the sim structure
 	 * requiring that traces connect only to pins.  It simplifies things everywhere else.
 	 */
-	private List<Pin> pins;
+	private List<Pin> vpins;
 	
 	
 	
 	public Junction() {
 		super();
-		pins = new ArrayList<>();
+		vpins = new ArrayList<>();
 	}
 	
 	
 	
 	public List<Pin> getPins() {
-		return pins;
+		return vpins;
 	}
 	
 	
 	
 	public List<Pin> getPinsExcept( Pin pin ) {
-		List<Pin> pinsCopy = new ArrayList<>( pins );
+		List<Pin> pinsCopy = new ArrayList<>( vpins );
 		pinsCopy.remove( pin );
 		return pinsCopy;
 	}
@@ -49,8 +49,17 @@ public class Junction extends ComponentPassive
 	public Pin createPin() {
 		Pin pin = new Pin( this, PinIoMode.bidi );
 		pin.setState( getState() );
-		pins.add( pin );
+		vpins.add( pin );
 		return pin;
+	}
+	
+	
+	
+	public void orState( boolean state ) {
+		super.orState( state );
+		
+		for (Pin pin: vpins)
+			pin.orState( state );
 	}
 	
 	
@@ -58,7 +67,7 @@ public class Junction extends ComponentPassive
 	public void setState( boolean state ) {
 		super.setState( state );
 		
-		for (Pin pin: pins)
+		for (Pin pin: vpins)
 			pin.setState( state );
 	}
 	
