@@ -11,7 +11,7 @@ package logicBox.sim.component;
  */
 public abstract class Component
 {
-	protected long simStep; // Simulation step the component was last touched on
+	public long simStep; // Simulation step the component was last touched on
 	
 	
 	
