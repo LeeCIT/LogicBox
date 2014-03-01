@@ -16,7 +16,6 @@ import java.util.*;
 public class PanelTest extends JFrame
 {
 	
-	 
 	
 	public PanelTest()
 	{
@@ -33,7 +32,7 @@ public class PanelTest extends JFrame
 		String ans7 = "Answer 7";
 		
 		
-		String question = "Which one is Answer 4?";
+		String questions = "Which one is Answer 4?";
 		
 		ArrayList<String> answers = new ArrayList<>();
 		
@@ -45,14 +44,19 @@ public class PanelTest extends JFrame
 		
 		
 		
-		for ( int i = 0; i < 9; i++ )
+		for ( McqQuestion question: McqQuestionList.getInstance() )
 		{
-			add( new McqPanel( new McqQuestion(question, answers, ans4) ) );
+			add( new McqPanel( question ) );
+			System.out.println("here");
 		}
 		
 		setVisible(true);
 	}
 	
+	
+	public PanelTest( McqPanel panel ) {
+		
+	}
 	
 	
 	public static void main(String[] args) 
