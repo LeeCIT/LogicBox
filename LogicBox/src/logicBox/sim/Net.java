@@ -23,7 +23,7 @@ import logicBox.util.Util;
 public class Net implements Stateful, Iterable<ComponentPassive>
 {
 	public Set<ComponentPassive> all;        // Everything in the net
-	public Set<ComponentPassive> writeable;  // Everything except pins leading into the net  
+	public Set<ComponentPassive> writeables;  // Everything except pins leading into the net  
 	public Set<Junction>         junctions;  // 
 	public Set<Trace>            traces;     // 
 	public Set<Pin>              pins;       // All pins, except virtual Junction pins
@@ -38,7 +38,7 @@ public class Net implements Stateful, Iterable<ComponentPassive>
 	 */
 	public Net( Pin pin ) {
 		all        = Util.createIdentityHashSet();
-		writeable  = Util.createIdentityHashSet();
+		writeables  = Util.createIdentityHashSet();
 		junctions  = Util.createIdentityHashSet();
 		traces     = Util.createIdentityHashSet();
 		pins       = Util.createIdentityHashSet();
@@ -96,7 +96,7 @@ public class Net implements Stateful, Iterable<ComponentPassive>
 	 * Set the state of the net's outputs.  (No effect on output pins leading into the net)
 	 */
 	public void setState( boolean state ) {
-		for (Stateful s: writeable)
+		for (Stateful s: writeables)
 			s.setState( state );
 	}
 	
@@ -106,7 +106,7 @@ public class Net implements Stateful, Iterable<ComponentPassive>
 	 * OR the state of the net's outputs.  (No effect on output pins leading into the net)
 	 */
 	public void orState( boolean state ) {
-		for (Stateful s: writeable)
+		for (Stateful s: writeables)
 			s.orState( state );
 	}
 	
@@ -119,15 +119,17 @@ public class Net implements Stateful, Iterable<ComponentPassive>
 	
 	
 	private void add( Junction junc ) {
-		all      .add( junc );
-		junctions.add( junc );
+		all       .add( junc );
+		junctions .add( junc );
+		writeables.add( junc );
 	}
 	
 	
 	
 	private void add( Trace trace ) {
-		all   .add( trace );
-		traces.add( trace );
+		all       .add( trace );
+		traces    .add( trace );
+		writeables.add( trace );
 	}
 	
 	
@@ -136,8 +138,12 @@ public class Net implements Stateful, Iterable<ComponentPassive>
 		all .add( pin );
 		pins.add( pin );
 		
-		if      (pin.isInput ()) pinInputs .add( pin );
-		else if (pin.isOutput()) pinOutputs.add( pin );
+		if (pin.isInput()) { 
+			pinInputs .add( pin );
+			writeables.add( pin );
+		} else if (pin.isOutput()) {
+			pinOutputs.add( pin );
+		}
 	}
 	
 	
