@@ -20,6 +20,7 @@ public class ComponentSnapper extends ComponentAdapter {
 	private boolean   motionInterlock;
 	private Component snapTo; 
 	private int snappingDistance = 16;
+	private boolean isSnapped = false;
 	
 	
 	
@@ -78,6 +79,10 @@ public class ComponentSnapper extends ComponentAdapter {
 					case bottom: pos.y = edgePair.ref.pos - size.y;  break;
 				} break;
 			}
+			isSnapped = true;
+		}
+		else {
+			isSnapped = false;
 		}
 		
 			
