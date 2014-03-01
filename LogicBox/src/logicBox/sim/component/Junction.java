@@ -8,12 +8,16 @@ import java.util.ArrayList;
 
 
 /**
- * Joins traces together.  Used to be called 'Solder'.
+ * Joins traces together.
  * @author Lee Coakley
  */
 public class Junction extends ComponentPassive
 {
-	private List<Pin> pins; // Junctions don't really have pins.
+	/**
+	 * Junctions don't really have pins.  This is an artifact of the sim structure
+	 * requiring that traces connect only to pins.  It simplifies things everywhere else.
+	 */
+	private List<Pin> pins;
 	
 	
 	
@@ -40,17 +44,22 @@ public class Junction extends ComponentPassive
 	
 	/**
 	 * Create a new pin, add it to the junction and return it.
+	 * The pin inherits the state of the junction.
 	 */
 	public Pin createPin() {
 		Pin pin = new Pin( this, PinIoMode.bidi );
+		pin.setState( getState() );
 		pins.add( pin );
 		return pin;
 	}
-
-
-
-	public String getName() {
-		return "Junction";
+	
+	
+	
+	public void setState( boolean state ) {
+		super.setState( state );
+		
+		for (Pin pin: pins)
+			pin.setState( state );
 	}
 	
 	
@@ -58,7 +67,24 @@ public class Junction extends ComponentPassive
 	public void reset() {
 		super.reset();
 		
-		for (Pin p: pins)
-			p.reset();
+		setState( false );
+	}
+	
+	
+	
+	public String getName() {
+		return "Junction";
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
