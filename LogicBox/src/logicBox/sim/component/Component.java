@@ -26,4 +26,10 @@ public abstract class Component
 	 * Reset the component to its initial state, as if the simulation was never run.
 	 */
 	public abstract void reset();
+	
+	
+	
+	public String toString() {
+		return getName();
+	}
 }
