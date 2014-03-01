@@ -22,12 +22,12 @@ public class CreateMCQPanel extends JPanel
 	
 	
 	private ArrayList<JTextField> answerFields = new ArrayList<>();
+	private ArrayList<String> answers = new ArrayList<>();
 	private JTextField questionField = new JTextField(); 
 	private int numOfAnswers = 4;
 	private JButton addQuestion = new JButton("Add Question");
 	private ButtonGroup options = new ButtonGroup();
 	private ArrayList<JRadioButton> correctAnswer = new ArrayList<>();
-	private int correctAnsIndex;
 	
 	
 	
@@ -39,6 +39,8 @@ public class CreateMCQPanel extends JPanel
 		
 		
 		addToPanel();
+		
+		addQuestion.addActionListener( new addQuestion() );
 	}
 	
 	
@@ -49,7 +51,7 @@ public class CreateMCQPanel extends JPanel
 	private void addToPanel() {
 		
 		add ( new JLabel("Create MCQ Question"), "wrap" );
-		add ( new JLabel("Question: ") );
+		add ( new JLabel("Question: "), "split 2" );
 		
 		questionField.setPreferredSize( new Dimension(400,20));
 		add ( questionField, "wrap" );
@@ -113,9 +115,32 @@ public class CreateMCQPanel extends JPanel
 
 		for (int i = 0; i < answerFields.size(); i++ ) {
 			if ( correctAnswer.get(i).isSelected()) 
-				return answerFields.get(i).toString();
+				return answerFields.get(i).getText();
 		}
 		return null;
+	}
+	
+	
+	
+	/**
+	 * Return the question specified.
+	 * @return
+	 */
+	public String getQuestion() {
+		return questionField.getText();
+	}
+	
+	
+	
+	/**
+	 * Return the answers set to the question.
+	 * @return
+	 */
+	public ArrayList<String> getAnswers() {
+		for ( JTextField ans: answerFields ) {
+			answers.add( ans.getText() );
+		}
+		return answers;
 	}
 	
 	
@@ -124,8 +149,12 @@ public class CreateMCQPanel extends JPanel
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			
+			McqQuestionList list = McqQuestionList.getInstance();
 			
+			McqQuestion question = new McqQuestion(getQuestion(), getAnswers(), getCorrectAnswer());
 			
+			list.add(question);
+			System.out.println(McqQuestion.getQuestionNum());
 		}
 	}
 }
