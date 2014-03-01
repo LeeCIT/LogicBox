@@ -12,7 +12,7 @@ package logicBox.sim.component;
  */
 public class Trace extends ComponentPassive
 {
-	protected Pin source, dest;
+	private Pin source, dest;
 	
 	
 	
