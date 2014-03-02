@@ -55,7 +55,7 @@ public class Bbox2 implements Transformable, Serializable
 	
 	public Bbox2( Rectangle rect ) {
 		this.tl = new Vec2( rect.getMinX(), rect.getMinY() );
-		this.tl = new Vec2( rect.getMaxX(), rect.getMaxY() );
+		this.br = new Vec2( rect.getMaxX(), rect.getMaxY() );
 	}
 	
 	

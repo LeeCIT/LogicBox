@@ -4,13 +4,13 @@
 package logicBox.gui.snapping;
 
 import java.awt.Component;
-import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import logicBox.util.Bbox2;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
@@ -19,7 +19,7 @@ import logicBox.util.Vec2;
 public class ComponentSnapper extends ComponentAdapter {
 	private boolean   motionInterlock;
 	private Component snapTo; 
-	private int snappingDistance = 16;
+	private int       snapThreshold = 16;
 	
 	
 	
@@ -34,37 +34,32 @@ public class ComponentSnapper extends ComponentAdapter {
 			return;
 		
 		//Rectangle      desk  =//GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-		Rectangle      ref   = snapTo.getBounds();
-		Rectangle      com   = ev.getComponent().getBounds();
-		List<EdgePair> edges = getSnappableEdgePairs( ref, com, snappingDistance);
+		Component snapee      = ev.getComponent();
+		Bbox2     bboxComp    = new Bbox2( snapee.getBounds() );
+		Bbox2     bboxSnap    = new Bbox2( snapTo .getBounds() );
+		Bbox2     bboxOverlap = bboxSnap.expand( new Vec2(snapThreshold*2) );
+		boolean   shouldSnap  = bboxOverlap.overlaps( bboxComp );
 		
-		for (EdgePair pair: edges) {
-			//System.out.println( "C-" + pair.com.edge + " to R-" + pair.ref.edge + " (" + pair.dist +"px)" );
-			snapToEdge( ev.getComponent(), com, pair );
+		if (shouldSnap) {
+			Vec2           pos   = new Vec2( snapee.getLocation() );
+			List<EdgePair> edges = getSnappableEdgePairs( bboxSnap, bboxComp, snapThreshold );
+			
+			for (EdgePair pair: edges)
+				pos = snapToEdge( pos, bboxComp, pair );
+			
+			motionInterlock = true;
+			snapee.setLocation( (int) pos.x, (int) pos.y );
+			motionInterlock = false;
 		}
 	}
 	
 	
 	
-	private void snapToEdge( Component comp, Rectangle rectComp, EdgePair edgePair ) {
-		Vec2 pos  = new Vec2( comp.getLocation() );
-		Vec2 size = new Vec2( comp.getWidth(), comp.getHeight() );
+	private Vec2 snapToEdge( Vec2 compPos, Bbox2 bboxComp, EdgePair edgePair ) {
+		Vec2 pos  = compPos.copy();
+		Vec2 size = bboxComp.getSize();
 		
-		Rectangle compRect = comp.getBounds();
-		Rectangle snapRect = snapTo.getBounds();
-		
-		// Increase the size of the component box so it snaps within the distance required only
-		compRect.x += snappingDistance;
-		compRect.y += snappingDistance;
-		
-		// Increase the opposite side of the frame to snap to by twice the snapping distance 
-		// This is due to increasing the box of the first frame so the second ones opposite edge needs to be doubled by that
-		snapRect.width  += (snappingDistance * 2);
-		snapRect.height += (snappingDistance * 2);
-		
-		
-		if( snapRect.intersects(compRect) ) {
-			switch (edgePair.ref.edge) {
+		switch (edgePair.ref.edge) {
 			case left:
 			case right:
 				switch (edgePair.com.edge) {
@@ -77,14 +72,9 @@ public class ComponentSnapper extends ComponentAdapter {
 					case top:    pos.y = edgePair.ref.pos;           break;
 					case bottom: pos.y = edgePair.ref.pos - size.y;  break;
 				} break;
-			}
 		}
 		
-			
-
-		motionInterlock = true;
-		comp.setLocation( (int) pos.x, (int) pos.y );
-		motionInterlock = false;
+		return pos;
 	}
 	
 	
@@ -112,26 +102,21 @@ public class ComponentSnapper extends ComponentAdapter {
 	
 	private class EdgePair {
 		public EdgePos ref,com;
-		public double  dist;
 
-		public EdgePair( EdgePos ref, EdgePos com, double dist ) {
+		public EdgePair( EdgePos ref, EdgePos com ) {
 			this.ref  = ref;
 			this.com  = com;
-			this.dist = dist;
 		}
 	}
 	
 	
 	
-	private EdgePos[] getEdges( Rectangle rect ) {
-		Vec2 pos  = new Vec2( rect.getX(),     rect.getY()      );
-		Vec2 size = new Vec2( rect.getWidth(), rect.getHeight() );
-		
+	private EdgePos[] getEdges( Bbox2 rect ) {
 		EdgePos[] edges = {
-			new EdgePos( Edge.left,   pos.x          ),
-			new EdgePos( Edge.top,    pos.y          ),
-			new EdgePos( Edge.right,  pos.x + size.x ),
-			new EdgePos( Edge.bottom, pos.y + size.y ),
+			new EdgePos( Edge.left,   rect.getLeft()   ),
+			new EdgePos( Edge.top,    rect.getTop()    ),
+			new EdgePos( Edge.right,  rect.getRight()  ),
+			new EdgePos( Edge.bottom, rect.getBottom() ),
 		};
 		
 		return edges;
@@ -147,7 +132,7 @@ public class ComponentSnapper extends ComponentAdapter {
 			double dist = Geo.absDiff( ref.pos, com.pos );
 			
 			if (dist <= thresh)
-				list.add( new EdgePair(ref,com,dist) );
+				list.add( new EdgePair(ref,com) );
 		}
 		
 		return list;
@@ -155,7 +140,7 @@ public class ComponentSnapper extends ComponentAdapter {
 	
 	
 	
-	private List<EdgePair> getSnappableEdgePairs( Rectangle ref, Rectangle com, double thresh ) {
+	private List<EdgePair> getSnappableEdgePairs( Bbox2 ref, Bbox2 com, double thresh ) {
 		EdgePos[] edgeRef = getEdges( ref );
 		EdgePos[] edgeCom = getEdges( com );
 		
@@ -166,7 +151,7 @@ public class ComponentSnapper extends ComponentAdapter {
 	
 	
 	
-	//Demo main, just to test the functionality
+	// Demo main, just to test the functionality
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 		JLabel label = new JLabel("Move to sides to snap. Main Frame");
@@ -174,7 +159,7 @@ public class ComponentSnapper extends ComponentAdapter {
 		JFrame secondDemo = new JFrame();
 		JLabel secondLab  = new JLabel("Demo test, move towards the edge of the screen to snap, Second frame");
 
-		//First frameC
+		// First frameC
 		frame.getContentPane().add(label);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//frame.addComponentListener( new SnappingPrototype() );
@@ -182,7 +167,7 @@ public class ComponentSnapper extends ComponentAdapter {
 		frame.setVisible(true);
 		frame.setLocationRelativeTo(null);
 
-		//Second frame
+		// Second frame
 		secondDemo.getContentPane().add(secondLab);
 		secondDemo.addComponentListener( new ComponentSnapper(frame) );
 		secondDemo.setSize(150, 300);
