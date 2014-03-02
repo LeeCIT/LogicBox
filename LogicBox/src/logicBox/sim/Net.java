@@ -16,8 +16,9 @@ import logicBox.util.Util;
 
 
 /**
- * Struct for modelling the connections of a component.
+ * Abstracts connective circuitry into a single object.
  * Can be used to treat interconnects and pins as a single entity.
+ * Also useful as an informational structure.
  * @author Lee Coakley
  */
 public class Net implements Stateful, Iterable<ComponentPassive>
@@ -58,6 +59,24 @@ public class Net implements Stateful, Iterable<ComponentPassive>
 			return false;
 		
 		return all.equals( ((Net)other).all );
+	}
+	
+	
+	
+	public int hashCode() {
+		return all.hashCode();
+	}
+	
+	
+	
+	public boolean isEmpty() {
+		return all.isEmpty();
+	}
+	
+	
+	
+	public boolean contains( ComponentPassive com ) {
+		return all.contains( com );
 	}
 	
 	
@@ -191,6 +210,17 @@ public class Net implements Stateful, Iterable<ComponentPassive>
 		
 		for (Pin pin: junc.getPinsExcept( originatingPin ))
 			accumulateFromPin( pin, false );
+	}
+	
+	
+	
+	public String toString() {
+		String str = "Net [";
+		
+		for (Component com: this)
+			str += "\n  " + com;
+		
+		return str + "\n]";
 	}
 }
 
