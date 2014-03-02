@@ -30,4 +30,9 @@ public class McqQuestionList extends ArrayList<McqQuestion>
 		}
 		return instance;
 	}
+	
+	
+	public int getSize() {
+		return size();
+	}
 }
