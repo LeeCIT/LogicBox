@@ -11,6 +11,7 @@ import logicBox.sim.component.Junction;
 import logicBox.sim.component.Pin;
 import logicBox.sim.component.Stateful;
 import logicBox.sim.component.Trace;
+import logicBox.sim.component.Updateable;
 import logicBox.util.Util;
 
 
@@ -21,7 +22,7 @@ import logicBox.util.Util;
  * Also useful as an informational structure.
  * @author Lee Coakley
  */
-public class Net implements Stateful, Iterable<ComponentPassive>
+public class Net implements Stateful, Updateable, Iterable<ComponentPassive>
 {
 	public Set<ComponentPassive> all;        // Everything in the net
 	public Set<ComponentPassive> writeables; // Everything except pins leading into the net  
@@ -109,8 +110,14 @@ public class Net implements Stateful, Iterable<ComponentPassive>
 	
 	
 	
+	public void update() {
+		setState( getState() );
+	}
+	
+	
+	
 	/**
-	 * Get the net's logic level, as defined by the inputs into it.
+	 * Get the net's logic level, as defined by the inputs coming into it.
 	 */
 	public boolean getState() {
 		boolean state = false;
