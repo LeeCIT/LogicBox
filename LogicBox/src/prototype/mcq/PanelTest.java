@@ -6,6 +6,7 @@ package prototype.mcq;
 
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -28,11 +29,9 @@ public class PanelTest extends JFrame
 		String ans3 = "Answer 3";
 		String ans4 = "Answer 4";
 		String ans5 = "Answer 5";
-		String ans6 = "Answer 6";
-		String ans7 = "Answer 7";
 		
 		
-		String questions = "Which one is Answer 4?";
+		String question = "Which one is Answer 4?";
 		
 		ArrayList<String> answers = new ArrayList<>();
 		
@@ -43,14 +42,38 @@ public class PanelTest extends JFrame
 		answers.add(ans5);
 		
 		
+		McqQuestion q1 = new McqQuestion(question, answers, ans4);
+		McqQuestion q2 = new McqQuestion(question, answers, ans4);
+		McqQuestion q3 = new McqQuestion(question, answers, ans4);
+		McqQuestion q4 = new McqQuestion(question, answers, ans4);
+		McqQuestion q5 = new McqQuestion(question, answers, ans4);
+		McqQuestion q6 = new McqQuestion(question, answers, ans4);
+			
 		
-		for ( McqQuestion question: McqQuestionList.getInstance() )
-		{
-			add( new McqQuestionPanel( question ) );
-			System.out.println("here");
-		}
+		ArrayList<McqQuestionPanel> questionPanels = new ArrayList<>();
+		
+		McqQuestionPanel p1 = new McqQuestionPanel(q1);
+		McqQuestionPanel p2 = new McqQuestionPanel(q2);
+		McqQuestionPanel p3 = new McqQuestionPanel(q3);
+		McqQuestionPanel p4 = new McqQuestionPanel(q4);
+		McqQuestionPanel p5 = new McqQuestionPanel(q5);
+		McqQuestionPanel p6 = new McqQuestionPanel(q6);
+		
+		questionPanels.add(p1);
+		questionPanels.add(p2);
+		questionPanels.add(p3);
+		questionPanels.add(p4);
+		questionPanels.add(p5);
+		questionPanels.add(p6);
+		
+		McqPanel panel = new McqPanel(questionPanels);
+		
+		JScrollPane scroll = new JScrollPane(panel);
+		add(scroll, "w 100%, h 100%");
+		
 		
 		setVisible(true);
+		
 	}
 	
 	
