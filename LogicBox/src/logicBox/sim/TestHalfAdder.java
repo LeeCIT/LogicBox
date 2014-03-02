@@ -38,10 +38,14 @@ public class TestHalfAdder
 		Trace andToLed = Simulation.connect( gateAnd, 0, ledCarry, 0 );
 		
 		Simulation sim = new Simulation();
-		sim.addSource( sourceA );
-		sim.addSource( sourceB );
-		sim.run();
+		sim.add( sourceA  );
+		sim.add( sourceB  );
+		sim.add( ledSum   );
+		sim.add( ledCarry );
+		sim.add( gateXor  );
+		sim.add( gateAnd  );
 		
+		sim.simulate();
 		System.out.println( "Sum:   " + ledSum  .isLit() );
 		System.out.println( "Carry: " + ledCarry.isLit() );
 	}
