@@ -13,106 +13,63 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
+import com.sun.xml.internal.messaging.saaj.packaging.mime.util.QEncoderStream;
+
 import net.miginfocom.swing.MigLayout;
 
 
-
+/**
+ * Class used to display each McqQuestionPanel created.
+ * @author Shaun
+ *
+ */
 public class McqPanel extends JPanel
 {
 	
 	
-	private ArrayList<String> answers;
-	private ArrayList<JRadioButton> buttons = new ArrayList<>();
-	private String correctAnswer, question;
-	private ButtonGroup options = new ButtonGroup();
-	private int questionNum;
+	
+	private ArrayList<McqQuestionPanel> questionPanels;
+	private JButton nextPage = new JButton("Next");
+	private int displayed = 5;
+	private int pageNo = 1;
 	
 	
 	
-	public McqPanel( McqQuestion mcq ) {
+	public McqPanel( ArrayList<McqQuestionPanel> questionPanels ) {
 		
 		super();
 		
-		
+		setSize(500, 500);
 		setLayout( new MigLayout() );
-		setBorder(new LineBorder(new Color(0, 0, 0)));
 		
 		
-		this.answers = mcq.getAnswers();
-		this.correctAnswer = mcq.getCorrectAnswer();
-		this.question = mcq.getQuestion();
-		this.questionNum = McqQuestion.getQuestionNum();
+		this.questionPanels = questionPanels;
 		
-		displayQuestion();
+		
+		displayPanels();
+		
+		setPanels();
 		
 	}
-	
-	
-	
-	/**
-	 * Display the question to the panel.
-	 */
-	private void displayQuestion() {
+
+
+
+	private void setPanels() {
 		
-		int j = 0;
-		
-		add( new JLabel("(Q" + questionNum + ")"), "wrap");
-		add( new JLabel(question), "wrap" ); //Add the question to the panel.
-		
-		
-		//Display each answer with a radio button across from it.
-		for ( String ans: answers ) {
-			add ( new JLabel(ans), "split 2" );
-			buttons.add( new JRadioButton() );
-			options.add( buttons.get(j) );
-			add ( buttons.get(j), "wrap" );
-			j++;
+		for ( int i = 0; i < displayed; i++ ) {
+			add( questionPanels.get(i), "wrap" );
 		}
 		
-		JButton checkAnswer = new JButton("Check answer");
-		add( checkAnswer );
-		checkAnswer.addActionListener( new buttonListener() );
+	}
+
+
+
+	private void displayPanels() {
+		
+		
+		
 		
 	}
-	
-	
-	
-	/**
-	 * Choose weather the panel is visible or not.
-	 * @param visible
-	 */
-	public void setPanelVisibility( boolean visible ) {
-		setVisible(visible);
-	}
-	
-	
-	
-	class buttonListener implements ActionListener
-	{
-		@Override
-		public void actionPerformed(ActionEvent e)
-		{
-			
-			for ( int i = 0; i < buttons.size(); i++ )
-			{
-				
-				if ( buttons.get(i).isSelected() )
-				{
-					
-					if ( answers.get(i).equals(correctAnswer) )
-					{
-						System.out.println("You are correct!");
-					}
-					else
-						System.out.println("INCORRECT!");
-					
-				}
-				
-			}
-			
-		}
-	}
-	
 	
 	
 	
