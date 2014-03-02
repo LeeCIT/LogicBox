@@ -120,12 +120,11 @@ public class Net implements Stateful, Updateable, Iterable<ComponentPassive>
 	 * Get the net's logic level, as defined by the inputs coming into it.
 	 */
 	public boolean getState() {
-		boolean state = false;
-		
 		for (Stateful s: pinOutputs)
-			state |= s.getState();
+			if (s.getState())
+				return true;
 		
-		return state;
+		return false;
 	}
 	
 	
