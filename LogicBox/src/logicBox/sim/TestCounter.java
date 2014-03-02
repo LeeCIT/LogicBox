@@ -26,14 +26,14 @@ public class TestCounter
 		
 		for (int i=0; i<64; i++) {
 			for (int r=0; r<2; r++) {
-				ffs[0].getPinC().setState( osc.getState() );
+				ffs[0].getPinClock().setState( osc.getState() );
 				ffs[0].update();
 				
 				for (int z=0; z<ffs.length-1; z++) {
 					FlipFlopJK cur  = ffs[ z     ];
 					FlipFlopJK next = ffs[ z + 1 ];
 					
-					next.getPinC().setState( cur.getPinQ().getState() );
+					next.getPinClock().setState( cur.getPinQ().getState() );
 					next.update();
 				}
 				

@@ -28,6 +28,12 @@ public abstract class ComponentPassive extends Component implements Stateful
 	
 	
 	
+	public void orState( boolean state ) {
+		this.state |= state;
+	}
+	
+	
+	
 	public void reset() {
 		setState( false );
 	}

@@ -4,8 +4,6 @@
 package logicBox.sim.component;
 
 import java.util.Arrays;
-import logicBox.sim.LogicLevel;
-import logicBox.sim.SimUtil;
 
 
 
@@ -13,7 +11,6 @@ import logicBox.sim.SimUtil;
  * JK-type flip-flop.
  * A 1-bit memory with inputs [J, C, K] and outputs [Q, !Q].
  * J sets, K resets.  J+K toggles.
- * Edge triggered: changes state only at the rising edge of a clock pulse.
  * Table:
  * 		J K C | Q
  * 		---------
@@ -25,66 +22,36 @@ import logicBox.sim.SimUtil;
  * 
  * @author Lee Coakley
  */
-public class FlipFlopJK extends ComponentActive
+public class FlipFlopJK extends FlipFlop
 {
-	private boolean lastClock;
-	
-	
-	
 	public FlipFlopJK() {
-		super();
-		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  3 );
-		SimUtil.addPins( pinOutputs, this, PinIoMode.output, 2 );
-		
-		reset();
+		super( 3 );
 	}
 	
 	
 	
-	public void reset() {
-		super.reset();
-		lastClock = false;
-		getPinQinv().setState( true );
+	public Pin getPinClock() {
+		return getPinInput( 1 );
 	}
 	
 	
 	
 	public Pin getPinJ() {
-		return pinInputs.get( 0 );
-	}
-	
-	
-	
-	public Pin getPinC() {
-		return pinInputs.get( 1 );
+		return getPinInput( 0 );
 	}
 	
 	
 	
 	public Pin getPinK() {
-		return pinInputs.get( 2 );
-	}
-	
-	
-	
-	public Pin getPinQ() {
-		return pinOutputs.get( 0 );
-	}
-	
-	
-	
-	public Pin getPinQinv() {
-		return pinOutputs.get( 1 );
+		return getPinInput( 2 );
 	}
 	
 	
 	
 	public void update() {
-		boolean clock     = getPinC().getState();
-		boolean isEdgePos = LogicLevel.isEdgePos( lastClock, clock );
-		lastClock = clock;
+		boolean shouldUpdate = updateClock();
 		
-		if ( ! isEdgePos)
+		if ( ! shouldUpdate)
 			return;
 		
 		boolean j = getPinJ().getState();
@@ -97,8 +64,7 @@ public class FlipFlopJK extends ComponentActive
 			else if (j)      state = true;
 			else  /* k */    state = false;
 			
-			getPinQ   ().setState(   state );
-			getPinQinv().setState( ! state );
+			setQ( state );
 		}
 	}
 	
@@ -106,12 +72,6 @@ public class FlipFlopJK extends ComponentActive
 	
 	public String getName() {
 		return "JK flip-flop";
-	}
-	
-	
-	
-	public boolean isCombinational() {
-		return false;
 	}
 	
 	
@@ -154,7 +114,7 @@ public class FlipFlopJK extends ComponentActive
 			boolean clockSignal = (i & 0b1) == 0;
 			
 			if (clockIO)
-				f.getPinC().setState( clockSignal );
+				f.getPinClock().setState( clockSignal );
 			
 			f.update();
 			

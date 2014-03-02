@@ -8,30 +8,34 @@ import java.util.ArrayList;
 
 
 /**
- * Joins traces together.  Used to be called 'Solder'.
+ * Joins traces together.
  * @author Lee Coakley
  */
 public class Junction extends ComponentPassive
 {
-	private List<Pin> pins; // Junctions don't really have pins.
+	/**
+	 * Junctions don't really have pins.  This is an artifact of the sim structure
+	 * requiring that traces connect only to pins.  It simplifies things everywhere else.
+	 */
+	private List<Pin> vpins;
 	
 	
 	
 	public Junction() {
 		super();
-		pins = new ArrayList<>();
+		vpins = new ArrayList<>();
 	}
 	
 	
 	
 	public List<Pin> getPins() {
-		return pins;
+		return vpins;
 	}
 	
 	
 	
 	public List<Pin> getPinsExcept( Pin pin ) {
-		List<Pin> pinsCopy = new ArrayList<>( pins );
+		List<Pin> pinsCopy = new ArrayList<>( vpins );
 		pinsCopy.remove( pin );
 		return pinsCopy;
 	}
@@ -40,17 +44,31 @@ public class Junction extends ComponentPassive
 	
 	/**
 	 * Create a new pin, add it to the junction and return it.
+	 * The pin inherits the state of the junction.
 	 */
 	public Pin createPin() {
 		Pin pin = new Pin( this, PinIoMode.bidi );
-		pins.add( pin );
+		pin.setState( getState() );
+		vpins.add( pin );
 		return pin;
 	}
-
-
-
-	public String getName() {
-		return "Junction";
+	
+	
+	
+	public void orState( boolean state ) {
+		super.orState( state );
+		
+		for (Pin pin: vpins)
+			pin.orState( state );
+	}
+	
+	
+	
+	public void setState( boolean state ) {
+		super.setState( state );
+		
+		for (Pin pin: vpins)
+			pin.setState( state );
 	}
 	
 	
@@ -58,7 +76,24 @@ public class Junction extends ComponentPassive
 	public void reset() {
 		super.reset();
 		
-		for (Pin p: pins)
-			p.reset();
+		setState( false );
+	}
+	
+	
+	
+	public String getName() {
+		return "Junction";
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+

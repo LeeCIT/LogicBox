@@ -3,8 +3,6 @@
 
 package logicBox.util;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.IdentityHashMap;
 import java.util.Set;
 
 
@@ -137,12 +135,6 @@ public class SpatialGrid<T>
 	
 	
 	
-	private Set<T> createIdentityHashSet() {
-		return Collections.newSetFromMap( new IdentityHashMap<T,Boolean>() );
-	}
-	
-	
-	
 	private int coordToIndex( int x, int y ) {
 		return ((y * cellsPerRow) + x) & indexWrapMask; // It even chops the sign bit. Magical.
 	}
@@ -214,7 +206,7 @@ public class SpatialGrid<T>
 		private Set<T> set;
 		
 		protected AccumulationTraversal() {
-			set = createIdentityHashSet();
+			set = Util.createIdentityHashSet();
 		}
 		
 		public void process( int index ) {

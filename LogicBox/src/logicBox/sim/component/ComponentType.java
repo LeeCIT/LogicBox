@@ -38,6 +38,7 @@ public enum ComponentType
 	
 	flipFlopD,
 	flipFlopJK,
+	flipFlopT,
 	
 	comparator,
 	shifter,
