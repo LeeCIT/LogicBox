@@ -18,12 +18,6 @@ public class SourceFixed extends Source
 	
 	
 	
-	public void update() {
-		// Do nothing
-	}
-	
-	
-	
 	public String getName() {
 		return "Fixed source (" + (getState()?1:0) + ")";
 	}

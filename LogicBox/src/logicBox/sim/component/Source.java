@@ -13,6 +13,10 @@ import logicBox.sim.SimUtil;
  */
 public abstract class Source extends ComponentActive
 {
+	private boolean state;
+	
+	
+	
 	public Source( boolean state ) {
 		super();
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, 1 );
@@ -22,12 +26,18 @@ public abstract class Source extends ComponentActive
 	
 	
 	public void setState( boolean state ) {
-		setPinOutputState( 0, state );
+		this.state = state;
 	}
 	
 	
 	
 	public boolean getState() {
-		return getPinOutputState( 0 );
+		return state;
+	}
+	
+	
+	
+	public void update() {
+		setPinOutputState( 0, state );
 	}
 }
