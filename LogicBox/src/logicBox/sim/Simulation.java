@@ -28,6 +28,7 @@ import logicBox.util.Util;
  * Performs the logic simulation.
  * This version uses a levelisation algorithm and works with combinational circuits only.
  * @author Lee Coakley
+ * TODO find islands
  */
 public class Simulation
 {
@@ -35,6 +36,7 @@ public class Simulation
 	private List<ComponentActive> actives; // Event-generating components
 	private List<Source>          sources; // Primary/const inputs
 	
+	private Set<Net>         cacheNets;
 	private List<Updateable> cacheUpdateables;
 	private boolean          cacheInvalidated;
 	
@@ -48,6 +50,10 @@ public class Simulation
 	
 	
 	
+	/**
+	 * Add a component to the simulation.
+	 * At the moment, only active components need to be added.
+	 */
 	public void add( Component com ) {
 		comps.add( com );
 		
@@ -62,13 +68,23 @@ public class Simulation
 	
 	
 	
+	/**
+	 * Reset the simulation to its initial state, as if simulate() were never called.
+	 */
 	public void reset() {
 		for (Component com: comps)
 			com.reset();
+		
+		for (Net net: cacheNets)
+			for (Component com: net)
+				com.reset();
 	}
 	
 	
 	
+	/**
+	 * Run the simulation.
+	 */
 	public void simulate() {
 		if (cacheInvalidated)
 			regenerateCaches();
@@ -91,6 +107,9 @@ public class Simulation
 	
 	
 	
+	/**
+	 * Recursively search for feedback loops.
+	 */
 	private boolean isLevelisable( Set<Component> set, ComponentActive origin ) {
 		if (set.contains( origin ))
 			return false;
@@ -100,10 +119,9 @@ public class Simulation
 		for (Pin pin: origin.getPinOutputs()) {
 			Net net = new Net( pin );
 			
-			for (ComponentActive com: net.getFanout()) {
+			for (ComponentActive com: net.getFanout())
 				if ( ! isLevelisable( set, com ))
 					return false;
-			}
 		}
 		
 		return true;
@@ -125,11 +143,10 @@ public class Simulation
 	
 	
 	private void regenerateCaches() {
-		Set<Net>     nets      = getUniqueNetSet();
-		Map<Pin,Net> pinNetMap = mapPinsToNets( nets );
+		cacheNets = getUniqueNetSet();
 		
 		Map<ComponentActive,Integer> comLevelMap = leveliseActives( actives );
-		Map<Net,            Integer> netLevelMap = leveliseNets   ( nets, comLevelMap );
+		Map<Net,            Integer> netLevelMap = leveliseNets   ( cacheNets, comLevelMap );
 		
 		cacheUpdateables = sortByEvaluationOrder( comLevelMap, netLevelMap );
 		cacheInvalidated = false;
@@ -189,9 +206,12 @@ public class Simulation
 	
 	
 	/**
-	 * Generate a list of active components sorted in evaluation order.
+	 * Find the evaluation order for each active component.
 	 */
 	private Map<ComponentActive,Integer> leveliseActives( List<ComponentActive> actives ) {
+		if ( ! isLevelisable())
+			throw new RuntimeException( "Can't levelise: circuit contains feedback loops." );
+		
 		Map<ComponentActive,Integer> levels   = genBaseLevelMap( actives );
 		Deque<ComponentActive>       deferred = new ArrayDeque<>( actives );
 		
@@ -221,6 +241,10 @@ public class Simulation
 	
 	
 	
+	/**
+	 * Find the evaluation order for nets.
+	 * The active levels must already be known.
+	 */
 	private Map<Net,Integer> leveliseNets( Iterable<Net> nets, Map<ComponentActive,Integer> activeLevels ) {
 		Map<Net,Integer> levels = genBaseLevelMap( nets );
 		
