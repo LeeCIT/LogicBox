@@ -16,7 +16,7 @@ public class McqQuestion {
 	private ArrayList<String> answers;
 	private String question, correctAnswer;
 	private static int questionNum = 0;
-	private int thisQuestionNum = questionNum;
+	private int thisQuestionNum;
 	
 	
 	public McqQuestion( String question, ArrayList<String> answers, String correctAnswer ) {
@@ -24,6 +24,7 @@ public class McqQuestion {
 		this.correctAnswer = correctAnswer;
 		this.question = question;
 		questionNum++; //Increase the number of questions for every new instance.
+		thisQuestionNum = questionNum; //Create a unique question number for the specific instance.
 	}
 	
 	
