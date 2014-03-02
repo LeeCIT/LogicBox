@@ -16,6 +16,7 @@ public class McqQuestion {
 	private ArrayList<String> answers;
 	private String question, correctAnswer;
 	private static int questionNum = 0;
+	private int thisQuestionNum = questionNum;
 	
 	
 	public McqQuestion( String question, ArrayList<String> answers, String correctAnswer ) {
@@ -62,7 +63,7 @@ public class McqQuestion {
 	 * Return the number of questions added.
 	 * @return
 	 */
-	public static int getQuestionNum() {
-		return questionNum;
+	public int getQuestionNum() {
+		return thisQuestionNum;
 	}
 }

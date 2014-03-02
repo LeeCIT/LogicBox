@@ -43,7 +43,7 @@ public class McqQuestionPanel extends JPanel
 		this.answers = mcq.getAnswers();
 		this.correctAnswer = mcq.getCorrectAnswer();
 		this.question = mcq.getQuestion();
-		this.questionNum = McqQuestion.getQuestionNum();
+		this.questionNum = mcq.getQuestionNum();
 		
 		displayQuestion();
 		
