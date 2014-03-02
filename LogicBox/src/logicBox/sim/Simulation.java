@@ -3,152 +3,148 @@
 
 package logicBox.sim;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import logicBox.sim.component.Component;
+import logicBox.sim.component.ComponentActive;
 import logicBox.sim.component.Junction;
 import logicBox.sim.component.Pin;
 import logicBox.sim.component.PinIo;
 import logicBox.sim.component.Source;
 import logicBox.sim.component.Trace;
-import logicBox.sim.component.Updateable;
 
 
 
 /**
  * Performs the logic simulation.
- * Note: This is just a placeholder implementation and only works in trivial cases.
+ * This version uses a levelisation algorithm and works with combinational circuits only.
  * @author Lee Coakley
  */
 public class Simulation
 {
-	private List<Source>    sources;
-	private List<Component> propos;
-	private long            simStep;
+	private List<Component>       comps;   // All sim components
+	private List<ComponentActive> actives; // Event-generating components
+	private List<Source>          sources; // Primary/const inputs
 	
 	
 	
 	public Simulation() {
+		comps   = new ArrayList<>();
+		actives = new ArrayList<>();
 		sources = new ArrayList<>();
-		propos  = new ArrayList<>();
 	}
 	
 	
 	
-	public void addSource( Source source ) {
-		sources.add( source );
-	}
-	
-	
-	
-	public void run() {
-		++simStep;
+	public void add( Component com ) {
+		comps.add( com );
 		
-		prime();
+		if (com instanceof ComponentActive)
+			actives.add( (ComponentActive) com );
 		
-		while ( ! propos.isEmpty())
-			iterate();
+		if (com instanceof Source)
+			sources.add( (Source) com );
 	}
 	
 	
 	
-	private void prime() {
-		propos = new ArrayList<>();
-		propos.addAll( sources );
+	public void reset() {
+		for (Component com: comps)
+			com.reset();
 	}
 	
 	
 	
-	private void iterate() {
-		System.out.println( "Iteration beginning..." );
-		List<Component> nextPropos = new ArrayList<>();
+	public void simulate() { // TODO optimise away net generation
+		List<ComponentActive> evals = levelise();
 		
-		while ( ! propos.isEmpty()) {
-			Component com = propos.remove( 0 );
-			System.out.println( "\tPropogating through: " + com );
+		for (ComponentActive com: evals) {
+			com.update();
 			
-			if (com instanceof Updateable) {
-				Updateable updateable = ((Updateable) com);
-				updateable.update();
-				System.out.println( "\tUpdated " + com );
-			}
-			
-			if (com instanceof PinIo) {
-				PinIo pinIo = ((PinIo) com);
-				
-				for (Pin pin: pinIo.getPinOutputs()) {
-					if (pin.getState()) {
-						AffectedPathSet set = getAffectedPath( pin );
-						set.setStates( true );
-						
-						for (Pin term: set.pinTerminators)
-							nextPropos.add( term.getAttachedComponent() );
-					}
-				}
+			for (Pin pin: com.getPinOutputs()) {
+				Net net = new Net( pin );
+				net.orState( pin.getState() );
 			}
 		}
+	}
+	
+	
+	
+	private Map<Component,Integer> genBaseLevelMap() {
+		Map<Component,Integer> map = new IdentityHashMap<>();
 		
-		propos.addAll( nextPropos );
+		for (Component com: comps) {
+			int level = (com instanceof Source) ? 0 : -1; // Sources are always first
+			map.put( com, level );
+		}
 		
-		System.out.println( "\tNext propogators: " );
-		for (Component c: nextPropos)
-			System.out.println( "\t\t" + c );
+		return map;
+	}
+	
+	
+	
+	private int levelOf( Map<Component,Integer> map, Component com ) {
+		return map.get( com );
+	}
+	
+	
+	
+	private int setLevel( Map<Component,Integer> map, Component com, int level ) {
+		return map.put( com, level );
 	}
 	
 	
 	
 	/**
-	 * Find all pins, junctions and traces connected to the given pin.
-	 * These are all the components which have their level set by the pin.
-	 * The result includes the pin given as input.
+	 * Generate a list of active components sorted for evaluation order.
 	 */
-	public AffectedPathSet getAffectedPath( Pin pin ) {
-		AffectedPathSet set = new AffectedPathSet();
-		getAffectedPath( pin, set );
-		return set;
+	private List<ComponentActive> levelise() {
+		Map<Component,Integer> map      = genBaseLevelMap();
+		List<ComponentActive>  deferred = new ArrayList<>( actives );
+		
+		while ( ! deferred.isEmpty()) {
+			ComponentActive com = deferred.remove( 0 );
+			
+			boolean allInputsHaveLevels = true;
+			int     maxLevel            = -1;
+			
+			for (Pin comPinInput: com.getPinInputs()) {
+				Net net = new Net( comPinInput );
+				
+				for (ComponentActive comDependency: net.getFanin()) {
+					int comLevel = levelOf( map, comDependency );
+					maxLevel = Math.max( maxLevel, comLevel );
+					allInputsHaveLevels &= (comLevel != -1);
+				}
+			}
+			
+			if (allInputsHaveLevels)
+				 setLevel( map, com, maxLevel + 1 );
+			else deferred.add( com );
+		}
+		
+		return sortByLevel( actives, map );
 	}
 	
 	
 	
-	private void getAffectedPath( Pin pin, AffectedPathSet set ) {
-		if ( ! pin.hasTrace())
-			return;
+	private List<ComponentActive> sortByLevel( List<ComponentActive> actives, final Map<Component,Integer> map ) {
+		List<ComponentActive> awYeahSon = new ArrayList<>( actives );
 		
-		Trace trace    = pin.getTrace();
-		Pin   otherPin = trace.getPinOtherSide( pin );
+		Collections.sort( awYeahSon, new Comparator<ComponentActive>() {
+			public int compare( ComponentActive a, ComponentActive b ) {
+				return map.get(a) - map.get(b);
+			}
+		});
 		
-		set.pins  .add( pin );
-		set.traces.add( trace );
-		set.pins  .add( otherPin );
-		
-		Component com = otherPin.getAttachedComponent();
-		
-		if (com instanceof Junction)
-			traverseJunction( com, set, otherPin );
-		
-		if ( ! isConnection(com) && otherPin.isInput())
-			set.pinTerminators.add( otherPin );
+		return awYeahSon;
 	}
-	
-	
-	
-	private void traverseJunction( Component com, AffectedPathSet set, Pin sourcePin ) {
-		Junction junction = (Junction) com;
-		
-		set.junctions.add( junction );
-		
-		for (Pin pin: junction.getPinsExcept( sourcePin ))
-			getAffectedPath( pin, set );
-	}
-	
-	
-	
-	private boolean isConnection( Component com ) {
-		return com instanceof Junction 
-			|| com instanceof Trace;
-	}
-	
-	
-	
+
+
+
 	/**
 	 * Insert a junction into a trace.
 	 * Two new traces are created and connected in place of the former one.
@@ -176,8 +172,8 @@ public class Simulation
 	
 	
 	public static Trace connect( PinIo outComp, int outPinIndex, PinIo inComp, int inPinIndex ) {
-		Pin pinOut = outComp.getPinOutputs().get( outPinIndex );
-		Pin pinIn  = inComp .getPinInputs() .get( inPinIndex  );
+		Pin pinOut = outComp.getPinOutput( outPinIndex );
+		Pin pinIn  = inComp .getPinInput ( inPinIndex  );
 		return connectPins( pinOut, pinIn );
 	}
 
@@ -185,7 +181,7 @@ public class Simulation
 
 	public static Trace connect( Junction outJunc, PinIo inComp, int inPinIndex ) {
 		Pin pinOut = outJunc.createPin();
-		Pin pinIn  = inComp.getPinInputs().get( inPinIndex );
+		Pin pinIn  = inComp.getPinInput( inPinIndex );
 		return connectPins( pinOut, pinIn );
 	}
 	
