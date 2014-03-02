@@ -7,6 +7,10 @@ import logicBox.sim.component.*;
 
 
 
+/**
+ * Half-adder circuit used as simulation testbed.
+ * @author Lee Coakley
+ */
 public class TestHalfAdder
 {
 	public static void main( String[] args ) {
