@@ -284,9 +284,6 @@ public class Simulation
 			}
 		});
 		
-		for (Updateable u: sorted)
-			System.out.println( "Level " + map.get(u) + ": " + u );
-		
 		return sorted;
 	}
 	
