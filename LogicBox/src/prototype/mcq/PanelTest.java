@@ -46,7 +46,7 @@ public class PanelTest extends JFrame
 		
 		for ( McqQuestion question: McqQuestionList.getInstance() )
 		{
-			add( new McqPanel( question ) );
+			add( new McqQuestionPanel( question ) );
 			System.out.println("here");
 		}
 		
@@ -54,7 +54,7 @@ public class PanelTest extends JFrame
 	}
 	
 	
-	public PanelTest( McqPanel panel ) {
+	public PanelTest( McqQuestionPanel panel ) {
 		
 	}
 	
