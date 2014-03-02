@@ -112,9 +112,8 @@ public class CreateMCQPanel extends JPanel
 	 * @return
 	 */
 	public String getCorrectAnswer() {
-
 		for (int i = 0; i < answerFields.size(); i++ ) {
-			if ( correctAnswer.get(i).isSelected()) 
+			if ( correctAnswer.get(i).isSelected() ) 
 				return answerFields.get(i).getText();
 		}
 		return null;
@@ -154,7 +153,6 @@ public class CreateMCQPanel extends JPanel
 			McqQuestion question = new McqQuestion(getQuestion(), getAnswers(), getCorrectAnswer());
 			
 			list.add(question);
-			System.out.println(McqQuestion.getQuestionNum());
 		}
 	}
 }
