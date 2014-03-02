@@ -23,7 +23,7 @@ import logicBox.util.Util;
 public class Net implements Stateful, Iterable<ComponentPassive>
 {
 	public Set<ComponentPassive> all;        // Everything in the net
-	public Set<ComponentPassive> writeables;  // Everything except pins leading into the net  
+	public Set<ComponentPassive> writeables; // Everything except pins leading into the net  
 	public Set<Junction>         junctions;  // 
 	public Set<Trace>            traces;     // 
 	public Set<Pin>              pins;       // All pins, except virtual Junction pins
@@ -38,7 +38,7 @@ public class Net implements Stateful, Iterable<ComponentPassive>
 	 */
 	public Net( Pin pin ) {
 		all        = Util.createIdentityHashSet();
-		writeables  = Util.createIdentityHashSet();
+		writeables = Util.createIdentityHashSet();
 		junctions  = Util.createIdentityHashSet();
 		traces     = Util.createIdentityHashSet();
 		pins       = Util.createIdentityHashSet();
@@ -46,6 +46,18 @@ public class Net implements Stateful, Iterable<ComponentPassive>
 		pinOutputs = Util.createIdentityHashSet();
 		
 		accumulateFromPin( pin, true );
+	}
+	
+	
+	
+	public boolean equals( Object other ) {
+		if (other == this) return true;
+		if (other == null) return false;
+		
+		if (other.getClass() != this.getClass())
+			return false;
+		
+		return all.equals( ((Net)other).all );
 	}
 	
 	
