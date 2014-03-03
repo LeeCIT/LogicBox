@@ -65,8 +65,7 @@ public class McqQuestionPanel extends JPanel
 		
 		//Display each answer with a radio button across from it.
 		for ( String ans: answers ) {
-			add ( new JLabel(ans), "split 2" );
-			buttons.add( new JRadioButton() );
+			buttons.add( new JRadioButton(ans) );
 			options.add( buttons.get(j) );
 			add ( buttons.get(j), "wrap" );
 			j++;
