@@ -83,6 +83,20 @@ public class Net implements Stateful, Updateable, Iterable<ComponentPassive>
 	
 	
 	/**
+	 * Find all the active components connected to this net.
+	 */
+	public Set<ComponentActive> getConnectedActives() {
+		Set<ComponentActive> set = Util.createIdentityHashSet();
+		
+		for (Pin pin: pins)
+			set.add( (ComponentActive) pin.getAttachedComponent() );
+		
+		return set;
+	}
+	
+	
+	
+	/**
 	 * Find all the active components connected via their input pins from this net (outward edge)
 	 */
 	public Set<ComponentActive> getFanout() {
