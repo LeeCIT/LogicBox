@@ -1,9 +1,7 @@
+
 package prototypes.zipPrototype;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -34,22 +32,23 @@ public class FileMangerZip {
 	
 	
 	
-	public String getCompressedString () {
+	public static String getCompressedString () {
 		String inputString = "";
 		
 		try {
 			FileInputStream input    = new FileInputStream( fileLocation );
 			ZipInputStream  zipInput = new ZipInputStream ( input        );
-
-			while ( zipInput.read() > 0 ) {
-				inputString += zipInput.getNextEntry();
-			}			
+			BufferedReader  streamReader = new BufferedReader( new InputStreamReader(zipInput)) ;
+			
+			while ( zipInput.getNextEntry() != null ) {
+				inputString += streamReader.readLine();
+			}
+			zipInput.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		return inputString;
 	}
 }
