@@ -54,14 +54,16 @@ public class Simulation
 	 * Add a component to the simulation.
 	 * At the moment, only active components need to be added.
 	 */
-	public void add( Component com ) {
-		comps.add( com );
-		
-		if (com instanceof ComponentActive)
-			actives.add( (ComponentActive) com );
-		
-		if (com instanceof Source)
-			sources.add( (Source) com );
+	public void add( Component...coms ) {
+		for (Component com: coms) {
+			comps.add( com );
+			
+			if (com instanceof ComponentActive)
+				actives.add( (ComponentActive) com );
+			
+			if (com instanceof Source)
+				sources.add( (Source) com );
+		}
 		
 		cacheInvalidated = true;
 	}
@@ -98,11 +100,12 @@ public class Simulation
 	/**
 	 * Test whether the circuit contains any feedback loops.
 	 * Doesn't test for the presence of memory.
+	 * TODO Split the circuit into "islands" so the start point isn't a hack.
 	 * @return True if there are no feedback loops.
 	 */
 	public boolean isLevelisable() {
-		Set<Component> set = Util.createIdentityHashSet();
-		return isLevelisable( set, sources.get(0) );
+		Set<Pin> set = Util.createIdentityHashSet();
+		return isLevelisable( set, sources.get(0).getPinOutput(0) );
 	}
 	
 	
@@ -110,19 +113,16 @@ public class Simulation
 	/**
 	 * Recursively search for feedback loops.
 	 */
-	private boolean isLevelisable( Set<Component> set, ComponentActive origin ) {
+	private boolean isLevelisable( Set<Pin> set, Pin origin ) {
 		if (set.contains( origin ))
 			return false;
 		
 		set.add( origin );
 		
-		for (Pin pin: origin.getPinOutputs()) {
-			Net net = new Net( pin );
-			
-			for (ComponentActive com: net.getFanout())
-				if ( ! isLevelisable( set, com ))
+		for (ComponentActive com: new Net(origin).getFanout())
+			for (Pin pin: com.getPinOutputs())
+				if ( ! isLevelisable( set, pin ))
 					return false;
-		}
 		
 		return true;
 	}
