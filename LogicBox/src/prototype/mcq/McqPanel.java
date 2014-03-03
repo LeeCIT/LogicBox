@@ -66,7 +66,12 @@ public class McqPanel extends JPanel
 		}
 		
 		for ( int i = 0; i < displayed; i++ ) {
-			add( questionPanels.get(i), "wrap" );
+			
+			if ( i == questionPanels.size() ) {
+				i = displayed;
+			}
+			else
+				add( questionPanels.get(i), "wrap" );
 		}
 		
 	}
@@ -91,6 +96,7 @@ public class McqPanel extends JPanel
 			
 			setPanels();
 			setDropDownList();
+			updateUI();
 		}
 	}
 }
