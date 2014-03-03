@@ -7,7 +7,12 @@ import logicBox.sim.component.*;
 
 
 
-public class TestCounter
+/**
+ * Tests the JK flip-flop.
+ * Doesn't use the sim - this is a pure component test.
+ * @author Lee Coakley
+ */
+public class TestFlipFlopJK
 {
 	public static void main( String[] args ) {
 		SourceToggle osc = new SourceToggle( false );
