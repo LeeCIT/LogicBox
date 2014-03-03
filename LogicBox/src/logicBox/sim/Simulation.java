@@ -154,6 +154,67 @@ public class Simulation
 	
 	
 	
+	/**
+	 * Group components into islands - regions of the circuit that aren't connected to one another.
+	 */
+	public List<Set<ComponentActive>> getIslands() {
+		Map<Pin,Net>               pinMap  = mapPinsToNets( getUniqueNetSet() );
+		List<Set<ComponentActive>> islands = new ArrayList<>();
+		Set<ComponentActive>       pool    = Util.createIdentityHashSet();
+		
+		pool.addAll( actives );
+		
+		while ( ! pool.isEmpty()) {
+			Set<ComponentActive> island = Util.createIdentityHashSet();
+			ComponentActive      origin = pool.iterator().next();
+			accumulateIsland( origin, island, pool, pinMap );
+			
+			if ( ! island.isEmpty())
+				islands.add( island );
+		}
+		
+		return islands;
+	}
+	
+	
+	
+	/**
+	 * Recursively accumulate islands by spreading out bidirectionally across nets.
+	 */
+	private void accumulateIsland( ComponentActive origin, Set<ComponentActive> island, Set<ComponentActive> pool, Map<Pin,Net> pinMap ) {
+		if (island.contains( origin )) // Don't get stuck in feedback loops
+			return;
+		
+		island.add   ( origin );
+		pool  .remove( origin );
+		
+		for (ComponentActive com: getConnectedActives(origin, pinMap))
+			accumulateIsland( com, island, pool, pinMap );
+	}
+	
+	
+	
+	/**
+	 * Get all components connected to the one given.
+	 */
+	private Set<ComponentActive> getConnectedActives( ComponentActive com, Map<Pin,Net> pinMap ) {
+		Set<ComponentActive> coms = Util.createIdentityHashSet();
+		
+		List<Pin> pins = new ArrayList<>();
+		pins.addAll( com.getPinInputs()  );
+		pins.addAll( com.getPinOutputs() );
+		
+		for (Pin pin: pins)
+			coms.addAll( pinMap.get(pin).getConnectedActives() );
+		
+		return coms;
+	}
+	
+	
+	
+	/**
+	 * Map pins to the nets they're in for O(1) lookup.
+	 */
 	private Map<Pin,Net> mapPinsToNets( Set<Net> nets ) {
 		Map<Pin,Net> map = new IdentityHashMap<>();
 		
@@ -176,7 +237,7 @@ public class Simulation
 	
 	/**
 	 * Get all nets in the circuit.
-	 * Components in a net are guaranteed not to be present in any other net.
+	 * Components in a net are guaranteed not to be present in any other net (if there are no loops).
 	 */
 	private Set<Net> getUniqueNetSet() {
 		Set<Net> netSet = new HashSet<>();
