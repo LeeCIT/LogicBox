@@ -28,7 +28,6 @@ import logicBox.util.Util;
  * Performs the logic simulation.
  * This version uses a levelisation algorithm and works with combinational circuits only.
  * @author Lee Coakley
- * TODO find islands
  */
 public class Simulation
 {
@@ -73,13 +72,13 @@ public class Simulation
 	/**
 	 * Reset the simulation to its initial state, as if simulate() were never called.
 	 */
-	public void reset() {
-		for (Component com: comps)
-			com.reset();
-		
-		for (Net net: cacheNets)
+	public void reset() {		
+		for (Net net: getNets())
 			for (Component com: net)
 				com.reset();
+		
+		for (Component com: comps)
+			com.reset();
 	}
 	
 	
@@ -88,8 +87,7 @@ public class Simulation
 	 * Run the simulation.
 	 */
 	public void simulate() {
-		if (cacheInvalidated)
-			regenerateCaches();
+		checkCache();
 		
 		for (Updateable up: cacheUpdateables)
 			up.update();
@@ -97,10 +95,134 @@ public class Simulation
 	
 	
 	
+	private void checkCache() {
+		if (cacheInvalidated)
+			regenerateCaches();
+	}
+	
+	
+	
+	private void regenerateCaches() {
+		cacheNets = getNets();
+		
+		Map<ComponentActive,Integer> comLevelMap = leveliseActives( actives );
+		Map<Net,            Integer> netLevelMap = leveliseNets   ( cacheNets, comLevelMap );
+		
+		cacheUpdateables = sortByEvaluationOrder( comLevelMap, netLevelMap );
+		cacheInvalidated = false;
+	}
+	
+	
+	
+	/**
+	 * Group components into islands - regions of the circuit that aren't connected to one another.
+	 */
+	public List<Island> getIslands() {
+		Map<Pin,Net>         pinMap  = mapPinsToNets( getNets() );
+		List<Island>         islands = new ArrayList<>();
+		Set<ComponentActive> pool    = Util.createIdentityHashSet( actives );
+		
+		while ( ! pool.isEmpty()) {
+			Island          island = new Island();
+			ComponentActive origin = pool.iterator().next();
+			accumulateIsland( origin, island, pool, pinMap );
+			
+			islands.add( island );
+		}
+		
+		return islands;
+	}
+	
+	
+	
+	/**
+	 * Recursively accumulate islands by spreading out bidirectionally across nets.
+	 */
+	private void accumulateIsland( ComponentActive origin, Island island, Set<ComponentActive> pool, Map<Pin,Net> pinMap ) {
+		if (island.contains( origin )) // Don't get stuck in feedback loops
+			return;
+		
+		island.add   ( origin );
+		pool  .remove( origin );
+		
+		for (ComponentActive com: getConnectedActives(origin, pinMap))
+			accumulateIsland( com, island, pool, pinMap );
+	}
+	
+	
+	
+	/**
+	 * Get all components connected to the one given.
+	 */
+	private Set<ComponentActive> getConnectedActives( ComponentActive com, Map<Pin,Net> pinMap ) {
+		Set<ComponentActive> coms = Util.createIdentityHashSet();
+		
+		for (Pin pin: com.getPins())
+			coms.addAll( pinMap.get(pin).getConnectedActives() );
+		
+		return coms;
+	}
+	
+	
+	
+	/**
+	 * Map pins to the nets they're in for O(1) lookup.
+	 */
+	private Map<Pin,Net> mapPinsToNets( Set<Net> nets ) {
+		Map<Pin,Net> map = new IdentityHashMap<>();
+		
+		for (ComponentActive com: actives) {
+			List<Pin> pins = new ArrayList<>();
+			
+			pins.addAll( com.getPinInputs () );
+			pins.addAll( com.getPinOutputs() );
+			
+			for (Pin pin: pins)
+				for (Net net: nets)
+					if (net.contains( pin ))
+						map.put( pin, net );
+		}
+	
+		return map;
+	}
+	
+	
+	
+	/**
+	 * Get all nets in the circuit.
+	 * Components in a net are guaranteed not to be present in any other net (if there are no loops).
+	 */
+	private Set<Net> getNets() {
+		Set<Net> netSet = new HashSet<>();
+		
+		for (ComponentActive com: actives) {
+			List<Pin> pins = new ArrayList<>( com.getPinInputs() );
+			pins.addAll( com.getPinOutputs() );
+			
+			for (Pin pin: pins)
+				netSet.add( new Net(pin) );
+		}
+			
+		return netSet;
+	}
+	
+	
+	
+	private <T> Map<T,Integer> genBaseLevelMap( Iterable<T> items ) {
+		Map<T,Integer> map = new IdentityHashMap<>();
+		
+		for (T item: items)
+			map.put( item, -1 );
+		
+		return map;
+	}
+	
+	
+	
 	/**
 	 * Test whether the circuit contains any feedback loops.
 	 * Doesn't test for the presence of memory.
-	 * TODO Split the circuit into "islands" so the start point isn't a hack.
+	 * TODO use islands
 	 * @return True if there are no feedback loops.
 	 */
 	public boolean isLevelisable() {
@@ -138,130 +260,6 @@ public class Simulation
 				return false;
 		
 		return isLevelisable();
-	}
-	
-	
-	
-	private void regenerateCaches() {
-		cacheNets = getUniqueNetSet();
-		
-		Map<ComponentActive,Integer> comLevelMap = leveliseActives( actives );
-		Map<Net,            Integer> netLevelMap = leveliseNets   ( cacheNets, comLevelMap );
-		
-		cacheUpdateables = sortByEvaluationOrder( comLevelMap, netLevelMap );
-		cacheInvalidated = false;
-	}
-	
-	
-	
-	/**
-	 * Group components into islands - regions of the circuit that aren't connected to one another.
-	 */
-	public List<Set<ComponentActive>> getIslands() {
-		Map<Pin,Net>               pinMap  = mapPinsToNets( getUniqueNetSet() );
-		List<Set<ComponentActive>> islands = new ArrayList<>();
-		Set<ComponentActive>       pool    = Util.createIdentityHashSet();
-		
-		pool.addAll( actives );
-		
-		while ( ! pool.isEmpty()) {
-			Set<ComponentActive> island = Util.createIdentityHashSet();
-			ComponentActive      origin = pool.iterator().next();
-			accumulateIsland( origin, island, pool, pinMap );
-			
-			if ( ! island.isEmpty())
-				islands.add( island );
-		}
-		
-		return islands;
-	}
-	
-	
-	
-	/**
-	 * Recursively accumulate islands by spreading out bidirectionally across nets.
-	 */
-	private void accumulateIsland( ComponentActive origin, Set<ComponentActive> island, Set<ComponentActive> pool, Map<Pin,Net> pinMap ) {
-		if (island.contains( origin )) // Don't get stuck in feedback loops
-			return;
-		
-		island.add   ( origin );
-		pool  .remove( origin );
-		
-		for (ComponentActive com: getConnectedActives(origin, pinMap))
-			accumulateIsland( com, island, pool, pinMap );
-	}
-	
-	
-	
-	/**
-	 * Get all components connected to the one given.
-	 */
-	private Set<ComponentActive> getConnectedActives( ComponentActive com, Map<Pin,Net> pinMap ) {
-		Set<ComponentActive> coms = Util.createIdentityHashSet();
-		
-		List<Pin> pins = new ArrayList<>();
-		pins.addAll( com.getPinInputs()  );
-		pins.addAll( com.getPinOutputs() );
-		
-		for (Pin pin: pins)
-			coms.addAll( pinMap.get(pin).getConnectedActives() );
-		
-		return coms;
-	}
-	
-	
-	
-	/**
-	 * Map pins to the nets they're in for O(1) lookup.
-	 */
-	private Map<Pin,Net> mapPinsToNets( Set<Net> nets ) {
-		Map<Pin,Net> map = new IdentityHashMap<>();
-		
-		for (ComponentActive com: actives) {
-			List<Pin> pins = new ArrayList<>();
-			
-			pins.addAll( com.getPinInputs () );
-			pins.addAll( com.getPinOutputs() );
-			
-			for (Pin pin: pins)
-				for (Net net: nets)
-					if (net.contains( pin ))
-						map.put( pin, net );
-		}
-	
-		return map;
-	}
-	
-	
-	
-	/**
-	 * Get all nets in the circuit.
-	 * Components in a net are guaranteed not to be present in any other net (if there are no loops).
-	 */
-	private Set<Net> getUniqueNetSet() {
-		Set<Net> netSet = new HashSet<>();
-		
-		for (ComponentActive com: actives) {
-			List<Pin> pins = new ArrayList<>( com.getPinInputs() );
-			pins.addAll( com.getPinOutputs() );
-			
-			for (Pin pin: pins)
-				netSet.add( new Net(pin) );
-		}
-			
-		return netSet;
-	}
-	
-	
-	
-	private <T> Map<T,Integer> genBaseLevelMap( Iterable<T> items ) {
-		Map<T,Integer> map = new IdentityHashMap<>();
-		
-		for (T item: items)
-			map.put( item, -1 );
-		
-		return map;
 	}
 	
 	
@@ -304,7 +302,7 @@ public class Simulation
 	
 	/**
 	 * Find the evaluation order for nets.
-	 * The active levels must already be known.
+	 * The active component levels must already be known.
 	 */
 	private Map<Net,Integer> leveliseNets( Iterable<Net> nets, Map<ComponentActive,Integer> activeLevels ) {
 		Map<Net,Integer> levels = genBaseLevelMap( nets );
