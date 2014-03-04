@@ -28,6 +28,15 @@ public abstract class ComponentActive extends Component implements Updateable, P
 	
 	
 	
+	public List<Pin> getPins() {
+		List<Pin> pins = new ArrayList<>();
+		pins.addAll( getPinInputs () );
+		pins.addAll( getPinOutputs() );
+		return pins;
+	}
+	
+	
+	
 	public Pin getPinInput( int index ) {
 		return pinInputs.get( index );
 	}
@@ -107,8 +116,8 @@ public abstract class ComponentActive extends Component implements Updateable, P
 	
 	
 	public void reset() {
-		for (Pin pin: getPinInputs())  pin.reset();
-		for (Pin pin: getPinOutputs()) pin.reset();
+		for (Pin pin: getPins())
+			pin.reset();
 	}
 	
 	
@@ -121,6 +130,7 @@ public abstract class ComponentActive extends Component implements Updateable, P
 		return true;
 	}
 }
+
 
 
 
