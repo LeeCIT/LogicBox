@@ -5,6 +5,7 @@ package logicBox.sim.component;
 
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.gui.editor.GraphicGen;
+import logicBox.util.Geo;
 
 
 
@@ -16,7 +17,7 @@ public class Mux extends Plexer
 {
 	public Mux( int inputPinCount ) {
 		super();
-		createPins( inputPinCount, computeSelectPinCount(inputPinCount), 1 );
+		createPins( inputPinCount, Geo.log2i(inputPinCount), 1 );
 	}
 	
 	

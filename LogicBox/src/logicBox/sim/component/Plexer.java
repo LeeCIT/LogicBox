@@ -64,12 +64,6 @@ public abstract class Plexer extends ComponentActive
 	
 	
 	
-	protected int computeSelectPinCount( int basisPinCount ) {
-		return (int) Math.ceil( Geo.log2(basisPinCount) );
-	}
-	
-	
-	
 	protected int decodeSelectPins() {
 		return SimUtil.decodePinsToInt( pinSelects );
 	}

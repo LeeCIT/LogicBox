@@ -5,6 +5,7 @@ package logicBox.sim.component;
 
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.gui.editor.GraphicGen;
+import logicBox.util.Geo;
 
 
 
@@ -16,7 +17,7 @@ public class Demux extends Plexer
 {
 	public Demux( int outputPinCount ) {
 		super();
-		createPins( 1, computeSelectPinCount(outputPinCount), outputPinCount );
+		createPins( 1, Geo.log2i(outputPinCount), outputPinCount );
 	}
 	
 	
