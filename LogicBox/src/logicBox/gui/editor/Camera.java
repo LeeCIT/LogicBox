@@ -2,10 +2,14 @@
 
 
 package logicBox.gui.editor;
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Cursor;
+import java.awt.MouseInfo;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.SwingUtilities;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
@@ -37,14 +41,14 @@ public class Camera
 	private Vec2    pan;
 	
 	private AffineTransform  matrix;
-	private Callback         onTransform;
+	private List<Callback>   onTransform;
 	private CallbackRepeater mover;
 	
 	
 	
 	
 	
-	public Camera( Component attachTo, Callback onTransformChange ) {
+	public Camera( Component attachTo ) {
 		component = attachTo;
 		
 		zoomRate  = 1.0 + (1.0 / 4.0);
@@ -53,16 +57,21 @@ public class Camera
 		zoomMax   =       zoomRange;
 		zoom      = 1.0;
 		
-		pan       = new Vec2( 0 );
-		matrix    = new AffineTransform();
-		
-		onTransform = onTransformChange;
+		pan         = new Vec2( 0 );
+		matrix      = new AffineTransform();
+		onTransform = new ArrayList<>();
 		
 		setupActions();
 	}
-
-
-
+	
+	
+	
+	public void addTransformCallback( Callback cb ) {
+		onTransform.add( cb );
+	}
+	
+	
+	
 	public Vec2 getMousePosScreen() {
 		return new Vec2( MouseInfo.getPointerInfo().getLocation() );
 	}
@@ -82,7 +91,7 @@ public class Camera
 		Vec2 out = new Vec2();
 		
 		try {
-			AffineTransform inv = matrix.createInverse(); // TODO consider caching this
+			AffineTransform inv = matrix.createInverse();
 			inv.transform( pos, out );
 		}
 		catch (NoninvertibleTransformException ex) {
@@ -265,7 +274,8 @@ public class Camera
 		matrix.translate(  centre.x,  centre.y );
 		matrix.translate(  0.5,       0.5      );
 		
-		onTransform.execute();
+		for (Callback cb: onTransform)
+			cb.execute();
 	}
 	
 	
