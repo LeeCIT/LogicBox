@@ -18,10 +18,8 @@ public class EditorFrame extends JFrame
 		super( "LogicBox" );
 		setLayout( new MigLayout( "gap 0", "[grow,fill][]", "[grow,fill][]" ) );
 		
-		
-		// TODO integrate so user can scroll with toolbars too (use world.getextent and cam.getviewablearea)
-		JScrollBar x = new JScrollBar( JScrollBar.HORIZONTAL );
-		JScrollBar y = new JScrollBar( JScrollBar.VERTICAL   );
+		EditorScrollBar x = new EditorScrollBar( panel, JScrollBar.HORIZONTAL );
+		EditorScrollBar y = new EditorScrollBar( panel, JScrollBar.VERTICAL   );
 		
 		add( panel );
 		add( x, "cell 0 1" );
