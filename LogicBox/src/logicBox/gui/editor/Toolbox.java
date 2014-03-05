@@ -16,6 +16,7 @@ import logicBox.util.Evaluator;
 /**
  * The editor toolbox, where components are displayed in a palette for easy creation.
  * TODO: BUG: Creating one object and reusing it many times!  New instances must be created.
+ * TODO: A copy() function in the Component class would solve this neatly, and it needs to be done anyway
  * @author John Murphy
  * @author Lee Coakley
  */
@@ -26,16 +27,14 @@ public class Toolbox extends JDialog
 	
 	
 	
-	public Toolbox(JFrame parent) {
-		super(parent);
-		
-		setTitle("Toolbox");
-		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		setVisible(true);
-		setLayout(new MigLayout("wrap 1"));		
-		setSize(new Dimension(200, 600));
+	public Toolbox( JFrame parent ) {
+		super( parent, "Toolbox" );
+		setDefaultCloseOperation( Toolbox.DISPOSE_ON_CLOSE );
+		setLayout( new MigLayout("wrap 1") );		
+		setSize( new Dimension(200, 600) );
 		setupEvaluator();
 		addButtons();
+		setVisible( true );
 	}
 		
 	
@@ -91,7 +90,8 @@ public class Toolbox extends JDialog
 		ToolboxButton[] butts = {
 			genButton( new SourceFixed(false)  ),
 			genButton( new SourceFixed(true)   ),
-			genButton( new SourceToggle(false) )
+			genButton( new SourceToggle(false) ),
+			genButton( new SourceOscillator(1) )
 		};
 		
 		addCategory( "Sources", butts );
@@ -105,7 +105,8 @@ public class Toolbox extends JDialog
 			genButton( new Mux       (2) ),
 			genButton( new Demux     (2) ),
 			genButton( new FlipFlopD ()  ),
-			genButton( new FlipFlopJK()  )
+			genButton( new FlipFlopJK()  ),
+			genButton( new FlipFlopT ()  )
 		};
 		
 		addCategory( "Components", butts );
@@ -166,7 +167,6 @@ public class Toolbox extends JDialog
 		for (ToolboxButton butt: buttons)
 			butt.setEditorPanelEvaluator( evaluator );
 	}
-	
 }
 
 
