@@ -239,6 +239,12 @@ public class Bbox2 implements Transformable, Serializable
 	
 	
 	
+	public Bbox2 expand( double amount ) {
+		return expand( new Vec2(amount) );
+	}
+	
+	
+	
 	/**
 	 * Create a bounding box from the extremes of a set of points.
 	 * Returns null if the list is empty.
