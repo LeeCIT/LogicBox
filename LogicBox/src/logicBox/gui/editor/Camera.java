@@ -103,7 +103,7 @@ public class Camera
 	
 	
 	
-	public Bbox2 getWorldViewableArea() {
+	public Bbox2 getWorldViewArea() {
 		Bbox2 b = new Bbox2( component );
 		b.tl = mapScreenToWorld( b.tl );
 		b.br = mapScreenToWorld( b.br );
@@ -113,7 +113,7 @@ public class Camera
 	
 	
 	public Vec2 getCentre() {
-		return getWorldViewableArea().getCentre();
+		return getWorldViewArea().getCentre();
 	}
 	
 	
