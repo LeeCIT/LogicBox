@@ -128,14 +128,14 @@ public class Camera
 	 * Move the camera so it is centred on the given position.
 	 */
 	public void panTo( Vec2 pos ) {
-		pan = pos.copy();
+		pan = pos.negate();
 		updateTransform();
 	}
 	
 	
 	
 	public Vec2 getPan() {
-		return pan.copy();
+		return pan.negate();
 	}
 	
 	
@@ -243,16 +243,12 @@ public class Camera
 	
 	
 	
-	
-	
 	private void directZoomAndPan( Vec2 pan, double zoom ) {
 		this.zoom = Geo.clamp( zoom, zoomMin, zoomMax );
-		this.pan  = pan.copy();
+		this.pan  = pan.negate();
 		
 		updateTransform();
 	}
-	
-	
 	
 	
 	
