@@ -40,8 +40,14 @@ public class DisplaySevenSeg extends Display
 	
 	
 	
+	public int getNumber() {
+		return SimUtil.decodePinsToInt( pinInputs );
+	}
+	
+	
+	
 	public void update() {
-		int i = SimUtil.decodePinsToInt( pinInputs );
+		int i = getNumber();
 		
 		boolean[] states = {
 		    ! (i==2 | i==12 | i==14 | i==15                 ),

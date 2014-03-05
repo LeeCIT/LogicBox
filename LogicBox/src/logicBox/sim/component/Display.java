@@ -14,6 +14,12 @@ import logicBox.sim.SimUtil;
  */
 public abstract class Display extends ComponentActive
 {
+	public Display() {
+		super();
+	}
+	
+	
+	
 	public Display( int inputPinCount ) {
 		super();
 		SimUtil.addPins( pinInputs, this, PinIoMode.input, inputPinCount );

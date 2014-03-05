@@ -12,7 +12,6 @@ import logicBox.util.Geo;
 
 /**
  * Defines the functionality common to the multiplexer and demultiplexer.
- * TODO although this works, having three pin groups is incompatible with the graphical pin mapper
  * @author Lee Coakley
  */
 public abstract class Plexer extends ComponentActive
@@ -29,9 +28,11 @@ public abstract class Plexer extends ComponentActive
 	
 	
 	protected void createPins( int inputs, int selects, int outputs ) {
-		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  inputs  );
-		SimUtil.addPins( pinSelects, this, PinIoMode.input,  selects );
+		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  inputs + selects );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, outputs );
+		
+		for (int i=inputs; i<pinInputs.size(); i++)
+			pinSelects.add( pinInputs.get(i) );
 	}
 	
 	
@@ -60,12 +61,6 @@ public abstract class Plexer extends ComponentActive
 	
 	
 	protected abstract Pin getDestinationPin();
-	
-	
-	
-	protected int computeSelectPinCount( int basisPinCount ) {
-		return (int) Math.ceil( Geo.log2(basisPinCount) );
-	}
 	
 	
 	
