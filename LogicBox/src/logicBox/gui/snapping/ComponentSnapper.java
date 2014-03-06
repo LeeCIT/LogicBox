@@ -4,6 +4,7 @@
 package logicBox.gui.snapping;
 
 import java.awt.Component;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
@@ -33,10 +34,10 @@ public class ComponentSnapper extends ComponentAdapter {
 		if (motionInterlock)
 			return;
 		
-		//Rectangle      desk  =//GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
 		Component snapee      = ev.getComponent();
+		Bbox2     bboxDesk    = new Bbox2( GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds() );
 		Bbox2     bboxComp    = new Bbox2( snapee.getBounds() );
-		Bbox2     bboxSnap    = new Bbox2( snapTo .getBounds() );
+		Bbox2     bboxSnap    = new Bbox2( snapTo.getBounds() );
 		Bbox2     bboxOverlap = bboxSnap.expand( new Vec2(snapThreshold*2) );
 		boolean   shouldSnap  = bboxOverlap.overlaps( bboxComp );
 		
