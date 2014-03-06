@@ -2,10 +2,14 @@
 
 
 package logicBox.gui.editor;
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.MouseInfo;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
@@ -21,7 +25,7 @@ import logicBox.util.Vec2;
  */
 public class Camera
 {
-	private Component component;
+	private JComponent component;
 	
 	private double zoomRate;
 	private double zoomRange;
@@ -37,14 +41,14 @@ public class Camera
 	private Vec2    pan;
 	
 	private AffineTransform  matrix;
-	private Callback         onTransform;
+	private List<Callback>   onTransform;
 	private CallbackRepeater mover;
 	
 	
 	
 	
 	
-	public Camera( Component attachTo, Callback onTransformChange ) {
+	public Camera( JComponent attachTo ) {
 		component = attachTo;
 		
 		zoomRate  = 1.0 + (1.0 / 4.0);
@@ -53,16 +57,21 @@ public class Camera
 		zoomMax   =       zoomRange;
 		zoom      = 1.0;
 		
-		pan       = new Vec2( 0 );
-		matrix    = new AffineTransform();
-		
-		onTransform = onTransformChange;
+		pan         = new Vec2( 0 );
+		matrix      = new AffineTransform();
+		onTransform = new ArrayList<>();
 		
 		setupActions();
 	}
-
-
-
+	
+	
+	
+	public void addTransformCallback( Callback cb ) {
+		onTransform.add( cb );
+	}
+	
+	
+	
 	public Vec2 getMousePosScreen() {
 		return new Vec2( MouseInfo.getPointerInfo().getLocation() );
 	}
@@ -82,7 +91,7 @@ public class Camera
 		Vec2 out = new Vec2();
 		
 		try {
-			AffineTransform inv = matrix.createInverse(); // TODO consider caching this
+			AffineTransform inv = matrix.createInverse();
 			inv.transform( pos, out );
 		}
 		catch (NoninvertibleTransformException ex) {
@@ -94,7 +103,7 @@ public class Camera
 	
 	
 	
-	public Bbox2 getWorldViewableArea() {
+	public Bbox2 getWorldViewArea() {
 		Bbox2 b = new Bbox2( component );
 		b.tl = mapScreenToWorld( b.tl );
 		b.br = mapScreenToWorld( b.br );
@@ -104,7 +113,7 @@ public class Camera
 	
 	
 	public Vec2 getCentre() {
-		return getWorldViewableArea().getCentre();
+		return getWorldViewArea().getCentre();
 	}
 	
 	
@@ -119,14 +128,14 @@ public class Camera
 	 * Move the camera so it is centred on the given position.
 	 */
 	public void panTo( Vec2 pos ) {
-		pan = pos.copy();
+		pan = pos.negate();
 		updateTransform();
 	}
 	
 	
 	
 	public Vec2 getPan() {
-		return pan.copy();
+		return pan.negate();
 	}
 	
 	
@@ -234,16 +243,12 @@ public class Camera
 	
 	
 	
-	
-	
 	private void directZoomAndPan( Vec2 pan, double zoom ) {
 		this.zoom = Geo.clamp( zoom, zoomMin, zoomMax );
-		this.pan  = pan.copy();
+		this.pan  = pan.negate();
 		
 		updateTransform();
 	}
-	
-	
 	
 	
 	
@@ -265,7 +270,8 @@ public class Camera
 		matrix.translate(  centre.x,  centre.y );
 		matrix.translate(  0.5,       0.5      );
 		
-		onTransform.execute();
+		for (Callback cb: onTransform)
+			cb.execute();
 	}
 	
 	

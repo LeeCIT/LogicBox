@@ -36,7 +36,7 @@ public class SpatialGrid<T>
 		int cellCount      = Geo.roundToNextPowerOfTwo( cellsPerRow * cellsPerColumn );
 		this.indexWrapMask = cellCount - 1; // 0001_0000 -> 0000_1111
 		
-		this.core = new ArrayList<>();
+		this.core = new ArrayList<>( cellCount );
 		for (int i=0; i<cellCount; i++)
 			core.add( new Cell() );
 	}

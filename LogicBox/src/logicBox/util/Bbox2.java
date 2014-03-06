@@ -4,6 +4,7 @@
 package logicBox.util;
 
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -48,6 +49,13 @@ public class Bbox2 implements Transformable, Serializable
 		this.tl = new Vec2( 0, 0 );
 		this.br = new Vec2( com.getWidth()  - 1,
 						    com.getHeight() - 1 );
+	}
+	
+	
+	
+	public Bbox2( Rectangle rect ) {
+		this.tl = new Vec2( rect.getMinX(), rect.getMinY() );
+		this.br = new Vec2( rect.getMaxX(), rect.getMaxY() );
 	}
 	
 	
@@ -227,6 +235,12 @@ public class Bbox2 implements Transformable, Serializable
 			tl.subtract( ex ),
 			br.add     ( ex )
 		);
+	}
+	
+	
+	
+	public Bbox2 expand( double amount ) {
+		return expand( new Vec2(amount) );
 	}
 	
 	
