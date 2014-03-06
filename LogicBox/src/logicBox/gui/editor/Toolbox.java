@@ -3,7 +3,6 @@
 
 package logicBox.gui.editor;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -30,11 +29,11 @@ public class Toolbox extends JDialog
 	public Toolbox( JFrame parent ) {
 		super( parent, "Toolbox" );
 		setDefaultCloseOperation( Toolbox.DISPOSE_ON_CLOSE );
-		setLayout( new MigLayout( "insets 0, wrap 1" ) );		
-		setSize( new Dimension(200, 600) );
+		setLayout( new MigLayout( "insets 0, flowy" ) );
 		setupEvaluator();
 		addButtons();
 		pack();
+		setResizable( false );
 		setVisible( true );
 	}
 		
