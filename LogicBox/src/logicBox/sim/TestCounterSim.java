@@ -41,10 +41,28 @@ public class TestCounterSim
 		sim.add( fft    );
 		sim.add( dss    );
 		
+		sim.add( new GateXor (2) );
+		sim.add( new GateNand(2) );
+		
+		Gate gateCA = new GateXnor(2);
+		Gate gateCB = new GateNor (2);
+		Simulation.connect( gateCA, 0, gateCB, 0 );
+		
+		sim.add( gateCA );
+		sim.add( gateCB );
+		
+		for (Island island: sim.getIslands()) {
+			System.out.print( "\n\n==== ISLAND =====" );
+			
+			for (ComponentActive com: island)
+				System.out.print( "\n" + com );
+		}
+		System.out.println( "\n\n" );
+		
+		
 		System.out.println( "isLevelisable: " + sim.isLevelisable() );
 		System.out.println( "isOptimisable: " + sim.isOptimisable() );
 		System.out.println();
-		
 		
 		
 		for (int i=0; i<1024; i++) {
