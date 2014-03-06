@@ -30,10 +30,11 @@ public class Toolbox extends JDialog
 	public Toolbox( JFrame parent ) {
 		super( parent, "Toolbox" );
 		setDefaultCloseOperation( Toolbox.DISPOSE_ON_CLOSE );
-		setLayout( new MigLayout("wrap 1") );		
+		setLayout( new MigLayout( "insets 0, wrap 1" ) );		
 		setSize( new Dimension(200, 600) );
 		setupEvaluator();
 		addButtons();
+		pack();
 		setVisible( true );
 	}
 		
