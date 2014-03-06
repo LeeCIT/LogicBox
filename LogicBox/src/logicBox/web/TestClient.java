@@ -9,6 +9,8 @@ public class TestClient
 		
 		Request r = new Request("http://lvh.me/");
 		
-		r.login("demo@demo.com", "dmo", lh);
+		r.setRequestInterface(lh);
+		
+		r.login("demo@demo.com", "demo");
 	}
 }

@@ -4,11 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -37,20 +34,23 @@ public class WebClient
 		{
 		    public void failed(UnirestException e) 
 		    {	
-	    		ri.onRequestResponse(null, req, RequestInterface.status.FAILED);
+		    	if(ri != null)
+		    		ri.onRequestResponse(null, req, RequestInterface.status.FAILED);
 		    }
 
 		    public void completed(HttpResponse<JsonNode> response) 
 		    {
 		    	parseHeaders(response.getHeaders());
 		    	parseErrors(response.getBody().getObject(), req.getErrors());
-		    	
-		    	ri.onRequestResponse(response, req, RequestInterface.status.COMPLETED);
+		    		
+		    	if(ri != null)
+		    		ri.onRequestResponse(response, req, RequestInterface.status.COMPLETED);
 		    }
 
 		    public void cancelled() 
 		    {
-		    	ri.onRequestResponse(null, req, RequestInterface.status.CANCELLED);
+		    	if(ri != null)
+		    		ri.onRequestResponse(null, req, RequestInterface.status.CANCELLED);
 		    }
 		});	
 	}
@@ -63,7 +63,8 @@ public class WebClient
 		{
 		    public void failed(UnirestException e) 
 		    {
-	    		ri.onRequestResponse(null, req, RequestInterface.status.FAILED);
+		    	if(ri != null)
+		    		ri.onRequestResponse(null, req, RequestInterface.status.FAILED);
 		    }
 
 		    public void completed(HttpResponse<JsonNode> response) 
@@ -71,12 +72,14 @@ public class WebClient
 		    	parseHeaders(response.getHeaders());
 		    	parseErrors(response.getBody().getObject(), req.getErrors());
 		    	
-		    	ri.onRequestResponse(response, req, RequestInterface.status.COMPLETED);
+		    	if(ri != null)
+		    		ri.onRequestResponse(response, req, RequestInterface.status.COMPLETED);
 		    }
 
 		    public void cancelled() 
 		    {
-		    	ri.onRequestResponse(null, req, RequestInterface.status.CANCELLED);
+		    	if(ri != null)
+		    		ri.onRequestResponse(null, req, RequestInterface.status.CANCELLED);
 		    }
 		});	
 	}
@@ -93,7 +96,7 @@ public class WebClient
 			parseHeaders(response.getHeaders());
 	    	parseErrors(response.getBody().getObject(), req.getErrors());
 		} 
-		catch (UnirestException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}
@@ -128,7 +131,7 @@ public class WebClient
 				}
 					
 			} 
-			catch (JSONException e) 
+			catch (Exception e) 
 			{
 				e.printStackTrace();
 			}
