@@ -18,15 +18,18 @@ public class LoginPanel extends JDialog implements RequestInterface
 	
 	private Request r = new Request("http://cloud.jatochnietdan.com/");
 	
+	private JFrame parent;
+	
 	public LoginPanel(JFrame frame)
 	{
 		super(frame, "Login to BoxCloud");
+		parent = frame;
 
 		MigLayout layout = new MigLayout("fillx", "[right]rel[grow,fill]", "[]10[]");
 		
 		setSize(400, 135);
 		setResizable(false);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
 		JPanel panel = new JPanel(layout);
 		
@@ -80,7 +83,7 @@ public class LoginPanel extends JDialog implements RequestInterface
 		else
 		{
 			if(req.hasErrors())
-				System.out.println(req.getErrors());
+				ErrorDialog.showErrorList(parent, req.getErrors(), "Login Failure");
 			else
 			{
 				System.out.println(res.getBody().toString());
