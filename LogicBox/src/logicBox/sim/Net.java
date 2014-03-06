@@ -17,8 +17,7 @@ import logicBox.util.Util;
 
 
 /**
- * Abstracts connective circuitry into a single object.
- * Can be used to treat interconnects and pins as a single entity.
+ * Abstracts connective circuitry between active components into a single object.
  * Also useful as an informational structure.
  * @author Lee Coakley
  */
@@ -29,14 +28,14 @@ public class Net implements Stateful, Updateable, Iterable<ComponentPassive>
 	public Set<Junction>         junctions;  // 
 	public Set<Trace>            traces;     // 
 	public Set<Pin>              pins;       // All pins, except virtual Junction pins
-	public Set<Pin>              pinInputs;  // Input pins (to components)
-	public Set<Pin>              pinOutputs; // Output pins (from components)
+	public Set<Pin>              pinInputs;  // Input pins (to components from net)
+	public Set<Pin>              pinOutputs; // Output pins (from components into net)
 	
 	
 	
 	/**
-	 * Find the connectivity network of the pin.
-	 * @param pin
+	 * Find the connectivity network of a pin.
+	 * The result includes the pin itself.
 	 */
 	public Net( Pin pin ) {
 		all        = Util.createIdentityHashSet();
@@ -52,6 +51,10 @@ public class Net implements Stateful, Updateable, Iterable<ComponentPassive>
 	
 	
 	
+	/**
+	 * A net is equal to another if it contains the same objects.
+	 * Order doesn't matter.
+	 */
 	public boolean equals( Object other ) {
 		if (other == this) return true;
 		if (other == null) return false;
@@ -78,6 +81,20 @@ public class Net implements Stateful, Updateable, Iterable<ComponentPassive>
 	
 	public boolean contains( ComponentPassive com ) {
 		return all.contains( com );
+	}
+	
+	
+	
+	/**
+	 * Find all the active components connected to this net.
+	 */
+	public Set<ComponentActive> getConnectedActives() {
+		Set<ComponentActive> set = Util.createIdentityHashSet();
+		
+		for (Pin pin: pins)
+			set.add( (ComponentActive) pin.getAttachedComponent() );
+		
+		return set;
 	}
 	
 	

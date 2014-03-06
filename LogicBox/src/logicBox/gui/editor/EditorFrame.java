@@ -16,15 +16,15 @@ public class EditorFrame extends JFrame
 {
 	public EditorFrame( EditorPanel panel ) {
 		super( "LogicBox" );
-		setLayout( new MigLayout( "gap 0", "[grow,fill][]", "[grow,fill][]" ) );
+		setLayout( new MigLayout( "insets 0, gap 0", "[grow,fill][]", "[][grow,fill][]" ) );
 		
+		EditorToolbar   toolbar = new EditorToolbar();
+		EditorScrollBar x       = new EditorScrollBar( panel, JScrollBar.HORIZONTAL );
+		EditorScrollBar y       = new EditorScrollBar( panel, JScrollBar.VERTICAL   );
 		
-		// TODO integrate so user can scroll with toolbars too (use world.getextent and cam.getviewablearea)
-		JScrollBar x = new JScrollBar( JScrollBar.HORIZONTAL );
-		JScrollBar y = new JScrollBar( JScrollBar.VERTICAL   );
-		
-		add( panel );
-		add( x, "cell 0 1" );
-		add( y, "cell 1 0" );
+		add( toolbar, "span 2, wrap" );
+		add( panel,   "grow"         );
+		add( x,       "cell 0 2"     );
+		add( y,       "cell 1 1"     );
 	}
 }

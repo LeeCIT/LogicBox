@@ -32,6 +32,16 @@ public abstract class Geo
 	
 	
 	/**
+	 * Get the integer base-2 logarithm of x.
+	 * Rounds up.
+	 */
+	public static int log2i( double x ) {
+		return (int) Math.ceil( log2(x) );
+	}
+	
+	
+	
+	/**
 	 * Linear interpolate from A to B by fraction F.
 	 */
 	public static double lerp( double a, double b, double f ) {

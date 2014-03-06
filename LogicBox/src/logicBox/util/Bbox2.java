@@ -111,12 +111,6 @@ public class Bbox2 implements Transformable, Serializable
 			br.y - tl.y
 		);						 
 	}
-	
-	
-	
-	public double getDrawRadius() {
-		return getSize().getSmallest() * 0.5 * 0.85;
-	}
 
 
 
@@ -241,6 +235,12 @@ public class Bbox2 implements Transformable, Serializable
 			tl.subtract( ex ),
 			br.add     ( ex )
 		);
+	}
+	
+	
+	
+	public Bbox2 expand( double amount ) {
+		return expand( new Vec2(amount) );
 	}
 	
 	

@@ -54,17 +54,21 @@ public class EditorPanel extends JPanel
 		super( true );
 		
 		enableAntialiasing = true;
-		
-		cam              = new Camera( this, createOnTransformCallback() );
-		world            = new EditorWorld();
 		repaintListeners = new ArrayList<>();
+		
+		world = new EditorWorld();
+		cam  = new Camera( this );
+		cam.addTransformCallback( createOnTransformCallback() );
+		
+		
+		
 		
 		//new ToolDragger    ( this, world, cam ).attach();
 		//new ToolHighlighter( this, world, cam ).attach();
-		new ToolTraceDrawer( this, world, cam ).attach();
+		//new ToolTraceDrawer( this, world, cam ).attach();
 		
-		//toolPlacer = new ToolPlacer( this, world, cam );
-		//toolPlacer.attach();
+		toolPlacer = new ToolPlacer( this, world, cam );
+		toolPlacer.attach();
 		
 		//new ToolSelector( this, world, cam ).attach();
 		
@@ -112,8 +116,32 @@ public class EditorPanel extends JPanel
 	
 	
 	
+	public void recentreCamera() {
+		cam.interpolateTo( world.getWorldExtent().getCentre(), 1, 3 );
+	}
+	
+	
+	
 	public Camera getCamera() {
 		return cam;
+	}
+	
+	
+	
+	public EditorWorld getWorld() {
+		return world;
+	}
+	
+	
+	
+	public Bbox2 getWorldViewArea() {
+		return cam.getWorldViewArea();
+	}
+	
+	
+	
+	public Bbox2 getWorldExtent() {
+		return world.getWorldExtent();
 	}
 	
 	
@@ -181,11 +209,11 @@ public class EditorPanel extends JPanel
 					rpl.draw( g );
 				
 				Gfx.pushColorAndSet( g, Color.GREEN );
-					Gfx.drawBbox( g, world.getOccupiedWorldExtent(), false );
+					Gfx.drawBbox( g, world.getWorldExtent(), false );
 				Gfx.popColor( g );
 				
 				Gfx.pushColorAndSet( g, Color.ORANGE );
-					Gfx.drawBbox( g, cam.getWorldViewableArea(), false );
+					Gfx.drawBbox( g, cam.getWorldViewArea(), false );
 				Gfx.popColor( g );
 				
 			Gfx.popAntialiasingState( g );
@@ -317,7 +345,7 @@ public class EditorPanel extends JPanel
 	
 	
 	private void drawGrid( Graphics2D g ) {
-		Bbox2 worldRegion  = cam.getWorldViewableArea();
+		Bbox2 worldRegion  = cam.getWorldViewArea();
 		Vec2  cellSize     = new Vec2( 64 );
 		Vec2  cellSizeHalf = cellSize.multiply( 0.5 );
 		Vec2  offset       = worldRegion.tl.modulo( cellSize ).negate().subtract( cellSizeHalf );
