@@ -2,7 +2,6 @@
 
 
 package logicBox.gui.editor;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.MouseInfo;
 import java.awt.event.*;
@@ -10,6 +9,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
@@ -25,7 +25,7 @@ import logicBox.util.Vec2;
  */
 public class Camera
 {
-	private Component component;
+	private JComponent component;
 	
 	private double zoomRate;
 	private double zoomRange;
@@ -48,7 +48,7 @@ public class Camera
 	
 	
 	
-	public Camera( Component attachTo ) {
+	public Camera( JComponent attachTo ) {
 		component = attachTo;
 		
 		zoomRate  = 1.0 + (1.0 / 4.0);
