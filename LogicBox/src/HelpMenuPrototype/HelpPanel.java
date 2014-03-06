@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 import logicBox.sim.component.ComponentType;
+import logicBox.gui.SearchPanel;
 
 
 
@@ -96,6 +97,7 @@ public class HelpPanel extends JPanel
 	 */
 	private void addToPanel()
 	{
+		add( new SearchPanel<>("Search:") );
 		JScrollPane scroll = new JScrollPane(compDescription);
 		add( scroll, "w 100%, h 100%" );
 		compDescription.setPreferredSize(new Dimension(getSize()));
