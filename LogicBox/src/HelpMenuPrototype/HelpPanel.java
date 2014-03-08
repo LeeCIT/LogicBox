@@ -6,11 +6,18 @@ package HelpMenuPrototype;
 
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import net.miginfocom.swing.MigLayout;
-import logicBox.sim.component.ComponentType;
+import logicBox.sim.component.*;
 import logicBox.gui.SearchPanel;
+import logicBox.gui.Searchable;
 
 
 
@@ -22,6 +29,7 @@ public class HelpPanel extends JPanel
 	private ComponentType componentType;
 	private Map <ComponentType, String> componentMap;
 	private JTextArea compDescription;
+	private SearchPanel<ComponentType> search; 
 	
 	
 	
@@ -31,23 +39,30 @@ public class HelpPanel extends JPanel
 	
 	
 	
-	public HelpPanel( Map<ComponentType, String> compMap ) {
+	public HelpPanel( Map<ComponentType, String> compMap  ) {
 		super();
 		setLayout( new MigLayout() );
+		
+		
 		this.componentMap = compMap;
+		
+		
 		compDescription = new JTextArea();
-		setSize(300, 300);
+		
+		
+		componentSearch();
+		
+		setSize(800, 300);
 		addToPanel();
-		displayDescription();
 	}
 	
 	
 	
 	/**
 	 * Display the description of the specified component.
-	 * @param compDes
 	 */
 	private void displayDescription() {
+		//compDescription.append(getCompName() + "\n");
 		compDescription.setText(getDescription());
 	}
 	
@@ -56,15 +71,14 @@ public class HelpPanel extends JPanel
 	/**
 	 * Return the help menu description for the component
 	 * passed in.
-	 * @param componentType
 	 * @return
 	 */
 	private String getDescription(){
-		if ( ! componentMap.containsKey(componentType) ){
+		if ( ! componentMap.containsKey(componentType) )
 			return "Missing info";
-		}
-		
-		return componentMap.get(componentType);
+			
+			return componentMap.get(componentType);	
+			
 	}
 	
 	
@@ -75,12 +89,11 @@ public class HelpPanel extends JPanel
 	 */
 	public void setDisplayedInfo(ComponentType compType) {
 		this.componentType = compType;
-		//repaint();
 		displayDescription();
 	}
 	
 	
-	
+
 	/**
 	 * Return get the JTextArea holding the description
 	 * of the component.
@@ -92,12 +105,43 @@ public class HelpPanel extends JPanel
 	
 	
 	
+	
+	private void componentSearch() {
+		
+		
+		////////////////////////////////////////////////////////////////////
+		// Search Test
+		///////////////////////////////////////////////////////////////////
+		
+		List<Searchable<ComponentType>> searchables = new ArrayList<>();
+
+		for (ComponentType type: ComponentType.values())
+			searchables.add( new Searchable<ComponentType>( type, type.name() ) );
+		
+		search = new SearchPanel<ComponentType>("Component Search:", searchables);
+		
+		search.addListSelectionListener( new ListSelectionListener() {
+			public void valueChanged( ListSelectionEvent ev ) {
+				if (search.hasSelectedItem())
+				{
+					componentType = search.getSelectedItem();
+					displayDescription();
+				}
+				//System.out.println( search.getSelectedItem() );
+			}
+		});
+
+		//search.setSelectedItem( ComponentType.demux );
+		
+	}
+	
+	
 	/**
 	 * Add components to the HelpPanel
 	 */
 	private void addToPanel()
 	{
-		add( new SearchPanel<>("Search:") );
+		add( search );
 		JScrollPane scroll = new JScrollPane(compDescription);
 		add( scroll, "w 100%, h 100%" );
 		compDescription.setPreferredSize(new Dimension(getSize()));
@@ -106,4 +150,8 @@ public class HelpPanel extends JPanel
 		compDescription.setEditable(false); //Text cannot be edited.
 		
 	}
+	
+	
+	
+	
 }
