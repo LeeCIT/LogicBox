@@ -9,9 +9,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.swing.JFrame;
+
 import net.miginfocom.swing.MigLayout;
-import logicBox.sim.component.ComponentType;
+import logicBox.gui.GUI;
+import logicBox.sim.component.*;
 import logicBox.util.Geo;
 
 
@@ -23,29 +26,21 @@ public class MenuFrameTest extends JFrame
 	
 	public MenuFrameTest() 
 	{	
-		HelpPanel menu = new HelpPanel( getComponentMap() );
-		
+		HelpPanel menu = new HelpPanel( getComponentTypeMap() );
 		
 		
 		setLayout( new MigLayout() );
-		setSize(300,300);
+		//setSize(840,300);
 		add( menu, "wrap" );
+		pack();
 		setVisible(true);
 		
 		menu.setDisplayedInfo( ComponentType.gateOr );
 	}
 	
 	
-	
-	private static ComponentType getRandomComp() {
-		ComponentType[] components = ComponentType.values();
-		int random = Geo.randomIntRange(0, components.length);
-		return components[random];
-	}
-
-	
-	
-	private Map<ComponentType, String> getComponentMap() {
+		
+	private Map<ComponentType, String> getComponentTypeMap() {
 		Map<ComponentType, String> compMap = new HashMap<ComponentType, String>();
 		
 		compMap.put(ComponentType.gateAnd, "And gate info");
@@ -59,10 +54,11 @@ public class MenuFrameTest extends JFrame
 	
 	public static void main(String[] args) 
 	{
+		GUI.setNativeStyle();
 		MenuFrameTest frame = new MenuFrameTest();
 		
 		
-		System.out.println( MenuFrameTest.getRandomComp() );
+		//System.out.println( MenuFrameTest.getRandomComp() );
 	}
 	
 	
