@@ -143,7 +143,7 @@ public class HelpPanel extends JPanel
 	{
 		add( search );
 		JScrollPane scroll = new JScrollPane(compDescription);
-		add( scroll, "w 100%, h 100%" );
+		add( scroll, "w 80%, h 100%" );
 		compDescription.setPreferredSize(new Dimension(getSize()));
 		compDescription.setLineWrap(true); //Wrap the text when it reaches the end of the TextArea.
 		compDescription.setWrapStyleWord(true); //Wrap at every word rather than every letter.
