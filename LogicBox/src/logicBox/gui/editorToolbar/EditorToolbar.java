@@ -28,14 +28,14 @@ public class EditorToolbar extends JToolBar
 		
 		String buttParam = "w 30, h 27";
 		
-		ImageIcon newFile   = new ImageIcon( "icons/NewFile32.png"   );
-		ImageIcon openFile  = new ImageIcon( "icons/OpenFile32.png"  );
-		ImageIcon undo      = new ImageIcon( "icons/Undo32.png"      );
-		ImageIcon redo      = new ImageIcon( "icons/Redo32.png"      );
-		ImageIcon editText  = new ImageIcon( "icons/EditText32.png"  );
-		ImageIcon grid      = new ImageIcon( "icons/Grid32.png"      );
-		ImageIcon centreCam = new ImageIcon( "icons/CentreCam32.png" );
-		ImageIcon toolBox   = new ImageIcon( "icons/ToolBox32.png"   );
+		ImageIcon newFile   = new ImageIcon( "icons/New16px.png"       );
+		ImageIcon openFile  = new ImageIcon( "icons/Open16px.png"      );
+		ImageIcon undo      = new ImageIcon( "icons/Undo16px.png"      );
+		ImageIcon redo      = new ImageIcon( "icons/Redo16px.png"      );
+		ImageIcon editText  = new ImageIcon( "icons/EditText16px.png"  );
+		ImageIcon grid      = new ImageIcon( "icons/Grid16px.png"      );
+		ImageIcon centreCam = new ImageIcon( "icons/CentreCam16px.png" );
+		ImageIcon toolBox   = new ImageIcon( "icons/ToolBox16px.png"   );
 		
 		
 		// Make buttons for the EditorToolbar
