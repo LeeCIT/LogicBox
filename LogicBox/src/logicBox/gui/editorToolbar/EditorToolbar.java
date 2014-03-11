@@ -39,14 +39,14 @@ public class EditorToolbar extends JToolBar
 		
 		
 		// Make buttons for the EditorToolbar
-		EditorToolBarButton newFileButt   = new EditorToolBarButton(newFile,  "New File"         );
-		EditorToolBarButton openFileButt  = new EditorToolBarButton(openFile, "OpenFile"         );
-		EditorToolBarButton undoButt      = new EditorToolBarButton(undo,     "Undo"             );
-		EditorToolBarButton redoButt      = new EditorToolBarButton(redo,     "Redo"             );
-		EditorToolBarButton editTextButt  = new EditorToolBarButton(editText, "Add Label"        );
-		EditorToolBarButton enableGrid    = new EditorToolBarButton(grid,     "Show/Hide grid"   );
-		EditorToolBarButton centreCamButt = new EditorToolBarButton(centreCam, "Centre Camera"   ); 
-		EditorToolBarButton toolBoxButt   = new EditorToolBarButton(toolBox, "Show/Hide Toolbox" );
+		EditorToolBarButton newFileButt   = new EditorToolBarButton(newFile,   "New File"          );
+		EditorToolBarButton openFileButt  = new EditorToolBarButton(openFile,  "OpenFile"          );
+		EditorToolBarButton undoButt      = new EditorToolBarButton(undo,      "Undo"              );
+		EditorToolBarButton redoButt      = new EditorToolBarButton(redo,      "Redo"              );
+		EditorToolBarButton editTextButt  = new EditorToolBarButton(editText,  "Add Label"         );
+		EditorToolBarButton enableGrid    = new EditorToolBarButton(grid,      "Show/Hide grid"    );
+		EditorToolBarButton centreCamButt = new EditorToolBarButton(centreCam, "Centre Camera"     ); 
+		EditorToolBarButton toolBoxButt   = new EditorToolBarButton(toolBox,   "Show/Hide Toolbox" );
 		
 		add( newFileButt,  buttParam ); // New circuit
 		add( openFileButt, buttParam ); // Open circuit
