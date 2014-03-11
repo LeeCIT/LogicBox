@@ -14,6 +14,8 @@ import logicBox.sim.Simulation;
  */
 public class BlackBox extends ComponentActive
 {
+	private static final long serialVersionUID = 1L;
+	
 	private Simulation sim;
 	private String     name;
 	

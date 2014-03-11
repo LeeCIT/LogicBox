@@ -2,6 +2,7 @@
 
 
 package logicBox.sim;
+import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,8 +30,10 @@ import logicBox.util.Util;
  * This version uses a levelisation algorithm and works with combinational circuits only.
  * @author Lee Coakley
  */
-public class Simulation
+public class Simulation implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private List<Component>       comps;   // All sim components
 	private List<ComponentActive> actives; // Event-generating components
 	private List<Source>          sources; // Primary/const inputs

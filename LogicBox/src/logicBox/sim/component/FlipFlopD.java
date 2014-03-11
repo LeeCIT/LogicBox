@@ -11,6 +11,10 @@ package logicBox.sim.component;
  */
 public class FlipFlopD extends FlipFlop
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public FlipFlopD() {
 		super( 2 );
 	}

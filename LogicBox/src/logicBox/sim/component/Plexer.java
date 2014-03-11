@@ -6,7 +6,6 @@ package logicBox.sim.component;
 import java.util.ArrayList;
 import java.util.List;
 import logicBox.sim.SimUtil;
-import logicBox.util.Geo;
 
 
 
@@ -16,6 +15,8 @@ import logicBox.util.Geo;
  */
 public abstract class Plexer extends ComponentActive
 {
+	private static final long serialVersionUID = 1L;
+	
 	protected List<Pin> pinSelects;
 	
 	

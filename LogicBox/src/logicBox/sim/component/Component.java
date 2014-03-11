@@ -3,15 +3,17 @@
 
 package logicBox.sim.component;
 
+import java.io.Serializable;
+
 
 
 /**
  * A circuit component.  Gates, pins, traces, LEDs, etc.
  * @author Lee Coakley
  */
-public abstract class Component
+public abstract class Component implements Serializable
 {
-	public long simStep; // Simulation step the component was last touched on
+	private static final long serialVersionUID = 1L;
 	
 	
 	

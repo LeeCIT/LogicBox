@@ -15,6 +15,10 @@ import logicBox.util.Geo;
  */
 public class Demux extends Plexer
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public Demux( int outputPinCount ) {
 		super();
 		createPins( 1, Geo.log2i(outputPinCount), outputPinCount );

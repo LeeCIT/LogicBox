@@ -24,6 +24,8 @@ import logicBox.sim.SimUtil;
  */
 public class DisplaySevenSeg extends Display
 {
+	private static final long serialVersionUID = 1L;
+	
 	private boolean[] segmentStates;
 	
 	

@@ -11,6 +11,10 @@ package logicBox.sim.component;
  */
 public class SourceFixed extends Source
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public SourceFixed( boolean state ) {
 		super( state );
 		setState( state );

@@ -15,6 +15,10 @@ import logicBox.util.Geo;
  */
 public class Mux extends Plexer
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public Mux( int inputPinCount ) {
 		super();
 		createPins( inputPinCount, Geo.log2i(inputPinCount), 1 );

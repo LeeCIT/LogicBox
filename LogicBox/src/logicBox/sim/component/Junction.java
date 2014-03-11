@@ -13,6 +13,8 @@ import java.util.ArrayList;
  */
 public class Junction extends ComponentPassive
 {
+	private static final long serialVersionUID = 1L;
+	
 	/**
 	 * Junctions don't really have pins.  This is an artifact of the sim structure
 	 * requiring that traces connect only to pins.  It simplifies things everywhere else.
