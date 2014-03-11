@@ -18,4 +18,16 @@ public class Main
 		GUI.setNativeStyle();
 		GUI.create();
 	}
+	
+	
+	
+	public static void onStartup() {
+		// TODO load settings and stuff.
+	}
+	
+	
+	
+	public static void onShutdown() {
+		// TODO Save settings, log out, etc
+	}
 }
