@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class Bbox2 implements Transformable, Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	public Vec2 tl; // Top left
 	public Vec2 br; // Bottom right
 	

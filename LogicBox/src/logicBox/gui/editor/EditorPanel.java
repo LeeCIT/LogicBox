@@ -60,42 +60,37 @@ public class EditorPanel extends JPanel
 		cam  = new Camera( this );
 		cam.addTransformCallback( createOnTransformCallback() );
 		
-		
-		
-		
-		//new ToolDragger    ( this, world, cam ).attach();
-		//new ToolHighlighter( this, world, cam ).attach();
-		//new ToolTraceDrawer( this, world, cam ).attach();
+		new ToolDragger    ( this, world, cam ).attach();
+		new ToolHighlighter( this, world, cam ).attach();
 		
 		toolPlacer = new ToolPlacer( this, world, cam );
 		toolPlacer.attach();
 		
-		//new ToolSelector( this, world, cam ).attach();
+		new ToolSelector( this, world, cam ).attach();
 		
-		addRepaintListener( world.getSpatialGridDebugRepainter() );
+		//addRepaintListener( world.getSpatialGridDebugRepainter() );
+		//new ToolTraceDrawer( this, world, cam ).attach();
 		
-		world.add( new EditorComponent( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, 0  ) ) );
-		world.add( new EditorComponent( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, 128) ) );
-		world.add( new EditorComponent( new GateAnd(),    GraphicGen.generateGateAnd(2),   new Vec2(  0, 256) ) );
-		world.add( new EditorComponent( new GateNand(),   GraphicGen.generateGateNand(2),  new Vec2(  0, 384) ) );
-		world.add( new EditorComponent( new GateOr(),     GraphicGen.generateGateOr(2),    new Vec2(192,   0) ) );
-		world.add( new EditorComponent( new GateNor(),    GraphicGen.generateGateNor(2),   new Vec2(192, 128) ) );
-		world.add( new EditorComponent( new GateXor(),    GraphicGen.generateGateXor(2),   new Vec2(192, 256) ) );
-		world.add( new EditorComponent( new GateXnor(),   GraphicGen.generateGateXnor(2),  new Vec2(192, 384) ) );
+		world.add( new EditorComponent( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, -128) ) );
+		world.add( new EditorComponent( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, -256) ) );
 		
-		world.add(
-			new EditorComponent(
-				new Mux(8),
-				GraphicGen.generateMux(8,3,1),new Vec2(-512,-256)
-			)
-		);
+		for (int i=2; i<=4; i++) {
+			double xo = 192 * (i-2);
+			
+			world.add( new EditorComponent( new GateAnd(i),    GraphicGen.generateGateAnd(i),   new Vec2(xo, 0) ) );
+			world.add( new EditorComponent( new GateNand(i),   GraphicGen.generateGateNand(i),  new Vec2(xo, 128) ) );
+			world.add( new EditorComponent( new GateOr(i),     GraphicGen.generateGateOr(i),    new Vec2(xo, 256) ) );
+			world.add( new EditorComponent( new GateNor(i),    GraphicGen.generateGateNor(i),   new Vec2(xo, 384) ) );
+			world.add( new EditorComponent( new GateXor(i),    GraphicGen.generateGateXor(i),   new Vec2(xo, 512) ) );
+			world.add( new EditorComponent( new GateXnor(i),   GraphicGen.generateGateXnor(i),  new Vec2(xo, 640) ) );
+		}
 		
-		world.add(
-			new EditorComponent(
-				new Demux(8),
-				GraphicGen.generateDemux(1,3,8),new Vec2(-256,-256)
-			)
-		);
+		for (int i=2; i<=8; i++) {
+			double xo = 192 * (i-2);
+			
+			world.add( new EditorComponent( new Mux(i),   new Mux(i)  .getGraphic(), new Vec2(xo,-512)) );
+			world.add( new EditorComponent( new Demux(i), new Demux(i).getGraphic(), new Vec2(xo,-768)) );
+		}
 		
 		addMouseOverTest();
 		setupActions();
