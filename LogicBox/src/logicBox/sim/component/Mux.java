@@ -45,7 +45,7 @@ public class Mux extends Plexer
 	
 	
 	public GraphicComActive getGraphic() {
-		return GraphicGen.generateMux( getPinInputCount(), pinSelects.size(), getPinOutputCount() );
+		return GraphicGen.generateMux( getPinInputCount()- getPinSelects().size(), pinSelects.size(), getPinOutputCount() );
 	}
 	
 	

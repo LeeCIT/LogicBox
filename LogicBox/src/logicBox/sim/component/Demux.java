@@ -45,7 +45,7 @@ public class Demux extends Plexer
 	
 	
 	public GraphicComActive getGraphic() {
-		return GraphicGen.generateDemux( getPinInputCount(), pinSelects.size(), getPinOutputCount() );
+		return GraphicGen.generateDemux( 1, pinSelects.size(), getPinOutputCount() );
 	}
 	
 	
