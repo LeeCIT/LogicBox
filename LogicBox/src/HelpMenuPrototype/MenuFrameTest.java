@@ -43,9 +43,12 @@ public class MenuFrameTest extends JFrame
 	private Map<ComponentType, String> getComponentTypeMap() {
 		Map<ComponentType, String> compMap = new HashMap<ComponentType, String>();
 		
-		compMap.put(ComponentType.gateAnd, "And gate info");
-		compMap.put(ComponentType.gateNot, "Not gate info");
-		compMap.put(ComponentType.gateOr, "This right here will be everything and anything you need to know about what an or gate does!");
+		for (ComponentType type: ComponentType.values())
+			compMap.put(type, type.name());
+		
+		//compMap.put(ComponentType.gateAnd, "And gate info");
+		//compMap.put(ComponentType.gateNot, "Not gate info");
+		//compMap.put(ComponentType.gateOr, "This right here will be everything and anything you need to know about what an or gate does!");
 		
 		return compMap;
 	}
@@ -56,9 +59,6 @@ public class MenuFrameTest extends JFrame
 	{
 		GUI.setNativeStyle();
 		MenuFrameTest frame = new MenuFrameTest();
-		
-		
-		//System.out.println( MenuFrameTest.getRandomComp() );
 	}
 	
 	
