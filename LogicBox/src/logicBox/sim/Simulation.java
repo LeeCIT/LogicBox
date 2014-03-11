@@ -2,25 +2,11 @@
 
 
 package logicBox.sim;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import logicBox.sim.component.Component;
-import logicBox.sim.component.ComponentActive;
-import logicBox.sim.component.Junction;
-import logicBox.sim.component.Pin;
-import logicBox.sim.component.PinIo;
-import logicBox.sim.component.Source;
-import logicBox.sim.component.Trace;
-import logicBox.sim.component.Updateable;
+import java.util.*;
+import logicBox.sim.component.*;
 import logicBox.util.Util;
 
 
@@ -38,9 +24,10 @@ public class Simulation implements Serializable
 	private List<ComponentActive> actives; // Event-generating components
 	private List<Source>          sources; // Primary/const inputs
 	
-	private Set<Net>         cacheNets;
-	private List<Updateable> cacheUpdateables;
-	private boolean          cacheInvalidated;
+	// Caches are regenerated on deserialisation.
+	transient private Set<Net>         cacheNets;
+	transient private List<Updateable> cacheUpdateables;
+	transient private boolean          cacheInvalidated;
 	
 	
 	
@@ -92,8 +79,12 @@ public class Simulation implements Serializable
 	public void simulate() {
 		checkCache();
 		
-		for (Updateable up: cacheUpdateables)
+		for (Updateable up: cacheUpdateables) {
 			up.update();
+			
+			if (up instanceof DisplaySevenSeg)
+				System.out.println( ((DisplaySevenSeg) up).getNumber() );
+		}
 	}
 	
 	
@@ -371,6 +362,16 @@ public class Simulation implements Serializable
 		});
 		
 		return sorted;
+	}
+	
+	
+	
+	/**
+	 * Ensure caches are regenerated when the object is reconstructed.
+	 */
+	private void readObject( ObjectInputStream in ) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		regenerateCaches();
 	}
 	
 	
