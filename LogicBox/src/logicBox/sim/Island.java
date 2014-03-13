@@ -10,6 +10,11 @@ import logicBox.util.Util;
 
 
 
+/**
+ * A group of components which are logically isolated.
+ * An island can be simulated in a separate thread, for example.
+ * @author Lee Coakley
+ */
 public class Island implements Iterable<ComponentActive>
 {
 	private Set<ComponentActive> set;
