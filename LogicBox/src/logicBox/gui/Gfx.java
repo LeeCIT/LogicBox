@@ -15,7 +15,7 @@ import java.util.Stack;
  * Provides convenient drawing functions.
  * @author Lee Coakley
  */
-public class Gfx
+public abstract class Gfx
 {
 	private static Stack<Color>           colorStack  = new Stack<Color>();
 	private static Stack<Object>          aaStack     = new Stack<Object>();
