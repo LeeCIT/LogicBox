@@ -79,12 +79,8 @@ public class Simulation implements Serializable
 	public void simulate() {
 		checkCache();
 		
-		for (Updateable up: cacheUpdateables) {
+		for (Updateable up: cacheUpdateables)
 			up.update();
-			
-			if (up instanceof DisplaySevenSeg)
-				System.out.println( ((DisplaySevenSeg) up).getNumber() );
-		}
 	}
 	
 	
@@ -100,7 +96,7 @@ public class Simulation implements Serializable
 		cacheNets = getNets();
 		
 		Map<ComponentActive,Integer> comLevelMap = leveliseActives( actives );
-		Map<Net,            Integer> netLevelMap = leveliseNets   ( cacheNets, comLevelMap );
+		Map<Net,            Integer> netLevelMap = pruneNets( leveliseNets( cacheNets, comLevelMap ) );
 		
 		cacheUpdateables = sortByEvaluationOrder( comLevelMap, netLevelMap );
 		cacheInvalidated = false;
@@ -285,7 +281,7 @@ public class Simulation implements Serializable
 			}
 			
 			if (allInputsHaveLevels)
-				levels.put( com, maxLevel + 1 );
+				 levels.put( com, maxLevel + 1 );
 			else deferred.addLast( com );
 		}
 		
@@ -311,6 +307,22 @@ public class Simulation implements Serializable
 		}
 		
 		return levels;
+	}
+	
+	
+	
+	/**
+	 * Remove nets with a level of -1 (they can't affect the simulation).
+	 */
+	private Map<Net,Integer> pruneNets( Map<Net,Integer> netLevels ) { 
+		Map<Net,Integer> prune = new IdentityHashMap<>( netLevels ); 
+		Integer          m1    = -1;
+		
+		for (Map.Entry<Net,Integer> en: netLevels.entrySet())
+			if (en.getValue().equals( m1 ))
+				prune.remove( en.getKey() );
+		
+		return prune;
 	}
 	
 	
