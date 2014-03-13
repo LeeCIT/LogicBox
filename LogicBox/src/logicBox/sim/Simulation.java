@@ -210,20 +210,46 @@ public class Simulation implements Serializable
 	/**
 	 * Test whether the circuit contains any feedback loops.
 	 * Doesn't test for the presence of memory.
-	 * TODO use islands
 	 * @return True if there are no feedback loops.
 	 */
 	public boolean isLevelisable() {
+		for (Island island: findIslands())
+			if ( ! isLevelisable(island))
+				return false;
+		
+		return true;
+	}
+	
+	
+	
+	/**
+	 * Test whether an island is levelisable.
+	 * @see #isLevelisable()
+	 */
+	public boolean isLevelisable( Island island ) {
+		for (ComponentActive com: island)
+			if ( ! com.hasInputsConnected())
+				for (Pin pin: com.getPinOutputs())
+					if ( ! isLevelisableHelper( pin ))
+						return false;
+		
+		return true;
+	}
+	
+	
+	
+	private boolean isLevelisableHelper( Pin pin ) {
 		Set<Pin> set = Util.createIdentityHashSet();
-		return isLevelisable( set, sources.get(0).getPinOutput(0) );
+		return isLevelisableHelper( set, pin );
 	}
 	
 	
 	
 	/**
 	 * Recursively search for feedback loops.
+	 * If we never touch the same pin twice, we're good.
 	 */
-	private boolean isLevelisable( Set<Pin> set, Pin origin ) {
+	private boolean isLevelisableHelper( Set<Pin> set, Pin origin ) {
 		if (set.contains( origin ))
 			return false;
 		
@@ -231,7 +257,7 @@ public class Simulation implements Serializable
 		
 		for (ComponentActive com: new Net(origin).getFanout())
 			for (Pin pin: com.getPinOutputs())
-				if ( ! isLevelisable( set, pin ))
+				if ( ! isLevelisableHelper( set, pin ))
 					return false;
 		
 		return true;
@@ -240,7 +266,8 @@ public class Simulation implements Serializable
 	
 	
 	/**
-	 * Test whether the circuit can be reduced to a truth table. (levelisable and combinational)
+	 * Test whether the circuit can be reduced to a truth table. (both levelisable and combinational)
+	 * This is still infeasible if there are a lot of inputs though.
 	 */
 	public boolean isOptimisable() {
 		for (ComponentActive com: actives)
