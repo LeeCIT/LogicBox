@@ -74,8 +74,8 @@ public abstract class GUI
 		
 		frame.pack();
 		frame.setSize( 720, 640 );
-		frame.setVisible( true );
 		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		frame.setVisible( true );
 	}
 }
 

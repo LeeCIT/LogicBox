@@ -11,7 +11,7 @@ import logicBox.sim.component.*;
  * Simulation of a 4-bit binary counter using T flip-flops.
  * @author Lee Coakley
  */
-public class TestCounterSim
+public class TestCounter
 {
 	public static void main( String[] args ) {
 		int bits = 4;
