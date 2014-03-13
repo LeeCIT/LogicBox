@@ -63,7 +63,7 @@ public class Simulation implements Serializable
 	 * Reset the simulation to its initial state, as if simulate() were never called.
 	 */
 	public void reset() {		
-		for (Net net: getNets())
+		for (Net net: findNets())
 			for (Component com: net)
 				com.reset();
 		
@@ -77,7 +77,7 @@ public class Simulation implements Serializable
 	 * Run the simulation.
 	 */
 	public void simulate() {
-		checkCache();
+		validateCache();
 		
 		for (Updateable up: cacheUpdateables)
 			up.update();
@@ -85,7 +85,7 @@ public class Simulation implements Serializable
 	
 	
 	
-	private void checkCache() {
+	private void validateCache() {
 		if (cacheInvalidated)
 			regenerateCaches();
 	}
@@ -93,10 +93,12 @@ public class Simulation implements Serializable
 	
 	
 	private void regenerateCaches() {
-		cacheNets = getNets();
+		Map<ComponentActive,Integer> comLevelMap; 
+		Map<Net,            Integer> netLevelMap; 
 		
-		Map<ComponentActive,Integer> comLevelMap = leveliseActives( actives );
-		Map<Net,            Integer> netLevelMap = pruneNets( leveliseNets( cacheNets, comLevelMap ) );
+		cacheNets   = findNets();
+		comLevelMap = leveliseActives( actives );
+		netLevelMap = pruneNets( leveliseNets(cacheNets,comLevelMap) );
 		
 		cacheUpdateables = sortByEvaluationOrder( comLevelMap, netLevelMap );
 		cacheInvalidated = false;
@@ -107,8 +109,8 @@ public class Simulation implements Serializable
 	/**
 	 * Group components into islands - regions of the circuit that aren't connected to one another.
 	 */
-	public List<Island> getIslands() {
-		Map<Pin,Net>         pinMap  = mapPinsToNets( getNets() );
+	public List<Island> findIslands() {
+		Map<Pin,Net>         pinMap  = mapPinsToNets( findNets() );
 		List<Island>         islands = new ArrayList<>();
 		Set<ComponentActive> pool    = Util.createIdentityHashSet( actives );
 		
@@ -179,19 +181,15 @@ public class Simulation implements Serializable
 	
 	
 	/**
-	 * Get all nets in the circuit.
+	 * Find all nets in the circuit.
 	 * Components in a net are guaranteed not to be present in any other net (if there are no loops).
 	 */
-	private Set<Net> getNets() {
+	private Set<Net> findNets() {
 		Set<Net> netSet = new HashSet<>();
 		
-		for (ComponentActive com: actives) {
-			List<Pin> pins = new ArrayList<>( com.getPinInputs() );
-			pins.addAll( com.getPinOutputs() );
-			
-			for (Pin pin: pins)
+		for (ComponentActive com: actives)
+			for (Pin pin: com.getPins())
 				netSet.add( new Net(pin) );
-		}
 			
 		return netSet;
 	}
