@@ -124,6 +124,16 @@ public abstract class ComponentActive extends Component implements Updateable, P
 	
 	
 	
+	public boolean hasInputsConnected() {
+		for (Pin pin: getPinInputs())
+			if (pin.hasTrace())
+				return true;
+		
+		return false;
+	}
+	
+	
+	
 	/**
 	 * True if the component's state is not dependent on previous inputs.
 	 * Override this for components with memory.
