@@ -55,7 +55,7 @@ public abstract class GUI
 	/**
 	 * Get the current instance of the main frame.  If this frame closes the program exits.
 	 */
-	public EditorFrame getMainFrame() {
+	public static EditorFrame getMainFrame() {
 		return mainFrame;
 	}
 	
