@@ -13,6 +13,9 @@ import java.util.Map;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyledDocument;
 
 import net.miginfocom.swing.MigLayout;
 import logicBox.sim.component.*;
@@ -28,30 +31,21 @@ public class HelpPanel extends JPanel
 	
 	private ComponentType componentType;
 	private Map <ComponentType, String> componentMap;
-	private JTextArea compDescription;
+	private JTextPane compDescription = new JTextPane();
 	private SearchPanel<ComponentType> search; 
 	
 	
 	
-	public HelpPanel() {
-		
-	}
-	
+	public HelpPanel() {}
+
 	
 	
 	public HelpPanel( Map<ComponentType, String> compMap  ) {
 		super();
 		setLayout( new MigLayout() );
-		
-		
 		this.componentMap = compMap;
-		
-		
-		compDescription = new JTextArea();
-		
-		
+		compDescription.setContentType("text/html");
 		componentSearch();
-		
 		setSize(800, 300);
 		addToPanel();
 	}
@@ -62,8 +56,13 @@ public class HelpPanel extends JPanel
 	 * Display the description of the specified component.
 	 */
 	private void displayDescription() {
-		//compDescription.append(getCompName() + "\n");
-		compDescription.setText(getDescription());
+			compDescription.setText("");
+			StringBuilder builder = new StringBuilder();
+			builder.append("<html>");
+			builder.append("<b>" + getDescription() +"</b><br/><br/>");
+			builder.append("Un-edited text");
+			builder.append("</html>");
+			compDescription.setText(builder.toString());
 	}
 	
 	
@@ -99,7 +98,7 @@ public class HelpPanel extends JPanel
 	 * of the component.
 	 * @return
 	 */
-	public JTextArea getComponentDescriptionArea(){
+	public JTextPane getComponentDescriptionArea(){
 		return compDescription;
 	}
 	
@@ -122,17 +121,12 @@ public class HelpPanel extends JPanel
 		
 		search.addListSelectionListener( new ListSelectionListener() {
 			public void valueChanged( ListSelectionEvent ev ) {
-				if (search.hasSelectedItem())
-				{
+				if (search.hasSelectedItem()) {
 					componentType = search.getSelectedItem();
 					displayDescription();
 				}
-				//System.out.println( search.getSelectedItem() );
 			}
 		});
-
-		//search.setSelectedItem( ComponentType.demux );
-		
 	}
 	
 	
@@ -145,8 +139,6 @@ public class HelpPanel extends JPanel
 		JScrollPane scroll = new JScrollPane(compDescription);
 		add( scroll, "w 80%, h 100%" );
 		compDescription.setPreferredSize(new Dimension(getSize()));
-		compDescription.setLineWrap(true); //Wrap the text when it reaches the end of the TextArea.
-		compDescription.setWrapStyleWord(true); //Wrap at every word rather than every letter.
 		compDescription.setEditable(false); //Text cannot be edited.
 		
 	}
