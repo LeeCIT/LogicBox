@@ -247,6 +247,17 @@ public class Bbox2 implements Transformable, Serializable
 	
 	
 	
+	public List<Line2> getLines() {
+		List<Line2> lines = new ArrayList<>();
+		lines.add( new Line2(tl.x, tl.y, br.x, tl.y) ); // Top
+		lines.add( new Line2(tl.x, br.y, br.x, br.y) ); // Bottom
+		lines.add( new Line2(tl.x, tl.y, tl.x, br.y) ); // Left
+		lines.add( new Line2(br.x, tl.y, br.x, br.y) ); // Right
+		return lines;
+	}
+	
+	
+	
 	/**
 	 * Create a bounding box from the extremes of a set of points.
 	 * Returns null if the list is empty.
