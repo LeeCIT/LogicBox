@@ -17,10 +17,11 @@ import java.util.Stack;
  */
 public abstract class Gfx
 {
-	private static Stack<Color>           colorStack  = new Stack<Color>();
-	private static Stack<Object>          aaStack     = new Stack<Object>();
-	private static Stack<AffineTransform> matrixStack = new Stack<AffineTransform>();
-	private static Stack<Stroke>          strokeStack = new Stack<Stroke>();
+	private static Stack<Composite>       compStack   = new Stack<>();
+	private static Stack<Color>           colorStack  = new Stack<>();
+	private static Stack<Object>          aaStack     = new Stack<>();
+	private static Stack<AffineTransform> matrixStack = new Stack<>();
+	private static Stack<Stroke>          strokeStack = new Stack<>();
 	
 	
 	
@@ -161,8 +162,22 @@ public abstract class Gfx
 				poly.lineTo( ry );
 			}
 			
-			g.draw( poly );			
+			g.draw( poly );
+			
 		Gfx.popStroke( g );
+	}
+	
+	
+	
+	public static void pushCompositeAndSet( Graphics2D g, double alpha ) {
+		compStack.push( g.getComposite() );
+		g.setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, (float) alpha ) );
+	}
+	
+	
+	
+	public static void popComposite( Graphics2D g ) {
+		g.setComposite( compStack.pop() );
 	}
 	
 	
