@@ -29,6 +29,12 @@ public class EditorComponent implements Drawable
 	
 	
 	
+	public Graphic getGraphic() {
+		return graphic;
+	}
+	
+	
+	
 	public void draw( Graphics2D g ) {
 		graphic.draw( g );
 	}
