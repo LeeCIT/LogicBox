@@ -1,12 +1,16 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.tools;
 
 import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
+import logicBox.gui.editor.Camera;
+import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.EditorWorld;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 

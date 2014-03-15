@@ -1,12 +1,17 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.tools;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
+import logicBox.gui.editor.Camera;
+import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.RepaintListener;
 import logicBox.util.CallbackParam;
 import logicBox.util.Vec2;
 

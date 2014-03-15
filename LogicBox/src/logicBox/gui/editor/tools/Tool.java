@@ -1,7 +1,11 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.tools;
+
+import logicBox.gui.editor.Camera;
+import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.EditorWorld;
 
 
 

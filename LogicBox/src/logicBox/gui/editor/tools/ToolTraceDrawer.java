@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.tools;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -16,6 +16,11 @@ import java.util.Stack;
 import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
+import logicBox.gui.editor.Camera;
+import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.EditorStyle;
+import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.RepaintListener;
 import logicBox.util.Geo;
 import logicBox.util.Line2;
 import logicBox.util.Vec2;
