@@ -26,9 +26,6 @@ import logicBox.util.Vec2;
  */
 public class ToolDragger extends Tool
 {
-	private EditorPanel     panel;
-	private EditorWorld     world;
-	private Camera          cam;
 	private double          dragThreshold;
 	private boolean         dragInitiated;
 	private boolean         dragging;
@@ -40,12 +37,10 @@ public class ToolDragger extends Tool
 	
 	
 	
-	public ToolDragger( EditorPanel panel, EditorWorld world, Camera cam ) {
-		this.panel           = panel;
-		this.world           = world;
-		this.cam             = cam;
-		this.eventListener   = createEventListener();
-		this.dragThreshold   = 4;
+	public ToolDragger( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
+		super( panel, world, cam, manager );
+		this.eventListener = createEventListener();
+		this.dragThreshold = 4;
 	}
 	
 	

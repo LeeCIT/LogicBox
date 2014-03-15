@@ -23,9 +23,6 @@ import logicBox.util.Vec2;
  */
 public class ToolSelector extends Tool
 {
-	private EditorPanel     panel;
-	private EditorWorld     world;
-	private Camera          cam;
 	private double          dragThreshold;
 	private boolean         dragInitiated;
 	private boolean         dragging;
@@ -36,10 +33,8 @@ public class ToolSelector extends Tool
 	
 	
 	
-	public ToolSelector( EditorPanel panel, EditorWorld world, Camera cam ) {
-		this.panel           = panel;
-		this.world           = world;
-		this.cam             = cam;
+	public ToolSelector( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
+		super( panel, world, cam, manager );
 		this.eventListener   = createEventListener();
 		this.repaintListener = createRepaintListener();
 	}
@@ -104,7 +99,7 @@ public class ToolSelector extends Tool
 	protected void drawSelection( Graphics2D g ) {
 		double zoom      = cam.getZoom();
 		float  thickness = (float) (EditorStyle.compThickness / zoom);
-		double radius    = (int)   (16.0 / zoom);
+		double radius    = (int)   (12.0 / zoom);
 		Bbox2  bbox      = getDragBbox();
 		
 		Gfx.pushStrokeAndSet( g, EditorStyle.makeSelectionStroke(thickness) );

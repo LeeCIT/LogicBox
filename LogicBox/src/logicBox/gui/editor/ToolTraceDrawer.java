@@ -29,10 +29,6 @@ import logicBox.util.Vec2;
  */
 public class ToolTraceDrawer extends Tool
 {
-	private EditorPanel panel;
-	private EditorWorld world;
-	private Camera      cam;
-	
 	private boolean         traceInitiated;
 	private boolean         traceChoosingOrigin;
 	private boolean         traceArmed;
@@ -44,10 +40,8 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
-	public ToolTraceDrawer( EditorPanel panel, EditorWorld world, Camera cam ) {
-		this.panel           = panel;
-		this.world           = world;
-		this.cam             = cam;
+	public ToolTraceDrawer( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
+		super( panel, world, cam, manager );
 		this.keyListener     = createKeyListener();
 		this.mouseListener   = createMouseListener();
 		this.repaintListener = createRepaintListener();

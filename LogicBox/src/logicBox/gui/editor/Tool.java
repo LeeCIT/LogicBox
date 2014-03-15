@@ -11,7 +11,21 @@ package logicBox.gui.editor;
  */
 public abstract class Tool
 {
+	protected ToolManager manager;
+	protected EditorPanel panel;
+	protected EditorWorld world;
+	protected Camera      cam;
+	
 	private boolean attached;
+	
+	
+	
+	public Tool( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
+		this.panel   = panel;
+		this.world   = world;
+		this.cam     = cam;
+		this.manager = manager;
+	}
 	
 	
 	

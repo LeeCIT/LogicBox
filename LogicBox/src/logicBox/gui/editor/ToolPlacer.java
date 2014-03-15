@@ -18,9 +18,6 @@ import logicBox.util.Vec2;
  */
 public class ToolPlacer extends Tool
 {
-	private EditorPanel     panel;
-	private EditorWorld     world;
-	private Camera          cam;
 	private MouseAdapter    mouseListener;
 	private RepaintListener repaintListener;
 	
@@ -33,10 +30,8 @@ public class ToolPlacer extends Tool
 	
 	
 	
-	public ToolPlacer( EditorPanel panel, EditorWorld world, Camera cam ) {
-		this.panel           = panel;
-		this.world           = world;
-		this.cam             = cam;
+	public ToolPlacer( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
+		super( panel, world, cam, manager );
 		this.mouseListener   = createEventListener();
 		this.repaintListener = createRepaintListener();
 	}
