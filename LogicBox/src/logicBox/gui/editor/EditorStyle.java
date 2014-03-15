@@ -13,7 +13,7 @@ import logicBox.util.Geo;
  * Defines the colour palette and line styles used by the editor.
  * @author Lee Coakley
  */
-public class EditorStyle
+public abstract class EditorStyle
 {
 	public static Color colBackground      = new Color(  55,  37,  37 );
 	public static Color colGrid            = new Color(  89,  51,  72 );
