@@ -16,6 +16,7 @@ import java.util.List;
 import javax.swing.JPanel;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
+import logicBox.gui.editor.tools.ToolManager;
 import logicBox.sim.component.ComponentActive;
 import logicBox.sim.component.Demux;
 import logicBox.sim.component.GateAnd;
@@ -41,12 +42,12 @@ import logicBox.util.Vec2;
  */
 public class EditorPanel extends JPanel
 {
-	private List<RepaintListener> repaintListeners;
-	
 	private Camera      cam;
 	private EditorWorld world;
-	private boolean     enableAntialiasing;
-	private ToolPlacer  toolPlacer;
+	private ToolManager toolManager;
+	
+	private List<RepaintListener> repaintListeners;
+	private boolean               enableAntialiasing;
 	
 	
 	
@@ -54,19 +55,13 @@ public class EditorPanel extends JPanel
 		super( true );
 		
 		enableAntialiasing = true;
-		repaintListeners = new ArrayList<>();
+		repaintListeners   = new ArrayList<>();
 		
 		world = new EditorWorld();
-		cam  = new Camera( this );
+		cam   = new Camera( this );
 		cam.addTransformCallback( createOnTransformCallback() );
 		
-		new ToolDragger    ( this, world, cam ).attach();
-		new ToolHighlighter( this, world, cam ).attach();
-		
-		toolPlacer = new ToolPlacer( this, world, cam );
-		toolPlacer.attach();
-		
-		new ToolSelector( this, world, cam ).attach();
+		toolManager = new ToolManager( this, world, cam );
 		
 		//addRepaintListener( world.getSpatialGridDebugRepainter() );
 		//new ToolTraceDrawer( this, world, cam ).attach();
@@ -99,7 +94,7 @@ public class EditorPanel extends JPanel
 	
 	
 	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
-		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<Vec2>() {
+		toolManager.getPlacer().placementStart( ecc.getGraphicPreview(), new CallbackParam<Vec2>() {
 			public void execute( Vec2 pos ) {
 				ComponentActive  scom = ecc.getComponentPayload();
 				GraphicComActive gca  = scom.getGraphic();
