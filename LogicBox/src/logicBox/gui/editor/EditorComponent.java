@@ -29,7 +29,7 @@ public class EditorComponent implements Drawable
 	
 	
 	
-	public Graphic getGraphic() {
+	public GraphicComActive getGraphic() {
 		return graphic;
 	}
 	
