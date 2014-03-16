@@ -25,6 +25,26 @@ public abstract class Gfx
 	
 	
 	
+	public static void drawOrientationOverlay( Graphics2D g, Vec2 pos, double radius, double angle ) {
+		double arrowSideLen = radius * 0.2;
+		Vec2   arrowEnd     = pos.add( Geo.lenDir(radius, angle) );
+		Vec2   arrowStart   = Geo.lerp( pos, arrowEnd, 0.5 );
+		Vec2   arrowA       = arrowEnd.add( Geo.lenDir(arrowSideLen, angle-180+45) );
+		Vec2   arrowB       = arrowEnd.add( Geo.lenDir(arrowSideLen, angle-180-45) );
+		
+		drawCircle( g, pos, radius, false );
+		
+		VecPath arrow = new VecPath();
+		arrow.moveTo( arrowStart );
+		arrow.lineTo( arrowEnd );
+		arrow.moveTo( arrowA );
+		arrow.lineTo( arrowEnd );
+		arrow.lineTo( arrowB );
+		g.draw( arrow );
+	}
+	
+	
+	
 	public static void drawCircle( Graphics2D g, Vec2 pos, double radius, boolean filled ) {		
 		int tl   = (int) -radius;
 		int size = (int) (radius * 2.0);
