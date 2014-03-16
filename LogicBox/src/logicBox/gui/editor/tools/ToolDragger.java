@@ -81,10 +81,12 @@ public class ToolDragger extends Tool
 					dragCancel();
 			}
 			
+			
 			public void mouseReleased( MouseEvent ev ) {
 				if (SwingUtilities.isLeftMouseButton( ev ))
 					dragComplete();
 			}
+			
 			
 			public void mouseDragged( MouseEvent ev ) {
 				Vec2 pos = cam.getMousePosWorld();
