@@ -30,10 +30,10 @@ import logicBox.util.Vec2;
 public class ToolSelector extends Tool
 {
 	private double          dragThreshold;
-	private boolean         dragInitiated;
-	private boolean         dragging;
-	private Vec2            dragInitiatedAt;
-	private Vec2            dragPosNow;
+	private boolean         selectInitiated;
+	private boolean         selecting;
+	private Vec2            selectInitiatedAt;
+	private Vec2            selectPosNow;
 	private MouseAdapter    eventListener;
 	private RepaintListener repaintListener;
 	
@@ -75,16 +75,16 @@ public class ToolSelector extends Tool
 		return new MouseAdapter() {
 			public void mousePressed( MouseEvent ev ) {
 				if (SwingUtilities.isLeftMouseButton( ev ))
-					dragInitiate( cam.getMousePosWorld() );
+					selectInitiate( cam.getMousePosWorld() );
 			}
 			
 			public void mouseReleased( MouseEvent ev ) {
 				if (SwingUtilities.isLeftMouseButton( ev ))
-					dragComplete();
+					selectComplete();
 			}
 			
 			public void mouseDragged( MouseEvent ev ) {
-				dragMove( cam.getMousePosWorld() );
+				selectMove( cam.getMousePosWorld() );
 			}
 		};
 	}
@@ -94,7 +94,7 @@ public class ToolSelector extends Tool
 	private RepaintListener createRepaintListener() {
 		return new RepaintListener() {
 			public void draw( Graphics2D g ) {
-				if (dragging)
+				if (selecting)
 					drawSelection( g );
 			}
 		};
@@ -102,11 +102,11 @@ public class ToolSelector extends Tool
 	
 	
 	
-	protected void drawSelection( Graphics2D g ) {
+	private void drawSelection( Graphics2D g ) {
 		double zoom      = cam.getZoom();
 		float  thickness = (float) (EditorStyle.compThickness / zoom);
 		double radius    = (int)   (12.0 / zoom);
-		Bbox2  bbox      = getDragBbox();
+		Bbox2  bbox      = getSelectBbox();
 		
 		Gfx.pushStrokeAndSet( g, EditorStyle.makeSelectionStroke(thickness) );
 			Gfx.pushColorAndSet( g, EditorStyle.colSelectionStroke );
@@ -117,35 +117,35 @@ public class ToolSelector extends Tool
 	
 	
 	
-	private Bbox2 getDragBbox() {
-		return Bbox2.createFromPoints( dragInitiatedAt, dragPosNow );
+	private Bbox2 getSelectBbox() {
+		return Bbox2.createFromPoints( selectInitiatedAt, selectPosNow );
 	}
 	
 	
 	
-	private void dragInitiate( Vec2 pos ) {		
+	private void selectInitiate( Vec2 pos ) {		
 		EditorComponent ecom = world.findTopmostAt( pos );
 		
 		if (ecom != null)
 			return;
 		
-		dragInitiated   = true;
-		dragInitiatedAt = pos;
+		selectInitiated   = true;
+		selectInitiatedAt = pos;
 	}
 	
 	
 	
-	private void dragMove( Vec2 pos ) {
-		if (dragInitiated) {
-			if ( ! dragging) 
+	private void selectMove( Vec2 pos ) {
+		if (selectInitiated) {
+			if ( ! selecting) 
 				if (isDragThresholdMet(pos)) {
-					dragging      = true;
-					dragInitiated = false;
+					selecting      = true;
+					selectInitiated = false;
 				}
 		}
 		
-		if (dragging) {
-			dragPosNow = pos;
+		if (selecting) {
+			selectPosNow = pos;
 			panel.repaint();
 		}
 	}
@@ -153,17 +153,17 @@ public class ToolSelector extends Tool
 	
 	
 	private boolean isDragThresholdMet( Vec2 pos ) {
-		return Geo.distance(pos,dragInitiatedAt) >= (dragThreshold / cam.getZoom());
+		return Geo.distance(pos,selectInitiatedAt) >= (dragThreshold / cam.getZoom());
 	}
 	
 	
 	
-	private void dragComplete() {
-		for (EditorComponent ecom: world.find( getDragBbox() ))
+	private void selectComplete() {
+		for (EditorComponent ecom: world.find( getSelectBbox() ))
 			ecom.getGraphic().setSelected( true );
 		
-		dragInitiated = false;
-		dragging      = false;
+		selectInitiated = false;
+		selecting      = false;
 		panel.setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
 		panel.repaint();
 	}
