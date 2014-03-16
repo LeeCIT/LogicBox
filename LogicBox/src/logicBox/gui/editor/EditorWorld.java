@@ -6,8 +6,11 @@ package logicBox.gui.editor;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import logicBox.gui.Gfx;
+import logicBox.sim.component.Component;
+import logicBox.sim.component.ComponentActive;
 import logicBox.util.Bbox2;
 import logicBox.util.BinaryFunctor;
 import logicBox.util.Geo;
@@ -134,6 +137,15 @@ public class EditorWorld
 	 * This is the union of all component bounding boxes.
 	 */
 	public Bbox2 getWorldExtent() {
+		return getExtent( ecoms );
+	}
+	
+	
+	
+	/**
+	 * Get union of component bounding boxes.
+	 */
+	public static Bbox2 getExtent( Collection<EditorComponent> ecoms ) {
 		List<Bbox2> bboxes = new ArrayList<>();
 		
 		for (EditorComponent ecom: ecoms)
