@@ -90,7 +90,7 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	public EditorComponent add( EditorComponent ecom ) {
 		ecoms.add( ecom );
-		setGraphicSelectStates( ecoms.size() > 1 );
+		ecom.getGraphic().setSelected( true );
 		return ecom;
 	}
 	
@@ -105,10 +105,7 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	public boolean remove( EditorComponent ecom ) {
 		ecom.getGraphic().setSelected( false );
-		
-		boolean rem = ecoms.remove( ecom );
-		setGraphicSelectStates( ecoms.size() > 1 );
-		return rem;
+		return ecoms.remove( ecom );
 	}
 	
 	
