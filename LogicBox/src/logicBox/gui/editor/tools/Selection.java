@@ -82,19 +82,37 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	public EditorComponent add( EditorComponent ecom ) {
 		ecoms.add( ecom );
+		setGraphicSelectStates( ecoms.size() > 1 );
 		return ecom;
 	}
 	
 	
 	
 	public boolean remove( EditorComponent ecom ) {
-		return ecoms.remove( ecom );
+		ecom.getGraphic().setSelected( false );
+		
+		boolean rem = ecoms.remove( ecom );
+		setGraphicSelectStates( ecoms.size() > 1 );
+		return rem;
 	}
 	
 	
 	
 	public void clear() {
+		setGraphicSelectStates( false );
 		ecoms.clear();
+	}
+	
+	
+	
+	public boolean isEmpty() {
+		return ecoms.isEmpty();
+	}
+	
+	
+	
+	public int size() {
+		return ecoms.size();
 	}
 	
 	
@@ -102,4 +120,24 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	public Iterator<EditorComponent> iterator() {
 		return ecoms.iterator();
 	}
+	
+	
+	
+	private void setGraphicSelectStates( boolean state ) {
+		for (EditorComponent ecom: this)
+			ecom.getGraphic().setSelected( state );
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
