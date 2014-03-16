@@ -5,6 +5,7 @@ package logicBox.gui.editor.tools;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorWorld;
@@ -80,10 +81,24 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	
 	
+	public void set( Iterable<EditorComponent> iter ) {
+		clear();
+		addAll( iter );
+	}
+	
+	
+	
 	public EditorComponent add( EditorComponent ecom ) {
 		ecoms.add( ecom );
 		setGraphicSelectStates( ecoms.size() > 1 );
 		return ecom;
+	}
+	
+	
+	
+	public void addAll( Iterable<EditorComponent> iter ) {
+		for (EditorComponent e: iter)
+			add( e );
 	}
 	
 	
@@ -94,6 +109,13 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 		boolean rem = ecoms.remove( ecom );
 		setGraphicSelectStates( ecoms.size() > 1 );
 		return rem;
+	}
+	
+	
+	
+	public void removeAll( Iterable<EditorComponent> iter ) {
+		for (EditorComponent e: iter)
+			remove( e );
 	}
 	
 	
