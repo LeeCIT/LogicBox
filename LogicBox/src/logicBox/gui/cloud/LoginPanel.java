@@ -70,7 +70,7 @@ public class LoginPanel extends JDialog implements RequestInterface
 	
 	public static void main(String args[])
 	{
-		LoginPanel lp = new LoginPanel(new JFrame());
+		new LoginPanel(new JFrame());
 	}
 
 	@Override
