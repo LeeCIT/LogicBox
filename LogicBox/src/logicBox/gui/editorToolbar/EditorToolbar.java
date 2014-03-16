@@ -47,14 +47,14 @@ public class EditorToolbar extends JToolBar
 	private void setUpToolbar() {
 		String buttParam = "w 30, h 27";
 		
-		ImageIcon newFile   = new ImageIcon( "icons/New16px.png"       );
-		ImageIcon openFile  = new ImageIcon( "icons/Open16px.png"      );
-		ImageIcon undo      = new ImageIcon( "icons/Undo16px.png"      );
-		ImageIcon redo      = new ImageIcon( "icons/Redo16px.png"      );
-		ImageIcon editText  = new ImageIcon( "icons/EditText16px.png"  );
-		ImageIcon grid      = new ImageIcon( "icons/Grid16px.png"      );
-		ImageIcon centreCam = new ImageIcon( "icons/CentreCam16px.png" );
-		ImageIcon toolBox   = new ImageIcon( "icons/ToolBox16px.png"   );
+		ImageIcon newFile   = loadIconFromResource( "icons/New16px.png"       );
+		ImageIcon openFile  = loadIconFromResource( "icons/Open16px.png"      );
+		ImageIcon undo      = loadIconFromResource( "icons/Undo16px.png"      );
+		ImageIcon redo      = loadIconFromResource( "icons/Redo16px.png"      );
+		ImageIcon editText  = loadIconFromResource( "icons/EditText16px.png"  );
+		ImageIcon grid      = loadIconFromResource( "icons/Grid16px.png"      );
+		ImageIcon centreCam = loadIconFromResource( "icons/CentreCam16px.png" );
+		ImageIcon toolBox   = loadIconFromResource( "icons/ToolBox16px.png"   );
 
 
 		// Make buttons for the EditorToolbar
@@ -80,6 +80,11 @@ public class EditorToolbar extends JToolBar
 		add( centreCamButt, buttParam ); // Centre camera on circuit
 		add( editTextButt,  buttParam ); // Make a label for selections
 		add( new JSeparator(JSeparator.VERTICAL) );
+	}
+	
+	private ImageIcon loadIconFromResource(String path)
+	{
+		return new ImageIcon(getClass().getClassLoader().getResource("resources/" + path));
 	}
 }
 
