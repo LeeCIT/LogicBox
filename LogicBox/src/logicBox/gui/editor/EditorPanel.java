@@ -9,7 +9,9 @@ import java.awt.LinearGradientPaint;
 import java.awt.MultipleGradientPaint.CycleMethod;
 import java.awt.Paint;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
@@ -371,9 +373,32 @@ public class EditorPanel extends JPanel
 	private Callback createOnTransformCallback() {
 		return new Callback() {
 			public void execute() {
-				repaint();
+				onTransform();
 			}
 		};
+	}
+
+
+
+	private void onTransform() {
+		MouseEvent me = new MouseEvent(
+			this,
+			MouseEvent.MOUSE_MOVED,
+			System.nanoTime(),
+			0,
+			(int) cam.getMousePosScreen().x,
+			(int) cam.getMousePosScreen().y,
+			0,
+			false,
+			MouseEvent.NOBUTTON
+		);
+		
+		for (MouseMotionListener ml: getMouseMotionListeners()) {
+			ml.mouseMoved  ( me );
+			ml.mouseDragged( me );
+		}
+		
+		repaint();
 	}
 }
 
