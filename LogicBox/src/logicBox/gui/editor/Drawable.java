@@ -6,7 +6,10 @@ import java.awt.Graphics2D;
 
 
 
-public interface Drawable
-{
+/**
+ * Something which can be drawn in the editor panel.
+ * @author Lee Coakley
+ */
+public interface Drawable {
 	public void draw( Graphics2D g );
 }
