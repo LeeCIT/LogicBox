@@ -59,13 +59,6 @@ public class ToolContextual extends Tool
 		this.dragListener    = createDragListener();
 		this.selectListener  = createSelectListener();
 		this.repaintListener = createSelectRepaintListener();
-		
-		// TODO DEBUG ONLY
-		new CallbackRepeater( 33, new Callback() {
-			public void execute() {
-				panel.repaint();
-			}
-		});
 	}
 	
 	
@@ -306,9 +299,12 @@ public class ToolContextual extends Tool
 	private void drawSelectionBbox( Graphics2D g ) {
 		Bbox2  bbox       = getSelectBbox();
 		double zoom       = cam.getZoom();
-		double modulation = Geo.boxStep( bbox.getSmallest(), 4, 32 ); 
+		double zoomInv    = 1.0 / zoom;
+		double modulation = Geo.boxStep( bbox.getSmallest(), 4*zoomInv, 32*zoomInv ); 
 		double modScaled  = Geo.lerp( 0.2, 1.0, modulation );
-		float  thickness  = (float) ((EditorStyle.compThickness * modScaled) / zoom);
+		double modThick   = (1.0 / EditorStyle.compThickness) * 2; // When zoomed out, thin the box
+		double modClamped = modScaled * Geo.clamp( zoom, modThick, 1 );
+		float  thickness  = (float) ((EditorStyle.compThickness * modClamped) / zoom);
 		double radius     = (int)   (2.0 / zoom);
 		
 		Gfx.pushStrokeAndSet( g, EditorStyle.makeSelectionStroke(thickness) );
