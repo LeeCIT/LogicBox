@@ -3,6 +3,7 @@
 
 package logicBox.gui.editor;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 import logicBox.sim.component.Component;
 import logicBox.util.Vec2;
 
@@ -13,8 +14,10 @@ import logicBox.util.Vec2;
  * Not sure if traces will be classified this way.  They may be a special case.
  * @author Lee Coakley
  */
-public class EditorComponent implements Drawable
+public class EditorComponent implements Serializable, Drawable
 {
+	private static final long serialVersionUID = 1L;
+	
 	protected Component        com;
 	protected GraphicComActive graphic;
 	private   EditorWorld      world;
