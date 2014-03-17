@@ -86,7 +86,7 @@ public abstract class Gfx
 	
 	
 	
-	public static void drawRegionRounded( Graphics2D g, Bbox2 rect, double radius, boolean filled ) {
+	public static void drawBboxRounded( Graphics2D g, Bbox2 rect, double radius, boolean filled ) {
 		int w = (int) rect.getSize().x;
 		int h = (int) rect.getSize().y;
 		int r = (int) radius;
