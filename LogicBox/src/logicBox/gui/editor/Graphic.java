@@ -33,14 +33,7 @@ public abstract class Graphic implements Serializable, Drawable
 	
 	public void setHighlighted( boolean state ) {
 		isHighlighted = state;
-		
-		if (isHighlighted) {
-			colStroke = EditorStyle.colHighlightStroke;
-			colFill   = EditorStyle.colHighlightFill;
-		} else {
-			colStroke = EditorStyle.colComponentStroke;
-			colFill   = EditorStyle.colComponentFill;
-		}
+		updateColours();
 	}
 	
 	
@@ -53,14 +46,7 @@ public abstract class Graphic implements Serializable, Drawable
 	
 	public void setSelected( boolean state ) {
 		isSelected = state;
-		
-		if (isSelected) {
-			colStroke = EditorStyle.colSelectionStroke;
-			colFill   = EditorStyle.colSelectionFill;
-		} else {
-			colStroke = EditorStyle.colComponentStroke;
-			colFill   = EditorStyle.colComponentFill;
-		}
+		updateColours();
 	}
 	
 	
@@ -79,5 +65,27 @@ public abstract class Graphic implements Serializable, Drawable
 	
 	public boolean isInverted() {
 		return isInverted;
+	}
+	
+	
+	
+	private void updateColours() {
+		if (isHighlighted) {
+			if (isSelected) {
+				colStroke = EditorStyle.colHighlightSelectStroke;
+				colFill   = EditorStyle.colHighlightSelectFill;
+			} else {
+				colStroke = EditorStyle.colHighlightStroke;
+				colFill   = EditorStyle.colHighlightFill;
+			}
+		} else {
+			if (isSelected) {
+				colStroke = EditorStyle.colSelectionStroke;
+				colFill   = EditorStyle.colSelectionFill;
+			} else {
+				colStroke = EditorStyle.colComponentStroke;
+				colFill   = EditorStyle.colComponentFill;
+			}
+		}
 	}
 }
