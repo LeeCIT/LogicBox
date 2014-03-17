@@ -77,9 +77,7 @@ public class LoginPanel extends JDialog implements RequestInterface
 	public void onRequestResponse(HttpResponse<JsonNode> res, Request req, status state) 
 	{
 		if(state == status.FAILED)
-		{
-			System.out.println("Request failed!");
-		}
+			Dialog.showError(parent, "Could not make request!", "Request Failure");
 		else
 		{
 			if(req.hasErrors())
