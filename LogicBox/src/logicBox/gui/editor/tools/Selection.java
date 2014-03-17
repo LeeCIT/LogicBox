@@ -83,6 +83,13 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	
 	
+	public void set( EditorComponent ecom ) {
+		clear();
+		add( ecom );
+	}
+	
+	
+	
 	public void set( Iterable<EditorComponent> iter ) {
 		clear();
 		addAll( iter );
