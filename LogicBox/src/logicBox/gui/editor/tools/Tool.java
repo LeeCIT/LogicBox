@@ -26,7 +26,7 @@ public abstract class Tool
 	protected Camera      cam;
 	
 	private boolean attached;
-	private double  dragThreshold = 4;
+	private double  dragThreshold = 8;
 	
 	
 	
