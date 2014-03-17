@@ -5,10 +5,10 @@ package logicBox.gui.editor.tools;
 
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorWorld;
+import logicBox.util.Geo;
 import logicBox.util.Util;
 import logicBox.util.Vec2;
 
@@ -23,13 +23,13 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	private static final long serialVersionUID = 1L;
 	
 	public Set<EditorComponent> ecoms;
-	public Vec2   pos;
 	public double angle;
 	
 	
 	
 	public Selection() {
 		ecoms = Util.createIdentityHashSet();
+		angle = 0;
 	}
 	
 	
@@ -53,8 +53,10 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 		Vec2 centre = getCentre();
 		Vec2 delta  = pos.subtract( centre );
 		
-		for (EditorComponent ecom: ecoms)
-			ecom.setPos( ecom.getPos().add(delta) );
+		for (EditorComponent ecom: ecoms) {
+			Vec2 newPos = ecom.getPos().add(delta);
+			ecom.setPos( Geo.snapNear(newPos, 16) );
+		}
 	}
 	
 	
@@ -118,8 +120,16 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	
 	public void clear() {
-		setGraphicSelectStates( false );
+		for (EditorComponent ecom: this)
+			ecom.getGraphic().setSelected( false );
+		
 		ecoms.clear();
+	}
+	
+	
+	
+	public boolean contains( EditorComponent ecom ) {
+		return ecoms.contains( ecom );
 	}
 	
 	
@@ -138,13 +148,6 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	public Iterator<EditorComponent> iterator() {
 		return ecoms.iterator();
-	}
-	
-	
-	
-	private void setGraphicSelectStates( boolean state ) {
-		for (EditorComponent ecom: this)
-			ecom.getGraphic().setSelected( state );
 	}
 }
 
