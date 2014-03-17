@@ -19,10 +19,8 @@ import logicBox.gui.editor.EditorWorld;
 public class ToolManager
 {
 	private ToolContextual  toolContextual;
-	private ToolDragger     toolDragger;
 	private ToolHighlighter toolHighlighter;
 	private ToolPlacer      toolPlacer;
-	private ToolSelector    toolSelector;
 	private ToolTraceDrawer toolTraceDrawer;
 	
 	private List<EditorComponent> selection;
@@ -54,10 +52,8 @@ public class ToolManager
 	
 	private void setupTools( EditorPanel panel, EditorWorld world, Camera cam ) {
 		toolContextual  = add( new ToolContextual (panel, world, cam, this) );
-		toolDragger     = add( new ToolDragger    (panel, world, cam, this) );
 		toolHighlighter = add( new ToolHighlighter(panel, world, cam, this) );
 		toolPlacer      = add( new ToolPlacer     (panel, world, cam, this) );
-		toolSelector    = add( new ToolSelector   (panel, world, cam, this) );
 		toolTraceDrawer = add( new ToolTraceDrawer(panel, world, cam, this) );
 	}
 	
@@ -71,10 +67,8 @@ public class ToolManager
 	
 	
 	public ToolContextual  getContextual()  { return toolContextual;  }
-	public ToolDragger     getDragger()     { return toolDragger;     }
 	public ToolHighlighter getHighlighter() { return toolHighlighter; }
 	public ToolPlacer      getPlacer()      { return toolPlacer;      }
-	public ToolSelector    getSelector()    { return toolSelector;    }
 	public ToolTraceDrawer getTraceDrawer() { return toolTraceDrawer; }
 	
 	
