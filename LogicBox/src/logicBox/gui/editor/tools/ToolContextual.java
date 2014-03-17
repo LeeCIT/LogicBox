@@ -350,12 +350,13 @@ public class ToolContextual extends Tool
 	
 	
 	private void onSelectClick( MouseEvent ev ) {
-		if (dragging)
+		if (dragging || selecting)
 			return;
 		
 		if (isLeft(ev)) {
-			if (ev.isShiftDown())   selectAdd();
-			if (ev.isControlDown()) selectToggle();
+			boolean shift = ev.isShiftDown();
+			boolean ctrl  = ev.isControlDown();
+			selectAddRemove( shift, ctrl );
 		}
 	}
 	
@@ -422,9 +423,7 @@ public class ToolContextual extends Tool
 			return;
 		
 		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
-		
 		modifySelection( isAdditive, isSubtractive );
-		
 		selectFinishedCommon();
 	}
 	
@@ -436,14 +435,13 @@ public class ToolContextual extends Tool
 		
 		Bbox2 bbox = getSelectBbox();
 		
-		if (bbox.getSmallest() <= 0) // There would be no visual feedback
-			return;
-		
-		List<EditorComponent> sel = world.find( bbox );
-		
-		if (!isAdditive && !isSubtractive) selection.set      ( sel );
-		else if (isAdditive)               selection.addAll   ( sel );
-		else if (isSubtractive)            selection.removeAll( sel );
+		if (bbox.getSmallest() > 0) { // There would be no visual feedback
+			List<EditorComponent> sel = world.find( bbox );
+			
+			if (!isAdditive && !isSubtractive) selection.set      ( sel );
+			else if (isAdditive)               selection.addAll   ( sel );
+			else if (isSubtractive)            selection.removeAll( sel );
+		}
 	}
 
 
@@ -462,26 +460,6 @@ public class ToolContextual extends Tool
 		panel.setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
 		panel.repaint();
 	}
-	
-	
-	
-	private void selectAdd() {
-		if (selecting)
-			return;
-		
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
-		selectAddRemove( true, false );
-	}
-	
-	
-	
-    private void selectToggle() {
-    	if (selecting)
-			return;
-    	
-    	System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
-    	selectAddRemove( false, true );
-	}
     
     
     
@@ -492,6 +470,9 @@ public class ToolContextual extends Tool
 		EditorComponent ecom = getComponentAt( cam.getMousePosWorld() );
 		
 		if (ecom == null)
+			return;
+		
+		if (adding && toggling)
 			return;
 		
 		if (adding)
