@@ -22,4 +22,9 @@ public class Dialog
 	{
 		JOptionPane.showMessageDialog(f, message, title, JOptionPane.ERROR_MESSAGE);
 	}
+	
+	public static void showInfo(JFrame f, String message, String title)
+	{
+		JOptionPane.showMessageDialog(f, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
 }
