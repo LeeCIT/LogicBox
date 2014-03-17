@@ -2,16 +2,10 @@
 
 
 package logicBox.sim;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Set;
-import logicBox.sim.component.Component;
-import logicBox.sim.component.ComponentActive;
-import logicBox.sim.component.ComponentPassive;
-import logicBox.sim.component.Junction;
-import logicBox.sim.component.Pin;
-import logicBox.sim.component.Stateful;
-import logicBox.sim.component.Trace;
-import logicBox.sim.component.Updateable;
+import logicBox.sim.component.*;
 import logicBox.util.Util;
 
 
@@ -21,8 +15,10 @@ import logicBox.util.Util;
  * Also useful as an informational structure.
  * @author Lee Coakley
  */
-public class Net implements Stateful, Updateable, Iterable<ComponentPassive>
+public class Net implements Stateful, Updateable, Serializable, Iterable<ComponentPassive>
 {
+	private static final long serialVersionUID = 1L;
+	
 	public Set<ComponentPassive> all;        // Everything in the net
 	public Set<ComponentPassive> writeables; // Everything except pins leading into the net  
 	public Set<Junction>         junctions;  // 

@@ -16,6 +16,8 @@ import logicBox.gui.editor.GraphicGen;
  */
 public abstract class ComponentActive extends Component implements Updateable, PinIo, Graphical
 {
+	private static final long serialVersionUID = 1L;
+	
 	protected List<Pin> pinInputs;
 	protected List<Pin> pinOutputs;
 	
@@ -118,6 +120,16 @@ public abstract class ComponentActive extends Component implements Updateable, P
 	public void reset() {
 		for (Pin pin: getPins())
 			pin.reset();
+	}
+	
+	
+	
+	public boolean hasInputsConnected() {
+		for (Pin pin: getPinInputs())
+			if (pin.hasTrace())
+				return true;
+		
+		return false;
 	}
 	
 	

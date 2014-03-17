@@ -12,6 +12,10 @@ import logicBox.sim.SimUtil;
  */
 public abstract class Gate extends ComponentActive
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public Gate() {
 		super();
 	}

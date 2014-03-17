@@ -13,6 +13,8 @@ import logicBox.sim.SimUtil;
  */
 public abstract class Source extends ComponentActive
 {
+	private static final long serialVersionUID = 1L;
+	
 	private boolean state;
 	
 	

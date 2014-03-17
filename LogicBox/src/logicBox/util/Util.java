@@ -3,6 +3,11 @@
 
 package logicBox.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -26,4 +31,37 @@ public abstract class Util
 		set.addAll( addThese );
 		return set;
 	}
+	
+	
+	
+	/**
+	 * Deep copy a serialisable object using loopback serialization.
+	 * This is a lot easier than making tons of classes cloneable.
+	 * It's probably not very fast, but this won't be frequently called.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Serializable> T deepCopy( T object ) {
+		try {
+			ByteArrayOutputStream osByte = new ByteArrayOutputStream();
+			ObjectOutputStream    osObj  = new ObjectOutputStream( osByte );
+			
+			osObj.writeObject( object );
+			
+			ByteArrayInputStream isByte = new ByteArrayInputStream( osByte.toByteArray() );
+			ObjectInputStream    isObj  = new ObjectInputStream( isByte );
+			
+			return (T) isObj.readObject();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
 }
+
+
+
+
+
+
+

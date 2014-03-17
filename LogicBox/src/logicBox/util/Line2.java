@@ -92,6 +92,19 @@ public class Line2 implements Transformable, Serializable
 	
 	
 	
+	public boolean overlaps( Bbox2 bbox ) {
+		if (getBbox().contains( bbox )) // No intersect, but overlaps
+			return true;
+		
+		for (Line2 line: bbox.getLines())
+			if (line.intersect( this ).intersects)
+				return true;
+		
+		return false;
+	}
+	
+	
+	
 	public Bbox2 getBbox() {
 		List<Vec2> points = new ArrayList<>();
 		points.add( a  );

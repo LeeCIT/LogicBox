@@ -12,6 +12,8 @@ package logicBox.sim.component;
  */
 public abstract class ComponentPassive extends Component implements Stateful
 {
+	private static final long serialVersionUID = 1L;
+	
 	protected boolean state;
 	
 	

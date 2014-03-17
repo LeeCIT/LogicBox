@@ -1,12 +1,18 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.tools;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
+import logicBox.gui.Gfx;
+import logicBox.gui.editor.Camera;
+import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.RepaintListener;
 import logicBox.util.CallbackParam;
 import logicBox.util.Vec2;
 
@@ -18,9 +24,6 @@ import logicBox.util.Vec2;
  */
 public class ToolPlacer extends Tool
 {
-	private EditorPanel     panel;
-	private EditorWorld     world;
-	private Camera          cam;
 	private MouseAdapter    mouseListener;
 	private RepaintListener repaintListener;
 	
@@ -33,10 +36,8 @@ public class ToolPlacer extends Tool
 	
 	
 	
-	public ToolPlacer( EditorPanel panel, EditorWorld world, Camera cam ) {
-		this.panel           = panel;
-		this.world           = world;
-		this.cam             = cam;
+	public ToolPlacer( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
+		super( panel, world, cam, manager );
 		this.mouseListener   = createEventListener();
 		this.repaintListener = createRepaintListener();
 	}
@@ -104,8 +105,12 @@ public class ToolPlacer extends Tool
 	private RepaintListener createRepaintListener() {
 		return new RepaintListener() {
 			public void draw( Graphics2D g ) {
-				if (placementInitiated)
-					placementGraphic.draw( g );
+				if (placementInitiated) {
+					Gfx.pushCompositeAndSet( g, 0.5 );
+						Gfx.drawOrientationOverlay( g, placementGraphic.getPos(), placementGraphic.getBbox().getBiggest()*1.4, placementGraphic.getAngle() );
+						placementGraphic.draw( g );
+					Gfx.popComposite( g );
+				}
 			}
 		};
 	}
@@ -147,6 +152,7 @@ public class ToolPlacer extends Tool
 	private void placementComplete( Vec2 pos ) {
 		placementPos = pos;
 		placementCallback.execute( placementPos );
+		placementGraphic.setHighlighted( false );
 		repaint();
 	}
 	

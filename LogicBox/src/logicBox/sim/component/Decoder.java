@@ -15,6 +15,10 @@ import logicBox.sim.SimUtil;
  */
 public class Decoder extends ComponentActive
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public Decoder( int inputPinCount ) {
 		super();
 		

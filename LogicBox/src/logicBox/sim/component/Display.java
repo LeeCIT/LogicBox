@@ -14,6 +14,10 @@ import logicBox.sim.SimUtil;
  */
 public abstract class Display extends ComponentActive
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public Display() {
 		super();
 	}

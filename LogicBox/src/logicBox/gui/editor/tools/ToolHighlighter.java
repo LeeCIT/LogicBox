@@ -1,11 +1,16 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.tools;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import logicBox.gui.editor.Camera;
+import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.RepaintListener;
 import logicBox.util.Vec2;
 
 
@@ -17,10 +22,6 @@ import logicBox.util.Vec2;
  */
 public class ToolHighlighter extends Tool
 {
-	private EditorPanel panel;
-	private EditorWorld world;
-	private Camera      cam;
-	
 	private EditorComponent lastComponent;
 	private EditorComponent curComponent;
 	private MouseAdapter    eventListener;
@@ -28,10 +29,8 @@ public class ToolHighlighter extends Tool
 	
 	
 	
-	public ToolHighlighter( EditorPanel panel, EditorWorld world, Camera cam ) {
-		this.panel           = panel;
-		this.world           = world;
-		this.cam             = cam;
+	public ToolHighlighter( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
+		super( panel, world, cam, manager );
 		this.eventListener   = createEventListener();
 		this.repaintListener = createRepaintListener();
 	}
@@ -89,7 +88,7 @@ public class ToolHighlighter extends Tool
 		boolean changed = false;
 		
 		if (lastComponent != null) {
-			lastComponent.graphic.setHighlighted( false );
+			lastComponent.getGraphic().setHighlighted( false );
 			lastComponent = null;
 			changed = true;
 		}
@@ -97,7 +96,7 @@ public class ToolHighlighter extends Tool
 		curComponent = world.findTopmostAt( pos );
 		
 		if (curComponent != null) {
-			curComponent.graphic.setHighlighted( true );
+			curComponent.getGraphic().setHighlighted( true );
 			lastComponent = curComponent;
 			changed = true;
 		}

@@ -116,6 +116,26 @@ public class EditorMenuBar extends JMenuBar
 		
 		return item;
 	}
+	
+	
+	
+	/**
+	 * Set whether the log in item is enabled or not
+	 * @param status
+	 */
+	public void setLogInItemstatus(Boolean status) {
+		itemCloudLogin.setEnabled(status);
+	}
+	
+	
+	
+	/**
+	 * Set whether the log out item is enabled or not
+	 * @param status
+	 */
+	public void setLogOutItemStatus(Boolean status) {
+		itemCloudLogout.setEnabled(status);
+	}
 }
 
 

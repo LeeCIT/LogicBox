@@ -4,6 +4,7 @@
 package logicBox.gui.editor;
 
 import java.awt.Color;
+import java.io.Serializable;
 
 
 
@@ -11,8 +12,10 @@ import java.awt.Color;
  * All graphics which can be drawn in the EditorPanel derive from this class.
  * @author Lee Coakley
  */
-public abstract class Graphic implements Drawable
+public abstract class Graphic implements Serializable, Drawable
 {
+	private static final long serialVersionUID = 1L;
+	
 	protected Color   colStroke;
 	protected Color   colFill;
 	private   boolean isSelected;

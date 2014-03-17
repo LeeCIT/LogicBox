@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class BezierCubic2 implements Transformable, Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	public Vec2 a, c1, c2, b;
 	
 	

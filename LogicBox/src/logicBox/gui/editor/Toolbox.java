@@ -3,20 +3,18 @@
 
 package logicBox.gui.editor;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
+import logicBox.util.Util;
 
 
 
 /**
  * The editor toolbox, where components are displayed in a palette for easy creation.
- * TODO: BUG: Creating one object and reusing it many times!  New instances must be created.
- * TODO: A copy() function in the Component class would solve this neatly, and it needs to be done anyway
  * @author John Murphy
  * @author Lee Coakley
  */
@@ -30,11 +28,11 @@ public class Toolbox extends JDialog
 	public Toolbox( JFrame parent ) {
 		super( parent, "Toolbox" );
 		setDefaultCloseOperation( Toolbox.DISPOSE_ON_CLOSE );
-		setLayout( new MigLayout( "insets 0, wrap 1" ) );		
-		setSize( new Dimension(200, 600) );
+		setLayout( new MigLayout( "insets 0, flowy" ) );
 		setupEvaluator();
 		addButtons();
 		pack();
+		setResizable( false );
 		setVisible( true );
 	}
 		
@@ -135,7 +133,7 @@ public class Toolbox extends JDialog
 	
 	
 	private EditorCreationCommand genCommand( ComponentActive com ) {
-		return new EditorCreationCommand( com, com.getGraphic() );
+		return new EditorCreationCommand( Util.deepCopy(com), com.getGraphic() );
 	}
 	
 	

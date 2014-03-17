@@ -2,24 +2,11 @@
 
 
 package logicBox.sim;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import logicBox.sim.component.Component;
-import logicBox.sim.component.ComponentActive;
-import logicBox.sim.component.Junction;
-import logicBox.sim.component.Pin;
-import logicBox.sim.component.PinIo;
-import logicBox.sim.component.Source;
-import logicBox.sim.component.Trace;
-import logicBox.sim.component.Updateable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.util.*;
+import logicBox.sim.component.*;
 import logicBox.util.Util;
 
 
@@ -29,15 +16,18 @@ import logicBox.util.Util;
  * This version uses a levelisation algorithm and works with combinational circuits only.
  * @author Lee Coakley
  */
-public class Simulation
+public class Simulation implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private List<Component>       comps;   // All sim components
 	private List<ComponentActive> actives; // Event-generating components
 	private List<Source>          sources; // Primary/const inputs
 	
-	private Set<Net>         cacheNets;
-	private List<Updateable> cacheUpdateables;
-	private boolean          cacheInvalidated;
+	// Caches are regenerated on deserialisation.
+	transient private Set<Net>         cacheNets;
+	transient private List<Updateable> cacheUpdateables;
+	transient private boolean          cacheInvalidated;
 	
 	
 	
@@ -73,7 +63,7 @@ public class Simulation
 	 * Reset the simulation to its initial state, as if simulate() were never called.
 	 */
 	public void reset() {		
-		for (Net net: getNets())
+		for (Net net: findNets())
 			for (Component com: net)
 				com.reset();
 		
@@ -87,7 +77,7 @@ public class Simulation
 	 * Run the simulation.
 	 */
 	public void simulate() {
-		checkCache();
+		validateCache();
 		
 		for (Updateable up: cacheUpdateables)
 			up.update();
@@ -95,7 +85,7 @@ public class Simulation
 	
 	
 	
-	private void checkCache() {
+	private void validateCache() {
 		if (cacheInvalidated)
 			regenerateCaches();
 	}
@@ -103,10 +93,12 @@ public class Simulation
 	
 	
 	private void regenerateCaches() {
-		cacheNets = getNets();
+		Map<ComponentActive,Integer> comLevelMap; 
+		Map<Net,            Integer> netLevelMap; 
 		
-		Map<ComponentActive,Integer> comLevelMap = leveliseActives( actives );
-		Map<Net,            Integer> netLevelMap = leveliseNets   ( cacheNets, comLevelMap );
+		cacheNets   = findNets();
+		comLevelMap = leveliseActives( actives );
+		netLevelMap = pruneNets( leveliseNets(cacheNets,comLevelMap) );
 		
 		cacheUpdateables = sortByEvaluationOrder( comLevelMap, netLevelMap );
 		cacheInvalidated = false;
@@ -117,8 +109,8 @@ public class Simulation
 	/**
 	 * Group components into islands - regions of the circuit that aren't connected to one another.
 	 */
-	public List<Island> getIslands() {
-		Map<Pin,Net>         pinMap  = mapPinsToNets( getNets() );
+	public List<Island> findIslands() {
+		Map<Pin,Net>         pinMap  = mapPinsToNets( findNets() );
 		List<Island>         islands = new ArrayList<>();
 		Set<ComponentActive> pool    = Util.createIdentityHashSet( actives );
 		
@@ -189,19 +181,15 @@ public class Simulation
 	
 	
 	/**
-	 * Get all nets in the circuit.
+	 * Find all nets in the circuit.
 	 * Components in a net are guaranteed not to be present in any other net (if there are no loops).
 	 */
-	private Set<Net> getNets() {
+	private Set<Net> findNets() {
 		Set<Net> netSet = new HashSet<>();
 		
-		for (ComponentActive com: actives) {
-			List<Pin> pins = new ArrayList<>( com.getPinInputs() );
-			pins.addAll( com.getPinOutputs() );
-			
-			for (Pin pin: pins)
+		for (ComponentActive com: actives)
+			for (Pin pin: com.getPins())
 				netSet.add( new Net(pin) );
-		}
 			
 		return netSet;
 	}
@@ -222,20 +210,46 @@ public class Simulation
 	/**
 	 * Test whether the circuit contains any feedback loops.
 	 * Doesn't test for the presence of memory.
-	 * TODO use islands
 	 * @return True if there are no feedback loops.
 	 */
 	public boolean isLevelisable() {
+		for (Island island: findIslands())
+			if ( ! isLevelisable(island))
+				return false;
+		
+		return true;
+	}
+	
+	
+	
+	/**
+	 * Test whether an island is levelisable.
+	 * @see #isLevelisable()
+	 */
+	public boolean isLevelisable( Island island ) {
+		for (ComponentActive com: island)
+			if ( ! com.hasInputsConnected())
+				for (Pin pin: com.getPinOutputs())
+					if ( ! isLevelisableHelper( pin ))
+						return false;
+		
+		return true;
+	}
+	
+	
+	
+	private boolean isLevelisableHelper( Pin pin ) {
 		Set<Pin> set = Util.createIdentityHashSet();
-		return isLevelisable( set, sources.get(0).getPinOutput(0) );
+		return isLevelisableHelper( set, pin );
 	}
 	
 	
 	
 	/**
 	 * Recursively search for feedback loops.
+	 * If we never touch the same pin twice, we're good.
 	 */
-	private boolean isLevelisable( Set<Pin> set, Pin origin ) {
+	private boolean isLevelisableHelper( Set<Pin> set, Pin origin ) {
 		if (set.contains( origin ))
 			return false;
 		
@@ -243,7 +257,7 @@ public class Simulation
 		
 		for (ComponentActive com: new Net(origin).getFanout())
 			for (Pin pin: com.getPinOutputs())
-				if ( ! isLevelisable( set, pin ))
+				if ( ! isLevelisableHelper( set, pin ))
 					return false;
 		
 		return true;
@@ -252,7 +266,8 @@ public class Simulation
 	
 	
 	/**
-	 * Test whether the circuit can be reduced to a truth table. (levelisable and combinational)
+	 * Test whether the circuit can be reduced to a truth table. (both levelisable and combinational)
+	 * This is still infeasible if there are a lot of inputs though.
 	 */
 	public boolean isOptimisable() {
 		for (ComponentActive com: actives)
@@ -291,7 +306,7 @@ public class Simulation
 			}
 			
 			if (allInputsHaveLevels)
-				levels.put( com, maxLevel + 1 );
+				 levels.put( com, maxLevel + 1 );
 			else deferred.addLast( com );
 		}
 		
@@ -317,6 +332,22 @@ public class Simulation
 		}
 		
 		return levels;
+	}
+	
+	
+	
+	/**
+	 * Remove nets with a level of -1 (they can't affect the simulation).
+	 */
+	private Map<Net,Integer> pruneNets( Map<Net,Integer> netLevels ) { 
+		Map<Net,Integer> prune = new IdentityHashMap<>( netLevels ); 
+		Integer          m1    = -1;
+		
+		for (Map.Entry<Net,Integer> en: netLevels.entrySet())
+			if (en.getValue().equals( m1 ))
+				prune.remove( en.getKey() );
+		
+		return prune;
 	}
 	
 	
@@ -368,6 +399,16 @@ public class Simulation
 		});
 		
 		return sorted;
+	}
+	
+	
+	
+	/**
+	 * Ensure caches are regenerated when the object is reconstructed.
+	 */
+	private void readObject( ObjectInputStream in ) throws IOException, ClassNotFoundException {
+		in.defaultReadObject();
+		regenerateCaches();
 	}
 	
 	
