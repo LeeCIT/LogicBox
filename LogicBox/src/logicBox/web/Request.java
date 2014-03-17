@@ -41,6 +41,11 @@ public class Request
 		wc.post("login", map, this, ri);
 	}
 	
+	public void logout()
+	{
+		wc.get("user/logout", this, ri);
+	}
+	
 	public void setRequestInterface(RequestInterface ri)
 	{
 		this.ri = ri;

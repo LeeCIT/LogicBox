@@ -9,6 +9,7 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 
 import logicBox.gui.GUI;
+import logicBox.gui.menubar.EditorMenuBar;
 import logicBox.web.*;
 import net.miginfocom.swing.MigLayout;
 
@@ -98,6 +99,8 @@ public class LoginPanel extends JDialog implements RequestInterface
 				Dialog.showErrorList(parent, req.getErrors(), "Login Failure");
 			else
 			{
+				EditorMenuBar.getInstance().setAuthState(true);
+				
 				dispose();
 			}
 		}
