@@ -23,16 +23,13 @@ public class ToolManager
 	private ToolPlacer      toolPlacer;
 	private ToolTraceDrawer toolTraceDrawer;
 	
-	private List<EditorComponent> selection;
-	
 	private List<Tool> tools;
 	private Tool       activeTool;
 	
 	
 	
 	public ToolManager( EditorPanel panel, EditorWorld world, Camera cam ) {
-		selection = new ArrayList<>();
-		tools     = new ArrayList<>();
+		tools = new ArrayList<>();
 		
 		setupTools ( panel, world, cam );
 		setActiveTool( toolContextual );
@@ -70,23 +67,6 @@ public class ToolManager
 	public ToolHighlighter getHighlighter() { return toolHighlighter; }
 	public ToolPlacer      getPlacer()      { return toolPlacer;      }
 	public ToolTraceDrawer getTraceDrawer() { return toolTraceDrawer; }
-	
-	
-	
-	public List<Tool> getTools() {
-		return tools;
-	}
-	
-	
-	
-	protected boolean hasSelection() {
-		return ! selection.isEmpty();
-	}
-	
-	
-	protected List<EditorComponent> getSelection() {
-		return selection;
-	}
 }
 
 
