@@ -36,4 +36,9 @@ class AuthController extends Controller
         
         return Auth::getUser()->getUserInfo();
     }
+    
+    function logout()
+    {
+        Auth::logout();
+    }
 }
