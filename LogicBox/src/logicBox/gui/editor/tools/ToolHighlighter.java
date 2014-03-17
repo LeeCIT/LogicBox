@@ -63,11 +63,11 @@ public class ToolHighlighter extends Tool
 	private MouseAdapter createEventListener() {
 		return new MouseAdapter() {			
 			public void mouseMoved( MouseEvent ev ) {
-				doHighlight( cam.getMousePosWorld() );
+				doHighlight();
 			}
 			
 			public void mouseDragged( MouseEvent ev ) {
-				doHighlight( cam.getMousePosWorld() );
+				doHighlight();
 			}
 		};
 	}
@@ -91,7 +91,7 @@ public class ToolHighlighter extends Tool
 	
 	
 	
-	private void doHighlight( Vec2 pos ) {
+	private void doHighlight() {
 		boolean changed = false;
 		
 		if (lastComponent != null) {
@@ -99,7 +99,7 @@ public class ToolHighlighter extends Tool
 			changed = true;
 		}
 		
-		curComponent = world.findTopmostAt( pos );
+		curComponent = getComponentAt( cam.getMousePosWorld() );
 		
 		if (curComponent != null) {
 			lastComponent = curComponent;
