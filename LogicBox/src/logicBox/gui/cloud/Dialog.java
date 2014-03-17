@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-public class ErrorDialog
+public class Dialog
 {
 	public static void showErrorList(JFrame f, ArrayList<String> errors, String title)
 	{

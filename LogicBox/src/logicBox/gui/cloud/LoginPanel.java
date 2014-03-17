@@ -83,7 +83,7 @@ public class LoginPanel extends JDialog implements RequestInterface
 		else
 		{
 			if(req.hasErrors())
-				ErrorDialog.showErrorList(parent, req.getErrors(), "Login Failure");
+				Dialog.showErrorList(parent, req.getErrors(), "Login Failure");
 			else
 			{
 				System.out.println(res.getBody().toString());

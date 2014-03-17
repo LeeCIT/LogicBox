@@ -85,6 +85,9 @@ public class EditorMenuBar extends JMenuBar
 		JMenu m = menuCloud = new JMenu( "Cloud" );
 		itemCloudLogin  = add( m, "Login" );
 		itemCloudLogout = add( m, "Logout" );
+		
+		itemCloudLogout.setEnabled(false);
+		
 		add( m );
 	}
 	
