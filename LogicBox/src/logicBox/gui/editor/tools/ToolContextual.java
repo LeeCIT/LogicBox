@@ -98,6 +98,18 @@ public class ToolContextual extends Tool
 	
 	
 	
+	public Selection getSelection() {
+		return selection;
+	}
+	
+	
+	
+	public boolean hasSelection() {
+		return ! getSelection().isEmpty();
+	}
+	
+	
+	
 	
 	
 	//////////////////////////////////////////////////
@@ -303,7 +315,7 @@ public class ToolContextual extends Tool
 			Gfx.pushColorAndSet( g, EditorStyle.colSelectionStroke );
 			
 				Gfx.pushColorAndSet( g, EditorStyle.colSelectionFill );
-					Gfx.pushCompositeAndSet( g, 0.15 );
+					Gfx.pushCompositeAndSet( g, 0.25 );
 						Gfx.drawBbox( g, bbox, true );
 					Gfx.popComposite( g );
 				Gfx.popColor( g );
