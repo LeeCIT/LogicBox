@@ -2,9 +2,13 @@ package logicBox.gui.cloud;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.*;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
+
+import logicBox.gui.GUI;
 import logicBox.web.*;
 import net.miginfocom.swing.MigLayout;
 
@@ -19,6 +23,8 @@ public class LoginPanel extends JDialog implements RequestInterface
 	private Request r = new Request("http://cloud.jatochnietdan.com/");
 	
 	private JFrame parent;
+	
+	private static LoginPanel instance = null;
 	
 	public LoginPanel(JFrame frame)
 	{
@@ -45,6 +51,14 @@ public class LoginPanel extends JDialog implements RequestInterface
 		r.setRequestInterface(this);
 		
 		setVisible(true);
+	}
+	
+	public static LoginPanel getInstance()
+	{
+		if(instance == null)
+			instance = new LoginPanel(GUI.getMainFrame());
+		
+		return instance;
 	}
 	
 	private void HandleLoginAttempt()
