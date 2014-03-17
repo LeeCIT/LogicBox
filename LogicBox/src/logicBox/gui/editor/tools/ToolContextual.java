@@ -28,6 +28,7 @@ import logicBox.util.Vec2;
  * Handles dragging, rotating and selection.
  * @author Lee Coakley
  * TODO there are still some bugs.
+ * TODO add support for context menus on components
  */
 public class ToolContextual extends Tool
 {
@@ -329,10 +330,8 @@ public class ToolContextual extends Tool
 		if (dragHasLock)
 			return;
 		
-		boolean modifierActive = ev.isShiftDown() || ev.isControlDown();
-		
-		if (isLeft(ev) && ! modifierActive)
-			selectInitiate();
+		if (isLeft(ev))
+			selectInitiate( ev.isShiftDown() || ev.isControlDown() );
 			
 		if (isRight(ev))
 			selectCancel();
@@ -351,7 +350,7 @@ public class ToolContextual extends Tool
 	
 	
 	private void onSelectClick( MouseEvent ev ) {
-		if (dragHasLock)
+		if (dragging)
 			return;
 		
 		if (isLeft(ev)) {
@@ -377,7 +376,7 @@ public class ToolContextual extends Tool
 	
 	
 	
-	private void selectInitiate() {
+	private void selectInitiate( boolean modifying ) {
 		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		Vec2    pos   = cam.getMousePosWorld();
 		boolean hover = isComponentAt( pos );
@@ -385,7 +384,7 @@ public class ToolContextual extends Tool
 		if (hover)
 			return; // Allow shift/alt click selection mods to take effect
 		
-		if ( ! hover) {
+		if ( ! hover && ! modifying) {
 			selection.clear();
 			panel.repaint();
 		}
@@ -393,6 +392,7 @@ public class ToolContextual extends Tool
 		selectHasLock     = true;
 		selectInitiated   = true;
 		selectInitiatedAt = pos;
+		selectPosNow      = pos;
 	}
 	
 	
@@ -418,25 +418,36 @@ public class ToolContextual extends Tool
 	
 	
 	private void selectComplete( boolean isAdditive, boolean isSubtractive ) {
-		if ( ! selecting)
+		if ( ! selectHasLock)
 			return;
 		
 		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		
-		if (isAdditive && isSubtractive)
-			return;
-		
-		List<EditorComponent> sel = world.find( getSelectBbox() );
-		
-		if (!isAdditive && !isSubtractive) selection.set      ( sel );
-		else if (isAdditive)               selection.addAll   ( sel );
-		else if (isSubtractive)            selection.removeAll( sel );
+		modifySelection( isAdditive, isSubtractive );
 		
 		selectFinishedCommon();
 	}
 	
 	
 	
+	private void modifySelection( boolean isAdditive, boolean isSubtractive ) {
+		if (isAdditive && isSubtractive)
+			return;
+		
+		Bbox2 bbox = getSelectBbox();
+		
+		if (bbox.getSmallest() <= 0) // There would be no visual feedback
+			return;
+		
+		List<EditorComponent> sel = world.find( bbox );
+		
+		if (!isAdditive && !isSubtractive) selection.set      ( sel );
+		else if (isAdditive)               selection.addAll   ( sel );
+		else if (isSubtractive)            selection.removeAll( sel );
+	}
+
+
+
 	private void selectCancel() {
 		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		selectFinishedCommon();
