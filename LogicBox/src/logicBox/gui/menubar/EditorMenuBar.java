@@ -88,6 +88,8 @@ public class EditorMenuBar extends JMenuBar
 		
 		itemCloudLogout.setEnabled(false);
 		
+		EditorMenuBarEvent.handleLoginEvent(itemCloudLogin);
+		
 		add( m );
 	}
 	

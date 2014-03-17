@@ -30,8 +30,6 @@ public class WebClient
 
 		h.fields(params);
 		
-		System.out.println(params.toString());
-		
 		h.asJsonAsync(new Callback<JsonNode>() 
 		{
 		    public void failed(UnirestException e) 
@@ -42,8 +40,6 @@ public class WebClient
 
 		    public void completed(HttpResponse<JsonNode> response) 
 		    {
-		    	System.out.println(response.getBody().toString());
-		    	
 		    	parseHeaders(response.getHeaders());
 		    	parseErrors(response.getBody().getObject(), req.getErrors());
 		    		

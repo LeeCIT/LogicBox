@@ -20,7 +20,7 @@ public class LoginPanel extends JDialog implements RequestInterface
 	private JPasswordField txtPassword = new JPasswordField("");
 	private JButton btnLogin = new JButton("Login");
 	
-	private Request r = new Request("http://cloud.jatochnietdan.com/");
+	private Request r = new Request();
 	
 	private JFrame parent;
 	
@@ -98,7 +98,7 @@ public class LoginPanel extends JDialog implements RequestInterface
 				Dialog.showErrorList(parent, req.getErrors(), "Login Failure");
 			else
 			{
-				System.out.println(res.getBody().toString());
+				dispose();
 			}
 		}
 		
