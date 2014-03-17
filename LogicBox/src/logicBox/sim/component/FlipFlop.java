@@ -57,7 +57,7 @@ public abstract class FlipFlop extends ComponentActive
 	
 	protected boolean updateClock() {
 		boolean clock     = getPinClock().getState();
-		boolean isEdgePos = LogicLevel.isEdgePos( lastClock, clock );
+		boolean isEdgePos = LogicLevel.isPositiveEdge( lastClock, clock );
 		lastClock = clock;
 		
 		return isEdgePos;
