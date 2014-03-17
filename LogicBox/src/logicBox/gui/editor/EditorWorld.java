@@ -5,6 +5,7 @@ package logicBox.gui.editor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,8 +24,10 @@ import logicBox.util.Vec2;
  * Stores and queries the "world" of the editor.
  * @author Lee Coakley
  */
-public class EditorWorld
+public class EditorWorld implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private SpatialGrid<EditorComponent> grid;
 	private List       <EditorComponent> ecoms;
 	
