@@ -33,19 +33,25 @@ public class EditorMenuBar extends JMenuBar
 	public JMenu     menuCloud; // Test
 	public JMenuItem itemCloudLogin;
 	public JMenuItem itemCloudLogout;
+	public JMenuItem itemCloudFiles;
 	
 	public JMenu     menuHelp;
 	public JMenuItem itemHelpHelp;
 	public JMenuItem itemHelpAbout;
 	
-	
+	private static EditorMenuBar instance = null;
 	
 	public EditorMenuBar() {
 		super();
 		setupComponents();
+		
+		instance = this;
 	}
 	
-	
+	public static EditorMenuBar getInstance()
+	{
+		return instance;
+	}
 	
 	private void setupComponents() {
 		setupFileMenu();
@@ -84,11 +90,13 @@ public class EditorMenuBar extends JMenuBar
 	private void setupCloudMenu() {
 		JMenu m = menuCloud = new JMenu( "Cloud" );
 		itemCloudLogin  = add( m, "Login" );
+		itemCloudFiles 	= add( m, "My Circuits");
 		itemCloudLogout = add( m, "Logout" );
 		
-		itemCloudLogout.setEnabled(false);
+		setAuthState(false);
 		
 		EditorMenuBarEvent.handleLoginEvent(itemCloudLogin);
+		EditorMenuBarEvent.handleLogoutEvent(itemCloudLogout);
 		
 		add( m );
 	}
@@ -123,23 +131,14 @@ public class EditorMenuBar extends JMenuBar
 	}
 	
 	
-	
 	/**
-	 * Set whether the log in item is enabled or not
+	 * Set authentication state
 	 * @param status
 	 */
-	public void setLogInItemstatus(Boolean status) {
-		itemCloudLogin.setEnabled(status);
-	}
-	
-	
-	
-	/**
-	 * Set whether the log out item is enabled or not
-	 * @param status
-	 */
-	public void setLogOutItemStatus(Boolean status) {
-		itemCloudLogout.setEnabled(status);
+	public void setAuthState(Boolean status) {
+		itemCloudLogout.setVisible(status);
+		itemCloudLogin.setVisible(!status);
+		itemCloudFiles.setVisible(status);
 	}
 }
 
