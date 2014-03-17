@@ -11,6 +11,11 @@ public class Request
 	private ArrayList<String> errors = new ArrayList<String>();
 	private RequestInterface ri;
 	
+	public Request()
+	{
+		this.wc = new WebClient("http://cloud.jatochnietdan.com/");
+	}
+	
 	public Request(String url)
 	{
 		this.wc = new WebClient(url);
