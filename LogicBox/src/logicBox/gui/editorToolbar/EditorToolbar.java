@@ -82,8 +82,9 @@ public class EditorToolbar extends JToolBar
 		add( new JSeparator(JSeparator.VERTICAL) );
 	}
 	
-	private ImageIcon loadIconFromResource(String path)
-	{
+	
+	
+	private ImageIcon loadIconFromResource(String path){
 		return new ImageIcon(getClass().getClassLoader().getResource("resources/" + path));
 	}
 }
