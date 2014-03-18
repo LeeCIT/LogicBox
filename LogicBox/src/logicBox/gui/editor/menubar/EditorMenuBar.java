@@ -11,6 +11,8 @@ import javax.swing.JMenuItem;
 
 /**
  * Menu bar with new/save/print etc.
+ * The menu items are public so you can modify them at will.
+ * Do not put event handling code in this class!  Use a controller to maintain modularity.
  * @author Lee Coakley
  */
 public class EditorMenuBar extends JMenuBar
@@ -87,12 +89,6 @@ public class EditorMenuBar extends JMenuBar
 		itemCloudLogin  = add( m, "Login" );
 		itemCloudFiles 	= add( m, "My Circuits");
 		itemCloudLogout = add( m, "Logout" );
-		
-		setAuthState(false);
-		
-		EditorMenuBarEvent.handleLoginEvent(itemCloudLogin);
-		EditorMenuBarEvent.handleLogoutEvent(itemCloudLogout);
-		
 		add( m );
 	}
 	
@@ -123,17 +119,6 @@ public class EditorMenuBar extends JMenuBar
 			menu.addSeparator();
 		
 		return item;
-	}
-	
-	
-	/**
-	 * Set authentication state
-	 * @param status
-	 */
-	public void setAuthState(Boolean status) {
-		itemCloudLogout.setVisible(status);
-		itemCloudLogin.setVisible(!status);
-		itemCloudFiles.setVisible(status);
 	}
 }
 

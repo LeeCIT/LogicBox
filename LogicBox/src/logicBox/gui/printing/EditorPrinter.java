@@ -6,7 +6,7 @@ import java.awt.print.*;
 import javax.swing.*;
 
 
-public class Printing implements Printable{
+public class EditorPrinter implements Printable{
 	
 	JFrame frame;
 

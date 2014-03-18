@@ -3,7 +3,7 @@
 
 package logicBox.gui.editor.toolbar;
 
-import javax.swing.ImageIcon;
+import javax.swing.Icon;
 import javax.swing.JButton;
 
 
@@ -14,7 +14,7 @@ import javax.swing.JButton;
  */
 public class EditorToolBarButton extends JButton
 {
-	public EditorToolBarButton( ImageIcon icon, String tooltip ) {
+	public EditorToolBarButton( Icon icon, String tooltip ) {
 		super( icon );
 		setToolTipText( tooltip );
 	}
