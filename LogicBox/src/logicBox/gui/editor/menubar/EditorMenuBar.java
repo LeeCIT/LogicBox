@@ -39,19 +39,14 @@ public class EditorMenuBar extends JMenuBar
 	public JMenuItem itemHelpHelp;
 	public JMenuItem itemHelpAbout;
 	
-	private static EditorMenuBar instance = null;
+	
 	
 	public EditorMenuBar() {
 		super();
 		setupComponents();
-		
-		instance = this;
 	}
 	
-	public static EditorMenuBar getInstance()
-	{
-		return instance;
-	}
+	
 	
 	private void setupComponents() {
 		setupFileMenu();
