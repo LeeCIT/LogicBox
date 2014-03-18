@@ -10,6 +10,7 @@ import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.RepaintListener;
 import logicBox.util.Vec2;
 
@@ -62,11 +63,11 @@ public class ToolHighlighter extends Tool
 	private MouseAdapter createEventListener() {
 		return new MouseAdapter() {			
 			public void mouseMoved( MouseEvent ev ) {
-				doHighlight( cam.getMousePosWorld() );
+				doHighlight();
 			}
 			
 			public void mouseDragged( MouseEvent ev ) {
-				doHighlight( cam.getMousePosWorld() );
+				doHighlight();
 			}
 		};
 	}
@@ -76,27 +77,31 @@ public class ToolHighlighter extends Tool
 	private RepaintListener createRepaintListener() {
 		return new RepaintListener() {
 			public void draw( Graphics2D g ) {
-				if (curComponent != null)
-					curComponent.draw( g );
+				if (curComponent != null) {
+					Graphic graphic = curComponent.getGraphic();
+					boolean state   = graphic.isHighlighted();
+					
+					graphic.setHighlighted( true );
+					graphic.draw( g );
+					graphic.setHighlighted( state );
+				}
 			}
 		};
 	}
 	
 	
 	
-	private void doHighlight( Vec2 pos ) {
+	private void doHighlight() {
 		boolean changed = false;
 		
 		if (lastComponent != null) {
-			lastComponent.getGraphic().setHighlighted( false );
 			lastComponent = null;
 			changed = true;
 		}
 		
-		curComponent = world.findTopmostAt( pos );
+		curComponent = getComponentAt( cam.getMousePosWorld() );
 		
 		if (curComponent != null) {
-			curComponent.getGraphic().setHighlighted( true );
 			lastComponent = curComponent;
 			changed = true;
 		}

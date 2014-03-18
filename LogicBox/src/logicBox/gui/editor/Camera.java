@@ -33,8 +33,8 @@ public class Camera
 	private double zoomMax;
 	private double zoom;
 	
-	private double zoomDirIn  = -1;
-	private double zoomDirOut = +1;
+	private final double zoomDirIn  = -1;
+	private final double zoomDirOut = +1;
 	
 	private boolean panningActive;
 	private Vec2    panningOrigin;
