@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editorToolbar;
+package logicBox.gui.editor.toolbar;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -21,9 +21,12 @@ import net.miginfocom.swing.MigLayout;
 public class EditorToolbar extends JToolBar
 {
 	public EditorToolBarButton newFileButt;
-	public EditorToolBarButton openFileButt; 
+	public EditorToolBarButton openFileButt;
+	public EditorToolBarButton printButt;
+	
 	public EditorToolBarButton undoButt;
 	public EditorToolBarButton redoButt;
+	
 	public EditorToolBarButton editTextButt;
 	public EditorToolBarButton enableGrid;
 	public EditorToolBarButton centreCamButt;
@@ -35,18 +38,16 @@ public class EditorToolbar extends JToolBar
 		super( HORIZONTAL );
 		setFloatable( false );
 
-		setLayout( new MigLayout("gap 1, insets 0", "[]", "[]") );
+		setLayout( new MigLayout( "gap 1, insets 0", "[]", "[]") );
 		setUpToolbar();
 	}
-
-
-
+	
+	
+	
 	/**
 	 * Set up the buttons
 	 */
 	private void setUpToolbar() {
-		String buttParam = "w 30, h 27";
-		
 		ImageIcon newFile   = loadIconFromResource( "icons/New16px.png"       );
 		ImageIcon openFile  = loadIconFromResource( "icons/Open16px.png"      );
 		ImageIcon undo      = loadIconFromResource( "icons/Undo16px.png"      );
@@ -55,8 +56,7 @@ public class EditorToolbar extends JToolBar
 		ImageIcon grid      = loadIconFromResource( "icons/Grid16px.png"      );
 		ImageIcon centreCam = loadIconFromResource( "icons/CentreCam16px.png" );
 		ImageIcon toolBox   = loadIconFromResource( "icons/ToolBox16px.png"   );
-
-
+		
 		// Make buttons for the EditorToolbar
 		newFileButt   = new EditorToolBarButton(newFile,   "New File"          );
 		openFileButt  = new EditorToolBarButton(openFile,  "OpenFile"          );
@@ -66,15 +66,17 @@ public class EditorToolbar extends JToolBar
 		enableGrid    = new EditorToolBarButton(grid,      "Show/Hide grid"    );
 		centreCamButt = new EditorToolBarButton(centreCam, "Centre Camera"     ); 
 		toolBoxButt   = new EditorToolBarButton(toolBox,   "Show/Hide Toolbox" );
-
+		
+		String buttParam = "w 30, h 27";
+		
 		add( newFileButt,  buttParam ); // New circuit
 		add( openFileButt, buttParam ); // Open circuit
 		add( new JSeparator(JSeparator.VERTICAL) );
-
+		
 		add( undoButt, buttParam ); // Undo
 		add( redoButt, buttParam ); // Redo
 		add( new JSeparator(JSeparator.VERTICAL) );
-
+		
 		add( enableGrid,    buttParam ); // Grid toggle
 		add( toolBoxButt,   buttParam ); // Toolbox toggle
 		add( centreCamButt, buttParam ); // Centre camera on circuit
@@ -82,8 +84,9 @@ public class EditorToolbar extends JToolBar
 		add( new JSeparator(JSeparator.VERTICAL) );
 	}
 	
-	private ImageIcon loadIconFromResource(String path)
-	{
+	
+	
+	private ImageIcon loadIconFromResource(String path)	{
 		return new ImageIcon(getClass().getClassLoader().getResource("resources/" + path));
 	}
 }

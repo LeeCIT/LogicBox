@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.menubar;
+package logicBox.gui.editor.menubar;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;

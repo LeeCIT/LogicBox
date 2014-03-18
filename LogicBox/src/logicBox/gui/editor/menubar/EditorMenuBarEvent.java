@@ -1,4 +1,4 @@
-package logicBox.gui.menubar;
+package logicBox.gui.editor.menubar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
