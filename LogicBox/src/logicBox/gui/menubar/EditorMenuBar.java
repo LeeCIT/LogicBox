@@ -10,6 +10,8 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import com.sun.org.apache.xerces.internal.xs.ItemPSVI;
+
 import logicBox.gui.CommonActionEvents;
 
 
@@ -151,11 +153,18 @@ public class EditorMenuBar extends JMenuBar
 	private void setUpActions() {
 		EditorMenuBarEvent.handleLoginEvent(itemCloudLogin);
 		EditorMenuBarEvent.handleLogoutEvent(itemCloudLogout);
+		
 		itemFileOpen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CommonActionEvents.openFileAction();  //TODO do something with the file got back
 			}
 		});
+		
+		itemFilePrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CommonActionEvents.printAction();
+			}
+		});		
 	}
 }
 
