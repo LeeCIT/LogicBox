@@ -9,7 +9,7 @@ import javax.swing.UIManager;
 import logicBox.gui.editor.EditorFrame;
 import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.Toolbox;
-import logicBox.gui.menubar.EditorMenuBar;
+import logicBox.gui.editor.menubar.EditorMenuBar;
 import logicBox.gui.snapping.ComponentSnapper;
 
 
@@ -20,7 +20,8 @@ import logicBox.gui.snapping.ComponentSnapper;
  */
 public abstract class GUI
 {
-	private static EditorFrame mainFrame;
+	private static EditorFrame editorFrame;
+	private static Toolbox     toolbox;
 	
 	
 	
@@ -54,28 +55,34 @@ public abstract class GUI
 	
 	/**
 	 * Get the current instance of the main frame.  If this frame closes the program exits.
+	 * There can only be one main frame, but there can be more than one actual frame. (black boxes etc).
 	 */
 	public static EditorFrame getMainFrame() {
-		return mainFrame;
+		return editorFrame;
+	}
+	
+	
+	
+	/**
+	 * Get the toolbox instance.  There can only be one.
+	 */
+	public static Toolbox getToolbox() {
+		return toolbox;
 	}
 	
 	
 	
 	private static void constructGUI() {
-		EditorPanel   panel =             new EditorPanel();
-		EditorFrame   frame = mainFrame = new EditorFrame( panel );
-		EditorMenuBar menu  =             new EditorMenuBar();
-		Toolbox       box   =             new Toolbox( frame );
+		editorFrame = new EditorFrame();
+		toolbox     = new Toolbox( editorFrame );
 		
-		box.addComponentListener( new ComponentSnapper(frame) );
+		toolbox.addComponentListener( new ComponentSnapper(editorFrame) );
+		toolbox.setActiveEditorPanel( editorFrame.getEditorPanel() );
 		
-		frame.setJMenuBar( menu );
-		box.setActiveEditorPanel( panel );
-		
-		frame.pack();
-		frame.setSize( 720, 640 );
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		frame.setVisible( true );
+		editorFrame.pack();
+		editorFrame.setSize( 720, 640 );
+		editorFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		editorFrame.setVisible( true );
 	}
 }
 
