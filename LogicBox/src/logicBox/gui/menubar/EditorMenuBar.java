@@ -3,9 +3,14 @@
 
 package logicBox.gui.menubar;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import logicBox.gui.CommonActionEvents;
 
 
 
@@ -44,7 +49,7 @@ public class EditorMenuBar extends JMenuBar
 	public EditorMenuBar() {
 		super();
 		setupComponents();
-		
+		setUpActions();
 		instance = this;
 	}
 	
@@ -95,9 +100,6 @@ public class EditorMenuBar extends JMenuBar
 		
 		setAuthState(false);
 		
-		EditorMenuBarEvent.handleLoginEvent(itemCloudLogin);
-		EditorMenuBarEvent.handleLogoutEvent(itemCloudLogout);
-		
 		add( m );
 	}
 	
@@ -139,6 +141,21 @@ public class EditorMenuBar extends JMenuBar
 		itemCloudLogout.setVisible(status);
 		itemCloudLogin.setVisible(!status);
 		itemCloudFiles.setVisible(status);
+	}
+	
+	
+	
+	/**
+	 * Actions for the menubar are here
+	 */
+	private void setUpActions() {
+		EditorMenuBarEvent.handleLoginEvent(itemCloudLogin);
+		EditorMenuBarEvent.handleLogoutEvent(itemCloudLogout);
+		itemFileOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CommonActionEvents.openFileAction();  //TODO do something with the file got back
+			}
+		});
 	}
 }
 
