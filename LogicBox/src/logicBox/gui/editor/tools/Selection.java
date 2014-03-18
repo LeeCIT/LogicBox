@@ -51,18 +51,19 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	 */
 	public void setPos( Vec2 pos ) {
 		Vec2 centre = getCentre();
-		Vec2 delta  = pos.subtract( centre );
+		Vec2 delta  = Geo.delta( pos, centre );
 		
 		for (EditorComponent ecom: ecoms) {
-			Vec2 newPos = ecom.getPos().add(delta);
-			ecom.setPos( Geo.snapNear(newPos, 16) );
+			Vec2 newPos = ecom.getPos().subtract(delta);
+			Vec2 snap   = Geo.snapNear( newPos, 16 );
+			ecom.setPos( snap );
 		}
 	}
 	
 	
 	
 	public double getAngle() {
-		return 0;
+		return angle;
 	}
 	
 	
@@ -71,8 +72,11 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	 * Rotate the selection to the given angle.
 	 * This moves and rotates the ecoms around the centre.
 	 */
-	public void setAngle( double angle ) {
-		System.out.println( "setangle" );
+	public void setAngle( double angleTo ) {
+		if (size() == 1)
+			iterator().next().setAngle( angleTo );
+		
+		System.out.println( "setAngle not implemented for multiple selects" );
 	}
 	
 	

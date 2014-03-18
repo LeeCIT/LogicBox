@@ -9,7 +9,6 @@ import java.awt.LinearGradientPaint;
 import java.awt.MultipleGradientPaint.CycleMethod;
 import java.awt.Paint;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
@@ -64,9 +63,6 @@ public class EditorPanel extends JPanel
 		cam.addTransformCallback( createOnTransformCallback() );
 		
 		toolManager = new ToolManager( this, world, cam );
-		
-		//addRepaintListener( world.getSpatialGridDebugRepainter() );
-		//new ToolTraceDrawer( this, world, cam ).attach();
 		
 		world.add( new EditorComponent( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, -128) ) );
 		world.add( new EditorComponent( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, -256) ) );
