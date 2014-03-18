@@ -3,11 +3,15 @@
 
 package logicBox.gui.editorToolbar;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
 
+import logicBox.gui.CommonActionEvents;
 import net.miginfocom.swing.MigLayout;
 
 
@@ -34,11 +38,10 @@ public class EditorToolbar extends JToolBar
 	public EditorToolbar() {
 		super( HORIZONTAL );
 		setFloatable( false );
-
 		setLayout( new MigLayout("gap 1, insets 0", "[]", "[]") );
 		setUpToolbar();
+		setUpActions();
 	}
-
 
 
 	/**
@@ -86,6 +89,19 @@ public class EditorToolbar extends JToolBar
 	
 	private ImageIcon loadIconFromResource(String path){
 		return new ImageIcon(getClass().getClassLoader().getResource("resources/" + path));
+	}
+	
+	
+	
+	/**
+	 * Set up the action listeners
+	 */
+	private void setUpActions() {
+		openFileButt.addActionListener( new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CommonActionEvents.openFileAction(); // TODO do something with the file got back				
+			}
+		});
 	}
 }
 

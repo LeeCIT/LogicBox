@@ -164,7 +164,7 @@ public class EditorMenuBar extends JMenuBar
 			public void actionPerformed(ActionEvent e) {
 				CommonActionEvents.printAction();
 			}
-		});		
+		});
 	}
 }
 
