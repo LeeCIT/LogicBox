@@ -73,7 +73,10 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	 * This moves and rotates the ecoms around the centre.
 	 */
 	public void setAngle( double angleTo ) {
-		System.out.println( "setAngle not implemented" );
+		if (size() == 1)
+			iterator().next().setAngle( angleTo );
+		
+		System.out.println( "setAngle not implemented for multiple selects" );
 	}
 	
 	

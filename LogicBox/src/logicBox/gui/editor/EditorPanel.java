@@ -64,9 +64,6 @@ public class EditorPanel extends JPanel
 		
 		toolManager = new ToolManager( this, world, cam );
 		
-		//addRepaintListener( world.getSpatialGridDebugRepainter() );
-		//new ToolTraceDrawer( this, world, cam ).attach();
-		
 		world.add( new EditorComponent( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, -128) ) );
 		world.add( new EditorComponent( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, -256) ) );
 		

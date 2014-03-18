@@ -16,9 +16,15 @@ import net.miginfocom.swing.MigLayout;
  */
 public class EditorFrame extends JFrame
 {
+	private EditorPanel editorPanel;
+	
+	
+	
 	public EditorFrame( EditorPanel panel ) {
 		super( "LogicBox" );
 		setLayout( new MigLayout( "insets 0, gap 0", "[grow,fill][]", "[][grow,fill][]" ) );
+		
+		this.editorPanel = panel;
 		
 		EditorToolbar   toolbar = new EditorToolbar();
 		EditorScrollBar x       = new EditorScrollBar( panel, JScrollBar.HORIZONTAL );
@@ -28,5 +34,11 @@ public class EditorFrame extends JFrame
 		add( panel,   "grow"         );
 		add( x,       "cell 0 2"     );
 		add( y,       "cell 1 1"     );
+	}
+	
+	
+	
+	public EditorPanel getEditorPanel() {
+		return editorPanel;
 	}
 }
