@@ -61,9 +61,23 @@ public class HelpPanel extends JPanel
 			builder.append("<html>");
 			builder.append("<h1>" + getCompName() +"</h1>");
 			builder.append("<hr>");
-			builder.append("Un-edited text");
+			builder.append(getCompDescription());
 			builder.append("</html>");
 			compDescription.setText(builder.toString());
+	}
+	
+	
+	
+	/**
+	 * Return the help menu name for the component
+	 * passed in.
+	 * @return
+	 */
+	private String getCompName() {
+		if ( ! componentMap.containsKey(componentType) )
+			return "Missing info";
+			
+			return componentMap.get(componentType).getCompName();	
 	}
 	
 	
@@ -73,12 +87,13 @@ public class HelpPanel extends JPanel
 	 * passed in.
 	 * @return
 	 */
-	private String getCompName(){
+	private String getCompDescription() {
 		if ( ! componentMap.containsKey(componentType) )
 			return "Missing info";
 			
-			return componentMap.get(componentType).getCompName();	
+			return componentMap.get(componentType).getCompDescription();	
 	}
+	
 	
 	
 	
