@@ -3,6 +3,7 @@
 
 package logicBox.gui;
 
+import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -10,6 +11,8 @@ import logicBox.gui.editor.EditorFrame;
 import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.Toolbox;
 import logicBox.gui.editor.menubar.EditorMenuBar;
+import logicBox.gui.editor.menubar.EditorMenuController;
+import logicBox.gui.editor.toolbar.EditorToolbarController;
 import logicBox.gui.snapping.ComponentSnapper;
 
 
@@ -79,8 +82,12 @@ public abstract class GUI
 		toolbox.addComponentListener( new ComponentSnapper(editorFrame) );
 		toolbox.setActiveEditorPanel( editorFrame.getEditorPanel() );
 		
+		new EditorMenuController   ( editorFrame.getEditorMenuBar(), editorFrame );
+		new EditorToolbarController( editorFrame.getEditorToolbar(), editorFrame );
+		
 		editorFrame.pack();
-		editorFrame.setSize( 720, 640 );
+		editorFrame.setSize       ( new Dimension(720, 640) );
+		editorFrame.setMinimumSize( new Dimension(640, 480) );
 		editorFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		editorFrame.setVisible( true );
 	}
