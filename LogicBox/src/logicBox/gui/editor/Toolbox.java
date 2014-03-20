@@ -3,40 +3,39 @@
 
 package logicBox.gui.editor;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import logicBox.gui.GUI;
+import net.miginfocom.swing.MigLayout;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
+import logicBox.util.Util;
 
 
 
 /**
  * The editor toolbox, where components are displayed in a palette for easy creation.
- * TODO: BUG: Creating one object and reusing it many times!  New instances must be created.
  * @author John Murphy
  * @author Lee Coakley
  */
-public class Toolbox extends JToolBar
+public class Toolbox extends JDialog
 {
 	private EditorPanel            activeEditorPanel;
 	private Evaluator<EditorPanel> evaluator;
 	
 	
 	
-	public Toolbox() {
-		super( "Toolbox" );
-		setMargin( new Insets(0, 2, 0, 0) );
-		setOrientation( JToolBar.VERTICAL );
-		
+	public Toolbox( JFrame parent ) {
+		super( parent, "Toolbox" );
+		setDefaultCloseOperation( Toolbox.DISPOSE_ON_CLOSE );
+		setLayout( new MigLayout( "insets 0, flowy" ) );
 		setupEvaluator();
 		addButtons();
+		pack();
+		setResizable( false );
+		setVisible( true );
 	}
-	
+		
 	
 	
 	private void addButtons() {
@@ -90,7 +89,8 @@ public class Toolbox extends JToolBar
 		ToolboxButton[] butts = {
 			genButton( new SourceFixed(false)  ),
 			genButton( new SourceFixed(true)   ),
-			genButton( new SourceToggle(false) )
+			genButton( new SourceToggle(false) ),
+			genButton( new SourceOscillator(1) )
 		};
 		
 		addCategory( "Sources", butts );
@@ -104,7 +104,8 @@ public class Toolbox extends JToolBar
 			genButton( new Mux       (2) ),
 			genButton( new Demux     (2) ),
 			genButton( new FlipFlopD ()  ),
-			genButton( new FlipFlopJK()  )
+			genButton( new FlipFlopJK()  ),
+			genButton( new FlipFlopT ()  )
 		};
 		
 		addCategory( "Components", butts );
@@ -132,7 +133,7 @@ public class Toolbox extends JToolBar
 	
 	
 	private EditorCreationCommand genCommand( ComponentActive com ) {
-		return new EditorCreationCommand( com, com.getGraphic() );
+		return new EditorCreationCommand( Util.deepCopy(com), com.getGraphic() );
 	}
 	
 	
@@ -155,8 +156,7 @@ public class Toolbox extends JToolBar
 	 */
 	public void addCategory( String title, ToolboxButton...buttons ) {
 		setButtonEvaluators( buttons );
-		addCategory( title );
-		JPanel panel = new ToolboxCategoryPanel( buttons );
+		JPanel panel = new ToolboxCategoryPanel( title, buttons );
 		add( panel );
 	}
 	
@@ -165,30 +165,6 @@ public class Toolbox extends JToolBar
 	private void setButtonEvaluators( ToolboxButton...buttons ) {
 		for (ToolboxButton butt: buttons)
 			butt.setEditorPanelEvaluator( evaluator );
-	}
-	
-	
-	
-	/**
-	 * Add a the category heading and separator.
-	 * @param heading
-	 * @param items
-	 */
-	private void addCategory( String title ) {
-		add( createCategoryLabel( title ) );
-		add( new JToolBar.Separator() );
-	}
-	
-	
-	
-	private JLabel createCategoryLabel( String title ) {
-		JLabel label = new JLabel( title );
-		Font   font  = label.getFont();
-		Font   bold  = new Font( font.getName(), Font.BOLD, font.getSize() );
-		
-		label.setFont( bold );
-		
-		return label;
 	}
 }
 

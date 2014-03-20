@@ -16,6 +16,10 @@ import logicBox.gui.editor.GraphicGen;
  */
 public class GateNot extends GateBuffer
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public GateNot() {
 		super();
 	}

@@ -2,13 +2,18 @@
 
 
 package logicBox.gui.editor;
-import java.awt.*;
+import java.awt.Cursor;
+import java.awt.MouseInfo;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
+import logicBox.util.CallbackRepeater;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
@@ -20,7 +25,7 @@ import logicBox.util.Vec2;
  */
 public class Camera
 {
-	private Component component;
+	private JComponent component;
 	
 	private double zoomRate;
 	private double zoomRange;
@@ -28,32 +33,41 @@ public class Camera
 	private double zoomMax;
 	private double zoom;
 	
+	private final double zoomDirIn  = -1;
+	private final double zoomDirOut = +1;
+	
 	private boolean panningActive;
 	private Vec2    panningOrigin;
 	private Vec2    pan;
 	
-	private AffineTransform matrix;
-	private Callback        onTransform;
+	private AffineTransform  matrix;
+	private List<Callback>   onTransform;
+	private CallbackRepeater mover;
 	
 	
 	
 	
 	
-	public Camera( Component attachTo, Callback onTransformChange ) {
+	public Camera( JComponent attachTo ) {
 		component = attachTo;
 		
-		zoomRate  = 1.0 + (1.0 / 3.0);
+		zoomRate  = 1.0 + (1.0 / 4.0);
 		zoomRange = 8.0;
 		zoomMin   = 1.0 / zoomRange;
 		zoomMax   =       zoomRange;
 		zoom      = 1.0;
 		
-		pan       = new Bbox2( attachTo ).getCentre();
-		matrix    = new AffineTransform();
-		
-		onTransform = onTransformChange;
+		pan         = new Vec2( 0 );
+		matrix      = new AffineTransform();
+		onTransform = new ArrayList<>();
 		
 		setupActions();
+	}
+	
+	
+	
+	public void addTransformCallback( Callback cb ) {
+		onTransform.add( cb );
 	}
 	
 	
@@ -77,7 +91,7 @@ public class Camera
 		Vec2 out = new Vec2();
 		
 		try {
-			AffineTransform inv = matrix.createInverse(); // TODO consider caching this
+			AffineTransform inv = matrix.createInverse();
 			inv.transform( pos, out );
 		}
 		catch (NoninvertibleTransformException ex) {
@@ -89,11 +103,17 @@ public class Camera
 	
 	
 	
-	public Bbox2 getWorldViewableArea() {
+	public Bbox2 getWorldViewArea() {
 		Bbox2 b = new Bbox2( component );
 		b.tl = mapScreenToWorld( b.tl );
 		b.br = mapScreenToWorld( b.br );
 		return b;
+	}
+	
+	
+	
+	public Vec2 getCentre() {
+		return getWorldViewArea().getCentre();
 	}
 	
 	
@@ -104,14 +124,62 @@ public class Camera
 	
 	
 	
+	/**
+	 * Move the camera so it is centred on the given position.
+	 */
+	public void panTo( Vec2 pos ) {
+		pan = pos.negate();
+		updateTransform();
+	}
+	
+	
+	
+	public Vec2 getPan() {
+		return pan.negate();
+	}
+	
+	
+	
+	/**
+	 * Set the zoom level of the camera.
+	 * The level is automatically clamped to min/max.
+	 * > 1 magnifies
+	 * < 1 minifies
+	 */
+	public void zoomTo( double zoomLevel ) {
+		zoom = Geo.clamp( zoomLevel, zoomMin, zoomMax );
+		
+		double thresh = 0.10;
+		if (zoom < 1  &&  zoom > 1-thresh
+		||  zoom > 1  &&  zoom < 1+thresh)
+			zoom = 1.0;
+		
+		updateTransform();
+	}
+	
+	
+	
+	private void zoomLogarithmic( double wheelInput, boolean isMouseInput ) {
+		double  delta = -wheelInput;
+		boolean in    = delta > 0.0;
+		double  mod   = zoomRate * Math.abs( delta );
+		
+		if ( ! in)
+			 mod = 1.0 / mod;
+		
+		zoomTo( zoom * mod );
+	}
+	
+	
+	
 	public void zoomIn() {
-		zoomLogarithmic( -1, false );
+		zoomLogarithmic( zoomDirIn, false );
 	}
 	
 	
 	
 	public void zoomOut() {
-		zoomLogarithmic( 1, false );
+		zoomLogarithmic( zoomDirOut, false );
 	}
 	
 	
@@ -134,27 +202,51 @@ public class Camera
 	
 	
 	
-	public Vec2 getCentre() {
-		return getWorldViewableArea().getCentre();
+	public void interpolateTo( final Vec2 pos, final double zoom, final double timeInSeconds ) {
+		interpolateStop();
+		
+		mover = new CallbackRepeater( 1000 / 60,
+			new Callback() {
+				private Vec2   panStart   = Camera.this.pan.copy();
+				private double zoomStart  = Camera.this.zoom;
+				private Vec2   panTarget  = pos;
+				private double zoomTarget = zoom;
+				private double frac       = 0;
+				private double step       = (1.0 / timeInSeconds) / (1000/60.0);
+				
+				public void execute() {
+					Vec2   p = Geo.herp( panStart,  panTarget,  frac );
+					double z = Geo.herp( zoomStart, zoomTarget, frac );
+					
+					if (frac < 1)
+						frac += step;
+					
+					if (frac >= 1) {
+						panTo ( panTarget );
+						zoomTo( zoomTarget );
+						
+						mover.softStop();
+					} else {
+						directZoomAndPan( p, z );
+					}
+				}
+			}
+		);
 	}
 	
 	
 	
-	private void zoomLogarithmic( double wheelInput, boolean isMouseInput ) {
-		double  delta = -wheelInput;
-		boolean in    = delta > 0.0;
-		double  mod   = zoomRate * Math.abs( delta );
+	public void interpolateStop() {
+		if (mover != null)
+			mover.join();
+	}
+	
+	
+	
+	private void directZoomAndPan( Vec2 pan, double zoom ) {
+		this.zoom = Geo.clamp( zoom, zoomMin, zoomMax );
+		this.pan  = pan.negate();
 		
-		if ( ! in)
-			 mod = 1.0 / mod;
-		
-		zoom = Geo.clamp( zoom * mod, zoomMin, zoomMax );
-		
-		double roundingSnapThresh = 1.0 / 32.0;
-		if (Geo.absDiff( zoom, 1.0 ) < roundingSnapThresh)
-			zoom = 1.0;
-		
-		// TODO account for mouse position
 		updateTransform();
 	}
 	
@@ -166,18 +258,20 @@ public class Camera
 	
 	
 	
-	private void updateTransform( Vec2 normalisedRelativePointer ) {
+	private void updateTransform( Vec2 relativeCentre ) {
 		Bbox2 region = new Bbox2( component );
-		Vec2  half   = region.getSize().multiply( 0.5 );
+		Vec2  centre = region.getSize().multiply( relativeCentre );
 		
 		matrix = new AffineTransform();
-		matrix.translate(  half.x,  half.y );
-		matrix.scale    (  zoom,    zoom   );
-		matrix.translate( -half.x, -half.y );
-		matrix.translate(  pan.x,   pan.y  );
-		matrix.translate(  0.5,     0.5    );
+		matrix.translate(  centre.x,  centre.y );
+		matrix.scale    (  zoom,      zoom     );
+		matrix.translate( -centre.x, -centre.y );
+		matrix.translate(  pan.x,     pan.y    );
+		matrix.translate(  centre.x,  centre.y );
+		matrix.translate(  0.5,       0.5      );
 		
-		onTransform.execute();
+		for (Callback cb: onTransform)
+			cb.execute();
 	}
 	
 	
@@ -208,6 +302,14 @@ public class Camera
 				if (SwingUtilities.isMiddleMouseButton( ev ))
 					panMove();
 			}
+		});
+		
+		
+		component.addComponentListener( new ComponentListener() {
+			public void componentShown  ( ComponentEvent ev ) { updateTransform(); }
+			public void componentResized( ComponentEvent ev ) { updateTransform(); }
+			public void componentMoved  ( ComponentEvent ev ) { updateTransform(); }
+			public void componentHidden ( ComponentEvent ev ) { updateTransform(); }
 		});
 	}
 	

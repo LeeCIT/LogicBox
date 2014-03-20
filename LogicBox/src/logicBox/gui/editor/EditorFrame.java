@@ -4,6 +4,8 @@
 package logicBox.gui.editor;
 import javax.swing.JFrame;
 import javax.swing.JScrollBar;
+
+import logicBox.gui.editorToolbar.EditorToolbar;
 import net.miginfocom.swing.MigLayout;
 
 
@@ -14,17 +16,29 @@ import net.miginfocom.swing.MigLayout;
  */
 public class EditorFrame extends JFrame
 {
+	private EditorPanel editorPanel;
+	
+	
+	
 	public EditorFrame( EditorPanel panel ) {
 		super( "LogicBox" );
-		setLayout( new MigLayout( "gap 0", "[grow,fill][]", "[grow,fill][]" ) );
+		setLayout( new MigLayout( "insets 0, gap 0", "[grow,fill][]", "[][grow,fill][]" ) );
 		
+		this.editorPanel = panel;
 		
-		// TODO integrate so user can scroll with toolbars too (use world.getextent and cam.getviewablearea)
-		JScrollBar x = new JScrollBar( JScrollBar.HORIZONTAL );
-		JScrollBar y = new JScrollBar( JScrollBar.VERTICAL   );
+		EditorToolbar   toolbar = new EditorToolbar();
+		EditorScrollBar x       = new EditorScrollBar( panel, JScrollBar.HORIZONTAL );
+		EditorScrollBar y       = new EditorScrollBar( panel, JScrollBar.VERTICAL   );
 		
-		add( panel );
-		add( x, "cell 0 1" );
-		add( y, "cell 1 0" );
+		add( toolbar, "span 2, wrap" );
+		add( panel,   "grow"         );
+		add( x,       "cell 0 2"     );
+		add( y,       "cell 1 1"     );
+	}
+	
+	
+	
+	public EditorPanel getEditorPanel() {
+		return editorPanel;
 	}
 }

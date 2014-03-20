@@ -32,6 +32,16 @@ public abstract class Geo
 	
 	
 	/**
+	 * Get the integer base-2 logarithm of x.
+	 * Rounds up.
+	 */
+	public static int log2i( double x ) {
+		return (int) Math.ceil( log2(x) );
+	}
+	
+	
+	
+	/**
 	 * Linear interpolate from A to B by fraction F.
 	 */
 	public static double lerp( double a, double b, double f ) {
@@ -88,6 +98,15 @@ public abstract class Geo
 	 */
 	public static double herp( double a, double b, double f ) {
 		return lerp( a, b, hermite(f) );
+	}
+	
+	
+	
+	public static Vec2 herp( Vec2 a, Vec2 b, double f ) {
+		return new Vec2( 
+			herp( a.x, b.x, f ),
+			herp( a.y, b.y, f )
+		);
 	}
 	
 	
@@ -211,8 +230,7 @@ public abstract class Geo
 	 * Get the dot product of A and B.
 	 */
 	public static double dot( Vec2 a, Vec2 b ) {
-		return (a.x * b.x) 
-		     + (a.y * b.y);
+		return (a.x * b.x) + (a.y * b.y);
 	}
 	
 	
@@ -221,8 +239,7 @@ public abstract class Geo
 	 * Find the 2D cross product of A,B.
 	 */
 	public static double cross( Vec2 a, Vec2 b ) {
-		return (a.x * b.y) 
-		     - (a.y * b.x);
+		return (a.x * b.y) - (a.y * b.x);
 	}
 	
 	
@@ -542,7 +559,6 @@ public abstract class Geo
 		System.out.println( "Closest to " + point + " is " + closest );
 	}
 }
-
 
 
 

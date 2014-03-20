@@ -36,4 +36,11 @@ class AuthController extends Controller
         
         return Auth::getUser()->getUserInfo();
     }
+    
+    function logout()
+    {
+        Auth::logout();
+        
+        return Response::json(array('success' => true));
+    }
 }

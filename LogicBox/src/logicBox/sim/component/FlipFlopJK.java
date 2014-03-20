@@ -3,9 +3,7 @@
 
 package logicBox.sim.component;
 
-import java.util.ArrayList;
-import java.util.List;
-import logicBox.sim.SimUtil;
+import java.util.Arrays;
 
 
 
@@ -13,7 +11,6 @@ import logicBox.sim.SimUtil;
  * JK-type flip-flop.
  * A 1-bit memory with inputs [J, C, K] and outputs [Q, !Q].
  * J sets, K resets.  J+K toggles.
- * Edge triggered: changes state only at the rising edge of a clock pulse.
  * Table:
  * 		J K C | Q
  * 		---------
@@ -25,80 +22,54 @@ import logicBox.sim.SimUtil;
  * 
  * @author Lee Coakley
  */
-public class FlipFlopJK extends ComponentActive
+public class FlipFlopJK extends FlipFlop
 {
-	private List<Pin> pinInputs;
-	private List<Pin> pinOutputs;
+	private static final long serialVersionUID = 1L;
 	
 	
 	
 	public FlipFlopJK() {
-		super();
-		pinInputs  = new ArrayList<>();
-		pinOutputs = new ArrayList<>();
-		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  3 );
-		SimUtil.addPins( pinOutputs, this, PinIoMode.output, 2 );
-		getPinQinv().setState( true ); // Ensure valid initial state
+		super( 3 );
 	}
 	
 	
 	
-	public List<Pin> getPinInputs() {
-		return pinInputs;
-	}
-	
-	
-	
-	public List<Pin> getPinOutputs() {
-		return pinOutputs;
+	public Pin getPinClock() {
+		return getPinInput( 1 );
 	}
 	
 	
 	
 	public Pin getPinJ() {
-		return pinInputs.get( 0 );
-	}
-	
-	
-	
-	public Pin getPinC() {
-		return pinInputs.get( 1 );
+		return getPinInput( 0 );
 	}
 	
 	
 	
 	public Pin getPinK() {
-		return pinInputs.get( 2 );
-	}
-	
-	
-	
-	public Pin getPinQ() {
-		return pinOutputs.get( 0 );
-	}
-	
-	
-	
-	public Pin getPinQinv() {
-		return pinOutputs.get( 1 );
+		return getPinInput( 2 );
 	}
 	
 	
 	
 	public void update() {
-		if ( ! getPinC().getState())
+		boolean shouldUpdate = updateClock();
+		
+		if ( ! shouldUpdate)
 			return;
 		
 		boolean j = getPinJ().getState();
 		boolean k = getPinK().getState();
-		boolean state;
 		
-		if      (j && k) state = ! getPinQ().getState();
-		else if (j)      state = true;
-		else /*k*/       state = false;
-		
-		getPinQ   ().setState(   state );
-		getPinQinv().setState( ! state );
+		if (j || k) {
+			boolean state;
+			
+			if      (j && k) state = ! getPinQ().getState();
+			else if (j)      state = true;
+			else  /* k */    state = false;
+			
+			setQ( state );
+		}
 	}
 	
 	
@@ -114,7 +85,47 @@ public class FlipFlopJK extends ComponentActive
 	public static void main( String[] args ) {
 		FlipFlopJK f = new FlipFlopJK();
 		
-		// TODO test
+		int[] patternExpected = {
+			1,1,0,0,1,1,0,0, // Toggle
+			0,0,0,0,0,0,0,0, // Set 0
+			1,1,1,1,1,1,1,1, // Set 1
+			1,1,1,1,1,1,1,1, // No change
+			1,1,1,1,1,1,1,1  // No change
+		};
+		
+		int[] patternActual = new int[ patternExpected.length ];
+		
+		cycle( f, patternActual,  0, true,  true,  true,  4 );
+		cycle( f, patternActual,  8, false, true,  true,  4 );
+		cycle( f, patternActual, 16, true,  false, true,  4 );
+		cycle( f, patternActual, 24, true,  false, false, 4 );
+		cycle( f, patternActual, 32, false, false, true,  4 );
+		
+		boolean good = Arrays.equals( patternExpected, patternActual );
+		
+		System.out.print( "\nTest " + (good ? "OK" : "Failed") );
+	}
+	
+	
+	
+	private static void cycle( FlipFlopJK f, int[] pattern, int offset, boolean J, boolean K, boolean clockIO, int cycles ) {
+		System.out.print( "\nQ: " );
+		
+		f.getPinJ().setState( J );
+		f.getPinK().setState( K );
+		
+		for (int i=0; i<cycles*2; i++) {
+			boolean clockSignal = (i & 0b1) == 0;
+			
+			if (clockIO)
+				f.getPinClock().setState( clockSignal );
+			
+			f.update();
+			
+			int v = f.getPinQ().getState() ? 1 : 0;
+			pattern[ offset + i ] = v;
+			System.out.print( v );
+		}
 	}
 }
 

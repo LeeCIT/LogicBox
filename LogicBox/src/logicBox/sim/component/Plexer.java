@@ -5,10 +5,7 @@ package logicBox.sim.component;
 
 import java.util.ArrayList;
 import java.util.List;
-import logicBox.gui.editor.GraphicComActive;
-import logicBox.gui.editor.GraphicGen;
 import logicBox.sim.SimUtil;
-import logicBox.util.Geo;
 
 
 
@@ -18,43 +15,31 @@ import logicBox.util.Geo;
  */
 public abstract class Plexer extends ComponentActive
 {
-	protected List<Pin> pinInputs;
+	private static final long serialVersionUID = 1L;
+	
 	protected List<Pin> pinSelects;
-	protected List<Pin> pinOutputs;
 	
 	
 	
 	public Plexer() {
 		super();
-		pinInputs  = new ArrayList<>();
 		pinSelects = new ArrayList<>();
-		pinOutputs = new ArrayList<>();
 	}
 	
 	
 	
 	protected void createPins( int inputs, int selects, int outputs ) {
-		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  inputs  );
-		SimUtil.addPins( pinSelects, this, PinIoMode.input,  selects );
+		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  inputs + selects );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, outputs );
-	}
-	
-	
-	
-	public List<Pin> getPinInputs() {
-		return pinInputs;
+		
+		for (int i=inputs; i<pinInputs.size(); i++)
+			pinSelects.add( pinInputs.get(i) );
 	}
 	
 	
 	
 	public List<Pin> getPinSelects() {
 		return pinSelects;
-	}
-	
-	
-	
-	public List<Pin> getPinOutputs() {
-		return pinOutputs;
 	}
 	
 	
@@ -66,8 +51,7 @@ public abstract class Plexer extends ComponentActive
 		Pin src  = getSourcePin();
 		Pin dest = getDestinationPin();
 		
-		if (src  != null
-		&&  dest != null)
+		if (src != null  &&  dest != null)
 			dest.setState( src.getState() );
 	}
 	
@@ -78,12 +62,6 @@ public abstract class Plexer extends ComponentActive
 	
 	
 	protected abstract Pin getDestinationPin();
-	
-	
-	
-	protected int computeSelectPinCount( int basisPinCount ) {
-		return (int) Math.ceil( Geo.log2(basisPinCount) );
-	}
 	
 	
 	

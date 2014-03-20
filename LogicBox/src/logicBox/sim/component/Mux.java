@@ -5,6 +5,7 @@ package logicBox.sim.component;
 
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.gui.editor.GraphicGen;
+import logicBox.util.Geo;
 
 
 
@@ -14,9 +15,13 @@ import logicBox.gui.editor.GraphicGen;
  */
 public class Mux extends Plexer
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public Mux( int inputPinCount ) {
 		super();
-		createPins( inputPinCount, computeSelectPinCount(inputPinCount), 1 );
+		createPins( inputPinCount, Geo.log2i(inputPinCount), 1 );
 	}
 	
 	
@@ -38,13 +43,13 @@ public class Mux extends Plexer
 	
 	
 	public String getName() {
-		return getPinInputCount() + "-to-1 Multiplexer";
+		return (getPinInputCount() - getPinSelects().size()) + "-to-1 Multiplexer";
 	}
 	
 	
 	
 	public GraphicComActive getGraphic() {
-		return GraphicGen.generateMux( getPinInputCount(), pinSelects.size(), getPinOutputCount() );
+		return GraphicGen.generateMux( getPinInputCount()- getPinSelects().size(), pinSelects.size(), getPinOutputCount() );
 	}
 	
 	

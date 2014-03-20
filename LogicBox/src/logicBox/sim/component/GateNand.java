@@ -18,6 +18,10 @@ import logicBox.gui.editor.GraphicGen;
  */
 public class GateNand extends GateAnd
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public GateNand() {
 		super( 2 );
 	}
@@ -30,8 +34,8 @@ public class GateNand extends GateAnd
 	
 	
 	
-	public void update() {
-		pinOut.setState( ! evaluate() );
+	public boolean evaluate() {
+		return ! super.evaluate();
 	}
 	
 	

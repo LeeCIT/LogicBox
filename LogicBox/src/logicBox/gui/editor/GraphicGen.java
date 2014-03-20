@@ -22,7 +22,7 @@ import logicBox.util.Vec2;
  * which allows them to be interfaced with the simulation.
  * @author Lee Coakley
  */
-public class GraphicGen
+public abstract class GraphicGen
 {
 	public static GraphicComActive generateGateBuffer() {
 		return generateGateBuffer( false );

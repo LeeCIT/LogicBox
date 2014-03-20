@@ -9,8 +9,12 @@ package logicBox.sim.component;
  * A fixed logic-level source.
  * @author Lee Coakley
  */
-public class SourceFixed extends Source implements Stateful
+public class SourceFixed extends Source
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public SourceFixed( boolean state ) {
 		super( state );
 		setState( state );
@@ -18,13 +22,7 @@ public class SourceFixed extends Source implements Stateful
 	
 	
 	
-	public void update() {
-		// Do nothing
-	}
-	
-	
-	
 	public String getName() {
-		return "Fixed source (" + (getState()?"1":"0") + ")";
+		return "Fixed source (" + (getState()?1:0) + ")";
 	}
 }

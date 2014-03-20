@@ -3,8 +3,6 @@
 
 package logicBox.sim.component;
 
-import java.util.ArrayList;
-import java.util.List;
 import logicBox.sim.SimUtil;
 
 
@@ -17,33 +15,17 @@ import logicBox.sim.SimUtil;
  */
 public class Decoder extends ComponentActive
 {
-	private List<Pin> pinInputs;
-	private List<Pin> pinOutputs;
+	private static final long serialVersionUID = 1L;
 	
 	
 	
 	public Decoder( int inputPinCount ) {
 		super();
 		
-		pinInputs  = new ArrayList<>();
-		pinOutputs = new ArrayList<>();
-		
 		int outputPinCount = (int) Math.pow( 2, inputPinCount );
 		
 		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  inputPinCount  );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, outputPinCount );
-	}
-	
-	
-	
-	public List<Pin> getPinInputs() {
-		return pinInputs;
-	}
-	
-	
-	
-	public List<Pin> getPinOutputs() {
-		return pinOutputs;
 	}
 	
 	
@@ -59,9 +41,7 @@ public class Decoder extends ComponentActive
 			pin.setState( false );
 		
 		int activeIndex = SimUtil.decodePinsToInt( pinInputs );
-		Pin activePin   = pinOutputs.get( activeIndex );
-		
-		activePin.setState( true );
+		setPinOutputState( activeIndex, true );
 	}
 	
 	
@@ -73,8 +53,8 @@ public class Decoder extends ComponentActive
 		
 		System.out.println( dec.getName() );
 		
-		dec.getPinInputs().get(0).setState( true );
-		dec.getPinInputs().get(1).setState( true );
+		dec.setPinInputState( 0, true );
+		dec.setPinInputState( 1, true );
 		
 		dec.update();
 		

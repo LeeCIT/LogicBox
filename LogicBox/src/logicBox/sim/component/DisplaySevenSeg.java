@@ -24,6 +24,8 @@ import logicBox.sim.SimUtil;
  */
 public class DisplaySevenSeg extends Display
 {
+	private static final long serialVersionUID = 1L;
+	
 	private boolean[] segmentStates;
 	
 	
@@ -40,10 +42,16 @@ public class DisplaySevenSeg extends Display
 	
 	
 	
+	public int getNumber() {
+		return SimUtil.decodePinsToInt( pinInputs );
+	}
+	
+	
+	
 	public void update() {
-		int i = SimUtil.decodePinsToInt( pinInputs );
+		int i = getNumber();
 		
-		boolean[] states = {
+		segmentStates = new boolean[] {
 		    ! (i==2 | i==12 | i==14 | i==15                 ),
 		    ! (i==5 | i== 6 | i==11 | i==12 | i==14 | i==15 ),
 		    ! (i==1 | i== 4 | i==11 | i==13                 ),
@@ -52,14 +60,19 @@ public class DisplaySevenSeg extends Display
 		    ! (i==1 | i== 3 | i== 4 | i== 5 | i== 7 | i== 9 ),
 		    ! (i==1 | i== 4 | i== 7 | i== 9 | i==10 | i==15 )
 		};
-		
-		segmentStates = states;
+	}
+	
+	
+	
+	public void reset() { // Show zero
+		super.reset();
+		update();
 	}
 	
 	
 	
 	public String getName() {
-		return "7-segment display";
+		return "Seven segment display";
 	}
 	
 	
@@ -67,12 +80,12 @@ public class DisplaySevenSeg extends Display
 	
 	
 	public static void main( String[] args ) {
-		DisplaySevenSeg seg = new DisplaySevenSeg();
+		DisplaySevenSeg ssd = new DisplaySevenSeg();
 		
 		for (int i=0; i<=0xF; i++) {
-			SimUtil.encodeIntToPins( i, seg.getPinInputs() );
-			seg.update();
-			printSegs( seg.getSegmentStates() );
+			SimUtil.encodeIntToPins( i, ssd.getPinInputs() );
+			ssd.update();
+			printSegs( ssd.getSegmentStates() );
 		}
 	}
 	

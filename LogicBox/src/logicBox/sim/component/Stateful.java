@@ -13,5 +13,6 @@ package logicBox.sim.component;
 public interface Stateful
 {
 	public boolean getState();
+	public void    orState ( boolean state );
 	public void    setState( boolean state );
 }

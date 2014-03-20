@@ -9,13 +9,19 @@ public class Request
 {
 	private WebClient wc = null;
 	private ArrayList<String> errors = new ArrayList<String>();
+	private RequestInterface ri;
+	
+	public Request()
+	{
+		this.wc = new WebClient("http://cloud.jatochnietdan.com/");
+	}
 	
 	public Request(String url)
 	{
 		this.wc = new WebClient(url);
 	}
 
-	public void register(String email, String password, RequestInterface ri)
+	public void register(String email, String password)
 	{
 		Map<String, Object> map = new HashMap<String, Object>(); 
 		
@@ -25,7 +31,7 @@ public class Request
 		wc.post("register", map, this, ri);
 	}
 	
-	public void login(String email, String password, RequestInterface ri)
+	public void login(String email, String password)
 	{
 		Map<String, Object> map = new HashMap<String, Object>(); 
 		
@@ -35,12 +41,22 @@ public class Request
 		wc.post("login", map, this, ri);
 	}
 	
+	public void logout()
+	{
+		wc.get("user/logout", this, ri);
+	}
+	
+	public void setRequestInterface(RequestInterface ri)
+	{
+		this.ri = ri;
+	}
+	
 	public void upload(File f)
 	{
 		wc.upload(f, this);
 	}
 	
-	public void requestInfo(RequestInterface ri)
+	public void requestInfo()
 	{
 		wc.get("user/", this, ri);
 	}

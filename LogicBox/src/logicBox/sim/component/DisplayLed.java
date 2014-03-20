@@ -11,25 +11,39 @@ package logicBox.sim.component;
  */
 public class DisplayLed extends Display
 {
+	private static final long serialVersionUID = 1L;
+	
+	private boolean lit;
+	
+	
+	
 	public DisplayLed() {
 		super( 1 );
+		reset();
 	}
 	
 	
 	
-	public boolean getState() {
-		return getPinInputs().get(0).getState();
+	public boolean isLit() {
+		return lit;
 	}
-
-
-
+	
+	
+	
 	public String getName() {
-		return "LED display";
+		return "LED";
 	}
 	
 	
 	
 	public void update() {
-		// Do nothing
+		lit = getPinInputState( 0 );
+	}
+	
+	
+	
+	public void reset() {
+		super.reset();
+		lit = false;
 	}
 }

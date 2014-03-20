@@ -7,13 +7,15 @@ package logicBox.sim.component;
 
 /**
  * Traces connect components together via pins.
+ * Traces are dumb: they have no ownership and their state is a simple boolean. 
  * @author Lee Coakley
  * @see    Pin
  */
 public class Trace extends ComponentPassive
 {
-	protected Pin     source, dest;
-	protected boolean state;
+	private static final long serialVersionUID = 1L;
+	
+	private Pin source, dest;
 	
 	
 	
@@ -45,18 +47,6 @@ public class Trace extends ComponentPassive
 	
 	public Pin getPinOtherSide( Pin pin ) {
 		return (pin == dest) ? source : dest;
-	}
-	
-	
-	
-	public boolean getState() {
-		return state;
-	}
-
-
-
-	public void setState( boolean state ) {
-		this.state = state;
 	}
 
 

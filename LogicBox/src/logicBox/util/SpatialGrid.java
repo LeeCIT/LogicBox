@@ -3,8 +3,6 @@
 
 package logicBox.util;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.IdentityHashMap;
 import java.util.Set;
 
 
@@ -38,7 +36,7 @@ public class SpatialGrid<T>
 		int cellCount      = Geo.roundToNextPowerOfTwo( cellsPerRow * cellsPerColumn );
 		this.indexWrapMask = cellCount - 1; // 0001_0000 -> 0000_1111
 		
-		this.core = new ArrayList<>();
+		this.core = new ArrayList<>( cellCount );
 		for (int i=0; i<cellCount; i++)
 			core.add( new Cell() );
 	}
@@ -105,6 +103,12 @@ public class SpatialGrid<T>
 	
 	
 	
+	public int getCellCount() {
+		return core.size();
+	}
+	
+	
+	
 	public int[][] debugGridLevels() {
 		int     w = cellsPerRow;
 		int     h = cellsPerColumn;
@@ -133,12 +137,6 @@ public class SpatialGrid<T>
 		if (total != 0)
 			 return load / total;
 		else return 0;
-	}
-	
-	
-	
-	private Set<T> createIdentityHashSet() {
-		return Collections.newSetFromMap( new IdentityHashMap<T,Boolean>() );
 	}
 	
 	
@@ -214,7 +212,7 @@ public class SpatialGrid<T>
 		private Set<T> set;
 		
 		protected AccumulationTraversal() {
-			set = createIdentityHashSet();
+			set = Util.createIdentityHashSet();
 		}
 		
 		public void process( int index ) {

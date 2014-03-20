@@ -15,12 +15,33 @@ import java.util.Stack;
  * Provides convenient drawing functions.
  * @author Lee Coakley
  */
-public class Gfx
+public abstract class Gfx
 {
-	private static Stack<Color>           colorStack  = new Stack<Color>();
-	private static Stack<Object>          aaStack     = new Stack<Object>();
-	private static Stack<AffineTransform> matrixStack = new Stack<AffineTransform>();
-	private static Stack<Stroke>          strokeStack = new Stack<Stroke>();
+	private static Stack<Composite>       compStack   = new Stack<>();
+	private static Stack<Color>           colorStack  = new Stack<>();
+	private static Stack<Object>          aaStack     = new Stack<>();
+	private static Stack<AffineTransform> matrixStack = new Stack<>();
+	private static Stack<Stroke>          strokeStack = new Stack<>();
+	
+	
+	
+	public static void drawOrientationOverlay( Graphics2D g, Vec2 pos, double radius, double angle ) {
+		double arrowSideLen = radius * 0.2;
+		Vec2   arrowEnd     = pos.add( Geo.lenDir(radius, angle) );
+		Vec2   arrowStart   = Geo.lerp( pos, arrowEnd, 0.5 );
+		Vec2   arrowA       = arrowEnd.add( Geo.lenDir(arrowSideLen, angle-180+45) );
+		Vec2   arrowB       = arrowEnd.add( Geo.lenDir(arrowSideLen, angle-180-45) );
+		
+		drawCircle( g, pos, radius, false );
+		
+		VecPath arrow = new VecPath();
+		arrow.moveTo( arrowStart );
+		arrow.lineTo( arrowEnd );
+		arrow.moveTo( arrowA );
+		arrow.lineTo( arrowEnd );
+		arrow.lineTo( arrowB );
+		g.draw( arrow );
+	}
 	
 	
 	
@@ -65,7 +86,7 @@ public class Gfx
 	
 	
 	
-	public static void drawRegionRounded( Graphics2D g, Bbox2 rect, double radius, boolean filled ) {
+	public static void drawBboxRounded( Graphics2D g, Bbox2 rect, double radius, boolean filled ) {
 		int w = (int) rect.getSize().x;
 		int h = (int) rect.getSize().y;
 		int r = (int) radius;
@@ -161,8 +182,22 @@ public class Gfx
 				poly.lineTo( ry );
 			}
 			
-			g.draw( poly );			
+			g.draw( poly );
+			
 		Gfx.popStroke( g );
+	}
+	
+	
+	
+	public static void pushCompositeAndSet( Graphics2D g, double alpha ) {
+		compStack.push( g.getComposite() );
+		g.setComposite( AlphaComposite.getInstance( AlphaComposite.SRC_OVER, (float) alpha ) );
+	}
+	
+	
+	
+	public static void popComposite( Graphics2D g ) {
+		g.setComposite( compStack.pop() );
 	}
 	
 	
