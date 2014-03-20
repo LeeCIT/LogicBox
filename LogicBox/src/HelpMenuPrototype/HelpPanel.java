@@ -6,10 +6,16 @@ package HelpMenuPrototype;
 
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import net.miginfocom.swing.MigLayout;
-import logicBox.sim.component.ComponentType;
+import logicBox.sim.component.*;
+import logicBox.gui.SearchPanel;
+import logicBox.gui.Searchable;
 
 
 
@@ -19,35 +25,54 @@ public class HelpPanel extends JPanel
 	
 	
 	private ComponentType componentType;
-	private Map <ComponentType, String> componentMap;
-	private JTextArea compDescription;
+	private Map <ComponentType, ComponentInfo> componentMap;
+	private JTextPane compDescription = new JTextPane();
+	private SearchPanel<ComponentType> search; 
 	
 	
 	
-	public HelpPanel() {
-		
-	}
+	public HelpPanel() {}
+
 	
 	
-	
-	public HelpPanel( Map<ComponentType, String> compMap ) {
+	public HelpPanel( Map<ComponentType, ComponentInfo> compMap  ) {
 		super();
 		setLayout( new MigLayout() );
 		this.componentMap = compMap;
-		compDescription = new JTextArea();
-		setSize(300, 300);
+		compDescription.setContentType("text/html");
+		componentSearch();
+		setSize(800, 300);
 		addToPanel();
-		displayDescription();
 	}
 	
 	
 	
 	/**
 	 * Display the description of the specified component.
-	 * @param compDes
 	 */
 	private void displayDescription() {
-		compDescription.setText(getDescription());
+			compDescription.setText("");
+			StringBuilder builder = new StringBuilder();
+			builder.append("<html>");
+			builder.append("<h1>" + getCompName() +"</h1>");
+			builder.append("<hr>");
+			builder.append(getCompDescription());
+			builder.append("</html>");
+			compDescription.setText(builder.toString());
+	}
+	
+	
+	
+	/**
+	 * Return the help menu name for the component
+	 * passed in.
+	 * @return
+	 */
+	private String getCompName() {
+		if ( ! componentMap.containsKey(componentType) )
+			return "Missing info";
+			
+			return componentMap.get(componentType).getCompName();	
 	}
 	
 	
@@ -55,16 +80,15 @@ public class HelpPanel extends JPanel
 	/**
 	 * Return the help menu description for the component
 	 * passed in.
-	 * @param componentType
 	 * @return
 	 */
-	private String getDescription(){
-		if ( ! componentMap.containsKey(componentType) ){
+	private String getCompDescription() {
+		if ( ! componentMap.containsKey(componentType) )
 			return "Missing info";
-		}
-		
-		return componentMap.get(componentType);
+			
+			return componentMap.get(componentType).getCompDescription();	
 	}
+	
 	
 	
 	
@@ -74,21 +98,46 @@ public class HelpPanel extends JPanel
 	 */
 	public void setDisplayedInfo(ComponentType compType) {
 		this.componentType = compType;
-		//repaint();
 		displayDescription();
 	}
 	
 	
-	
+
 	/**
 	 * Return get the JTextArea holding the description
 	 * of the component.
 	 * @return
 	 */
-	public JTextArea getComponentDescriptionArea(){
+	public JTextPane getComponentDescriptionArea(){
 		return compDescription;
 	}
 	
+	
+	
+	
+	private void componentSearch() {
+		
+		
+		////////////////////////////////////////////////////////////////////
+		// Search Test
+		///////////////////////////////////////////////////////////////////
+		
+		List<Searchable<ComponentType>> searchables = new ArrayList<>();
+
+		for (ComponentType type: ComponentType.values())
+			searchables.add( new Searchable<ComponentType>( type, type.name() ) );
+		
+		search = new SearchPanel<ComponentType>("Component Search:", searchables);
+		
+		search.addListSelectionListener( new ListSelectionListener() {
+			public void valueChanged( ListSelectionEvent ev ) {
+				if (search.hasSelectedItem()) {
+					componentType = search.getSelectedItem();
+					displayDescription();
+				}
+			}
+		});
+	}
 	
 	
 	/**
@@ -96,12 +145,15 @@ public class HelpPanel extends JPanel
 	 */
 	private void addToPanel()
 	{
+		add( search );
 		JScrollPane scroll = new JScrollPane(compDescription);
-		add( scroll, "w 100%, h 100%" );
+		add( scroll, "w 80%, h 100%" );
 		compDescription.setPreferredSize(new Dimension(getSize()));
-		compDescription.setLineWrap(true); //Wrap the text when it reaches the end of the TextArea.
-		compDescription.setWrapStyleWord(true); //Wrap at every word rather than every letter.
 		compDescription.setEditable(false); //Text cannot be edited.
 		
 	}
+	
+	
+	
+	
 }
