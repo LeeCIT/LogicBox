@@ -19,6 +19,16 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	{
 		return $this->password;
 	}
+	
+	protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function($model)
+        {
+            return mkdir(public_path('files/'.$model->id));
+        });
+    }
 
 	public function getReminderEmail()
 	{

@@ -24,6 +24,10 @@ import java.util.Arrays;
  */
 public class FlipFlopJK extends FlipFlop
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public FlipFlopJK() {
 		super( 3 );
 	}

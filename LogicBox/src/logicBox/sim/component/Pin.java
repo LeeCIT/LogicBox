@@ -11,6 +11,8 @@ package logicBox.sim.component;
  */
 public class Pin extends ComponentPassive
 {
+	private static final long serialVersionUID = 1L;
+	
 	private Component comp; // Component this is physically attached to.
 	private Trace     trace;
 	private PinIoMode mode;

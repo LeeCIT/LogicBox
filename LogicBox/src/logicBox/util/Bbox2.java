@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class Bbox2 implements Transformable, Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	public Vec2 tl; // Top left
 	public Vec2 br; // Bottom right
 	
@@ -241,6 +243,17 @@ public class Bbox2 implements Transformable, Serializable
 	
 	public Bbox2 expand( double amount ) {
 		return expand( new Vec2(amount) );
+	}
+	
+	
+	
+	public List<Line2> getLines() {
+		List<Line2> lines = new ArrayList<>();
+		lines.add( new Line2(tl.x, tl.y, br.x, tl.y) ); // Top
+		lines.add( new Line2(tl.x, br.y, br.x, br.y) ); // Bottom
+		lines.add( new Line2(tl.x, tl.y, tl.x, br.y) ); // Left
+		lines.add( new Line2(br.x, tl.y, br.x, br.y) ); // Right
+		return lines;
 	}
 	
 	

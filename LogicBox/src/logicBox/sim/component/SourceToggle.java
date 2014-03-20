@@ -11,6 +11,10 @@ package logicBox.sim.component;
  */
 public class SourceToggle extends SourceFixed
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public SourceToggle( boolean state ) {
 		super( state );
 	}

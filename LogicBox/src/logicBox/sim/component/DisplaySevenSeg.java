@@ -24,6 +24,8 @@ import logicBox.sim.SimUtil;
  */
 public class DisplaySevenSeg extends Display
 {
+	private static final long serialVersionUID = 1L;
+	
 	private boolean[] segmentStates;
 	
 	
@@ -49,7 +51,7 @@ public class DisplaySevenSeg extends Display
 	public void update() {
 		int i = getNumber();
 		
-		boolean[] states = {
+		segmentStates = new boolean[] {
 		    ! (i==2 | i==12 | i==14 | i==15                 ),
 		    ! (i==5 | i== 6 | i==11 | i==12 | i==14 | i==15 ),
 		    ! (i==1 | i== 4 | i==11 | i==13                 ),
@@ -58,8 +60,6 @@ public class DisplaySevenSeg extends Display
 		    ! (i==1 | i== 3 | i== 4 | i== 5 | i== 7 | i== 9 ),
 		    ! (i==1 | i== 4 | i== 7 | i== 9 | i==10 | i==15 )
 		};
-		
-		segmentStates = states;
 	}
 	
 	

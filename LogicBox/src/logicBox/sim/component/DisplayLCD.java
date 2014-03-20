@@ -18,6 +18,8 @@ import logicBox.util.Geo;
  */
 public class DisplayLCD extends Display
 {
+	private static final long serialVersionUID = 1L;
+	
 	private int    resX;
 	private int    resY;
 	private BitSet matrix;

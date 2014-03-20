@@ -4,6 +4,7 @@
 package logicBox.gui.editor;
 
 import java.awt.Color;
+import java.io.Serializable;
 
 
 
@@ -11,8 +12,10 @@ import java.awt.Color;
  * All graphics which can be drawn in the EditorPanel derive from this class.
  * @author Lee Coakley
  */
-public abstract class Graphic implements Drawable
+public abstract class Graphic implements Serializable, Drawable
 {
+	private static final long serialVersionUID = 1L;
+	
 	protected Color   colStroke;
 	protected Color   colFill;
 	private   boolean isSelected;
@@ -30,14 +33,7 @@ public abstract class Graphic implements Drawable
 	
 	public void setHighlighted( boolean state ) {
 		isHighlighted = state;
-		
-		if (isHighlighted) {
-			colStroke = EditorStyle.colHighlightStroke;
-			colFill   = EditorStyle.colHighlightFill;
-		} else {
-			colStroke = EditorStyle.colComponentStroke;
-			colFill   = EditorStyle.colComponentFill;
-		}
+		updateColours();
 	}
 	
 	
@@ -50,14 +46,7 @@ public abstract class Graphic implements Drawable
 	
 	public void setSelected( boolean state ) {
 		isSelected = state;
-		
-		if (isSelected) {
-			colStroke = EditorStyle.colSelectionStroke;
-			colFill   = EditorStyle.colSelectionFill;
-		} else {
-			colStroke = EditorStyle.colComponentStroke;
-			colFill   = EditorStyle.colComponentFill;
-		}
+		updateColours();
 	}
 	
 	
@@ -76,5 +65,27 @@ public abstract class Graphic implements Drawable
 	
 	public boolean isInverted() {
 		return isInverted;
+	}
+	
+	
+	
+	private void updateColours() {
+		if (isHighlighted) {
+			if (isSelected) {
+				colStroke = EditorStyle.colHighlightSelectStroke;
+				colFill   = EditorStyle.colHighlightSelectFill;
+			} else {
+				colStroke = EditorStyle.colHighlightStroke;
+				colFill   = EditorStyle.colHighlightFill;
+			}
+		} else {
+			if (isSelected) {
+				colStroke = EditorStyle.colSelectionStroke;
+				colFill   = EditorStyle.colSelectionFill;
+			} else {
+				colStroke = EditorStyle.colComponentStroke;
+				colFill   = EditorStyle.colComponentFill;
+			}
+		}
 	}
 }

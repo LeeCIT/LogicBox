@@ -26,6 +26,8 @@ import logicBox.util.Vec2;
  */
 public class GraphicComActive extends Graphic
 {
+	private static final long serialVersionUID = 1L;
+	
 	private VecPath polyBody;
 	private VecPath polyPins;
 	private VecPath	polyAux;

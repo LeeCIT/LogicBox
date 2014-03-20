@@ -3,9 +3,16 @@
 
 package logicBox.gui.menubar;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+
+import com.sun.org.apache.xerces.internal.xs.ItemPSVI;
+
+import logicBox.gui.CommonActionEvents;
 
 
 
@@ -33,19 +40,25 @@ public class EditorMenuBar extends JMenuBar
 	public JMenu     menuCloud; // Test
 	public JMenuItem itemCloudLogin;
 	public JMenuItem itemCloudLogout;
+	public JMenuItem itemCloudFiles;
 	
 	public JMenu     menuHelp;
 	public JMenuItem itemHelpHelp;
 	public JMenuItem itemHelpAbout;
 	
-	
+	private static EditorMenuBar instance = null;
 	
 	public EditorMenuBar() {
 		super();
 		setupComponents();
+		setUpActions();
+		instance = this;
 	}
 	
-	
+	public static EditorMenuBar getInstance()
+	{
+		return instance;
+	}
 	
 	private void setupComponents() {
 		setupFileMenu();
@@ -84,7 +97,11 @@ public class EditorMenuBar extends JMenuBar
 	private void setupCloudMenu() {
 		JMenu m = menuCloud = new JMenu( "Cloud" );
 		itemCloudLogin  = add( m, "Login" );
+		itemCloudFiles 	= add( m, "My Circuits");
 		itemCloudLogout = add( m, "Logout" );
+		
+		setAuthState(false);
+		
 		add( m );
 	}
 	
@@ -115,6 +132,39 @@ public class EditorMenuBar extends JMenuBar
 			menu.addSeparator();
 		
 		return item;
+	}
+	
+	
+	/**
+	 * Set authentication state
+	 * @param status
+	 */
+	public void setAuthState(Boolean status) {
+		itemCloudLogout.setVisible(status);
+		itemCloudLogin.setVisible(!status);
+		itemCloudFiles.setVisible(status);
+	}
+	
+	
+	
+	/**
+	 * Actions for the menubar are here
+	 */
+	private void setUpActions() {
+		EditorMenuBarEvent.handleLoginEvent(itemCloudLogin);
+		EditorMenuBarEvent.handleLogoutEvent(itemCloudLogout);
+		
+		itemFileOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CommonActionEvents.openFileAction();  //TODO do something with the file got back
+			}
+		});
+		
+		itemFilePrint.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CommonActionEvents.printAction();
+			}
+		});
 	}
 }
 

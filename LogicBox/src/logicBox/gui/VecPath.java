@@ -5,6 +5,7 @@ package logicBox.gui;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
+import java.io.Serializable;
 import logicBox.util.Transformable;
 import logicBox.util.Vec2;
 
@@ -12,10 +13,15 @@ import logicBox.util.Vec2;
 
 /**
  * Path2D which accepts Vec2 parameters.
+ * TODO this can't be serialised because there's a private constructor in the hierarchy somewhere.
  * @author Lee Coakley
  */
-public class VecPath extends Path2D.Float implements Transformable
+public class VecPath extends Path2D.Double implements Serializable, Transformable
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public VecPath() {
 		super();
 	}

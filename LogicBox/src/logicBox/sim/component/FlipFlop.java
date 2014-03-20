@@ -15,6 +15,8 @@ import logicBox.sim.SimUtil;
  */
 public abstract class FlipFlop extends ComponentActive
 {
+	private static final long serialVersionUID = 1L;
+	
 	private boolean lastClock;
 	
 	
@@ -55,7 +57,7 @@ public abstract class FlipFlop extends ComponentActive
 	
 	protected boolean updateClock() {
 		boolean clock     = getPinClock().getState();
-		boolean isEdgePos = LogicLevel.isEdgePos( lastClock, clock );
+		boolean isEdgePos = LogicLevel.isPositiveEdge( lastClock, clock );
 		lastClock = clock;
 		
 		return isEdgePos;

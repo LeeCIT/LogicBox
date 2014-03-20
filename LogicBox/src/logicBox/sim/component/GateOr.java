@@ -18,6 +18,10 @@ import logicBox.gui.editor.GraphicGen;
  */
 public class GateOr extends Gate
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public GateOr() {
 		super( 2 );
 	}

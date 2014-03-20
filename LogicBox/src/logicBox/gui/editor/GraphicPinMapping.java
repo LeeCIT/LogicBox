@@ -2,6 +2,7 @@
 
 
 package logicBox.gui.editor;
+import java.io.Serializable;
 import logicBox.sim.component.PinIoMode;
 import logicBox.util.Line2;
 import logicBox.util.Vec2;
@@ -13,8 +14,10 @@ import logicBox.util.Vec2;
  * Allows the graphical display to be mapped onto the simulator.
  * @author Lee Coakley
  */
-public class GraphicPinMapping
+public class GraphicPinMapping implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	public Line2     line;
 	public PinIoMode mode;
 	public int       index;

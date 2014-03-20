@@ -11,6 +11,8 @@ package logicBox.sim.component;
  */
 public class DisplayLed extends Display
 {
+	private static final long serialVersionUID = 1L;
+	
 	private boolean lit;
 	
 	

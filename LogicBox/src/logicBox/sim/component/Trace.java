@@ -13,6 +13,8 @@ package logicBox.sim.component;
  */
 public class Trace extends ComponentPassive
 {
+	private static final long serialVersionUID = 1L;
+	
 	private Pin source, dest;
 	
 	

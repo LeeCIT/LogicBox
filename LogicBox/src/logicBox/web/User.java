@@ -26,7 +26,7 @@ public class User
 			for(int i = 0; i < filesarray.length(); i++)
 				files.add(filesarray.getString(i));
 		} 
-		catch (JSONException e) 
+		catch (Exception e) 
 		{
 			e.printStackTrace();
 		}

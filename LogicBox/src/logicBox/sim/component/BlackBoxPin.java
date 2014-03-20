@@ -12,6 +12,10 @@ package logicBox.sim.component;
  */
 public class BlackBoxPin extends Pin
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public BlackBoxPin( PinIoMode mode ) {
 		super( null, mode );
 	}

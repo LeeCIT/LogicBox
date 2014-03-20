@@ -1,11 +1,17 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.tools;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import logicBox.gui.editor.Camera;
+import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.Graphic;
+import logicBox.gui.editor.RepaintListener;
 import logicBox.util.Vec2;
 
 
@@ -17,10 +23,6 @@ import logicBox.util.Vec2;
  */
 public class ToolHighlighter extends Tool
 {
-	private EditorPanel panel;
-	private EditorWorld world;
-	private Camera      cam;
-	
 	private EditorComponent lastComponent;
 	private EditorComponent curComponent;
 	private MouseAdapter    eventListener;
@@ -28,10 +30,8 @@ public class ToolHighlighter extends Tool
 	
 	
 	
-	public ToolHighlighter( EditorPanel panel, EditorWorld world, Camera cam ) {
-		this.panel           = panel;
-		this.world           = world;
-		this.cam             = cam;
+	public ToolHighlighter( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
+		super( panel, world, cam, manager );
 		this.eventListener   = createEventListener();
 		this.repaintListener = createRepaintListener();
 	}
@@ -63,11 +63,11 @@ public class ToolHighlighter extends Tool
 	private MouseAdapter createEventListener() {
 		return new MouseAdapter() {			
 			public void mouseMoved( MouseEvent ev ) {
-				doHighlight( cam.getMousePosWorld() );
+				doHighlight();
 			}
 			
 			public void mouseDragged( MouseEvent ev ) {
-				doHighlight( cam.getMousePosWorld() );
+				doHighlight();
 			}
 		};
 	}
@@ -77,27 +77,31 @@ public class ToolHighlighter extends Tool
 	private RepaintListener createRepaintListener() {
 		return new RepaintListener() {
 			public void draw( Graphics2D g ) {
-				if (curComponent != null)
-					curComponent.draw( g );
+				if (curComponent != null) {
+					Graphic graphic = curComponent.getGraphic();
+					boolean state   = graphic.isHighlighted();
+					
+					graphic.setHighlighted( true );
+					graphic.draw( g );
+					graphic.setHighlighted( state );
+				}
 			}
 		};
 	}
 	
 	
 	
-	private void doHighlight( Vec2 pos ) {
+	private void doHighlight() {
 		boolean changed = false;
 		
 		if (lastComponent != null) {
-			lastComponent.graphic.setHighlighted( false );
 			lastComponent = null;
 			changed = true;
 		}
 		
-		curComponent = world.findTopmostAt( pos );
+		curComponent = getComponentAt( cam.getMousePosWorld() );
 		
 		if (curComponent != null) {
-			curComponent.graphic.setHighlighted( true );
 			lastComponent = curComponent;
 			changed = true;
 		}
