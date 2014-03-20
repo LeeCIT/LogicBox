@@ -40,7 +40,7 @@ public class EditorFrame extends JFrame
 	
 	
 	
-	public EditorToolbar getEditorToolbox() {
+	public EditorToolbar getEditorToolbar() {
 		return toolbar;
 	}
 	
