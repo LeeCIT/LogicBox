@@ -44,8 +44,10 @@ public class MenuFrameTest extends JFrame
 		Map<ComponentType, ComponentInfo> compMap = new HashMap<ComponentType, ComponentInfo>();
 		
 		ComponentInfo andInfo = new ComponentInfo("And Gate", "Description of an And Gate");
+		ComponentInfo orInfo  = new ComponentInfo("OR Gate", "Description of an Or Gate");
 		
 		compMap.put(ComponentType.gateAnd, andInfo);
+		compMap.put(ComponentType.gateOr, orInfo);
 		
 		//for (ComponentType type: ComponentType.values())
 			//compMap.put(type, type.name());
