@@ -30,7 +30,7 @@ public class HelpPanel extends JPanel
 	
 	
 	private ComponentType componentType;
-	private Map <ComponentType, String> componentMap;
+	private Map <ComponentType, ComponentInfo> componentMap;
 	private JTextPane compDescription = new JTextPane();
 	private SearchPanel<ComponentType> search; 
 	
@@ -40,7 +40,7 @@ public class HelpPanel extends JPanel
 
 	
 	
-	public HelpPanel( Map<ComponentType, String> compMap  ) {
+	public HelpPanel( Map<ComponentType, ComponentInfo> compMap  ) {
 		super();
 		setLayout( new MigLayout() );
 		this.componentMap = compMap;
@@ -59,7 +59,8 @@ public class HelpPanel extends JPanel
 			compDescription.setText("");
 			StringBuilder builder = new StringBuilder();
 			builder.append("<html>");
-			builder.append("<b>" + getDescription() +"</b><br/><br/>");
+			builder.append("<h1>" + getCompName() +"</h1>");
+			builder.append("<hr>");
 			builder.append("Un-edited text");
 			builder.append("</html>");
 			compDescription.setText(builder.toString());
@@ -72,12 +73,11 @@ public class HelpPanel extends JPanel
 	 * passed in.
 	 * @return
 	 */
-	private String getDescription(){
+	private String getCompName(){
 		if ( ! componentMap.containsKey(componentType) )
 			return "Missing info";
 			
-			return componentMap.get(componentType);	
-			
+			return componentMap.get(componentType).getCompName();	
 	}
 	
 	
