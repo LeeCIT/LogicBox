@@ -56,7 +56,7 @@ public class HelpPanel extends JPanel
 			builder.append("<html>");
 			builder.append("<h1>" + getCompName() +"</h1>");
 			builder.append("<hr>");
-			builder.append(getCompDescription());
+			builder.append("<p>" + getCompDescription() + "</p>");
 			builder.append("</html>");
 			compDescription.setText(builder.toString());
 	}
