@@ -86,7 +86,6 @@ public class EditorPanel extends JPanel
 		}
 		
 		addMouseOverTest();
-		setupActions();
 	}
 	
 	
@@ -148,12 +147,6 @@ public class EditorPanel extends JPanel
 	
 	public void removeRepaintListener( RepaintListener rl ) {
 		repaintListeners.remove( rl );
-	}
-	
-	
-	
-	private void setupActions() {
-		
 	}
 	
 	
