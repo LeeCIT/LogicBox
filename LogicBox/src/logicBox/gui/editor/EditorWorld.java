@@ -5,13 +5,13 @@ package logicBox.gui.editor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import logicBox.gui.Gfx;
-import logicBox.sim.component.Component;
-import logicBox.sim.component.ComponentActive;
+import logicBox.sim.Simulation;
 import logicBox.util.Bbox2;
 import logicBox.util.BinaryFunctor;
 import logicBox.util.Geo;
@@ -30,12 +30,26 @@ public class EditorWorld implements Serializable
 	
 	private SpatialGrid<EditorComponent> grid;
 	private List       <EditorComponent> ecoms;
+	private Simulation                   sim;
 	
 	
 	
 	public EditorWorld() {
 		grid  = new SpatialGrid<>( 2048, 2048, 128 );
 		ecoms = new ArrayList<>(); 
+		sim   = new Simulation();
+	}
+	
+	
+	
+	public void newCircuit() {
+		System.out.println( "newCircuit:" );
+	}
+	
+	
+	
+	public void loadCircuit( File file ) {
+		System.out.println( "loadCircuit: " + file );
 	}
 	
 	
