@@ -9,14 +9,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Style;
-import javax.swing.text.StyledDocument;
-
 import net.miginfocom.swing.MigLayout;
 import logicBox.sim.component.*;
 import logicBox.gui.SearchPanel;
