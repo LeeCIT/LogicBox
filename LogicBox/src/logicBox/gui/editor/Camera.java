@@ -202,6 +202,17 @@ public class Camera
 	
 	
 	
+	public void interpolateToBbox( Bbox2 bbox, double border, double timeInSeconds ) {
+		Vec2   sizeMe  = new Bbox2( component ).getSize();
+		Vec2   sizeYou = bbox.expand( border ) .getSize();
+		Vec2   pos     = bbox.getCentre();
+		double zoom    = Geo.getAspectScaleFactor( sizeYou, sizeMe, true );
+		
+		interpolateTo( pos, zoom, timeInSeconds );
+	}
+	
+	
+	
 	public void interpolateTo( final Vec2 pos, final double zoom, final double timeInSeconds ) {
 		interpolateStop();
 		
