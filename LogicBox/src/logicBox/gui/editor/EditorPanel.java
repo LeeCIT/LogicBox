@@ -104,7 +104,7 @@ public class EditorPanel extends JPanel
 	
 	
 	public void recentreCamera() {
-		cam.interpolateTo( world.getWorldExtent().getCentre(), 1, 3 );
+		cam.interpolateToBbox( world.getWorldExtent(), 64, 3 );
 	}
 	
 	
