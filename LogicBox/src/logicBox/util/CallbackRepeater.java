@@ -7,7 +7,6 @@ package logicBox.util;
 
 /**
  * Spawns a thread which executes a callback at a set frequency.
- * Triggers the callback immediately.
  * @author Lee Coakley
  * @see Callback
  */
@@ -33,7 +32,7 @@ public class CallbackRepeater
 	
 	
 	/**
-	 * Optionally start paused.  If starting paused, nothing will happen until
+	 * Optionally start paused.  If starting paused, nothing will happen until unpause() is called.
 	 */
 	public CallbackRepeater( long frequencyMillisecs, boolean startPaused, Callback callback ) {
 		this.callback      = callback;
@@ -193,6 +192,12 @@ public class CallbackRepeater
 		rep.join();
 		
 		System.out.println( "Done!" );
+		
+		rep.pause();
+		
+		rep.unpause();
+		
+		rep.join();
 	}
 }
 
