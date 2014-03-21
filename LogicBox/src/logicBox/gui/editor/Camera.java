@@ -279,6 +279,7 @@ public class Camera
 	private void setupActions() {
 		component.addMouseWheelListener( new MouseWheelListener() {
 			public void mouseWheelMoved( MouseWheelEvent ev ) {
+				interpolateStop(); // Never override user input; always listen
 				zoomLogarithmic( ev.getPreciseWheelRotation(), true );
 			}
 		});
@@ -286,21 +287,27 @@ public class Camera
 		
 		component.addMouseListener( new MouseAdapter() {
 			public void mousePressed( MouseEvent ev ) {
-				if (SwingUtilities.isMiddleMouseButton( ev ))
+				if (SwingUtilities.isMiddleMouseButton( ev )) {
+					interpolateStop();
 					panBegin();
+				}
 			}
 			
 			public void mouseReleased( MouseEvent ev ) {
-				if (SwingUtilities.isMiddleMouseButton( ev ))
+				if (SwingUtilities.isMiddleMouseButton( ev )) {
+					interpolateStop();
 					panEnd();
+				}
 			}
 		});
 		
 		
 		component.addMouseMotionListener( new MouseMotionAdapter() {
 			public void mouseDragged( MouseEvent ev ) {
-				if (SwingUtilities.isMiddleMouseButton( ev ))
+				if (SwingUtilities.isMiddleMouseButton( ev )) {
+					interpolateStop();
 					panMove();
+				}
 			}
 		});
 		
