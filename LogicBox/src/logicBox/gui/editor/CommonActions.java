@@ -22,7 +22,6 @@ public abstract class CommonActions
 {
 	/**
 	 * When a file is opened this is called and the JFile chooser is brought up
-	 * @return The file that was picked
 	 */
 	public static void addOpenCircuitListener( AbstractButton abutt, final EditorFrame frame ) {
 		abutt.addActionListener( new ActionListener() {
