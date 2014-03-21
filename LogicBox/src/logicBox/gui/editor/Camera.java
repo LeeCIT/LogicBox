@@ -207,7 +207,7 @@ public class Camera
 		
 		mover = new CallbackRepeater( 1000 / 60,
 			new Callback() {
-				private Vec2   panStart   = Camera.this.pan.copy();
+				private Vec2   panStart   = Camera.this.getPan();
 				private double zoomStart  = Camera.this.zoom;
 				private Vec2   panTarget  = pos;
 				private double zoomTarget = zoom;
