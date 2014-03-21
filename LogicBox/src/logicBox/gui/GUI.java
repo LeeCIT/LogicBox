@@ -8,9 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import logicBox.gui.editor.EditorFrame;
-import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.Toolbox;
-import logicBox.gui.editor.menubar.EditorMenuBar;
 import logicBox.gui.editor.menubar.EditorMenuController;
 import logicBox.gui.editor.toolbar.EditorToolbarController;
 import logicBox.gui.snapping.ComponentSnapper;
@@ -37,7 +35,7 @@ public abstract class GUI
 			UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
 		}
 		catch (Exception ex) {
-			System.out.println( ex );
+			ex.printStackTrace();
 		}	
 	}
 	
