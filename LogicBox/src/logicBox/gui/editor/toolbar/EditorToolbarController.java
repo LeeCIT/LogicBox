@@ -3,9 +3,8 @@
 
 package logicBox.gui.editor.toolbar;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import logicBox.gui.CommonActions;
+import logicBox.gui.editor.CommonActions;
+import logicBox.gui.editor.EditorFrame;
 
 
 
@@ -15,14 +14,9 @@ import logicBox.gui.CommonActions;
  */
 public class EditorToolbarController
 {
-	/**
-	 * Set up the action listeners
-	 */
-	private void setUpActions() {
-		openFileButt.addActionListener( new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CommonActions.openFile(); // TODO do something with the file got back				
-			}
-		});
+	public EditorToolbarController( EditorToolbar toolbar, EditorFrame frame ) {
+		CommonActions.addOpenCircuitListener   ( toolbar.openFileButt,  frame );
+		CommonActions.addPrintCircuitListener  ( toolbar.printFileButt, frame );
+		CommonActions.addRecentreCameraListener( toolbar.centreCamButt, frame );
 	}
 }

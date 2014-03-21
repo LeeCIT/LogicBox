@@ -18,6 +18,7 @@ public class EditorToolbar extends JToolBar
 {
 	public EditorToolBarButton newFileButt;
 	public EditorToolBarButton openFileButt;
+	public EditorToolBarButton printFileButt;
 	public EditorToolBarButton undoButt;
 	public EditorToolBarButton redoButt;
 	public EditorToolBarButton editTextButt;
@@ -30,7 +31,7 @@ public class EditorToolbar extends JToolBar
 	public EditorToolbar() {
 		super( HORIZONTAL );
 		setFloatable( false );
-		addButtons();
+		createButtons();
 	}
 	
 	
@@ -38,15 +39,16 @@ public class EditorToolbar extends JToolBar
 	/**
 	 * Set up the buttons
 	 */
-	private void addButtons() {
+	private void createButtons() {
 		setLayout( new MigLayout( "gap 1, insets 0", "[]", "[]" ) );
 		
 		newFileButt   = addButton( "New16px.png"      , "New file"         , false );
-		openFileButt  = addButton( "Open16px.png"     , "OpenFile"         , false );
+		openFileButt  = addButton( "Open16px.png"     , "Open file"        , false );
+		printFileButt = addButton( "Open16px.png"     , "Print file"       , false );
 		undoButt      = addButton( "Undo16px.png"     , "Undo"             , true  );
 		redoButt      = addButton( "Redo16px.png"     , "Redo"             , false );
 		enableGrid    = addButton( "Grid16px.png"     , "Show/hide grid"   , true  );
-		centreCamButt = addButton( "CentreCam16px.png", "Centre camera"    , false ); 
+		centreCamButt = addButton( "CentreCam16px.png", "Centre camera"    , false );
 		toolBoxButt   = addButton( "ToolBox16px.png"  , "Show/hide toolbox", false );
 	}
 	
@@ -68,7 +70,7 @@ public class EditorToolbar extends JToolBar
 	
 	
 	private Icon loadIconFromResource( String name ) {
-		return new ImageIcon( getClass().getClassLoader().getResource("resources/icons/" + name ) );
+		return new ImageIcon( getClass().getClassLoader().getResource("resources/icons/" + name) );
 	}
 }
 

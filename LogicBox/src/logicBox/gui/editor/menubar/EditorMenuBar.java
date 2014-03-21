@@ -32,7 +32,7 @@ public class EditorMenuBar extends JMenuBar
 	public JMenuItem itemEditCopy;
 	public JMenuItem itemEditPaste;
 	
-	public JMenu     menuCloud; // Test
+	public JMenu     menuCloud;
 	public JMenuItem itemCloudLogin;
 	public JMenuItem itemCloudLogout;
 	public JMenuItem itemCloudFiles;

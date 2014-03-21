@@ -9,6 +9,10 @@ import logicBox.gui.GUI;
 import logicBox.gui.cloud.*;
 import logicBox.web.*;
 
+
+/**
+ * This is horrible!  bleeaurgh!
+ */
 public class EditorMenuBarEvent 
 {
 	public static void handleLoginEvent(JMenuItem m)
@@ -23,6 +27,8 @@ public class EditorMenuBarEvent
 			}
 		});
 	}
+	
+	
 	
 	public static void handleLogoutEvent(JMenuItem m)
 	{
