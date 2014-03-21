@@ -13,13 +13,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Stack;
-import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorStyle;
 import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.GraphicPinMapping;
 import logicBox.gui.editor.RepaintListener;
 import logicBox.util.Geo;
 import logicBox.util.Line2;
@@ -43,6 +43,9 @@ public class ToolTraceDrawer extends Tool
 	private MouseAdapter    mouseListener;
 	private RepaintListener repaintListener;
 	
+	private EditorWorld.FindClosestPinResult traceSrc;
+	private EditorWorld.FindClosestPinResult traceDest;
+	
 	
 	
 	public ToolTraceDrawer( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
@@ -51,6 +54,7 @@ public class ToolTraceDrawer extends Tool
 		this.mouseListener   = createMouseListener();
 		this.repaintListener = createRepaintListener();
 		this.tracePoints     = new Stack<>();
+		this.tracePosNext    = new Vec2();
 	}
 	
 	
@@ -104,13 +108,13 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private void drawFeedback( Graphics2D g ) {
-		if (traceChoosingOrigin)
-			Gfx.drawCircle( g, tracePosNext, 5, EditorStyle.colHighlightStroke, true );
+		if (traceChoosingOrigin || ! traceInitiated)
+			Gfx.drawCircle( g, tracePosNext, 7, getCol(traceChoosingOrigin), true );
 		
 		if ( (!traceInitiated) || tracePoints.isEmpty())
 			return;
 		
-		Gfx.drawCircle( g, tracePosNext, 5, EditorStyle.colTraceOff, true );
+		Gfx.drawCircle( g, tracePosNext, 5, getCol(traceArmed), true );
 		
 		Gfx.pushStrokeAndSet( g, EditorStyle.strokeTrace );
 			Gfx.pushColorAndSet ( g, EditorStyle.colTraceOff );
@@ -118,6 +122,12 @@ public class ToolTraceDrawer extends Tool
 				drawNextLine( g );
 			Gfx.popColor ( g );
 		Gfx.popStroke( g );
+	}
+	
+	
+	
+	private Color getCol( boolean armed ) {
+		return (armed) ? EditorStyle.colHighlightStroke : EditorStyle.colTraceOff;
 	}
 	
 	
@@ -199,7 +209,7 @@ public class ToolTraceDrawer extends Tool
 	private MouseAdapter createMouseListener() {
 		return new MouseAdapter() {
 			public void mousePressed( MouseEvent ev ) {
-				if (SwingUtilities.isLeftMouseButton( ev ))
+				if (isLeft( ev ))
 					if ( ! traceInitiated)
 						 traceStartChoosingOrigin();
 					else traceArm();
@@ -207,12 +217,12 @@ public class ToolTraceDrawer extends Tool
 			
 			
 			public void mouseReleased( MouseEvent ev ) {
-				if (SwingUtilities.isLeftMouseButton( ev ))
+				if (isLeft( ev ))
 					if ( ! traceInitiated) 
 						 traceStart();
 					else traceAdd  ();
 				
-				if (SwingUtilities.isRightMouseButton( ev ))
+				if (isRight( ev ))
 					if (traceInitiated)
 						traceCancel();
 			}
@@ -231,9 +241,11 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
-	private void traceStartChoosingOrigin() {
+	public void traceStartChoosingOrigin() {
+		traceSrc            = null;
+		traceDest           = null;
 		traceChoosingOrigin = true;
-		tracePosNext        = getSnappedMousePos();
+		tracePosNext        = getNextPos();
 		panel.repaint();
 	}
 	
@@ -250,17 +262,58 @@ public class ToolTraceDrawer extends Tool
 	private void traceStart() {
 		traceInitiated      = true;
 		traceChoosingOrigin = false;
-		tracePosNext        = getSnappedMousePos();
-		tracePoints.push( tracePosNext );
-		panel.repaint();
+		traceAdd();
 	}
 	
 	
 	
 	private void traceAdd() {
 		traceArmed = false;
-		tracePoints.push( getSnappedMousePos() );
+		
+		Vec2     nextPos   = cam.getMousePosWorld();
+		boolean  completed = doTraceToPinSnapping( nextPos );
+		
+		tracePoints.push( nextPos );
+		
+		if (completed)
+			traceComplete();
+		
 		panel.repaint();
+	}
+	
+	
+	
+	/**
+	 * Snap and update the source/dest info.  If true is returned the trace is completed.
+	 * @return Whether the trace is now completed.
+	 */
+	private boolean doTraceToPinSnapping( Vec2 nextPos ) {
+		SnapInfo snapInfo  = getSnapInfo( nextPos );
+		boolean  completed = false;
+		
+		if (snapInfo.snapped) {
+			GraphicPinMapping gpm = snapInfo.pinInfo.gpm;
+			boolean dupe = traceSrc  != null  &&  traceSrc .gpm != gpm
+				        || traceDest != null  &&  traceDest.gpm != gpm;
+			
+			if ( ! dupe) {
+				nextPos.setLocation( snapInfo.pos );
+				
+				boolean hasPoints = ! tracePoints.isEmpty(); 
+				boolean isSource  = (   traceChoosingOrigin && traceSrc  == null);
+				boolean isDest    = ( ! traceChoosingOrigin && traceDest == null && hasPoints);
+				
+				if (isSource)
+					traceSrc = snapInfo.pinInfo;
+				
+				if (isDest) {
+					traceDest = snapInfo.pinInfo;
+					completed = true;
+				}
+			}
+		}
+		
+		return completed;
 	}
 	
 	
@@ -274,28 +327,82 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
+	private void traceMove() {
+		tracePosNext = getNextPos();
+		panel.repaint();
+	}
+	
+	
+	
+	private void traceComplete() {
+		System.out.println( "Trace completed" );
+		traceFinishCommon();
+	}
+	
+	
+	
 	private void traceCancel() {
+		traceFinishCommon();
+	}
+	
+	
+	
+	private void traceFinishCommon() {
 		traceInitiated      = false;
 		traceChoosingOrigin = false;
+		traceSrc         = null;
+		traceDest    = null;
 		tracePoints.clear();
 		panel.repaint();
 	}
 	
 	
 	
-	private void traceMove() {
-		tracePosNext = getSnappedMousePos();
-		panel.repaint();
+	private Vec2 getNextPos() {
+		Vec2     pos      = cam.getMousePosWorld();
+		SnapInfo snapInfo = getSnapInfo( pos );
+		
+		if (snapInfo.snapped)
+			 return snapInfo.pos;
+		else return pos;
+	}
+	
+	
+	
+	private class SnapInfo {
+		public boolean snapped;
+		public Vec2    pos;
+		public EditorWorld.FindClosestPinResult pinInfo;
+	}
+	
+	
+	
+	private SnapInfo getSnapInfo( Vec2 pos ) {
+		double snapThresh = 16 / cam.getZoom();
+		SnapInfo                         snapInfo = new SnapInfo();
+		EditorWorld.FindClosestPinResult fcpRes   = world.findClosestPin( pos, snapThresh );
+		
+		if (fcpRes.foundPin) {
+			snapInfo.snapped = true;
+			snapInfo.pos     = fcpRes.gpm.getPinPosEnd();
+			snapInfo.pinInfo = fcpRes;
+		}
+		
+		return snapInfo;
 	}
 	
 	
 	
 	private Vec2 getSnappedMousePos() {
 		Vec2 pos = cam.getMousePosWorld();
+		return pos;
 		
+		/** TODO worry about nice lines later.
+		 * TODO insert a break so if a line is off, another is inserted to make it 45 degs
 		if (traceInitiated && ! tracePoints.isEmpty())
 			 return snap( tracePoints.peek(), pos );
 		else return pos;
+		*/
 	}
 	
 	
