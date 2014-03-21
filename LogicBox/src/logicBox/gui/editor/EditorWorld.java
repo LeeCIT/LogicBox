@@ -139,6 +139,39 @@ public class EditorWorld implements Serializable
 	
 	
 	
+	public class FindClosestPinResult {
+		public boolean           foundPin;
+		public GraphicPinMapping gpm;
+		public EditorComponent   ecom;
+	}
+	
+	
+	
+	public FindClosestPinResult findClosestPin( Vec2 pos, double radius ) {
+		FindClosestPinResult result = new FindClosestPinResult();
+		Bbox2  bbox     = new Bbox2(pos,pos).expand( radius * 2 );
+		double bestDist = Double.MAX_VALUE;
+		
+		for (EditorComponent ecom: find( bbox )) {
+			GraphicPinMapping gpm = ecom.getGraphic().findClosestPin( pos, radius );
+			
+			if (gpm != null) {
+				double dist = gpm.line.distanceToPoint( pos );
+				
+				if (dist <= bestDist) {
+					bestDist = dist;
+					result.foundPin = true;
+					result.gpm      = gpm;
+					result.ecom     = ecom;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	
+	
 	/**
 	 * Get a list of all components.
 	 * @return
