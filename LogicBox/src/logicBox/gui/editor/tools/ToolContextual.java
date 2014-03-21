@@ -17,8 +17,6 @@ import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.RepaintListener;
 import logicBox.util.Bbox2;
-import logicBox.util.Callback;
-import logicBox.util.CallbackRepeater;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
@@ -158,8 +156,6 @@ public class ToolContextual extends Tool
 		if (selectHasLock || ! isComponentAt(pos)) // Select will take control
 			return;
 		
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
-		
 		dragInitiated   = true;
 		dragInitiatedAt = pos;
 	}
@@ -167,7 +163,6 @@ public class ToolContextual extends Tool
 	
 	
 	private void dragMove() {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		Vec2 pos = cam.getMousePosWorld();
 		
 		if (dragInitiated) {
@@ -186,7 +181,6 @@ public class ToolContextual extends Tool
 	
 	
 	private void enterDraggingState() {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		dragHasLock   = true;
 		dragging      = true;
 		dragInitiated = false;
@@ -212,8 +206,6 @@ public class ToolContextual extends Tool
 		if ( ! (dragInitiated || dragging))
 			return;
 		
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
-		
 		panel.setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
 		
 		Vec2   pos     = cam.getMousePosWorld();
@@ -229,14 +221,12 @@ public class ToolContextual extends Tool
 		if ( ! dragging)
 			return;
 		
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		dragFinishedCommon();
 	}
 	
 	
 	
 	private void dragCancel() {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		boolean wasDragging = dragging;
 		
 		dragFinishedCommon();
@@ -386,7 +376,6 @@ public class ToolContextual extends Tool
 	
 	
 	private void selectInitiate( boolean modifying ) {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		Vec2    pos   = cam.getMousePosWorld();
 		boolean hover = isComponentAt( pos );
 		
@@ -407,7 +396,6 @@ public class ToolContextual extends Tool
 	
 	
 	private void selectMove() {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		Vec2 pos = cam.getMousePosWorld();
 		
 		if (selectInitiated) {
@@ -430,7 +418,6 @@ public class ToolContextual extends Tool
 		if ( ! selectHasLock)
 			return;
 		
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		modifySelection( isAdditive, isSubtractive );
 		selectFinishedCommon();
 	}
@@ -455,7 +442,6 @@ public class ToolContextual extends Tool
 
 
 	private void selectCancel() {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		selectFinishedCommon();
 	}
 	
