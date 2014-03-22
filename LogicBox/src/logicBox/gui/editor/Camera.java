@@ -8,13 +8,12 @@ import java.awt.MouseInfo;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
 import logicBox.util.CallbackRepeater;
+import logicBox.util.CallbackSet;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
@@ -42,7 +41,7 @@ public class Camera
 	private Vec2    pan;
 	
 	private AffineTransform  matrix;
-	private List<Callback>   onTransform;
+	private CallbackSet      onTransform;
 	private CallbackRepeater mover;
 	
 	
@@ -60,7 +59,7 @@ public class Camera
 		
 		pan         = new Vec2( 0 );
 		matrix      = new AffineTransform();
-		onTransform = new ArrayList<>();
+		onTransform = new CallbackSet();
 		
 		setupActions();
 	}
@@ -350,8 +349,7 @@ public class Camera
 		matrix.translate(  centre.x,  centre.y );
 		matrix.translate(  0.5,       0.5      );
 		
-		for (Callback cb: onTransform)
-			cb.execute();
+		onTransform.execute();
 	}
 	
 	

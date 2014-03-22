@@ -31,6 +31,9 @@ public class CallbackSet extends HashSet<Callback> implements Callback
 	
 	
 	
+	/**
+	 * Execute all callbacks in the set.
+	 */
 	public void execute() {
 		for (Callback cb: this)
 			cb.execute();
