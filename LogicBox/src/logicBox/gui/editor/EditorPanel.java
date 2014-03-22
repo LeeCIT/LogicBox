@@ -11,14 +11,12 @@ import java.awt.Paint;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.gui.editor.tools.ToolManager;
-import logicBox.sim.component.ComponentActive;
 import logicBox.sim.component.Demux;
 import logicBox.sim.component.GateAnd;
 import logicBox.sim.component.GateBuffer;
@@ -31,7 +29,6 @@ import logicBox.sim.component.GateXor;
 import logicBox.sim.component.Mux;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
-import logicBox.util.CallbackParam;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
@@ -62,7 +59,7 @@ public class EditorPanel extends JPanel
 		cam   = new Camera( this );
 		cam.addTransformCallback( createOnTransformCallback() );
 		
-		toolManager = new ToolManager( this, world, cam );
+		toolManager = new ToolManager( this );
 		
 		world.add( new EditorComponent( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, -128) ) );
 		world.add( new EditorComponent( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, -256) ) );
@@ -90,19 +87,6 @@ public class EditorPanel extends JPanel
 	
 	
 	
-	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
-		toolManager.getPlacer().placementStart( ecc.getGraphicPreview(), new CallbackParam<Vec2>() {
-			public void execute( Vec2 pos ) {
-				ComponentActive  scom = ecc.getComponentPayload();
-				GraphicComActive gca  = scom.getGraphic();
-				EditorComponent  ecom = new EditorComponent( scom, gca, pos );
-				world.add( ecom );
-			}
-		});
-	}
-	
-	
-	
 	public void recentreCamera() {
 		cam.interpolateToBbox( world.getWorldExtent(), 64, 3 );
 	}
@@ -117,6 +101,12 @@ public class EditorPanel extends JPanel
 	
 	public EditorWorld getWorld() {
 		return world;
+	}
+	
+	
+	
+	public ToolManager getToolManager() {
+		return toolManager;
 	}
 	
 	
@@ -178,24 +168,11 @@ public class EditorPanel extends JPanel
 				drawGrid( g );
 				drawDebugCrap( g );
 				
-				for (EditorComponent ecom: world.getViewableComponents( cam, 64 )) {
+				for (EditorComponent ecom: world.getViewableComponents( cam, 64 ))
 					ecom.draw( g );
-					
-					Gfx.pushColorAndSet( g, Color.RED );
-						Gfx.drawBbox( g, ecom.graphic.getBbox(), false );
-					Gfx.popColor( g );
-				}
 				
 				for (RepaintListener rpl: repaintListeners)
 					rpl.draw( g );
-				
-				Gfx.pushColorAndSet( g, Color.GREEN );
-					Gfx.drawBbox( g, world.getWorldExtent(), false );
-				Gfx.popColor( g );
-				
-				Gfx.pushColorAndSet( g, Color.ORANGE );
-					Gfx.drawBbox( g, cam.getWorldViewArea(), false );
-				Gfx.popColor( g );
 				
 			Gfx.popAntialiasingState( g );
 		Gfx.popMatrix( g );
