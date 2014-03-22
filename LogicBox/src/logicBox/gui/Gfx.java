@@ -4,6 +4,7 @@
 package logicBox.gui;
 import logicBox.util.Bbox2;
 import logicBox.util.Geo;
+import logicBox.util.Line2;
 import logicBox.util.Vec2;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -127,6 +128,18 @@ public abstract class Gfx
 	
 	public static void drawThickRoundedLine( Graphics2D g, Vec2 a, Vec2 b, double thickness ) {
 		drawThickLineImpl( g, a, b, thickness, true );
+	}
+	
+	
+	
+	public static void drawThickLine( Graphics2D g, Line2 line, double thickness ) {
+		drawThickLineImpl( g, line.a, line.b, thickness, false );
+	}
+	
+	
+	
+	public static void drawThickRoundedLine( Graphics2D g, Line2 line, double thickness ) {
+		drawThickLineImpl( g, line.a, line.b, thickness, true );
 	}
 	
 	
