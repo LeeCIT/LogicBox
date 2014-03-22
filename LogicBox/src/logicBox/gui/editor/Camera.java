@@ -3,6 +3,7 @@
 
 package logicBox.gui.editor;
 import java.awt.Cursor;
+import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
@@ -62,6 +63,18 @@ public class Camera
 		onTransform = new ArrayList<>();
 		
 		setupActions();
+	}
+	
+	
+	
+	public void applyTransform( Graphics2D g ) {
+		AffineTransform matCam = getTransform();
+		AffineTransform matRef = g.getTransform();
+		AffineTransform mat    = new AffineTransform();
+		mat.concatenate( matRef );
+		mat.concatenate( matCam );
+		
+		g.setTransform( mat );
 	}
 	
 	

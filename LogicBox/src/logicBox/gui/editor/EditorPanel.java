@@ -174,7 +174,7 @@ public class EditorPanel extends JPanel
 					fillBackground( g );
 				Gfx.popAntialiasingState( g );
 				
-				setCameraTransform( g );
+				cam.applyTransform( g );
 				drawGrid( g );
 				drawDebugCrap( g );
 				
@@ -199,18 +199,6 @@ public class EditorPanel extends JPanel
 				
 			Gfx.popAntialiasingState( g );
 		Gfx.popMatrix( g );
-	}
-	
-	
-	
-	private void setCameraTransform( Graphics2D g ) {
-		AffineTransform matCam = cam.getTransform();
-		AffineTransform matRef = g.getTransform();
-		AffineTransform mat    = new AffineTransform();
-		mat.concatenate( matRef );
-		mat.concatenate( matCam );
-		
-		g.setTransform( mat );
 	}
 	
 	
@@ -366,10 +354,21 @@ public class EditorPanel extends JPanel
 			}
 		};
 	}
-
-
-
+	
+	
+	
+	/**
+	 * When the transform is changed by the camera, repaint and generate mouse events.
+	 * The events ensure that tools etc update their positions when zooming/panning while dragging/placing/etc.
+	 */
 	private void onTransform() {
+		generateMouseEvent();
+		repaint();
+	}
+	
+	
+	
+	private void generateMouseEvent() {
 		MouseEvent me = new MouseEvent(
 			this,
 			MouseEvent.MOUSE_MOVED,
@@ -386,8 +385,6 @@ public class EditorPanel extends JPanel
 			ml.mouseMoved  ( me );
 			ml.mouseDragged( me );
 		}
-		
-		repaint();
 	}
 }
 
