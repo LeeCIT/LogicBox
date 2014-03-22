@@ -35,7 +35,7 @@ public class Toolbox extends JDialog
 		setResizable( false );
 		setVisible( true );
 	}
-		
+	
 	
 	
 	private void addButtons() {
@@ -125,7 +125,7 @@ public class Toolbox extends JDialog
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {		
 				EditorPanel ed = butt.getEditorPanelEvaluator().evaluate();
-				ed.initiateComponentCreation( genCommand(com) );
+				ed.getToolManager().initiateComponentCreation( genCommand(com) );
 			}
 		});
 	}
