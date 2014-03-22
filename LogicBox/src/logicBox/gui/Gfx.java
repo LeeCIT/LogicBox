@@ -23,6 +23,7 @@ public abstract class Gfx
 	private static Stack<Object>          aaStack     = new Stack<>();
 	private static Stack<AffineTransform> matrixStack = new Stack<>();
 	private static Stack<Stroke>          strokeStack = new Stack<>();
+	private static Stack<Paint>           paintStack  = new Stack<>();
 	
 	
 	
@@ -304,6 +305,22 @@ public abstract class Gfx
 	public static void popStroke( Graphics2D g ) {
 		g.setStroke( strokeStack.pop() );
 	}
+	
+	
+	
+	public static void pushPaintAndSet( Graphics2D g, Paint p ) {
+		paintStack.push( p );
+		g.setPaint( p );
+	}
+	
+	
+	
+	public static void popPaint( Graphics2D g ) {
+		g.setPaint( paintStack.pop() );
+	}
+	
+	
+	
 }
 
 
