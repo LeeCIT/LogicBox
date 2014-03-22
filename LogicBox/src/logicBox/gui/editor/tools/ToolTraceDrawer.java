@@ -12,6 +12,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
@@ -154,30 +156,18 @@ public class ToolTraceDrawer extends Tool
 	
 	private void drawNextLine( Graphics2D g ) {
 		Gfx.pushStrokeAndSet( g, EditorStyle.strokeTracePlace );
-			if (traceArmed)
-				 Gfx.pushColorAndSet( g, EditorStyle.colHighlightStroke );
-			else Gfx.pushColorAndSet( g, EditorStyle.colTraceOff );
+			Gfx.pushColorAndSet( g, EditorStyle.colHighlightStroke );
 			
-				Line2 ref = new Line2( tracePoints.peek(), tracePosNext );
-				Line2.IntersectResult ir = null;
-			
-				for (int i=0; i<tracePoints.size()-1; i++) {
-					Line2 com = new Line2( tracePoints.get(i), tracePoints.get(i+1) );
-					Line2.IntersectResult emir = ref.intersect( com );
-					
-					if (emir.intersects)
-					if (Geo.distance( tracePoints.peek(), emir.pos) > 1.0/16.0 )
-						ir = emir;
-				}
+				List<Vec2> points = breakLineToFitSnap( tracePoints.peek(), tracePosNext );
 				
-				if (ir != null && ir.intersects) {
-					drawOverlappedTrace( g, ref.a, ir.pos, ref.b );
-				} else {
-					VecPath polyLineVis = new VecPath();
-					polyLineVis.moveTo( tracePoints.peek() );
-					polyLineVis.lineTo( tracePosNext       );
-					g.draw( polyLineVis );
-				}
+				VecPath polyLineVis = new VecPath();
+				polyLineVis.moveTo( points.get(0) );
+				
+				for (int i=1; i<points.size(); i++)
+					polyLineVis.lineTo( points.get(i) );
+				
+				g.draw( polyLineVis );
+			
 			Gfx.popColor ( g );
 		Gfx.popStroke( g );
 	}
@@ -206,7 +196,6 @@ public class ToolTraceDrawer extends Tool
 		Vec2   a2i    = Geo.lenDir(radius,angleA).add( intersect );
 		Vec2   b2i    = Geo.lenDir(radius,angleB).add( intersect );
 		
-		Paint lastPaint = g.getPaint();
 		Color   shade = Geo.lerp( g.getColor(), new Color(0,255,0), 0.5 );
 		float[] fracs = { 0.0f, 0.5f, 1.0f };
 		Color[] cols  = { EditorStyle.colTraceOff, shade, EditorStyle.colTraceOff };
@@ -220,11 +209,11 @@ public class ToolTraceDrawer extends Tool
 		
 		g.draw( poly );
 		
-		g.setPaint( shadePaint );
-		Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
-		Gfx.drawArc( g, intersect, radius, angleA, angleB );
-		Gfx.popStroke( g );
-		g.setPaint( lastPaint );
+		Gfx.pushPaintAndSet( g, shadePaint );
+			Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
+				Gfx.drawArc( g, intersect, radius, angleA, angleB );
+			Gfx.popStroke( g );
+		Gfx.popPaint( g );
 	}
 	
 	
@@ -336,10 +325,6 @@ public class ToolTraceDrawer extends Tool
 				boolean isSource  = (traceChoosingOrigin && traceSrc == null);
 				boolean isDest    = (hasPoints);
 				
-				System.out.println( "isSource:  " + isSource  );
-				System.out.println( "isDest:    " + isDest    );
-				System.out.println( "hasPoints: " + hasPoints );
-				
 				if (isSource) {
 					traceSrc = snapInfo.pinInfo;
 				} 
@@ -438,20 +423,6 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
-	private Vec2 getSnappedMousePos() {
-		Vec2 pos = cam.getMousePosWorld();
-		return pos;
-		
-		/** TODO worry about nice lines later.
-		 * TODO insert a break so if a line is off, another is inserted to make it 45 degs
-		if (traceInitiated && ! tracePoints.isEmpty())
-			 return snap( tracePoints.peek(), pos );
-		else return pos;
-		*/
-	}
-	
-	
-	
 	private Vec2 snap( Vec2 from, Vec2 to ) {
 		double angle = Geo.angleBetween( from, to );
 		double dist  = Geo.distance    ( from, to );
@@ -459,6 +430,50 @@ public class ToolTraceDrawer extends Tool
 		angle = Geo.roundToMultiple( angle, 45 );
 		
 		return from.add( Geo.lenDir(dist, angle) );
+	}
+	
+	
+	
+	private List<Vec2> breakLineToFitSnap( Vec2 from, Vec2 to ) {
+		List<Vec2> list = new ArrayList<>();
+		
+		Vec2  snapped     = snap( from, to );
+		Line2 lineSnapped = new Line2( from, snapped );
+		Line2.IntersectResult ir = findBestBreakIntersect( lineSnapped, to );
+		
+		list.add( from );
+		
+		if (ir != null)
+			list.add( ir.pos );
+		
+		list.add( to );
+		
+		System.out.println( list.size() );
+		
+		return list;
+	}
+	
+	
+	
+	private Line2.IntersectResult findBestBreakIntersect( Line2 line, Vec2 radiant ) {
+		Line2.IntersectResult bestIr = null;
+		double bestDist = Double.MAX_VALUE; // Shorter is better
+		
+		for (double dir=0; dir<=360; dir+=45) {
+			Line2 intersector = new Line2( radiant, radiant.addPolar(65536, dir) );
+			Line2.IntersectResult ir = intersector.intersect( line );
+			
+			if (ir.intersects) {
+				double dist = Geo.distance( ir.pos, line.a );
+				
+				if (dist < bestDist) {
+					bestIr   = ir;
+					bestDist = dist;
+				}
+			}
+		}
+		
+		return bestIr;
 	}
 }
 
