@@ -67,6 +67,10 @@ public class Camera
 	
 	
 	
+	/**
+	 * Apply the camera transform to a Graphic2D.
+	 * Drawing will then be done in terms of the view space defined by the camera.
+	 */
 	public void applyTransform( Graphics2D g ) {
 		AffineTransform matCam = getTransform();
 		AffineTransform matRef = g.getTransform();
@@ -79,18 +83,28 @@ public class Camera
 	
 	
 	
+	/**
+	 * Add a callback that is executed every time the camera transform changes.
+	 */
 	public void addTransformCallback( Callback cb ) {
 		onTransform.add( cb );
 	}
 	
 	
 	
+	/**
+	 * Get the mouse position in screen space.
+	 */
 	public Vec2 getMousePosScreen() {
 		return new Vec2( MouseInfo.getPointerInfo().getLocation() );
 	}
 	
 	
 	
+	/**
+	 * Get the mouse position in world space.
+	 * Sub-pixel precision.
+	 */
 	public Vec2 getMousePosWorld() {
 		Vec2 comPos   = new Vec2( component.getLocationOnScreen() );
 		Vec2 mousePos = getMousePosScreen();
@@ -100,6 +114,9 @@ public class Camera
 	
 	
 	
+	/**
+	 * Transform a screen-space coordinate to a world-space coordinate.
+	 */
 	public Vec2 mapScreenToWorld( Vec2 pos ) {
 		Vec2 out = new Vec2();
 		
@@ -116,6 +133,9 @@ public class Camera
 	
 	
 	
+	/**
+	 * Get the area (in world space) which is currently viewed by the camera.
+	 */
 	public Bbox2 getWorldViewArea() {
 		Bbox2 b = new Bbox2( component );
 		b.tl = mapScreenToWorld( b.tl );
@@ -125,14 +145,20 @@ public class Camera
 	
 	
 	
+	/**
+	 * Get the centre position of the region the camera is looking at.
+	 */
 	public Vec2 getCentre() {
 		return getWorldViewArea().getCentre();
 	}
 	
 	
 	
+	/**
+	 * Get a copy of the camera's view matrix.
+	 */
 	public AffineTransform getTransform() {
-		return matrix;
+		return new AffineTransform( matrix );
 	}
 	
 	
@@ -147,6 +173,9 @@ public class Camera
 	
 	
 	
+	/**
+	 * Get the camera's centre position.
+	 */
 	public Vec2 getPan() {
 		return pan.negate();
 	}
@@ -185,36 +214,54 @@ public class Camera
 	
 	
 	
+	/**
+	 * Zoom in by an amount equivalent to one click of the mouse wheel.
+	 */
 	public void zoomIn() {
 		zoomLogarithmic( zoomDirIn, false );
 	}
 	
 	
 	
+	/**
+	 * Zoom out by an amount equivalent to one click of the mouse wheel.
+	 */
 	public void zoomOut() {
 		zoomLogarithmic( zoomDirOut, false );
 	}
 	
 	
 	
+	/**
+	 * Get the current zoom level.  (Scaling factor: less than 1 is "further out")
+	 */
 	public double getZoom() {
 		return zoom;
 	}
 	
 	
 	
+	/**
+	 * Get the minimum permitted zoom level.
+	 */
 	public double getZoomMin() {
 		return zoomMin;
 	}
 	
 	
 	
+	/**
+	 * Get the maximum permitted zoom level.
+	 */
 	public double getZoomMax() {
 		return zoomMax;
 	}
 	
 	
 	
+	/**
+	 * Automatically pan and zoom the camera such that it is looking at the given region in world space.
+	 */
 	public void interpolateToBbox( Bbox2 bbox, double border, double timeInSeconds ) {
 		Vec2   sizeMe  = new Bbox2( component ).getSize();
 		Vec2   sizeYou = bbox.expand( border ) .getSize();
@@ -226,6 +273,11 @@ public class Camera
 	
 	
 	
+	/**
+	 * Automatically pan and zoom the camera over a given period of time.
+	 * Any previous movement is cancelled.
+	 * This can be interrupted by user input (zooming or panning).
+	 */
 	public void interpolateTo( final Vec2 pos, final double zoom, final double timeInSeconds ) {
 		interpolateStop();
 		
@@ -260,6 +312,10 @@ public class Camera
 	
 	
 	
+	/**
+	 * Stop automatic camera movement.
+	 * If no movement is currently happening, there is no effect.
+	 */
 	public void interpolateStop() {
 		if (mover != null)
 			mover.join();
