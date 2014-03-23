@@ -50,6 +50,11 @@ public abstract class Util
 			ByteArrayInputStream isByte = new ByteArrayInputStream( osByte.toByteArray() );
 			ObjectInputStream    isObj  = new ObjectInputStream( isByte );
 			
+			osByte.close();
+			isByte.close();
+			osObj .close();
+			isObj .close();
+			
 			return (T) isObj.readObject();
 		}
 		catch (Exception ex) {
