@@ -27,11 +27,11 @@ public class Camera
 {
 	private JComponent component;
 	
-	private double zoomRate;
-	private double zoomRange;
-	private double zoomMin;
-	private double zoomMax;
-	private double zoom;
+	private final double zoomRate;
+	private final double zoomRange;
+	private final double zoomMin;
+	private final double zoomMax;
+	private       double zoom;
 	
 	private final double zoomDirIn  = -1;
 	private final double zoomDirOut = +1;
@@ -40,9 +40,9 @@ public class Camera
 	private Vec2    panningOrigin;
 	private Vec2    pan;
 	
-	private AffineTransform  matrix;
-	private CallbackSet      onTransform;
-	private CallbackRepeater mover;
+	private       AffineTransform  matrix;
+	private final CallbackSet      onTransform;
+	private       CallbackRepeater mover;
 	
 	
 	
@@ -84,9 +84,19 @@ public class Camera
 	
 	/**
 	 * Add a callback that is executed every time the camera transform changes.
+	 * NOTE: This can be called asynchronously
 	 */
 	public void addTransformCallback( Callback cb ) {
 		onTransform.add( cb );
+	}
+	
+	
+	
+	/**
+	 * Remove a callback.
+	 */
+	public void removeTransformCallback( Callback cb ) {
+		onTransform.remove( cb );
 	}
 	
 	
@@ -133,7 +143,7 @@ public class Camera
 	
 	
 	/**
-	 * Transform a world-space coordinate to a screens-space coordinate.
+	 * Transform a world-space coordinate to a screen-space coordinate.
 	 */
 	public Vec2 mapWorldToScreen( Vec2 pos ) {
 		Vec2 out = new Vec2();
@@ -348,7 +358,7 @@ public class Camera
 	
 	
 	
-	private void updateTransform( Vec2 relativeCentre ) {
+	private synchronized void updateTransform( Vec2 relativeCentre ) {
 		Bbox2 region = new Bbox2( component );
 		Vec2  centre = region.getSize().multiply( relativeCentre );
 		
@@ -360,7 +370,11 @@ public class Camera
 		matrix.translate(  centre.x,  centre.y );
 		matrix.translate(  0.5,       0.5      );
 		
-		onTransform.execute();
+		SwingUtilities.invokeLater( new Runnable() {
+			public void run() {
+				onTransform.execute();
+			}
+		});
 	}
 	
 	
