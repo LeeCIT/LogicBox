@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.Stack;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import logicBox.util.Callback;
+import logicBox.util.CallbackSet;
 import logicBox.util.Vec2;
 
 
@@ -27,14 +29,28 @@ public class HistoryManager<T extends Serializable>
 	private HistoryListener<T> listener;
 	private Stack<byte[]>      history;
 	private int                index;
+	private CallbackSet        onChange;
 	
 	
 	
 	public HistoryManager( HistoryListener<T> listener ) {
 		this.history  = new Stack<>();
+		this.onChange = new CallbackSet();
 		this.listener = listener;
 		this.index    = -1;
 		this.maxSize  = 512;
+	}
+	
+	
+	
+	public void addOnChangeCallback( Callback onChange ) {
+		this.onChange.add( onChange );
+	}
+	
+	
+	
+	public void removeOnChangeCallback( Callback onChange ) {
+		this.onChange.remove( onChange );
 	}
 	
 	
@@ -43,10 +59,13 @@ public class HistoryManager<T extends Serializable>
 	 * Add a point to the undo/redo timeline.
 	 */
 	public void markChange() {
+		System.out.println( "markChange()" );
 		purgeRedo();
 		history.push( getStreamerState() );
 		index = history.size() - 1;
 		cullHistory();
+		
+		onChange.execute();
 	}
 	
 	
@@ -65,6 +84,7 @@ public class HistoryManager<T extends Serializable>
 	 * The undo itself can be undone by redo(), if no further changes are made.
 	 */
 	public void undo() {
+		System.out.println( "undo()" );
 		if ( ! canUndo())
 			throw new RuntimeException( "Can't undo: already at beginning of history." );
 		
@@ -74,6 +94,7 @@ public class HistoryManager<T extends Serializable>
 	
 	
 	public void redo() {
+		System.out.println( "redo()" );
 		if ( ! canRedo())
 			throw new RuntimeException( "Can't redo: already at end of history." );
 		
