@@ -18,8 +18,8 @@ import logicBox.util.Vec2;
 
 
 /**
- * A collection of compressed undo/redo states arranged on a timeline.
- * It can apply changes to the associated streamer.
+ * Manages compressed undo/redo states arranged on a timeline.
+ * It can apply changes to the associated history listener.
  * @author Lee Coakley
  */
 public class HistoryManager<T extends Serializable>
@@ -38,7 +38,7 @@ public class HistoryManager<T extends Serializable>
 		this.onChange = new CallbackSet();
 		this.listener = listener;
 		this.index    = -1;
-		this.maxSize  = 512;
+		this.maxSize  = 1024; // With compression each step is quite small.
 	}
 	
 	
@@ -59,42 +59,29 @@ public class HistoryManager<T extends Serializable>
 	 * Add a point to the undo/redo timeline.
 	 */
 	public void markChange() {
-		System.out.println( "markChange()" );
 		purgeRedo();
 		history.push( getStreamerState() );
 		index = history.size() - 1;
 		cullHistory();
-		
 		onChange.execute();
 	}
 	
 	
 	
-	private void cullHistory() {
-		while (history.size() > maxSize) {
-			history.remove( 0 );
-			index--;
-		}
-	}
-
-
-
 	/**
 	 * Revert state to the previous point on the timeline.
 	 * The undo itself can be undone by redo(), if no further changes are made.
 	 */
 	public void undo() {
-		System.out.println( "undo()" );
 		if ( ! canUndo())
 			throw new RuntimeException( "Can't undo: already at beginning of history." );
 		
-		applyStateToStreamer( index-- );
+		applyStateToStreamer( --index );
 	}
 	
 	
 	
 	public void redo() {
-		System.out.println( "redo()" );
 		if ( ! canRedo())
 			throw new RuntimeException( "Can't redo: already at end of history." );
 		
@@ -110,7 +97,17 @@ public class HistoryManager<T extends Serializable>
 	
 	
 	public boolean canUndo() {
-		return index > 0;
+		return index > 0
+			&& ! history.isEmpty();
+	}
+	
+	
+	
+	private void cullHistory() {
+		while (history.size() > maxSize) {
+			history.remove( 0 );
+			index--;
+		}
 	}
 	
 	
