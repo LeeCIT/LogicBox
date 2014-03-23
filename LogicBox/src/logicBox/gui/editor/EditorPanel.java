@@ -73,6 +73,8 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 		world.add( new EditorComponent( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, -128) ) );
 		world.add( new EditorComponent( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, -256) ) );
 		
+		historyManager.markChange();
+		
 		for (int i=2; i<=4; i++) {
 			double xo = 192 * (i-2);
 			
@@ -83,6 +85,8 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 			world.add( new EditorComponent( new GateXor(i),  GraphicGen.generateGateXor(i),  new Vec2(xo, 512) ) );
 			world.add( new EditorComponent( new GateXnor(i), GraphicGen.generateGateXnor(i), new Vec2(xo, 640) ) );
 		}
+		
+		historyManager.markChange();
 		
 		for (int i=2; i<=8; i++) {
 			double xo = 192 * (i-2);
@@ -105,6 +109,8 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	
 	
 	public void setStateFromHistory( EditorWorld world ) {
+		System.out.println( "Set state from history" );
+		System.out.println( "World equal: " + this.world.equals( world ) );
 		this.world = world;
 		repaint();
 	}
