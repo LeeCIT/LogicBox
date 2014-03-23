@@ -185,9 +185,14 @@ public class EditorWorld implements Serializable
 	/**
 	 * Find the extent of the world occupied by components.
 	 * This is the union of all component bounding boxes.
+	 * If there are no components a default area is used.
 	 */
 	public Bbox2 getWorldExtent() {
-		return getExtent( ecoms );
+		Bbox2 extent = getExtent( ecoms );
+		
+		if (extent != null)
+		     return extent;
+		else return new Bbox2( 0,0, 1024,768 );
 	}
 	
 	
