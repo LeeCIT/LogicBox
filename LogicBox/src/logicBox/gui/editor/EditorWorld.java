@@ -43,7 +43,7 @@ public class EditorWorld implements Serializable
 	
 	
 	public void newCircuit() {
-		System.out.println( "newCircuit:" );
+		System.out.println( "newCircuit" );
 	}
 	
 	

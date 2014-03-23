@@ -38,11 +38,12 @@ import logicBox.util.Vec2;
  * The main simulation editor interface.
  * @author Lee Coakley
  */
-public class EditorPanel extends JPanel
+public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 {
-	private Camera      cam;
-	private EditorWorld world;
-	private ToolManager toolManager;
+	private Camera                      cam;
+	private EditorWorld                 world;
+	private ToolManager                 toolManager;
+	private HistoryManager<EditorWorld> historyManager;
 	
 	private List<RepaintListener> repaintListeners;
 	private boolean               enableAntialiasing;
@@ -87,6 +88,19 @@ public class EditorPanel extends JPanel
 	
 	
 	
+	public EditorWorld getHistoryState() {
+		return world;
+	}
+	
+	
+	
+	public void setStateFromHistory( EditorWorld world ) {
+		this.world = world;
+		repaint();
+	}
+	
+	
+	
 	public void recentreCamera() {
 		cam.interpolateToBbox( world.getWorldExtent(), 64, 3 );
 	}
@@ -107,6 +121,12 @@ public class EditorPanel extends JPanel
 	
 	public ToolManager getToolManager() {
 		return toolManager;
+	}
+	
+	
+	
+	public HistoryManager<EditorWorld> getHistoryManager() {
+		return historyManager;
 	}
 	
 	
