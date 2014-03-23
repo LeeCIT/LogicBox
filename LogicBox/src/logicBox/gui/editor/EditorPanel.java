@@ -336,7 +336,7 @@ public class EditorPanel extends JPanel
 	
 	/**
 	 * When the transform is changed by the camera, repaint and generate mouse events.
-	 * The events ensure that tools etc update their positions when zooming/panning while dragging/placing/etc.
+	 * The events ensure that tools update their positions when zooming/panning while dragging/placing/etc.
 	 */
 	private void onTransform() {
 		generateMouseEvent();

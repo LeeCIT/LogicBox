@@ -6,13 +6,9 @@ package logicBox.gui.editor.tools;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
-import logicBox.gui.editor.EditorPanel;
-import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.RepaintListener;
-import logicBox.util.Vec2;
 
 
 
@@ -30,8 +26,8 @@ public class ToolHighlighter extends Tool
 	
 	
 	
-	public ToolHighlighter( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
-		super( panel, world, cam, manager );
+	public ToolHighlighter( ToolManager manager ) {
+		super( manager );
 		this.eventListener   = createEventListener();
 		this.repaintListener = createRepaintListener();
 	}
@@ -42,8 +38,8 @@ public class ToolHighlighter extends Tool
 		if (isAttached())
 			return;
 		
-		panel.addMouseMotionListener( eventListener );
-		panel.addRepaintListener( repaintListener );
+		getEditorPanel().addMouseMotionListener( eventListener );
+		getEditorPanel().addRepaintListener( repaintListener );
 		setAttached( true );
 	}
 	
@@ -53,8 +49,8 @@ public class ToolHighlighter extends Tool
 		if ( ! isAttached())
 			return;
 		
-		panel.removeMouseMotionListener( eventListener );
-		panel.removeRepaintListener( repaintListener );
+		getEditorPanel().removeMouseMotionListener( eventListener );
+		getEditorPanel().removeRepaintListener( repaintListener );
 		setAttached( false );
 	}
 	
@@ -99,7 +95,7 @@ public class ToolHighlighter extends Tool
 			changed = true;
 		}
 		
-		curComponent = getComponentAt( cam.getMousePosWorld() );
+		curComponent = getComponentAt( getMousePosWorld() );
 		
 		if (curComponent != null) {
 			lastComponent = curComponent;
@@ -107,7 +103,7 @@ public class ToolHighlighter extends Tool
 		}
 		
 		if (changed)
-			panel.repaint();
+			repaint();
 	}
 }
 

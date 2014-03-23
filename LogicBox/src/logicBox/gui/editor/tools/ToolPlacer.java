@@ -8,9 +8,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
-import logicBox.gui.editor.Camera;
-import logicBox.gui.editor.EditorPanel;
-import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.gui.editor.RepaintListener;
 import logicBox.util.CallbackParam;
@@ -36,8 +33,8 @@ public class ToolPlacer extends Tool
 	
 	
 	
-	public ToolPlacer( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
-		super( panel, world, cam, manager );
+	public ToolPlacer( ToolManager manager ) {
+		super( manager );
 		this.mouseListener   = createEventListener();
 		this.repaintListener = createRepaintListener();
 	}
@@ -48,9 +45,9 @@ public class ToolPlacer extends Tool
 		if (isAttached())
 			return;
 		
-		panel.addMouseListener      ( mouseListener );
-		panel.addMouseMotionListener( mouseListener );
-		panel.addRepaintListener( repaintListener );
+		getEditorPanel().addMouseListener      ( mouseListener );
+		getEditorPanel().addMouseMotionListener( mouseListener );
+		getEditorPanel().addRepaintListener( repaintListener );
 		setAttached( true );
 	}
 	
@@ -60,9 +57,9 @@ public class ToolPlacer extends Tool
 		if ( ! isAttached())
 			return;
 		
-		panel.removeMouseListener      ( mouseListener );
-		panel.removeMouseMotionListener( mouseListener );
-		panel.removeRepaintListener( repaintListener );
+		getEditorPanel().removeMouseListener      ( mouseListener );
+		getEditorPanel().removeMouseMotionListener( mouseListener );
+		getEditorPanel().removeRepaintListener( repaintListener );
 		setAttached( false );
 	}
 	
@@ -82,7 +79,7 @@ public class ToolPlacer extends Tool
 				
 				if (placementArmed)
 				if (SwingUtilities.isLeftMouseButton( ev ))
-					placementComplete( cam.getMousePosWorld() );
+					placementComplete();
 				
 				if (SwingUtilities.isRightMouseButton( ev ))
 					placementCancel();
@@ -90,12 +87,12 @@ public class ToolPlacer extends Tool
 			
 			public void mouseMoved( MouseEvent ev ) {
 				if (placementInitiated)
-					placementMove( cam.getMousePosWorld() );
+					placementMove();
 			}
 			
 			public void mouseDragged( MouseEvent ev ) {
 				if (placementInitiated)
-					placementMove( cam.getMousePosWorld() );
+					placementMove();
 			}
 		};
 	}
@@ -117,12 +114,6 @@ public class ToolPlacer extends Tool
 	
 	
 	
-	private void repaint() {
-		panel.repaint();
-	}
-	
-	
-	
 	/**
 	 * Begin placing a component.
 	 * @param createCallback What to do when the placement completes.  Note that it can be cancelled.
@@ -135,7 +126,7 @@ public class ToolPlacer extends Tool
 		placementInitiated = true;
 		placementArmed     = false;
 		
-		graphic.transformTo( cam.getMousePosWorld(), 0 );
+		graphic.transformTo( getMousePosWorld(), 0 );
 		repaint();
 	}
 	
@@ -149,8 +140,8 @@ public class ToolPlacer extends Tool
 	
 	
 	
-	private void placementComplete( Vec2 pos ) {
-		placementPos = pos;
+	private void placementComplete() {
+		placementPos = getMousePosWorld();
 		placementCallback.execute( placementPos );
 		placementGraphic.setHighlighted( false );
 		repaint();
@@ -158,8 +149,8 @@ public class ToolPlacer extends Tool
 	
 	
 	
-	private void placementMove( Vec2 pos ) {
-		placementPos = pos;
+	private void placementMove() {
+		placementPos = getMousePosWorld();
 		placementGraphic.transformTo( placementPos, placementAngle );
 		repaint();
 	}

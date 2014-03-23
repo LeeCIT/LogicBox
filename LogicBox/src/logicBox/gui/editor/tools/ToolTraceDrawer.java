@@ -17,8 +17,6 @@ import java.util.List;
 import java.util.Stack;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
-import logicBox.gui.editor.Camera;
-import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorStyle;
 import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.GraphicPinMapping;
@@ -50,8 +48,8 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
-	public ToolTraceDrawer( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
-		super( panel, world, cam, manager );
+	public ToolTraceDrawer( ToolManager manager ) {
+		super( manager );
 		this.keyListener     = createKeyListener();
 		this.mouseListener   = createMouseListener();
 		this.repaintListener = createRepaintListener();
@@ -65,10 +63,10 @@ public class ToolTraceDrawer extends Tool
 		if (isAttached())
 			return;
 		
-		panel.addKeyListener( keyListener );
-		panel.addMouseListener      ( mouseListener );
-		panel.addMouseMotionListener( mouseListener );
-		panel.addRepaintListener( repaintListener );
+		getEditorPanel().addKeyListener( keyListener );
+		getEditorPanel().addMouseListener      ( mouseListener );
+		getEditorPanel().addMouseMotionListener( mouseListener );
+		getEditorPanel().addRepaintListener( repaintListener );
 		setAttached( true );
 	}
 	
@@ -78,10 +76,10 @@ public class ToolTraceDrawer extends Tool
 		if ( ! isAttached())
 			return;
 		
-		panel.removeKeyListener( keyListener );
-		panel.removeMouseListener      ( mouseListener );
-		panel.removeMouseMotionListener( mouseListener );
-		panel.removeRepaintListener( repaintListener );
+		getEditorPanel().removeKeyListener( keyListener );
+		getEditorPanel().removeMouseListener      ( mouseListener );
+		getEditorPanel().removeMouseMotionListener( mouseListener );
+		getEditorPanel().removeRepaintListener( repaintListener );
 		setAttached( false );
 	}
 	
@@ -131,7 +129,7 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private void drawPinHighlights( Graphics2D g ) {
-		SnapInfo snapInfo  = getSnapInfo( cam.getMousePosWorld() );
+		SnapInfo snapInfo  = getSnapInfo( getMousePosWorld() );
 		double   thickness = EditorStyle.compThickness + 2;
 		
 		Gfx.pushColorAndSet( g, EditorStyle.colHighlightStroke );
@@ -270,7 +268,7 @@ public class ToolTraceDrawer extends Tool
 	public void traceStartChoosingOrigin() {
 		traceChoosingOrigin = true;
 		tracePosNext        = getNextPos();
-		panel.repaint();
+		repaint();
 	}
 	
 	
@@ -278,7 +276,7 @@ public class ToolTraceDrawer extends Tool
 	private void traceArm() {
 		traceArmed          = true;
 		traceChoosingOrigin = ! traceInitiated;
-		panel.repaint();
+		repaint();
 	}
 	
 	
@@ -294,7 +292,7 @@ public class ToolTraceDrawer extends Tool
 	private void traceAdd() {
 		traceArmed = false;
 		
-		Vec2    nextPos   = cam.getMousePosWorld();
+		Vec2    nextPos   = getMousePosWorld();
 		boolean completed = doTraceToPinSnapping( nextPos );
 		
 		tracePoints.push( nextPos );
@@ -302,7 +300,7 @@ public class ToolTraceDrawer extends Tool
 		if (completed)
 			traceComplete();
 		
-		panel.repaint();
+		repaint();
 	}
 	
 	
@@ -350,7 +348,7 @@ public class ToolTraceDrawer extends Tool
 	private void traceUndo() {
 		if ( ! tracePoints.isEmpty()) {
 			 tracePoints.pop();
-			 panel.repaint();
+			 repaint();
 		}
 	}
 	
@@ -358,7 +356,7 @@ public class ToolTraceDrawer extends Tool
 	
 	private void traceMove() {
 		tracePosNext = getNextPos();
-		panel.repaint();
+		repaint();
 	}
 	
 	
@@ -382,13 +380,13 @@ public class ToolTraceDrawer extends Tool
 		traceSrc            = null;
 		traceDest           = null;
 		tracePoints.clear();
-		panel.repaint();
+		repaint();
 	}
 	
 	
 	
 	private Vec2 getNextPos() {
-		Vec2     pos      = cam.getMousePosWorld();
+		Vec2     pos      = getMousePosWorld();
 		SnapInfo snapInfo = getSnapInfo( pos );
 		boolean  useSnap  = snapInfo.snapped && ! isGpmUsed(snapInfo.pinInfo.gpm);
 		
@@ -408,9 +406,9 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private SnapInfo getSnapInfo( Vec2 pos ) {
-		double   snapThresh = 8 / cam.getZoom();
+		double   snapThresh = 8 / getCamera().getZoom();
 		SnapInfo snapInfo   = new SnapInfo();
-		EditorWorld.FindClosestPinResult fcpRes = world.findClosestPin( pos, snapThresh );
+		EditorWorld.FindClosestPinResult fcpRes = getWorld().findClosestPin( pos, snapThresh );
 		
 		if (fcpRes.foundPin) {
 			snapInfo.snapped = true;

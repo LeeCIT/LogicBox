@@ -50,6 +50,12 @@ public class ToolManager
 	
 	
 	
+	public EditorPanel getEditorPanel() {
+		return panel;
+	}
+	
+	
+	
 	public void takeExclusiveControl( Tool tool ) {
 		detachAll();
 		tool.attach();
@@ -92,10 +98,10 @@ public class ToolManager
 	
 	
 	private void setupTools( EditorPanel panel, EditorWorld world, Camera cam ) {
-		toolContextual  = add( new ToolContextual (panel, world, cam, this) );
-		toolHighlighter = add( new ToolHighlighter(panel, world, cam, this) );
-		toolPlacer      = add( new ToolPlacer     (panel, world, cam, this) );
-		toolTraceDrawer = add( new ToolTraceDrawer(panel, world, cam, this) );
+		toolContextual  = add( new ToolContextual (this) );
+		toolHighlighter = add( new ToolHighlighter(this) );
+		toolPlacer      = add( new ToolPlacer     (this) );
+		toolTraceDrawer = add( new ToolTraceDrawer(this) );
 	}
 	
 	
