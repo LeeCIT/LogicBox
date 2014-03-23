@@ -446,8 +446,6 @@ public class ToolTraceDrawer extends Tool
 		
 		list.add( to );
 		
-		System.out.println( list.size() );
-		
 		return list;
 	}
 	
