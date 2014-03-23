@@ -39,7 +39,6 @@ public class EditorToolbarController
 		
 		manager.addOnChangeCallback( new Callback() {
 			public void execute() {
-				System.out.println( "toolbar callback" );
 				toolbar.undoButt.setEnabled( manager.canUndo() );
 				toolbar.redoButt.setEnabled( manager.canRedo() );
 			}

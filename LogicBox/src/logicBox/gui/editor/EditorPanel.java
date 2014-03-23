@@ -109,8 +109,6 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	
 	
 	public void setStateFromHistory( EditorWorld world ) {
-		System.out.println( "Set state from history" );
-		System.out.println( "World equal: " + this.world.equals( world ) );
 		this.world = world;
 		repaint();
 	}

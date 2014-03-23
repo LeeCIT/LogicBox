@@ -36,7 +36,6 @@ public class EditorMenuController
 		
 		manager.addOnChangeCallback( new Callback() {
 			public void execute() {
-				System.out.println( "menu callback" );
 				menu.itemEditUndo.setEnabled( manager.canUndo() );
 				menu.itemEditRedo.setEnabled( manager.canRedo() );
 			}
