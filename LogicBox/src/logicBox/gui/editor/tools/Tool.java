@@ -21,15 +21,15 @@ import logicBox.util.Vec2;
  */
 public abstract class Tool
 {
-	protected ToolManager manager;
-	
-	private boolean attached;
-	private double  dragThreshold = 8;
+	private final ToolManager manager;
+	private final double      dragThreshold;
+	private       boolean     attached;
 	
 	
 	
 	public Tool( ToolManager manager ) {
-		this.manager = manager;
+		this.manager       = manager;
+		this.dragThreshold = 8;
 	}
 	
 	
@@ -92,6 +92,12 @@ public abstract class Tool
 	
 	protected void repaint() {
 		manager.getEditorPanel().repaint();
+	}
+	
+	
+	
+	protected void markHistoryChange() {
+		manager.getEditorPanel().getHistoryManager().markChange();
 	}
 	
 	
