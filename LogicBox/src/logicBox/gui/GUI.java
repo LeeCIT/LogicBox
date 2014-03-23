@@ -88,6 +88,8 @@ public abstract class GUI
 		editorFrame.setMinimumSize( new Dimension(640, 480) );
 		editorFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 		editorFrame.setVisible( true );
+		
+		editorFrame.getEditorPanel().addDebugAndDemoStuff();
 	}
 }
 
