@@ -2,12 +2,11 @@
 
 
 package logicBox.gui.editor.menubar;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import logicBox.gui.editor.CommonActions;
 import logicBox.gui.editor.EditorFrame;
-import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.HistoryManager;
+import logicBox.util.Callback;
 
 
 
@@ -17,8 +16,30 @@ import logicBox.gui.editor.EditorPanel;
  */
 public class EditorMenuController
 {
-	public EditorMenuController( EditorMenuBar menu, EditorFrame frame ) {
+	public EditorMenuController( final EditorMenuBar menu, final EditorFrame frame ) {
 		CommonActions.addOpenCircuitListener ( menu.itemFileOpen,  frame );
 		CommonActions.addPrintCircuitListener( menu.itemFilePrint, frame );
+		
+		setupUndoRedo( menu, frame );
+	}
+	
+	
+	
+	private void setupUndoRedo( final EditorMenuBar menu, final EditorFrame frame ) {
+		CommonActions.addUndoListener( menu.itemEditUndo, frame );
+		CommonActions.addRedoListener( menu.itemEditRedo, frame );
+		
+		menu.itemEditUndo.setEnabled( false );
+		menu.itemEditRedo.setEnabled( false );
+		
+		final HistoryManager<EditorWorld> manager = frame.getEditorPanel().getHistoryManager();
+		
+		manager.addOnChangeCallback( new Callback() {
+			public void execute() {
+				System.out.println( "menu callback" );
+				menu.itemEditUndo.setEnabled( manager.canUndo() );
+				menu.itemEditRedo.setEnabled( manager.canRedo() );
+			}
+		});
 	}
 }

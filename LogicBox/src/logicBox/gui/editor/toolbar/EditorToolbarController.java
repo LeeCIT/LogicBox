@@ -5,6 +5,10 @@ package logicBox.gui.editor.toolbar;
 
 import logicBox.gui.editor.CommonActions;
 import logicBox.gui.editor.EditorFrame;
+import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.HistoryManager;
+import logicBox.gui.editor.menubar.EditorMenuBar;
+import logicBox.util.Callback;
 
 
 
@@ -18,5 +22,27 @@ public class EditorToolbarController
 		CommonActions.addOpenCircuitListener   ( toolbar.openFileButt,  frame );
 		CommonActions.addPrintCircuitListener  ( toolbar.printFileButt, frame );
 		CommonActions.addRecentreCameraListener( toolbar.centreCamButt, frame );
+		
+		setupUndoRedo( toolbar, frame );
+	}
+	
+	
+	
+	private void setupUndoRedo( final EditorToolbar toolbar, final EditorFrame frame ) {
+		CommonActions.addUndoListener( toolbar.undoButt, frame );
+		CommonActions.addRedoListener( toolbar.redoButt, frame );
+		
+		toolbar.undoButt.setEnabled( false );
+		toolbar.redoButt.setEnabled( false );
+		
+		final HistoryManager<EditorWorld> manager = frame.getEditorPanel().getHistoryManager();
+		
+		manager.addOnChangeCallback( new Callback() {
+			public void execute() {
+				System.out.println( "toolbar callback" );
+				toolbar.undoButt.setEnabled( manager.canUndo() );
+				toolbar.redoButt.setEnabled( manager.canRedo() );
+			}
+		});
 	}
 }
