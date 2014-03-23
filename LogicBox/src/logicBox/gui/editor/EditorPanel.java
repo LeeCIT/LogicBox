@@ -67,12 +67,12 @@ public class EditorPanel extends JPanel
 		for (int i=2; i<=4; i++) {
 			double xo = 192 * (i-2);
 			
-			world.add( new EditorComponent( new GateAnd(i),    GraphicGen.generateGateAnd(i),   new Vec2(xo, 0) ) );
-			world.add( new EditorComponent( new GateNand(i),   GraphicGen.generateGateNand(i),  new Vec2(xo, 128) ) );
-			world.add( new EditorComponent( new GateOr(i),     GraphicGen.generateGateOr(i),    new Vec2(xo, 256) ) );
-			world.add( new EditorComponent( new GateNor(i),    GraphicGen.generateGateNor(i),   new Vec2(xo, 384) ) );
-			world.add( new EditorComponent( new GateXor(i),    GraphicGen.generateGateXor(i),   new Vec2(xo, 512) ) );
-			world.add( new EditorComponent( new GateXnor(i),   GraphicGen.generateGateXnor(i),  new Vec2(xo, 640) ) );
+			world.add( new EditorComponent( new GateAnd(i),  GraphicGen.generateGateAnd(i),   new Vec2(xo, 0) ) );
+			world.add( new EditorComponent( new GateNand(i), GraphicGen.generateGateNand(i),  new Vec2(xo, 128) ) );
+			world.add( new EditorComponent( new GateOr(i),   GraphicGen.generateGateOr(i),    new Vec2(xo, 256) ) );
+			world.add( new EditorComponent( new GateNor(i),  GraphicGen.generateGateNor(i),   new Vec2(xo, 384) ) );
+			world.add( new EditorComponent( new GateXor(i),  GraphicGen.generateGateXor(i),   new Vec2(xo, 512) ) );
+			world.add( new EditorComponent( new GateXnor(i), GraphicGen.generateGateXnor(i),  new Vec2(xo, 640) ) );
 		}
 		
 		for (int i=2; i<=8; i++) {

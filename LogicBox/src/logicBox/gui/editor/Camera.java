@@ -133,6 +133,17 @@ public class Camera
 	
 	
 	/**
+	 * Transform a world-space coordinate to a screens-space coordinate.
+	 */
+	public Vec2 mapWorldToScreen( Vec2 pos ) {
+		Vec2 out = new Vec2();
+		matrix.transform( pos, out );
+		return out;
+	}
+	
+	
+	
+	/**
 	 * Get the area (in world space) which is currently viewed by the camera.
 	 */
 	public Bbox2 getWorldViewArea() {
