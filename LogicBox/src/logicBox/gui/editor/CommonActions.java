@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.AbstractButton;
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import logicBox.fileManager.FileOpen;
 import logicBox.gui.printing.EditorPrinter;
 
@@ -57,4 +59,77 @@ public abstract class CommonActions
 			}
 		});
 	}
+	
+	
+	
+	public static void addUndoListener( AbstractButton butt, final EditorFrame frame ) {
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				undoAction( frame );
+			}
+		});
+	}
+	
+	
+	
+	public static void addRedoListener( AbstractButton butt, final EditorFrame frame ) {
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				redoAction( frame );
+			}
+		});
+	}
+	
+	
+	
+	private static void undoAction( EditorFrame frame ) {
+		historyAction( frame, true );
+	}
+	
+	
+	
+	private static void redoAction( EditorFrame frame ) {
+		historyAction( frame, false );
+	}
+	
+	
+	
+	private static void historyAction( EditorFrame frame, boolean undoing ) {
+		HistoryManager<EditorWorld> manager = frame.getEditorPanel().getHistoryManager();
+		JMenuItem menuUndo = frame.getEditorMenuBar().itemEditUndo;
+		JButton   buttUndo = frame.getEditorToolbar().undoButt;
+		JMenuItem menuRedo = frame.getEditorMenuBar().itemEditRedo;
+		JButton   buttRedo = frame.getEditorToolbar().redoButt;
+		
+		if (undoing)
+			 manager.undo();
+		else manager.redo();
+		
+		boolean canUndo = manager.canUndo();
+		boolean canRedo = manager.canRedo();
+		
+		menuUndo.setEnabled( canUndo );
+		buttUndo.setEnabled( canUndo );
+		menuRedo.setEnabled( canRedo );
+		buttRedo.setEnabled( canRedo );
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
