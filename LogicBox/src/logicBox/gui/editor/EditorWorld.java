@@ -232,6 +232,12 @@ public class EditorWorld implements Serializable
 	
 	
 	
+	public String toString() {
+		return "EditorWorld with " + ecoms.size() + " components.";
+	}
+	
+	
+	
 	public RepaintListener getSpatialGridDebugRepainter() {
 		return new RepaintListener() {
 			public void draw( Graphics2D g ) {
