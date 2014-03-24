@@ -19,6 +19,7 @@ public class EditorToolbar extends JToolBar
 	public EditorToolBarButton newFileButt;
 	public EditorToolBarButton openFileButt;
 	public EditorToolBarButton printFileButt;
+	public EditorToolBarButton saveFileButt;
 	public EditorToolBarButton undoButt;
 	public EditorToolBarButton redoButt;
 	public EditorToolBarButton editTextButt;
@@ -44,7 +45,8 @@ public class EditorToolbar extends JToolBar
 		
 		newFileButt   = addButton( "New16px.png"      , "New file"         , false );
 		openFileButt  = addButton( "Open16px.png"     , "Open file"        , false );
-		printFileButt = addButton( "Open16px.png"     , "Print file"       , false );
+		printFileButt = addButton( "Print16px.png"    , "Print file"       , false );
+		saveFileButt  = addButton( "Save16px.png"     , "Save file"        , false );
 		undoButt      = addButton( "Undo16px.png"     , "Undo"             , true  );
 		redoButt      = addButton( "Redo16px.png"     , "Redo"             , false );
 		enableGrid    = addButton( "Grid16px.png"     , "Show/hide grid"   , true  );
