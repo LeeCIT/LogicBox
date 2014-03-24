@@ -95,6 +95,18 @@ public class EditorWorld implements Serializable
 	
 	
 	/**
+	 * Make all graphics un-highlighted and un-selected.
+	 */
+	public void clearGraphicSelectionAndHighlightStates() {
+		for (EditorComponent ecom: ecoms) {
+			ecom.getGraphic().setHighlighted( false );
+			ecom.getGraphic().setSelected   ( false );
+		}
+	}
+	
+	
+	
+	/**
 	 * Find one component at the given position.
 	 * It is always the most recently modified or moved component.
 	 * Returns null if no component is found.
@@ -147,6 +159,9 @@ public class EditorWorld implements Serializable
 	
 	
 	
+	/**
+	 * Find the closest pin/ecom within the given radius.
+	 */
 	public FindClosestPinResult findClosestPin( Vec2 pos, double radius ) {
 		FindClosestPinResult result = new FindClosestPinResult();
 		Bbox2  bbox     = new Bbox2(pos,pos).expand( radius * 2 );
@@ -174,7 +189,6 @@ public class EditorWorld implements Serializable
 	
 	/**
 	 * Get a list of all components.
-	 * @return
 	 */
 	public List<EditorComponent> getComponents() {
 		return ecoms;
@@ -190,9 +204,9 @@ public class EditorWorld implements Serializable
 	public Bbox2 getWorldExtent() {
 		Bbox2 extent = getExtent( ecoms );
 		
-		if (extent != null)
-		     return extent;
-		else return new Bbox2( 0,0, 1024,768 );
+		if (extent == null)
+		     return new Bbox2( 0,0, 1024,768 );
+		else return extent;
 	}
 	
 	
