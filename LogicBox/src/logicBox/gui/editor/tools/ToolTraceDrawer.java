@@ -85,6 +85,17 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
+	public void reset() {
+		traceInitiated      = false;
+		traceChoosingOrigin = false;
+		traceArmed          = false;
+		traceSrc            = null;
+		traceDest           = null;
+		tracePoints.clear();
+	}
+	
+	
+	
 	private KeyAdapter createKeyListener() {
 		return new KeyAdapter() {
 			public void keyReleased( KeyEvent ev ) {
