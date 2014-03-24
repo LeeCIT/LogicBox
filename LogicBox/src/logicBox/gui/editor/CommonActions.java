@@ -45,7 +45,18 @@ public abstract class CommonActions
 	public static void addPrintCircuitListener( AbstractButton abutt, final EditorFrame frame ) {
 		abutt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				new EditorPrinter().setUpPrintJob( frame );;
+				new EditorPrinter( frame );
+			}
+		});
+	}
+	
+	
+	
+	public static void addGridToggleListener( AbstractButton abutt, final EditorFrame frame ) {
+		abutt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				EditorPanel panel = frame.getEditorPanel();
+				panel.setGridEnabled( ! panel.getGridEnabled() );
 			}
 		});
 	}
