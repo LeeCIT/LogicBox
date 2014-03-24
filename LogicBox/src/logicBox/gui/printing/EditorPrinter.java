@@ -6,6 +6,7 @@ package logicBox.gui.printing;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.print.*;
+import logicBox.gui.GUI;
 import logicBox.gui.editor.EditorFrame;
 
 
@@ -50,8 +51,8 @@ public class EditorPrinter implements Printable
 		if (userSelectedOkay) {
 			try {
 				job.print();
-			}
-			catch (PrinterException ex) {
+			} catch (PrinterException ex) {
+				GUI.showError( frame, "Printing Failed", "A problem occurred when attempting to print." );
 				ex.printStackTrace();
 			}
 		}
