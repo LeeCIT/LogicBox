@@ -161,6 +161,7 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	
 	public void setAntialiasingEnabled( boolean state ) {
 		enableAntialiasing = state;
+		repaint();
 	}
 	
 	
@@ -173,6 +174,7 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	
 	public void setGridEnabled( boolean state ) {
 		enableGrid = state;
+		repaint();
 	}
 	
 	
