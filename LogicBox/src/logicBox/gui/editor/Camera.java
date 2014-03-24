@@ -184,6 +184,33 @@ public class Camera
 	
 	
 	/**
+	 * Directly set the camera transform.
+	 */
+	public void setTransform( AffineTransform matrix ) {
+		this.matrix = matrix;
+	}
+	
+	
+	
+	/**
+	 * Instantly pan and zoom so the given worldspace bounds are in view.
+	 * The usual pan/zoom limits apply.
+	 */
+	public void viewBbox( Bbox2 bbox, double border ) {
+		Vec2   sizeMe  = new Bbox2( component ).getSize();
+		Vec2   sizeYou = bbox.expand( border ) .getSize();
+		Vec2   pan     = bbox.getCentre();
+		double zoom    = Geo.getAspectScaleFactor( sizeYou, sizeMe, true );
+		
+		panTo ( pan );
+		zoomTo( zoom );
+		
+		updateTransform();
+	}
+	
+	
+	
+	/**
 	 * Move the camera so it is centred on the given position.
 	 */
 	public void panTo( Vec2 pos ) {
