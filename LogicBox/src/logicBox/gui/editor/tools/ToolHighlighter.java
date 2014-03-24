@@ -56,6 +56,12 @@ public class ToolHighlighter extends Tool
 	
 	
 	
+	public void reset() {
+		// Do nothing
+	}
+	
+	
+	
 	private MouseAdapter createEventListener() {
 		return new MouseAdapter() {			
 			public void mouseMoved( MouseEvent ev ) {
