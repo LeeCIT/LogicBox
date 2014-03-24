@@ -46,8 +46,10 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	private HistoryManager<EditorWorld> historyManager;
 	
 	private List<RepaintListener> repaintListeners;
-	private boolean               enableGrid;
-	private boolean               enableAntialiasing;
+	
+	private boolean enableGrid;
+	private boolean enableAntialiasing;
+	private boolean isPrinting;
 	
 	
 	
@@ -214,33 +216,50 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	public void print( Graphics g ) {
 		// TODO change background colour, zoom out etc
 		System.out.println( "Printing " + this );
+		isPrinting = true;
 		super.print( g );
+		isPrinting = false;
 	}
 	
 	
 	
-	protected void paintComponent( Graphics gx ) {
-		Graphics2D g = (Graphics2D) gx;
-		
+	protected void paintComponent( Graphics g ) {
+		draw( (Graphics2D) g );
+	}
+	
+	
+	
+	private void draw( Graphics2D g ) {
 		Gfx.pushMatrix( g );
 			Gfx.pushAntialiasingStateAndSet( g, enableAntialiasing );
 				fillBackground( g );
-				
 				cam.applyTransform( g );
-				
-				if (enableGrid)
-					drawGrid( g );
-				
+				drawGrid( g );
 				drawDebugCrap( g );
-				
-				for (EditorComponent ecom: world.getViewableComponents( cam, 64 ))
-					ecom.draw( g );
-				
-				for (RepaintListener rpl: repaintListeners)
-					rpl.draw( g );
-				
+				drawEditorComponents( g );
+				drawRepaintListeners( g );
 			Gfx.popAntialiasingState( g );
 		Gfx.popMatrix( g );
+	}
+	
+	
+	
+	private void drawEditorComponents( Graphics2D g ) {
+		for (EditorComponent ecom: world.getViewableComponents( cam, 64 )) {
+			Graphic graphic     = ecom.getGraphic();
+			boolean wasInverted = graphic.isInverted();
+			
+			graphic.setInverted( isPrinting );
+			graphic.draw( g );
+			graphic.setInverted( wasInverted );
+		}
+	}
+	
+	
+	
+	private void drawRepaintListeners( Graphics2D g ) {
+		for (RepaintListener rpl: repaintListeners)
+			rpl.draw( g );
 	}
 	
 	
@@ -346,7 +365,7 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	
 	
 	private void fillBackground( Graphics2D g ) {
-		Gfx.pushColorAndSet( g, EditorStyle.colBackground );
+		Gfx.pushColorAndSet( g, (isPrinting) ? Color.white : EditorStyle.colBackground );
 			Gfx.pushAntialiasingStateAndSet( g, false );
 				g.fillRect( 0, 0, getWidth(), getHeight() );
 			Gfx.popAntialiasingState( g );
@@ -356,6 +375,9 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	
 	
 	private void drawGrid( Graphics2D g ) {
+		if ( ! enableGrid || isPrinting)
+			return;
+		
 		Bbox2 worldRegion  = cam.getWorldViewArea();
 		Vec2  cellSize     = new Vec2( 64 );
 		Vec2  cellSizeHalf = cellSize.multiply( 0.5 );
