@@ -38,7 +38,7 @@ public class HistoryManager<T extends Serializable>
 		this.onChange = new CallbackSet();
 		this.listener = listener;
 		this.index    = -1;
-		this.maxSize  = 1024; // With compression each step is quite small.
+		this.maxSize  = 512; // With compression each step is quite small.
 	}
 	
 	
@@ -99,6 +99,32 @@ public class HistoryManager<T extends Serializable>
 	public boolean canUndo() {
 		return index > 0
 			&& ! history.isEmpty();
+	}
+	
+	
+	
+	public String toString() {
+		String str = "HistoryManager: " + history.size() + " steps, " + getTotalBytes() + " bytes\n";
+		
+		for (int i=0; i<history.size(); i++) {
+			T obj = decompress( history.get(i) );
+			str += (i) + ": \t" + obj;
+			str += (i==index) ? " < now" : "";
+			str += "\n";
+		}
+		
+		return str;
+	}
+	
+	
+	
+	private long getTotalBytes() {
+		long acc = 0;
+		
+		for (byte[] item: history)
+			acc += item.length;
+		
+		return acc;
 	}
 	
 	
@@ -178,12 +204,7 @@ public class HistoryManager<T extends Serializable>
 	
 	
 	private void debugPrint() {
-		for (int i=0; i<history.size(); i++) {
-			T obj = decompress( history.get(i) );
-			System.out.print( "" + (i) + ": \t" + obj );
-			System.out.println( (i==index) ? " < now" : "" );
-		}
-		System.out.println();
+		System.out.println( this );
 	}
 	
 	
