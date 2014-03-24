@@ -6,11 +6,13 @@ package logicBox.gui.editor.tools;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
+import logicBox.gui.editor.EditorCreationParam;
+import logicBox.gui.editor.EditorStyle;
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.gui.editor.RepaintListener;
 import logicBox.util.CallbackParam;
+import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
 
@@ -24,12 +26,12 @@ public class ToolPlacer extends Tool
 	private MouseAdapter    mouseListener;
 	private RepaintListener repaintListener;
 	
-	private GraphicComActive    placementGraphic;
-	private CallbackParam<Vec2> placementCallback;
-	private boolean             placementInitiated;
-	private boolean             placementArmed;
-	private Vec2                placementPos;
-	private double              placementAngle;
+	private CallbackParam<EditorCreationParam> placementCallback;
+	private GraphicComActive placementGraphic;
+	private boolean          placementInitiated;
+	private boolean          placementArmed;
+	private Vec2             placementPos;
+	private double           placementAngle;
 	
 	
 	
@@ -65,34 +67,49 @@ public class ToolPlacer extends Tool
 	
 	
 	
+	public void reset() {
+		placementGraphic   = null;
+		placementCallback  = null;
+		placementInitiated = false;
+		placementArmed     = false;
+	}
+	
+	
+	
 	private MouseAdapter createEventListener() {
 		return new MouseAdapter() {
 			public void mousePressed( MouseEvent ev ) {
 				if (placementInitiated)
-				if (SwingUtilities.isLeftMouseButton( ev ))
+				if (isLeft( ev ))
 					placementArm();
 			}
+			
 			
 			public void mouseReleased( MouseEvent ev ) {
 				if ( ! placementInitiated)
 					return;
 				
 				if (placementArmed)
-				if (SwingUtilities.isLeftMouseButton( ev ))
+				if (isLeft( ev ))
 					placementComplete();
 				
-				if (SwingUtilities.isRightMouseButton( ev ))
+				if (isRight( ev ))
 					placementCancel();
 			}
 			
+			
 			public void mouseMoved( MouseEvent ev ) {
-				if (placementInitiated)
-					placementMove();
+				if ( ! placementInitiated)
+					return;
+				
+				if (ev.isShiftDown())
+					 placementRotate();
+				else placementMove();
 			}
 			
+			
 			public void mouseDragged( MouseEvent ev ) {
-				if (placementInitiated)
-					placementMove();
+				mouseMoved( ev ); // Same thing
 			}
 		};
 	}
@@ -103,13 +120,26 @@ public class ToolPlacer extends Tool
 		return new RepaintListener() {
 			public void draw( Graphics2D g ) {
 				if (placementInitiated) {
+					drawOverlay( g );
+					
 					Gfx.pushCompositeAndSet( g, 0.5 );
-						Gfx.drawOrientationOverlay( g, placementGraphic.getPos(), placementGraphic.getBbox().getBiggest()*1.4, placementGraphic.getAngle() );
 						placementGraphic.draw( g );
 					Gfx.popComposite( g );
 				}
 			}
 		};
+	}
+	
+	
+	
+	private void drawOverlay( Graphics2D g ) {
+		Vec2   pos    = placementGraphic.getPos();
+		double angle  = placementGraphic.getAngle();
+		double radius = placementGraphic.getBbox().getEnclosingRadius() * 1.5;
+		
+		Gfx.pushColorAndSet( g, EditorStyle.colSelectionStroke );
+			Gfx.drawOrientationOverlay( g, pos, radius, angle );
+		Gfx.popColor( g );
 	}
 	
 	
@@ -120,13 +150,13 @@ public class ToolPlacer extends Tool
 	 * @param graphic The graphic used to show where the component will be placed.  
 	 * 				  The graphic will be modified by the tool, so don't reuse it.
 	 */
-	public void placementStart( GraphicComActive graphic, CallbackParam<Vec2> createCallback ) {
+	public void placementStart( GraphicComActive graphic, CallbackParam<EditorCreationParam> createCallback ) {
 		placementCallback  = createCallback;
 		placementGraphic   = graphic;
 		placementInitiated = true;
 		placementArmed     = false;
 		
-		graphic.transformTo( getMousePosWorld(), 0 );
+		graphic.transformTo( getSnappedMousePos(), 0 );
 		repaint();
 	}
 	
@@ -141,8 +171,10 @@ public class ToolPlacer extends Tool
 	
 	
 	private void placementComplete() {
-		placementPos = getMousePosWorld();
-		placementCallback.execute( placementPos );
+		placementPos = getSnappedMousePos();
+		EditorCreationParam param = new EditorCreationParam( placementPos, placementAngle );
+		placementCallback.execute( param );
+		markHistoryChange();
 		placementGraphic.setHighlighted( false );
 		repaint();
 	}
@@ -150,7 +182,19 @@ public class ToolPlacer extends Tool
 	
 	
 	private void placementMove() {
-		placementPos = getMousePosWorld();
+		placementPos = getSnappedMousePos();
+		placementGraphic.transformTo( placementPos, placementAngle );
+		repaint();
+	}
+	
+	
+	
+	private void placementRotate() {
+		Vec2   pos     = getMousePosWorld();
+		double angle   = Geo.angleBetween( placementPos, pos );
+		double snapped = Geo.roundToMultiple( angle, 45 );
+		
+		placementAngle = snapped;
 		placementGraphic.transformTo( placementPos, placementAngle );
 		repaint();
 	}
@@ -164,6 +208,14 @@ public class ToolPlacer extends Tool
 		placementCallback  = null;
 		placementPos       = null;
 		repaint();
+		
+		getToolManager().releaseControl();
+	}
+	
+	
+	
+	private Vec2 getSnappedMousePos() {
+		return Geo.snapNear( getMousePosWorld(), 16 );
 	}
 }
 
