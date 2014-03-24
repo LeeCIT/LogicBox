@@ -3,8 +3,10 @@
 
 package logicBox.gui;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import logicBox.gui.editor.EditorFrame;
@@ -47,7 +49,7 @@ public abstract class GUI
 	public static void create() {
 		SwingUtilities.invokeLater( new Runnable() {
 			public void run() {
-				constructGUI();
+				constructMainFrame();
 			}
 		});
 	}
@@ -73,7 +75,63 @@ public abstract class GUI
 	
 	
 	
-	private static void constructGUI() {
+	/**
+	 * Modally ask a question, with three possible answers.
+	 */
+	public static DialogueAnswer askYesNoCancel( Component parent, String title, String question ) {
+		int answer = JOptionPane.showConfirmDialog( parent, question, title, JOptionPane.YES_NO_CANCEL_OPTION );
+		
+		switch (answer) {
+			case JOptionPane.YES_OPTION: return DialogueAnswer.YES;
+			case JOptionPane.NO_OPTION:  return DialogueAnswer.NO;
+			default:					 return DialogueAnswer.CANCEL;
+		}
+	}
+	
+	
+	
+	/**
+	 * Modally confirm an action.
+	 */
+	public static boolean askConfirm( Component parent, String title, String question ) {
+		int answer = JOptionPane.showConfirmDialog( parent, question, title, JOptionPane.YES_NO_OPTION );
+		
+		switch (answer) {
+			case JOptionPane.YES_OPTION: return true;
+			default:					 return false;
+		}
+	}
+	
+	
+	
+	/**
+	 * Show a modal message dialogue.
+	 */
+	public static void showMessage( Component parent, String title, String message ) {
+		JOptionPane.showMessageDialog( parent, message, title, JOptionPane.INFORMATION_MESSAGE );
+	}
+	
+	
+	
+	/**
+	 * Show a modal warning dialogue.
+	 */
+	public static void showWarning( Component parent, String title, String message ) {
+		JOptionPane.showMessageDialog( parent, message, title, JOptionPane.WARNING_MESSAGE );
+	}
+	
+		
+	
+	/**
+	 * Show a modal error dialogue.
+	 */
+	public static void showError( Component parent, String title, String message ) {
+		JOptionPane.showMessageDialog( parent, message, title, JOptionPane.ERROR_MESSAGE );
+	}
+	
+	
+	
+	private static void constructMainFrame() {
 		editorFrame = new EditorFrame();
 		toolbox     = new Toolbox( editorFrame );
 		
