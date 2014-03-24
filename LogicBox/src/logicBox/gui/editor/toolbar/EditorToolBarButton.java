@@ -28,7 +28,6 @@ public class EditorToolBarButton extends JButton
 		setMaximumSize( new Dimension(25,23) );
 		setFocusable( false );
 		
-		
 		addRolloverListener();
 	}
 	

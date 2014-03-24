@@ -46,6 +46,7 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	private HistoryManager<EditorWorld> historyManager;
 	
 	private List<RepaintListener> repaintListeners;
+	private boolean               enableGrid;
 	private boolean               enableAntialiasing;
 	
 	
@@ -53,6 +54,7 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	public EditorPanel() {
 		super( true );
 		
+		enableGrid         = true;
 		enableAntialiasing = true;
 		repaintListeners   = new ArrayList<>();
 		
@@ -163,6 +165,24 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	
 	
 	
+	public boolean getAntialiasingEnabled() {
+		return enableAntialiasing;
+	}
+	
+	
+	
+	public void setGridEnabled( boolean state ) {
+		enableGrid = state;
+	}
+	
+	
+	
+	public boolean getGridEnabled() {
+		return enableGrid;
+	}
+	
+	
+	
 	public void addRepaintListener( RepaintListener rl ) {
 		repaintListeners.add( rl );
 	}
@@ -189,17 +209,26 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	
 	
 	
+	public void print( Graphics g ) {
+		// TODO change background colour, zoom out etc
+		System.out.println( "Printing " + this );
+		super.print( g );
+	}
+	
+	
+	
 	protected void paintComponent( Graphics gx ) {
 		Graphics2D g = (Graphics2D) gx;
 		
 		Gfx.pushMatrix( g );
 			Gfx.pushAntialiasingStateAndSet( g, enableAntialiasing );
-				Gfx.pushAntialiasingStateAndSet( g, false );
-					fillBackground( g );
-				Gfx.popAntialiasingState( g );
+				fillBackground( g );
 				
 				cam.applyTransform( g );
-				drawGrid( g );
+				
+				if (enableGrid)
+					drawGrid( g );
+				
 				drawDebugCrap( g );
 				
 				for (EditorComponent ecom: world.getViewableComponents( cam, 64 ))
@@ -315,11 +344,11 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	
 	
 	private void fillBackground( Graphics2D g ) {
-		Gfx.pushMatrix( g );
-			Gfx.pushColorAndSet( g, EditorStyle.colBackground );
+		Gfx.pushColorAndSet( g, EditorStyle.colBackground );
+			Gfx.pushAntialiasingStateAndSet( g, false );
 				g.fillRect( 0, 0, getWidth(), getHeight() );
-			Gfx.popColor( g );
-		Gfx.popMatrix( g );
+			Gfx.popAntialiasingState( g );
+		Gfx.popColor( g );
 	}
 	
 	

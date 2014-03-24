@@ -4,7 +4,6 @@
 package logicBox.gui.editor;
 import javax.swing.JFrame;
 import javax.swing.JScrollBar;
-
 import logicBox.gui.editor.menubar.EditorMenuBar;
 import logicBox.gui.editor.toolbar.EditorToolbar;
 import net.miginfocom.swing.MigLayout;
