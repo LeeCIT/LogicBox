@@ -8,12 +8,12 @@ import java.util.List;
 import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorCreationCommand;
+import logicBox.gui.editor.EditorCreationParam;
 import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.sim.component.ComponentActive;
 import logicBox.util.CallbackParam;
-import logicBox.util.Vec2;
 
 
 
@@ -37,8 +37,8 @@ public class ToolManager
 		this.panel = panel;
 		this.tools = new ArrayList<>();
 		
-		setupTools ( panel, panel.getWorld(), panel.getCamera() );
-		takeExclusiveControl( toolTraceDrawer );
+		setupTools( panel, panel.getWorld(), panel.getCamera() );
+		releaseControl();
 	}
 	
 	
@@ -57,14 +57,14 @@ public class ToolManager
 	
 	
 	public void takeExclusiveControl( Tool tool ) {
-		detachAll();
+		detachAndResetAll();
 		tool.attach();
 	}
 	
 	
 	
 	public void takeCooperativeControl( Tool a, Tool b ) {
-		detachAll();
+		detachAndResetAll();
 		a.attach();
 		b.attach();
 	}
@@ -78,11 +78,12 @@ public class ToolManager
 	
 	
 	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
-		getPlacer().placementStart( ecc.getGraphicPreview(), new CallbackParam<Vec2>() {
-			public void execute( Vec2 pos ) {
+		takeExclusiveControl( toolPlacer );
+		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<EditorCreationParam>() {
+			public void execute( EditorCreationParam param ) {
 				ComponentActive  scom = ecc.getComponentPayload();
 				GraphicComActive gca  = scom.getGraphic();
-				EditorComponent  ecom = new EditorComponent( scom, gca, pos );
+				EditorComponent  ecom = new EditorComponent( scom, gca, param.pos, param.angle );
 				panel.getWorld().add( ecom );
 			}
 		});
@@ -90,9 +91,11 @@ public class ToolManager
 	
 	
 	
-	private void detachAll() {
-		for (Tool t: tools)
+	private void detachAndResetAll() {
+		for (Tool t: tools) {
 			t.detach();
+			t.reset();
+		}
 	}
 	
 	

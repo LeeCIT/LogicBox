@@ -85,6 +85,17 @@ public class ToolContextual extends Tool
 	
 	
 	
+	public void reset() {
+		dragHasLock     = false;
+		selectHasLock   = false;
+		dragInitiated   = false;
+		dragging        = false;
+		selectInitiated = false;
+		selecting       = false;
+	}
+	
+	
+	
 	public Selection getSelection() {
 		return selection;
 	}
@@ -217,6 +228,7 @@ public class ToolContextual extends Tool
 		if ( ! dragging)
 			return;
 		
+		markHistoryChange();
 		dragFinishedCommon();
 	}
 	

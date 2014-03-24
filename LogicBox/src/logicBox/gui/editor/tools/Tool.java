@@ -54,6 +54,10 @@ public abstract class Tool
 	
 	
 	
+	public abstract void reset();
+	
+	
+	
 	protected boolean isLeft( MouseEvent ev ) {
 		return SwingUtilities.isLeftMouseButton( ev );
 	}
@@ -86,6 +90,12 @@ public abstract class Tool
 	
 	protected void resetCursor() {
 		getEditorPanel().setCursor( Cursor.getDefaultCursor() );
+	}
+	
+	
+	
+	protected ToolManager getToolManager() {
+		return manager;
 	}
 	
 	
