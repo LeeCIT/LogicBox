@@ -18,12 +18,13 @@ public class EditorToolbar extends JToolBar
 {
 	public EditorToolBarButton newFileButt;
 	public EditorToolBarButton openFileButt;
-	public EditorToolBarButton printFileButt;
 	public EditorToolBarButton saveFileButt;
+	public EditorToolBarButton printFileButt;
+	
 	public EditorToolBarButton undoButt;
 	public EditorToolBarButton redoButt;
-	public EditorToolBarButton editTextButt;
-	public EditorToolBarButton enableGrid;
+	
+	public EditorToolBarButton enableGridButt;
 	public EditorToolBarButton centreCamButt;
 	public EditorToolBarButton toolBoxButt;
 	
@@ -37,21 +38,20 @@ public class EditorToolbar extends JToolBar
 	
 	
 	
-	/**
-	 * Set up the buttons
-	 */
 	private void createButtons() {
-		setLayout( new MigLayout( "gap 1, insets 0", "[]", "[]" ) );
+		setLayout( new MigLayout( "gap 0, insets 0", "[]", "[]" ) );
 		
-		newFileButt   = addButton( "New16px.png"      , "New file"         , false );
-		openFileButt  = addButton( "Open16px.png"     , "Open file"        , false );
-		saveFileButt  = addButton( "Save16px.png"     , "Save file"        , false );
-		printFileButt = addButton( "Print16px.png"    , "Print file"       , false );
-		undoButt      = addButton( "Undo16px.png"     , "Undo"             , true  );
-		redoButt      = addButton( "Redo16px.png"     , "Redo"             , false );
-		enableGrid    = addButton( "Grid16px.png"     , "Show/hide grid"   , true  );
-		centreCamButt = addButton( "CentreCam16px.png", "Centre camera"    , false );
-		toolBoxButt   = addButton( "ToolBox16px.png"  , "Show/hide toolbox", false );
+		newFileButt    = addButton( "New16px.png"      , "New file"         , false );
+		openFileButt   = addButton( "Open16px.png"     , "Open file"        , false );
+		saveFileButt   = addButton( "Save16px.png"     , "Save file"        , false );
+		printFileButt  = addButton( "Print16px.png"    , "Print file"       , false );
+		
+		undoButt       = addButton( "Undo16px.png"     , "Undo"             , true  );
+		redoButt       = addButton( "Redo16px.png"     , "Redo"             , false );
+		
+		enableGridButt = addButton( "Grid16px.png"     , "Show/hide grid"   , true  );
+		centreCamButt  = addButton( "CentreCam16px.png", "Centre camera"    , false );
+		toolBoxButt    = addButton( "ToolBox16px.png"  , "Show/hide toolbox", false );
 	}
 	
 	
@@ -59,10 +59,7 @@ public class EditorToolbar extends JToolBar
 	private EditorToolBarButton addButton( String icoName, String tooltip, boolean sepBefore ) {
 		Icon                icon  = loadIconFromResource( icoName );		
 		EditorToolBarButton butt  = new EditorToolBarButton( icon, tooltip );
-		String              param = "w 22px, h 18px";
-		
-		if (sepBefore)
-			param += ", gap 10px";
+		String              param = (sepBefore) ? "gap 16px" : "";
 		
 		add( butt, param );
 		
