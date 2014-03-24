@@ -8,9 +8,9 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import logicBox.gui.editor.EditorFrame;
-import logicBox.gui.editor.Toolbox;
 import logicBox.gui.editor.menubar.EditorMenuController;
 import logicBox.gui.editor.toolbar.EditorToolbarController;
+import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.snapping.ComponentSnapper;
 
 

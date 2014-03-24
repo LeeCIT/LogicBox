@@ -1,12 +1,14 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.toolbox;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
+import logicBox.gui.editor.EditorCreationCommand;
+import logicBox.gui.editor.EditorPanel;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
 import logicBox.util.Util;
