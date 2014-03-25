@@ -16,6 +16,16 @@ public abstract class Graphic implements Serializable, Drawable
 {
 	private static final long serialVersionUID = 1L;
 	
+	protected Color colStrokeNormal;
+	protected Color colStrokeHighlight;
+	protected Color colStrokeSelect;
+	protected Color colStrokeSelectHighlight;
+	
+	protected Color colFillNormal;
+	protected Color colFillHighlight;
+	protected Color colFillSelect;
+	protected Color colFillSelectHighlight;
+	
 	protected Color   colStroke;
 	protected Color   colFill;
 	private   boolean isSelected;
@@ -25,8 +35,18 @@ public abstract class Graphic implements Serializable, Drawable
 	
 	
 	public Graphic() {
-		this.colStroke = EditorStyle.colComponentStroke;
-		this.colFill   = EditorStyle.colComponentFill;
+		this.colStrokeNormal          = EditorStyle.colComponentStroke;
+		this.colStrokeHighlight       = EditorStyle.colHighlightStroke;
+		this.colStrokeSelect          = EditorStyle.colSelectionStroke;
+		this.colStrokeSelectHighlight = EditorStyle.colHighlightSelectStroke;
+		
+		this.colFillNormal            = EditorStyle.colComponentFill;
+		this.colFillHighlight         = EditorStyle.colHighlightFill;
+		this.colFillSelect            = EditorStyle.colSelectionFill;
+		this.colFillSelectHighlight   = EditorStyle.colHighlightSelectFill;
+		
+		this.colStroke = colStrokeNormal;
+		this.colFill   = colFillNormal;
 	}
 	
 	
@@ -72,19 +92,19 @@ public abstract class Graphic implements Serializable, Drawable
 	private void updateColours() {
 		if (isHighlighted) {
 			if (isSelected) {
-				colStroke = EditorStyle.colHighlightSelectStroke;
-				colFill   = EditorStyle.colHighlightSelectFill;
+				colStroke = colStrokeSelectHighlight;
+				colFill   = colFillSelectHighlight;
 			} else {
-				colStroke = EditorStyle.colHighlightStroke;
-				colFill   = EditorStyle.colHighlightFill;
+				colStroke = colStrokeHighlight;
+				colFill   = colFillHighlight;
 			}
 		} else {
 			if (isSelected) {
-				colStroke = EditorStyle.colSelectionStroke;
-				colFill   = EditorStyle.colSelectionFill;
+				colStroke = colStrokeSelect;
+				colFill   = colFillSelect;
 			} else {
-				colStroke = EditorStyle.colComponentStroke;
-				colFill   = EditorStyle.colComponentFill;
+				colStroke = colStrokeNormal;
+				colFill   = colFillNormal;
 			}
 		}
 	}
