@@ -65,10 +65,10 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 		cam = new Camera( this );
 		cam.addTransformCallback( createOnTransformCallback() );
 		
-		toolManager = new ToolManager( this );
-		
 		historyManager = new HistoryManager<>( this );
 		historyManager.markChange();
+		
+		toolManager = new ToolManager( this );
 	}
 	
 	
