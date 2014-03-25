@@ -7,7 +7,7 @@ package logicBox.sim.component;
 
 /**
  * A clock generator.
- * The make the sim easier to program, its frequency is always a multiple of a common base frequency.
+ * To make the sim easier to program, its frequency is always a multiple of a common base frequency.
  * @author Lee Coakley
  */
 public class SourceOscillator extends Source

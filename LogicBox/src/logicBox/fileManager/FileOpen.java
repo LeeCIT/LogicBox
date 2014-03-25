@@ -17,15 +17,15 @@ public class FileOpen
 	 * Open the file open dialog
 	 * @param frame	The frame that the dialog is to come from
 	 */
-	public FileOpen(JFrame frame) {
+	public FileOpen( JFrame frame ) {
 		JFileChooser chooser = new JFileChooser();
 		
 		// File filter
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Logicbox", "lbx");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("LogicBox circuit", "lbx");
 		chooser.setFileFilter(filter);
 				
-		int returnVal = chooser.showOpenDialog(frame);
-		if(returnVal == JFileChooser.APPROVE_OPTION) {
+		int returnVal = chooser.showOpenDialog( frame );
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
 			loadFile = chooser.getSelectedFile();
 		}

@@ -73,6 +73,12 @@ public class Vec2 extends Point2D implements Serializable, Transformable
 	
 	
 	
+	public Vec2 addPolar( double len, double dir ) {
+		return this.add( Geo.lenDir(len, dir) );
+	}
+	
+	
+	
 	public Vec2 add( Vec2 v ) {
 		return new Vec2( x + v.x, y + v.y );
 	}

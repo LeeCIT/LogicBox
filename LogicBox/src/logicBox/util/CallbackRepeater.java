@@ -7,7 +7,6 @@ package logicBox.util;
 
 /**
  * Spawns a thread which executes a callback at a set frequency.
- * Triggers the callback immediately.
  * @author Lee Coakley
  * @see Callback
  */
@@ -33,7 +32,7 @@ public class CallbackRepeater
 	
 	
 	/**
-	 * Optionally start paused.  If starting paused, nothing will happen until
+	 * Optionally start paused.  If starting paused, nothing will happen until unpause() is called.
 	 */
 	public CallbackRepeater( long frequencyMillisecs, boolean startPaused, Callback callback ) {
 		this.callback      = callback;
@@ -60,21 +59,25 @@ public class CallbackRepeater
 	 * The calling thread waits until this operation completes.
 	 * Don't call this from inside the callback!
 	 */
-	public synchronized void join() {
-		softStop();
+	public void join() {
+		checkCaller();
 		
-		while (thread.isAlive()) {
-			try {
-				thread.join();
-			}
-			catch (InterruptedException ex) {
-				Thread.interrupted();
+		synchronized (thread) {
+			softStop();
+			
+			while (thread.isAlive()) {
+				try {
+					thread.join();
+				}
+				catch (InterruptedException ex) {
+					Thread.interrupted();
+				}
 			}
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Causes the repeater to stop executing.
 	 * If already paused there is no effect.
@@ -113,9 +116,20 @@ public class CallbackRepeater
 	 * You can safely call this from inside the callback.
 	 * After calling this function the repeater's lifetime has ended and it can no longer be used.
 	 */
-	public synchronized void softStop() {
-		threadExecute = false;
-		unpause();
+	public void softStop() {
+		synchronized (thread) {
+			threadExecute = false;
+			unpause();
+		}
+	}
+	
+	
+	
+	private void checkCaller() {
+		if (Thread.currentThread() == thread)
+			throw new RuntimeException(
+				"Attempting to call this function from the callback would result in a deadlock."
+			);
 	}
 	
 	
@@ -171,7 +185,6 @@ public class CallbackRepeater
 			}
 		});
 		
-		
 		for (int i=0; i<16384; i++) {
 			rep.pause();
 			rep.unpause();
@@ -179,7 +192,12 @@ public class CallbackRepeater
 			rep.unpause();
 			rep.pause();
 			rep.pause();
+			rep.pause();
+			rep.pause();
 			rep.unpause();
+			rep.unpause();
+			rep.pause();
+			rep.pause();
 			rep.unpause();
 		}
 		
@@ -193,6 +211,10 @@ public class CallbackRepeater
 		rep.join();
 		
 		System.out.println( "Done!" );
+		
+		rep.pause();
+		rep.unpause();
+		rep.join();
 	}
 }
 
