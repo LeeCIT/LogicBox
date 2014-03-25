@@ -24,7 +24,6 @@ public class IconLoader
 			return loadIconFromResource( name );
 		} 
 		catch (NullPointerException ex) {
-			GUI.showError( null, "fuck", "fuck" );
 			throw new RuntimeException( "Icon not found: " + name, ex );
 		}
 	}
