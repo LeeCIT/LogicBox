@@ -13,6 +13,7 @@ import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.sim.component.ComponentActive;
+import logicBox.util.Callback;
 import logicBox.util.CallbackParam;
 
 
@@ -105,10 +106,22 @@ public class ToolManager
 		toolHighlighter = add( new ToolHighlighter(this) );
 		toolPlacer      = add( new ToolPlacer     (this) );
 		toolTraceDrawer = add( new ToolTraceDrawer(this) );
+		
+		addUndoDeselectCallback();
 	}
 	
 	
 	
+	private void addUndoDeselectCallback() {
+		panel.getHistoryManager().addOnChangeCallback( new Callback() {
+			public void execute() {
+				toolContextual.getSelection().clear();
+			}
+		});
+	}
+
+
+
 	private <T extends Tool> T add( T tool ) {
 		tools.add( tool );
 		return tool;
