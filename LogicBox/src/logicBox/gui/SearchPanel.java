@@ -23,7 +23,7 @@ public class SearchPanel<T> extends JPanel
 {
 	private List<Searchable<T>> searchableItems;
 	 
-	private JLabel               label;
+	private JLabel				 labelFilter;
 	private JTextField           searchField;
 	private JButton              searchClear;
 	private JList<Searchable<T>> searchList;
@@ -31,21 +31,15 @@ public class SearchPanel<T> extends JPanel
 	
 	
 	
-	private SearchPanel() {
-		super( new MigLayout("insets 0, filly", "[grow]", "[][fill,grow][]") );
+	public SearchPanel() {
+		this( new ArrayList<Searchable<T>>() );
 	}
 	
 	
 	
-	public SearchPanel( String labelText ){
-		this( labelText, new ArrayList<Searchable<T>>() );
-	}
-	
-	
-	
-	public SearchPanel( String labelText, List<Searchable<T>> searchables ) {
-		this();
-		setup( labelText, searchables );
+	public SearchPanel( List<Searchable<T>> searchables ) {
+		super();
+		setup( searchables );
 	}
 	
 	
@@ -175,16 +169,18 @@ public class SearchPanel<T> extends JPanel
 	// Internals
 	/////////////////////////////////////////////////////////////////////////
 	
-	private void setup( String labelText, List<Searchable<T>> searchableItems ) {
-		setupComponents( labelText );
+	private void setup( List<Searchable<T>> searchableItems ) {
+		setupComponents();
 		setupActions();
 		setSearchableItems( searchableItems );
 	}
 	
 	
 	
-	private void setupComponents( String labelText ) {		
-		label       = new JLabel( labelText );
+	private void setupComponents() {
+		setLayout( new MigLayout( "insets 0, filly", "[grow]", "[][fill,grow]" ) );
+		
+		labelFilter = new JLabel( "Search: " );
 		searchField = new JTextField( 12 );
 		searchClear = new JButton( "Clear" );
 		
@@ -195,10 +191,12 @@ public class SearchPanel<T> extends JPanel
 		scrollPane.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
 		scrollPane.setVerticalScrollBarPolicy  ( JScrollPane.VERTICAL_SCROLLBAR_ALWAYS      );
 		
-		add( label,       "wrap, growy 0" );
-		add( scrollPane,  "wrap, grow, hmin 72px" );
-		add( searchField, "growx, split 2" );
-		add( searchClear );
+		add( labelFilter, "split 3" );
+		add( searchField, "growx" );
+		add( searchClear, "wrap" );
+		add( scrollPane,  "grow, hmin 72px" );
+		
+		
 	}
 	
 	
@@ -288,7 +286,7 @@ public class SearchPanel<T> extends JPanel
 			searchables.add( new Searchable<ComponentType>( type, type.name() ) );
 		
 		
-		final SearchPanel<ComponentType> sp = new SearchPanel<ComponentType>( "Component Search", searchables );
+		final SearchPanel<ComponentType> sp = new SearchPanel<ComponentType>( searchables );
 		
 		sp.addListSelectionListener( new ListSelectionListener() {
 			public void valueChanged( ListSelectionEvent ev ) {
