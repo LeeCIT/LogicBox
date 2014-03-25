@@ -80,6 +80,7 @@ public class ToolManager
 	
 	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
 		takeExclusiveControl( toolPlacer );
+		
 		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<EditorCreationParam>() {
 			public void execute( EditorCreationParam param ) {
 				ComponentActive  scom = ecc.getComponentPayload();
@@ -97,7 +98,7 @@ public class ToolManager
 			t.detach();
 			t.reset();
 		}
-	}
+	} 
 	
 	
 	

@@ -12,21 +12,28 @@ import net.miginfocom.swing.MigLayout;
 
 /**
  * The toolbar situated above the editor with standard and commonly used controls.
+ * That's a lot of butts...
  * @author Lee Coakley, John Murphy
  */
 public class EditorToolbar extends JToolBar
 {
-	public EditorToolBarButton newFileButt;
-	public EditorToolBarButton openFileButt;
-	public EditorToolBarButton saveFileButt;
-	public EditorToolBarButton printFileButt;
+	public EditorToolBarButton buttNew;
+	public EditorToolBarButton buttOpen;
+	public EditorToolBarButton buttSave;
+	public EditorToolBarButton buttPrint;
 	
-	public EditorToolBarButton undoButt;
-	public EditorToolBarButton redoButt;
+	public EditorToolBarButton buttUndo;
+	public EditorToolBarButton buttRedo;
 	
-	public EditorToolBarButton enableGridButt;
-	public EditorToolBarButton centreCamButt;
-	public EditorToolBarButton toolBoxButt;
+	public EditorToolBarButton buttCut;
+	public EditorToolBarButton buttCopy;
+	public EditorToolBarButton buttPaste;
+	
+	public EditorToolBarButton buttToggleGrid;
+	public EditorToolBarButton buttCameraRecentre;
+	public EditorToolBarButton buttToggleToolbox;
+	
+	public EditorToolBarButton buttHelp;
 	
 	
 	
@@ -41,17 +48,23 @@ public class EditorToolbar extends JToolBar
 	private void createButtons() {
 		setLayout( new MigLayout( "gap 0, insets 0", "[]", "[]" ) );
 		
-		newFileButt    = addButton( "New16px.png"      , "New file"         , false );
-		openFileButt   = addButton( "Open16px.png"     , "Open file"        , false );
-		saveFileButt   = addButton( "Save16px.png"     , "Save file"        , false );
-		printFileButt  = addButton( "Print16px.png"    , "Print file"       , false );
+		buttNew            = addButton( "New16px.png"      , "New file"         , false );
+		buttOpen           = addButton( "Open16px.png"     , "Open file"        , false );
+		buttSave           = addButton( "Save16px.png"     , "Save file"        , false );
+		buttPrint          = addButton( "Print16px.png"    , "Print file"       , false );
+		                   
+		buttUndo           = addButton( "Undo16px.png"     , "Undo"             , true  );
+		buttRedo           = addButton( "Redo16px.png"     , "Redo"             , false );
 		
-		undoButt       = addButton( "Undo16px.png"     , "Undo"             , true  );
-		redoButt       = addButton( "Redo16px.png"     , "Redo"             , false );
+		buttCut            = addButton( "Cut16px.png"      , "Cut"              , true  );
+		buttCopy           = addButton( "Copy16px.png"     , "Copy"             , false );
+		buttPaste          = addButton( "Paste16px.png"    , "Paste"            , false );
 		
-		enableGridButt = addButton( "Grid16px.png"     , "Show/hide grid"   , true  );
-		centreCamButt  = addButton( "CentreCam16px.png", "Centre camera"    , false );
-		toolBoxButt    = addButton( "ToolBox16px.png"  , "Show/hide toolbox", false );
+		buttToggleGrid     = addButton( "Grid16px.png"     , "Show/hide grid"   , true  );
+		buttCameraRecentre = addButton( "CentreCam16px.png", "Centre camera"    , false );
+		buttToggleToolbox  = addButton( "ToolBox16px.png"  , "Show/hide toolbox", false );
+		
+		buttHelp           = addButton( "Help16px.png"     , "Show help"        , true  );
 	}
 	
 	
@@ -59,7 +72,7 @@ public class EditorToolbar extends JToolBar
 	private EditorToolBarButton addButton( String icoName, String tooltip, boolean sepBefore ) {
 		Icon                icon  = loadIconFromResource( icoName );		
 		EditorToolBarButton butt  = new EditorToolBarButton( icon, tooltip );
-		String              param = (sepBefore) ? "gap 16px" : "";
+		String              param = (sepBefore) ? "gap 12px" : "";
 		
 		add( butt, param );
 		

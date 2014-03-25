@@ -19,10 +19,10 @@ import logicBox.util.Callback;
 public class EditorToolbarController
 {
 	public EditorToolbarController( EditorToolbar toolbar, EditorFrame frame ) {
-		CommonActions.addOpenCircuitListener   ( toolbar.openFileButt,   frame );
-		CommonActions.addPrintCircuitListener  ( toolbar.printFileButt,  frame );
-		CommonActions.addRecentreCameraListener( toolbar.centreCamButt,  frame );
-		CommonActions.addGridToggleListener    ( toolbar.enableGridButt, frame );
+		CommonActions.addOpenCircuitListener   ( toolbar.buttOpen,   frame );
+		CommonActions.addPrintCircuitListener  ( toolbar.buttPrint,  frame );
+		CommonActions.addRecentreCameraListener( toolbar.buttCameraRecentre,  frame );
+		CommonActions.addGridToggleListener    ( toolbar.buttToggleGrid, frame );
 		
 		setupUndoRedo( toolbar, frame );
 	}
@@ -30,18 +30,18 @@ public class EditorToolbarController
 	
 	
 	private void setupUndoRedo( final EditorToolbar toolbar, final EditorFrame frame ) {
-		CommonActions.addUndoListener( toolbar.undoButt, frame );
-		CommonActions.addRedoListener( toolbar.redoButt, frame );
+		CommonActions.addUndoListener( toolbar.buttUndo, frame );
+		CommonActions.addRedoListener( toolbar.buttRedo, frame );
 		
-		toolbar.undoButt.setEnabled( false );
-		toolbar.redoButt.setEnabled( false );
+		toolbar.buttUndo.setEnabled( false );
+		toolbar.buttRedo.setEnabled( false );
 		
 		final HistoryManager<EditorWorld> manager = frame.getEditorPanel().getHistoryManager();
 		
 		manager.addOnChangeCallback( new Callback() {
 			public void execute() {
-				toolbar.undoButt.setEnabled( manager.canUndo() );
-				toolbar.redoButt.setEnabled( manager.canRedo() );
+				toolbar.buttUndo.setEnabled( manager.canUndo() );
+				toolbar.buttRedo.setEnabled( manager.canRedo() );
 			}
 		});
 	}

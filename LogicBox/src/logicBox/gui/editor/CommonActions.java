@@ -108,9 +108,9 @@ public abstract class CommonActions
 	private static void historyAction( EditorFrame frame, boolean undoing ) {
 		HistoryManager<EditorWorld> manager = frame.getEditorPanel().getHistoryManager();
 		JMenuItem menuUndo = frame.getEditorMenuBar().itemEditUndo;
-		JButton   buttUndo = frame.getEditorToolbar().undoButt;
+		JButton   buttUndo = frame.getEditorToolbar().buttUndo;
 		JMenuItem menuRedo = frame.getEditorMenuBar().itemEditRedo;
-		JButton   buttRedo = frame.getEditorToolbar().redoButt;
+		JButton   buttRedo = frame.getEditorToolbar().buttRedo;
 		
 		if (undoing)
 			 manager.undo();
