@@ -202,7 +202,7 @@ public class ToolContextual extends Tool
 			selection.set( ecom );
 		}
 		
-		dragOffset       = selection.getPos().subtract( getMousePosWorld() );
+		dragOffset       = selection.getPos().subtract( dragInitiatedAt );
 		rotateStartAngle = selection.getAngle();
 		repaint();
 	}
@@ -215,7 +215,7 @@ public class ToolContextual extends Tool
 		
 		resetCursor();
 		
-		Vec2   pos     = getCamera().getMousePosWorld();
+		Vec2   pos     = getMousePosWorld();
 		double angle   = Geo.angleBetween( selection.getPos(), pos );
 		double snapped = Geo.roundToMultiple( angle, 45 );
 		selection.setAngle( snapped );
