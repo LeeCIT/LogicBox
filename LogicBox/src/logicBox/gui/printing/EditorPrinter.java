@@ -5,6 +5,7 @@ package logicBox.gui.printing;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.print.*;
 import logicBox.gui.GUI;
 import logicBox.gui.editor.EditorFrame;
@@ -35,6 +36,8 @@ public class EditorPrinter implements Printable
 		
 		Graphics2D g2d = (Graphics2D) graphics;
 		g2d.translate( pageFormat.getImageableX(), pageFormat.getImageableY() );
+		g2d.setRenderingHint( RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY );
+		g2d.setRenderingHint( RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC );
 		
 		frame.getEditorPanel().print( graphics );
 		
