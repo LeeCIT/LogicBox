@@ -32,7 +32,7 @@ public class SearchPanel<T> extends JPanel
 	
 	
 	private SearchPanel() {
-		super( new MigLayout("filly", "[grow]", "[][fill,grow][]") );
+		super( new MigLayout("insets 0, filly", "[grow]", "[][fill,grow][]") );
 	}
 	
 	
