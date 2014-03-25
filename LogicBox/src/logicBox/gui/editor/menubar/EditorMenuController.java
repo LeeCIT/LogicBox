@@ -19,6 +19,7 @@ public class EditorMenuController
 	public EditorMenuController( final EditorMenuBar menu, final EditorFrame frame ) {
 		CommonActions.addOpenCircuitListener ( menu.itemFileOpen,  frame );
 		CommonActions.addPrintCircuitListener( menu.itemFilePrint, frame );
+		CommonActions.addHelpListener        ( menu.itemHelpHelp,  frame );
 		
 		setupUndoRedo( menu, frame );
 	}

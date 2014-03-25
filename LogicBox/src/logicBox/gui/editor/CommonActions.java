@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import logicBox.fileManager.FileOpen;
 import logicBox.gui.edtior.printing.EditorPrinter;
+import logicBox.gui.help.HelpFrame;
 
 
 
@@ -67,6 +68,16 @@ public abstract class CommonActions
 		abutt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				frame.getEditorPanel().recentreCamera();
+			}
+		});
+	}
+	
+	
+	
+	public static void addHelpListener( AbstractButton abutt, final EditorFrame frame ) {
+		abutt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				new HelpFrame(); // TODO this is temporary, change it later
 			}
 		});
 	}

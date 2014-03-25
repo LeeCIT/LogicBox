@@ -19,10 +19,11 @@ import logicBox.util.Callback;
 public class EditorToolbarController
 {
 	public EditorToolbarController( EditorToolbar toolbar, EditorFrame frame ) {
-		CommonActions.addOpenCircuitListener   ( toolbar.buttOpen,   frame );
-		CommonActions.addPrintCircuitListener  ( toolbar.buttPrint,  frame );
-		CommonActions.addRecentreCameraListener( toolbar.buttCameraRecentre,  frame );
-		CommonActions.addGridToggleListener    ( toolbar.buttToggleGrid, frame );
+		CommonActions.addOpenCircuitListener   ( toolbar.buttOpen,           frame );
+		CommonActions.addPrintCircuitListener  ( toolbar.buttPrint,          frame );
+		CommonActions.addRecentreCameraListener( toolbar.buttCameraRecentre, frame );
+		CommonActions.addGridToggleListener    ( toolbar.buttToggleGrid,     frame );
+		CommonActions.addHelpListener          ( toolbar.buttHelp,           frame );
 		
 		setupUndoRedo( toolbar, frame );
 	}

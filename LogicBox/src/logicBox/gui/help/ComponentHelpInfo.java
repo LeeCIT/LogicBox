@@ -1,20 +1,24 @@
-package HelpMenuPrototype;
 
 
 
-public class ComponentInfo 
+package logicBox.gui.help;
+
+
+
+/**
+ * Describes a sim component's help information.
+ * @author Shaun O'Donovan
+ */
+public class ComponentHelpInfo 
 {
-	
-	
-	
 	private String compName;
 	private String compDescription;
 	
 	
 	
-	public ComponentInfo( String compName, String compDes ) {
+	public ComponentHelpInfo( String compName, String compDes ) {
 		this.compDescription = compDes;
-		this.compName = compName;
+		this.compName        = compName;
 	}
 	
 	

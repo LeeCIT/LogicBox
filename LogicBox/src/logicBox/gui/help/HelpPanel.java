@@ -1,11 +1,7 @@
 
 
 
-package HelpMenuPrototype;
-
-
-
-import java.awt.*;
+package logicBox.gui.help;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -19,30 +15,27 @@ import logicBox.gui.Searchable;
 
 
 
+/**
+ * Shows information about various components in the simulator.
+ * @author Shaun O'Donovan
+ * @author Lee Coakley
+ * TODO: create for a specific type of component
+ */
 public class HelpPanel extends JPanel
 {
-	
-	
-	
 	private ComponentType componentType;
-	private Map <ComponentType, ComponentInfo> componentMap;
-	private JTextPane compDescription = new JTextPane();
-	private SearchPanel<ComponentType> search; 
+	private Map<ComponentType,ComponentHelpInfo> componentMap;
+	private JTextPane textPane = new JTextPane();
+	private SearchPanel<ComponentType> searchPanel;
 	
 	
 	
-	public HelpPanel() {}
-
-	
-	
-	public HelpPanel( Map<ComponentType, ComponentInfo> compMap  ) {
+	public HelpPanel( Map<ComponentType,ComponentHelpInfo> compMap ) {
 		super();
-		setLayout( new MigLayout() );
 		this.componentMap = compMap;
-		compDescription.setContentType("text/html");
-		componentSearch();
-		setSize(800, 300);
-		addToPanel();
+		textPane.setContentType("text/html");
+		createSearchPanel();
+		addComponents();
 	}
 	
 	
@@ -51,14 +44,14 @@ public class HelpPanel extends JPanel
 	 * Display the description of the specified component.
 	 */
 	private void displayDescription() {
-			compDescription.setText("");
-			StringBuilder builder = new StringBuilder();
-			builder.append("<html>");
-			builder.append("<h1>" + getCompName() +"</h1>");
-			builder.append("<hr>");
-			builder.append("<p>" + getCompDescription() + "</p>");
-			builder.append("</html>");
-			compDescription.setText(builder.toString());
+		textPane.setText("");
+		StringBuilder builder = new StringBuilder();
+		builder.append("<html><body>");
+		builder.append("<h1>" + getCompName() +"</h1>");
+		builder.append("<hr>");
+		builder.append("<p>" + getCompDescription() + "</p>");
+		builder.append("</body></html>");
+		textPane.setText(builder.toString());
 	}
 	
 	
@@ -109,30 +102,24 @@ public class HelpPanel extends JPanel
 	 * @return
 	 */
 	public JTextPane getComponentDescriptionArea(){
-		return compDescription;
+		return textPane;
 	}
 	
 	
 	
 	
-	private void componentSearch() {
-		
-		
-		////////////////////////////////////////////////////////////////////
-		// Search Test
-		///////////////////////////////////////////////////////////////////
-		
+	private void createSearchPanel() {
 		List<Searchable<ComponentType>> searchables = new ArrayList<>();
 
 		for (ComponentType type: ComponentType.values())
 			searchables.add( new Searchable<ComponentType>( type, type.name() ) );
 		
-		search = new SearchPanel<ComponentType>("Component Search:", searchables);
+		searchPanel = new SearchPanel<ComponentType>( searchables );
 		
-		search.addListSelectionListener( new ListSelectionListener() {
+		searchPanel.addListSelectionListener( new ListSelectionListener() {
 			public void valueChanged( ListSelectionEvent ev ) {
-				if (search.hasSelectedItem()) {
-					componentType = search.getSelectedItem();
+				if (searchPanel.hasSelectedItem()) {
+					componentType = searchPanel.getSelectedItem();
 					displayDescription();
 				}
 			}
@@ -140,20 +127,34 @@ public class HelpPanel extends JPanel
 	}
 	
 	
-	/**
-	 * Add components to the HelpPanel
-	 */
-	private void addToPanel()
-	{
-		add( search );
-		JScrollPane scroll = new JScrollPane(compDescription);
-		add( scroll, "w 80%, h 100%" );
-		compDescription.setPreferredSize(new Dimension(getSize()));
-		compDescription.setEditable(false); //Text cannot be edited.
+	
+	private void addComponents() {
+		setLayout( new MigLayout( "", "[grow,fill][grow,fill]", "[grow,fill]" ) );
 		
+		createSearchPanel();
+		JScrollPane scrollPane = new JScrollPane( textPane );
+		
+		add( searchPanel, "wmin 192px" );
+		add( scrollPane,  "grow"       );
+		
+		textPane.setEditable( false ); // Text cannot be edited.
 	}
-	
-	
-	
-	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
