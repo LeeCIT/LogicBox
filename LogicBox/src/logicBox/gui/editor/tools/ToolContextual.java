@@ -92,6 +92,7 @@ public class ToolContextual extends Tool
 		dragging        = false;
 		selectInitiated = false;
 		selecting       = false;
+		selection.clear();
 	}
 	
 	
