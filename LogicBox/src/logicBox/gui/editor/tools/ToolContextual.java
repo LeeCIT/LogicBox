@@ -9,16 +9,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import logicBox.gui.Gfx;
-import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
-import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorStyle;
-import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.RepaintListener;
 import logicBox.util.Bbox2;
-import logicBox.util.Callback;
-import logicBox.util.CallbackRepeater;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
@@ -27,7 +22,6 @@ import logicBox.util.Vec2;
 /**
  * Handles dragging, rotating and selection.
  * @author Lee Coakley
- * TODO there are still some bugs.
  * TODO add support for context menus on components
  */
 public class ToolContextual extends Tool
@@ -53,8 +47,8 @@ public class ToolContextual extends Tool
 	
 	
 	
-	public ToolContextual( final EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
-		super( panel, world, cam, manager );
+	public ToolContextual( ToolManager manager ) {
+		super( manager );
 		this.selection       = new Selection();
 		this.dragListener    = createDragListener();
 		this.selectListener  = createSelectListener();
@@ -67,11 +61,11 @@ public class ToolContextual extends Tool
 		if (isAttached())
 			return;
 		
-		panel.addMouseListener      ( dragListener );
-		panel.addMouseMotionListener( dragListener );
-		panel.addMouseListener      ( selectListener );
-		panel.addMouseMotionListener( selectListener );
-		panel.addRepaintListener( repaintListener );
+		getEditorPanel().addMouseListener      ( dragListener );
+		getEditorPanel().addMouseMotionListener( dragListener );
+		getEditorPanel().addMouseListener      ( selectListener );
+		getEditorPanel().addMouseMotionListener( selectListener );
+		getEditorPanel().addRepaintListener( repaintListener );
 		setAttached( true );
 	}
 	
@@ -81,12 +75,24 @@ public class ToolContextual extends Tool
 		if ( ! isAttached())
 			return;
 		
-		panel.removeMouseListener      ( dragListener );
-		panel.removeMouseMotionListener( dragListener );
-		panel.removeMouseListener      ( selectListener );
-		panel.removeMouseMotionListener( selectListener );
-		panel.removeRepaintListener( repaintListener );
+		getEditorPanel().removeMouseListener      ( dragListener );
+		getEditorPanel().removeMouseMotionListener( dragListener );
+		getEditorPanel().removeMouseListener      ( selectListener );
+		getEditorPanel().removeMouseMotionListener( selectListener );
+		getEditorPanel().removeRepaintListener( repaintListener );
 		setAttached( false );
+	}
+	
+	
+	
+	public void reset() {
+		dragHasLock     = false;
+		selectHasLock   = false;
+		dragInitiated   = false;
+		dragging        = false;
+		selectInitiated = false;
+		selecting       = false;
+		selection.clear();
 	}
 	
 	
@@ -153,12 +159,15 @@ public class ToolContextual extends Tool
 	
 	
 	private void dragInitiate() {
-		Vec2 pos = cam.getMousePosWorld();
+		Vec2            pos            = getMousePosWorld();
+		EditorComponent ecom           = getComponentAt( pos );
+		boolean         componentAtPos = ecom != null;
 		
-		if (selectHasLock || ! isComponentAt(pos)) // Select will take control
+		if (selectHasLock || ! componentAtPos) // Select will take control
 			return;
 		
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
+		if ( ! selection.contains( ecom ))
+			selection.clear();
 		
 		dragInitiated   = true;
 		dragInitiatedAt = pos;
@@ -167,8 +176,7 @@ public class ToolContextual extends Tool
 	
 	
 	private void dragMove() {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
-		Vec2 pos = cam.getMousePosWorld();
+		Vec2 pos = getMousePosWorld();
 		
 		if (dragInitiated) {
 			if ( ! dragging) 
@@ -177,16 +185,15 @@ public class ToolContextual extends Tool
 		}
 		
 		if (dragging) {
-			panel.setCursor( new Cursor(Cursor.MOVE_CURSOR) );
+			setCursor( new Cursor(Cursor.MOVE_CURSOR) );
 			selection.setPos( pos.add(dragOffset) );
-			panel.repaint();
+			repaint();
 		}
 	}
 	
 	
 	
 	private void enterDraggingState() {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		dragHasLock   = true;
 		dragging      = true;
 		dragInitiated = false;
@@ -201,9 +208,9 @@ public class ToolContextual extends Tool
 			selection.set( ecom );
 		}
 		
-		dragOffset       = selection.getPos().subtract( cam.getMousePosWorld() );
+		dragOffset       = selection.getPos().subtract( dragInitiatedAt );
 		rotateStartAngle = selection.getAngle();
-		panel.repaint();
+		repaint();
 	}
 	
 	
@@ -212,15 +219,13 @@ public class ToolContextual extends Tool
 		if ( ! (dragInitiated || dragging))
 			return;
 		
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
+		resetCursor();
 		
-		panel.setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
-		
-		Vec2   pos     = cam.getMousePosWorld();
+		Vec2   pos     = getMousePosWorld();
 		double angle   = Geo.angleBetween( selection.getPos(), pos );
 		double snapped = Geo.roundToMultiple( angle, 45 );
 		selection.setAngle( snapped );
-		panel.repaint();
+		repaint();
 	}
 	
 	
@@ -229,14 +234,13 @@ public class ToolContextual extends Tool
 		if ( ! dragging)
 			return;
 		
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
+		markHistoryChange();
 		dragFinishedCommon();
 	}
 	
 	
 	
 	private void dragCancel() {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		boolean wasDragging = dragging;
 		
 		dragFinishedCommon();
@@ -253,8 +257,8 @@ public class ToolContextual extends Tool
 		dragHasLock   = false;
 		dragInitiated = false;
 		dragging      = false;
-		panel.setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
-		panel.repaint();
+		resetCursor();
+		repaint();
 	}
 	
 	
@@ -280,7 +284,7 @@ public class ToolContextual extends Tool
 	
 	private void drawSelectionFeedback( Graphics2D g ) {
 		Bbox2                 bbox  = getSelectBbox();
-		List<EditorComponent> ecoms = world.find( bbox );
+		List<EditorComponent> ecoms = getWorld().find( bbox );
 		
 		for (int i=0; i<ecoms.size(); i++) {
 			Graphic graphic = ecoms.get(i).getGraphic();
@@ -298,7 +302,7 @@ public class ToolContextual extends Tool
 	
 	private void drawSelectionBbox( Graphics2D g ) {
 		Bbox2  bbox       = getSelectBbox();
-		double zoom       = cam.getZoom();
+		double zoom       = getCamera().getZoom();
 		double zoomInv    = 1.0 / zoom;
 		double modulation = Geo.boxStep( bbox.getSmallest(), 4*zoomInv, 32*zoomInv ); 
 		double modScaled  = Geo.lerp( 0.2, 1.0, modulation );
@@ -386,8 +390,7 @@ public class ToolContextual extends Tool
 	
 	
 	private void selectInitiate( boolean modifying ) {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
-		Vec2    pos   = cam.getMousePosWorld();
+		Vec2    pos   = getMousePosWorld();
 		boolean hover = isComponentAt( pos );
 		
 		if (hover)
@@ -395,7 +398,7 @@ public class ToolContextual extends Tool
 		
 		if ( ! hover && ! modifying) {
 			selection.clear();
-			panel.repaint();
+			repaint();
 		}
 		
 		selectHasLock     = true;
@@ -407,8 +410,7 @@ public class ToolContextual extends Tool
 	
 	
 	private void selectMove() {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
-		Vec2 pos = cam.getMousePosWorld();
+		Vec2 pos = getMousePosWorld();
 		
 		if (selectInitiated) {
 			if ( ! selecting) 
@@ -420,7 +422,7 @@ public class ToolContextual extends Tool
 		
 		if (selecting) {
 			selectPosNow = pos;
-			panel.repaint();
+			repaint();
 		}
 	}
 	
@@ -430,7 +432,6 @@ public class ToolContextual extends Tool
 		if ( ! selectHasLock)
 			return;
 		
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		modifySelection( isAdditive, isSubtractive );
 		selectFinishedCommon();
 	}
@@ -444,7 +445,7 @@ public class ToolContextual extends Tool
 		Bbox2 bbox = getSelectBbox();
 		
 		if (bbox.getSmallest() > 0) { // There would be no visual feedback
-			List<EditorComponent> sel = world.find( bbox );
+			List<EditorComponent> sel = getWorld().find( bbox );
 			
 			if (!isAdditive && !isSubtractive) selection.set      ( sel );
 			else if (isAdditive)               selection.addAll   ( sel );
@@ -455,7 +456,6 @@ public class ToolContextual extends Tool
 
 
 	private void selectCancel() {
-		System.out.println( new Object(){}.getClass().getEnclosingMethod().getName() );
 		selectFinishedCommon();
 	}
 	
@@ -465,8 +465,8 @@ public class ToolContextual extends Tool
 		selectHasLock   = false;
 		selectInitiated = false;
 		selecting       = false;
-		panel.setCursor( new Cursor(Cursor.DEFAULT_CURSOR) );
-		panel.repaint();
+		resetCursor();
+		repaint();
 	}
     
     
@@ -475,7 +475,7 @@ public class ToolContextual extends Tool
     	if (selecting)
     		return;
     	
-		EditorComponent ecom = getComponentAt( cam.getMousePosWorld() );
+		EditorComponent ecom = getComponentAt( getMousePosWorld() );
 		
 		if (ecom == null)
 			return;
@@ -492,7 +492,7 @@ public class ToolContextual extends Tool
 			else selection.add   ( ecom );
 		}
 		
-		panel.repaint();
+		repaint();
 	}
 }
 

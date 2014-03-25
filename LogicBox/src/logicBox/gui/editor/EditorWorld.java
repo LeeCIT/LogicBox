@@ -5,13 +5,13 @@ package logicBox.gui.editor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import logicBox.gui.Gfx;
-import logicBox.sim.component.Component;
-import logicBox.sim.component.ComponentActive;
+import logicBox.sim.Simulation;
 import logicBox.util.Bbox2;
 import logicBox.util.BinaryFunctor;
 import logicBox.util.Geo;
@@ -30,12 +30,26 @@ public class EditorWorld implements Serializable
 	
 	private SpatialGrid<EditorComponent> grid;
 	private List       <EditorComponent> ecoms;
+	private Simulation                   sim;
 	
 	
 	
 	public EditorWorld() {
 		grid  = new SpatialGrid<>( 2048, 2048, 128 );
 		ecoms = new ArrayList<>(); 
+		sim   = new Simulation();
+	}
+	
+	
+	
+	public void newCircuit() {
+		System.out.println( "newCircuit" );
+	}
+	
+	
+	
+	public void loadCircuit( File file ) {
+		System.out.println( "loadCircuit: " + file );
 	}
 	
 	
@@ -76,6 +90,18 @@ public class EditorWorld implements Serializable
 	public void onComponentTransform( EditorComponent ecom ) {
 		remove( ecom );
 		add   ( ecom );
+	}
+	
+	
+	
+	/**
+	 * Make all graphics un-highlighted and un-selected.
+	 */
+	public void clearGraphicSelectionAndHighlightStates() {
+		for (EditorComponent ecom: ecoms) {
+			ecom.getGraphic().setHighlighted( false );
+			ecom.getGraphic().setSelected   ( false );
+		}
 	}
 	
 	
@@ -125,9 +151,44 @@ public class EditorWorld implements Serializable
 	
 	
 	
+	public class FindClosestPinResult {
+		public boolean           foundPin;
+		public GraphicPinMapping gpm;
+		public EditorComponent   ecom;
+	}
+	
+	
+	
+	/**
+	 * Find the closest pin/ecom within the given radius.
+	 */
+	public FindClosestPinResult findClosestPin( Vec2 pos, double radius ) {
+		FindClosestPinResult result = new FindClosestPinResult();
+		Bbox2  bbox     = new Bbox2(pos,pos).expand( radius * 2 );
+		double bestDist = Double.MAX_VALUE;
+		
+		for (EditorComponent ecom: find( bbox )) {
+			GraphicPinMapping gpm = ecom.getGraphic().findClosestPin( pos, radius );
+			
+			if (gpm != null) {
+				double dist = gpm.line.distanceToPoint( pos );
+				
+				if (dist <= bestDist) {
+					bestDist = dist;
+					result.foundPin = true;
+					result.gpm      = gpm;
+					result.ecom     = ecom;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	
+	
 	/**
 	 * Get a list of all components.
-	 * @return
 	 */
 	public List<EditorComponent> getComponents() {
 		return ecoms;
@@ -138,9 +199,14 @@ public class EditorWorld implements Serializable
 	/**
 	 * Find the extent of the world occupied by components.
 	 * This is the union of all component bounding boxes.
+	 * If there are no components a default area is used.
 	 */
 	public Bbox2 getWorldExtent() {
-		return getExtent( ecoms );
+		Bbox2 extent = getExtent( ecoms );
+		
+		if (extent == null)
+		     return new Bbox2( 0,0, 1024,768 );
+		else return extent;
 	}
 	
 	
@@ -176,6 +242,12 @@ public class EditorWorld implements Serializable
 				list.add( ecom );
 		
 		return list;
+	}
+	
+	
+	
+	public String toString() {
+		return "EditorWorld with " + ecoms.size() + " components.";
 	}
 	
 	

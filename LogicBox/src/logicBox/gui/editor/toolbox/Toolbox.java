@@ -1,12 +1,14 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.toolbox;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
+import logicBox.gui.editor.EditorCreationCommand;
+import logicBox.gui.editor.EditorPanel;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
 import logicBox.util.Util;
@@ -35,7 +37,7 @@ public class Toolbox extends JDialog
 		setResizable( false );
 		setVisible( true );
 	}
-		
+	
 	
 	
 	private void addButtons() {
@@ -125,7 +127,7 @@ public class Toolbox extends JDialog
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {		
 				EditorPanel ed = butt.getEditorPanelEvaluator().evaluate();
-				ed.initiateComponentCreation( genCommand(com) );
+				ed.getToolManager().initiateComponentCreation( genCommand(com) );
 			}
 		});
 	}

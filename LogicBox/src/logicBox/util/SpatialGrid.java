@@ -2,6 +2,7 @@
 
 
 package logicBox.util;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -11,8 +12,10 @@ import java.util.Set;
  * Divides space into chunks for fast broad-phase searching.
  * @author Lee Coakley
  */
-public class SpatialGrid<T>
+public class SpatialGrid<T> implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	private ArrayList<Cell> core;
 	private int	cellSize;
 	private int cellsPerRow;
@@ -184,7 +187,9 @@ public class SpatialGrid<T>
 	
 	
 	
-	private class Cell extends ArrayList<T> {};
+	private class Cell extends ArrayList<T> {
+		private static final long serialVersionUID = 1L;
+	};
 	
 	
 	

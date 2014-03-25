@@ -1,21 +1,18 @@
-
-package logicBox.gui.menubar;
+package logicBox.gui.editor.menubar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
-
-import javax.swing.Action;
 import javax.swing.JMenuItem;
-
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
-
-import logicBox.gui.CommonActionEvents;
 import logicBox.gui.GUI;
 import logicBox.gui.cloud.*;
 import logicBox.web.*;
 
+
+/**
+ * This is horrible!  bleeaurgh!
+ */
 public class EditorMenuBarEvent 
 {
 	public static void handleLoginEvent(JMenuItem m)
@@ -30,7 +27,6 @@ public class EditorMenuBarEvent
 			}
 		});
 	}
-	
 	
 	
 	

@@ -35,6 +35,12 @@ public class Line2 implements Transformable, Serializable
 	
 	
 	
+	public double distanceToPoint( Vec2 point ) {
+		return Geo.distance( point, closestPoint(point) );
+	}
+	
+	
+	
 	/**
 	 * Find the point on the line which lies closest to the parameter.
 	 */

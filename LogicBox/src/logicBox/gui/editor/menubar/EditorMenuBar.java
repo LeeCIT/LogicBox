@@ -1,23 +1,18 @@
 
 
 
-package logicBox.gui.menubar;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+package logicBox.gui.editor.menubar;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
-import com.sun.org.apache.xerces.internal.xs.ItemPSVI;
-
-import logicBox.gui.CommonActionEvents;
-
 
 
 /**
  * Menu bar with new/save/print etc.
+ * The menu items are public so you can modify them at will.
+ * Do not put event handling code in this class!  Use a controller to maintain modularity.
  * @author Lee Coakley
  */
 public class EditorMenuBar extends JMenuBar
@@ -37,7 +32,7 @@ public class EditorMenuBar extends JMenuBar
 	public JMenuItem itemEditCopy;
 	public JMenuItem itemEditPaste;
 	
-	public JMenu     menuCloud; // Test
+	public JMenu     menuCloud;
 	public JMenuItem itemCloudLogin;
 	public JMenuItem itemCloudLogout;
 	public JMenuItem itemCloudFiles;
@@ -46,19 +41,14 @@ public class EditorMenuBar extends JMenuBar
 	public JMenuItem itemHelpHelp;
 	public JMenuItem itemHelpAbout;
 	
-	private static EditorMenuBar instance = null;
+	
 	
 	public EditorMenuBar() {
 		super();
 		setupComponents();
-		setUpActions();
-		instance = this;
 	}
 	
-	public static EditorMenuBar getInstance()
-	{
-		return instance;
-	}
+	
 	
 	private void setupComponents() {
 		setupFileMenu();
@@ -99,9 +89,6 @@ public class EditorMenuBar extends JMenuBar
 		itemCloudLogin  = add( m, "Login" );
 		itemCloudFiles 	= add( m, "My Circuits");
 		itemCloudLogout = add( m, "Logout" );
-		
-		setAuthState(false);
-		
 		add( m );
 	}
 	
@@ -132,39 +119,6 @@ public class EditorMenuBar extends JMenuBar
 			menu.addSeparator();
 		
 		return item;
-	}
-	
-	
-	/**
-	 * Set authentication state
-	 * @param status
-	 */
-	public void setAuthState(Boolean status) {
-		itemCloudLogout.setVisible(status);
-		itemCloudLogin.setVisible(!status);
-		itemCloudFiles.setVisible(status);
-	}
-	
-	
-	
-	/**
-	 * Actions for the menubar are here
-	 */
-	private void setUpActions() {
-		EditorMenuBarEvent.handleLoginEvent(itemCloudLogin);
-		EditorMenuBarEvent.handleLogoutEvent(itemCloudLogout);
-		
-		itemFileOpen.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CommonActionEvents.openFileAction();  //TODO do something with the file got back
-			}
-		});
-		
-		itemFilePrint.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				CommonActionEvents.printAction();
-			}
-		});
 	}
 }
 

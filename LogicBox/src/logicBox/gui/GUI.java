@@ -3,13 +3,16 @@
 
 package logicBox.gui;
 
+import java.awt.Component;
+import java.awt.Dimension;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import logicBox.gui.editor.EditorFrame;
-import logicBox.gui.editor.EditorPanel;
-import logicBox.gui.editor.Toolbox;
-import logicBox.gui.menubar.EditorMenuBar;
+import logicBox.gui.editor.menubar.EditorMenuController;
+import logicBox.gui.editor.toolbar.EditorToolbarController;
+import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.snapping.ComponentSnapper;
 
 
@@ -20,7 +23,8 @@ import logicBox.gui.snapping.ComponentSnapper;
  */
 public abstract class GUI
 {
-	private static EditorFrame mainFrame;
+	private static EditorFrame editorFrame;
+	private static Toolbox     toolbox;
 	
 	
 	
@@ -33,7 +37,7 @@ public abstract class GUI
 			UIManager.setLookAndFeel( UIManager.getSystemLookAndFeelClassName() );
 		}
 		catch (Exception ex) {
-			System.out.println( ex );
+			ex.printStackTrace();
 		}	
 	}
 	
@@ -45,7 +49,7 @@ public abstract class GUI
 	public static void create() {
 		SwingUtilities.invokeLater( new Runnable() {
 			public void run() {
-				constructGUI();
+				constructMainFrame();
 			}
 		});
 	}
@@ -54,28 +58,96 @@ public abstract class GUI
 	
 	/**
 	 * Get the current instance of the main frame.  If this frame closes the program exits.
+	 * There can only be one main frame, but there can be more than one actual frame. (black boxes etc).
 	 */
 	public static EditorFrame getMainFrame() {
-		return mainFrame;
+		return editorFrame;
 	}
 	
 	
 	
-	private static void constructGUI() {
-		EditorPanel   panel =             new EditorPanel();
-		EditorFrame   frame = mainFrame = new EditorFrame( panel );
-		EditorMenuBar menu  =             new EditorMenuBar();
-		Toolbox       box   =             new Toolbox( frame );
+	/**
+	 * Get the toolbox instance.  There can only be one.
+	 */
+	public static Toolbox getToolbox() {
+		return toolbox;
+	}
+	
+	
+	
+	/**
+	 * Modally ask a question, with three possible answers.
+	 */
+	public static DialogueAnswer askYesNoCancel( Component parent, String title, String question ) {
+		int answer = JOptionPane.showConfirmDialog( parent, question, title, JOptionPane.YES_NO_CANCEL_OPTION );
 		
-		box.addComponentListener( new ComponentSnapper(frame) );
+		switch (answer) {
+			case JOptionPane.YES_OPTION: return DialogueAnswer.YES;
+			case JOptionPane.NO_OPTION:  return DialogueAnswer.NO;
+			default:					 return DialogueAnswer.CANCEL;
+		}
+	}
+	
+	
+	
+	/**
+	 * Modally confirm an action.
+	 */
+	public static boolean askConfirm( Component parent, String title, String question ) {
+		int answer = JOptionPane.showConfirmDialog( parent, question, title, JOptionPane.YES_NO_OPTION );
 		
-		frame.setJMenuBar( menu );
-		box.setActiveEditorPanel( panel );
+		switch (answer) {
+			case JOptionPane.YES_OPTION: return true;
+			default:					 return false;
+		}
+	}
+	
+	
+	
+	/**
+	 * Show a modal message dialogue.
+	 */
+	public static void showMessage( Component parent, String title, String message ) {
+		JOptionPane.showMessageDialog( parent, message, title, JOptionPane.INFORMATION_MESSAGE );
+	}
+	
+	
+	
+	/**
+	 * Show a modal warning dialogue.
+	 */
+	public static void showWarning( Component parent, String title, String message ) {
+		JOptionPane.showMessageDialog( parent, message, title, JOptionPane.WARNING_MESSAGE );
+	}
+	
 		
-		frame.pack();
-		frame.setSize( 720, 640 );
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		frame.setVisible( true );
+	
+	/**
+	 * Show a modal error dialogue.
+	 */
+	public static void showError( Component parent, String title, String message ) {
+		JOptionPane.showMessageDialog( parent, message, title, JOptionPane.ERROR_MESSAGE );
+	}
+	
+	
+	
+	private static void constructMainFrame() {
+		editorFrame = new EditorFrame();
+		toolbox     = new Toolbox( editorFrame );
+		
+		toolbox.addComponentListener( new ComponentSnapper(editorFrame) );
+		toolbox.setActiveEditorPanel( editorFrame.getEditorPanel() );
+		
+		new EditorMenuController   ( editorFrame.getEditorMenuBar(), editorFrame );
+		new EditorToolbarController( editorFrame.getEditorToolbar(), editorFrame );
+		
+		editorFrame.pack();
+		editorFrame.setSize       ( new Dimension(720, 640) );
+		editorFrame.setMinimumSize( new Dimension(640, 480) );
+		editorFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		editorFrame.setVisible( true );
+		
+		editorFrame.getEditorPanel().addDebugAndDemoStuff();
 	}
 }
 

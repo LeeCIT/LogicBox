@@ -81,8 +81,21 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	
 	
+	public Selection cut() {
+		// TODO
+		return null;
+	}
+	
+	
+	
 	public Selection copy() { // TODO it ain't quite this simple...
 		return Util.deepCopy( this );
+	}
+	
+	
+	
+	public void delete() {
+		// TODO
 	}
 	
 	
