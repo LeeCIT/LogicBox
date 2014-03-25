@@ -159,10 +159,15 @@ public class ToolContextual extends Tool
 	
 	
 	private void dragInitiate() {
-		Vec2 pos = getMousePosWorld();
+		Vec2            pos            = getMousePosWorld();
+		EditorComponent ecom           = getComponentAt( pos );
+		boolean         componentAtPos = ecom != null;
 		
-		if (selectHasLock || ! isComponentAt(pos)) // Select will take control
+		if (selectHasLock || ! componentAtPos) // Select will take control
 			return;
+		
+		if ( ! selection.contains( ecom ))
+			selection.clear();
 		
 		dragInitiated   = true;
 		dragInitiatedAt = pos;
