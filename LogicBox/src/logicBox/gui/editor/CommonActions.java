@@ -10,7 +10,7 @@ import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import logicBox.fileManager.FileOpen;
-import logicBox.gui.printing.EditorPrinter;
+import logicBox.gui.edtior.printing.EditorPrinter;
 
 
 

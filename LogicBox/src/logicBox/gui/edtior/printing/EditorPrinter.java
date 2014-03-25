@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.printing;
+package logicBox.gui.edtior.printing;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
