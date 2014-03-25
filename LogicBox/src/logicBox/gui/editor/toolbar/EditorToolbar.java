@@ -5,6 +5,7 @@ package logicBox.gui.editor.toolbar;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JToolBar;
+import logicBox.gui.IconLoader;
 import logicBox.gui.editor.toolbar.EditorToolBarButton;
 import net.miginfocom.swing.MigLayout;
 
@@ -70,19 +71,13 @@ public class EditorToolbar extends JToolBar
 	
 	
 	private EditorToolBarButton addButton( String icoName, String tooltip, boolean sepBefore ) {
-		Icon                icon  = loadIconFromResource( icoName );		
+		Icon                icon  = IconLoader.load( icoName );		
 		EditorToolBarButton butt  = new EditorToolBarButton( icon, tooltip );
 		String              param = (sepBefore) ? "gap 12px" : "";
 		
 		add( butt, param );
 		
 		return butt;
-	}
-	
-	
-	
-	private Icon loadIconFromResource( String name ) {
-		return new ImageIcon( getClass().getClassLoader().getResource("resources/icons/" + name) );
 	}
 }
 
