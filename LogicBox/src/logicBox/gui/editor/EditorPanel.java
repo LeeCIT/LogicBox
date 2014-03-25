@@ -114,6 +114,7 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	
 	public void setStateFromHistory( EditorWorld world ) {
 		this.world = world;
+		this.world.clearGraphicSelectionAndHighlightStates();
 		repaint();
 	}
 	
