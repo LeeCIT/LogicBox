@@ -141,7 +141,7 @@ public abstract class GUI
 		new EditorMenuController   ( editorFrame.getEditorMenuBar(), editorFrame );
 		new EditorToolbarController( editorFrame.getEditorToolbar(), editorFrame );
 		
-		new KeybooardShortcuts(editorFrame.getEditorPanel());
+		new KeyboardShortcuts(editorFrame.getEditorPanel());
 		
 		editorFrame.pack();
 		editorFrame.setSize       ( new Dimension(720, 640) );
