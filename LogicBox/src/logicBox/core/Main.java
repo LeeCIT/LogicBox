@@ -12,7 +12,7 @@ import logicBox.gui.GUI;
  * @author Lee Coakley
  * @author John Murphy
  */
-public class Main 
+public abstract class Main
 {
 	public static void main(String[] args) {
 		GUI.setNativeStyle();

@@ -24,10 +24,16 @@ public class EditorComponent implements Serializable, Drawable
 	
 	
 	
-	public EditorComponent( Component com, GraphicComActive gca, Vec2 pos ) {
+	public EditorComponent( Component com, GraphicComActive gca, Vec2 pos, double angle ) {
 		this.com     = com;
 		this.graphic = gca;
-		setPos( pos );
+		setPosAngle( pos, angle );
+	}
+	
+	
+	
+	public EditorComponent( Component com, GraphicComActive gca, Vec2 pos ) {
+		this( com, gca, pos, gca.getAngle() );
 	}
 	
 	
@@ -55,6 +61,13 @@ public class EditorComponent implements Serializable, Drawable
 		graphic.transformTo( getPos(), angle );
 		signalTransformChange();
 	}
+	
+	
+	
+	public void setPosAngle( Vec2 pos, double angle ) {
+		graphic.transformTo( pos, angle );
+		signalTransformChange();
+	}	
 	
 	
 	

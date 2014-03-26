@@ -1,13 +1,15 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.toolbox;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JButton;
 import logicBox.gui.Gfx;
 import logicBox.gui.contextMenu.ContextMenu;
+import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.GraphicComActive;
 import logicBox.util.Bbox2;
 import logicBox.util.Evaluator;
 import logicBox.util.Geo;

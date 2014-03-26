@@ -2,9 +2,13 @@
 
 
 package logicBox.gui;
+import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import logicBox.util.Transformable;
 import logicBox.util.Vec2;
@@ -13,61 +17,109 @@ import logicBox.util.Vec2;
 
 /**
  * Path2D which accepts Vec2 parameters.
- * TODO this can't be serialised because there's a private constructor in the hierarchy somewhere.
  * @author Lee Coakley
  */
-public class VecPath extends Path2D.Double implements Serializable, Transformable
+public class VecPath implements Serializable, Transformable, Shape
 {
 	private static final long serialVersionUID = 1L;
+	
+	private Path2D.Double path;
 	
 	
 	
 	public VecPath() {
-		super();
+		path = new Path2D.Double();
 	}
-	
-	
-	
-	public VecPath( int rule, int initialCapacity ) {
-		super( rule, initialCapacity );
-	}
-	
-	
-	
-	public VecPath( int rule ) {
-		super( rule );
-	}
-	
-	
-	
-	public VecPath( Shape s, AffineTransform at ) {
-		super( s, at );
-	}
-	
-	
-	
-	public VecPath( Shape s ) {
-		super( s );
-	}		
 	
 	
 	
 	public void moveTo( Vec2 v ) {
-		super.moveTo( v.x, v.y );
+		path.moveTo( v.x, v.y );
 	}
 	
 	
 	
 	public void lineTo( Vec2 v ) {
-		super.lineTo( v.x, v.y );
+		path.lineTo( v.x, v.y );
 	}
 	
 	
 	
 	public void curveTo( Vec2 c1, Vec2 c2, Vec2 end ) {
-		super.curveTo( c1.x, c1.y, c2.x, c2.y, end.x, end.y );
+		path.curveTo( c1.x, c1.y, c2.x, c2.y, end.x, end.y );
 	}
-}
+	
+	
+	
+	public void closePath() {
+		path.closePath();
+	}
+	
+	
+	
+	public void transform( AffineTransform matrix ) {
+		path.transform( matrix );
+	}
+	
+	
+	
+	public Rectangle getBounds() {
+		return path.getBounds();
+	}
+	
+	
+	
+	public Rectangle2D getBounds2D() {
+		return path.getBounds2D();
+	}
+	
+	
+	
+	public boolean contains( double x, double y ) {
+		return path.contains( x, y );
+	}
+	
+	
+	
+	public boolean contains( Point2D p ) {
+		return path.contains( p );
+	}
+	
+	
+	
+	public boolean intersects( double x, double y, double w, double h ) {
+		return path.intersects( x, y, w, h );
+	}
+	
+	
+	
+	public boolean intersects( Rectangle2D r ) {
+		return path.intersects( r );
+	}
+	
+	
+	
+	public boolean contains( double x, double y, double w, double h ) {
+		return path.contains( x, y, w, h );
+	}
+	
+	
+	
+	public boolean contains( Rectangle2D r ) {
+		return path.contains( r );
+	}
+	
+	
+	
+	public PathIterator getPathIterator( AffineTransform at ) {
+		return path.getPathIterator( at );
+	}
+	
+	
+	
+	public PathIterator getPathIterator( AffineTransform at, double flatness ) {
+		return path.getPathIterator( at, flatness );
+	}}
 
 
 

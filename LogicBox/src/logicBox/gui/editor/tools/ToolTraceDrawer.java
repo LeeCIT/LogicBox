@@ -12,14 +12,14 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
-import javax.swing.SwingUtilities;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
-import logicBox.gui.editor.Camera;
-import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorStyle;
 import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.GraphicPinMapping;
 import logicBox.gui.editor.RepaintListener;
 import logicBox.util.Geo;
 import logicBox.util.Line2;
@@ -43,14 +43,18 @@ public class ToolTraceDrawer extends Tool
 	private MouseAdapter    mouseListener;
 	private RepaintListener repaintListener;
 	
+	private EditorWorld.FindClosestPinResult traceSrc;
+	private EditorWorld.FindClosestPinResult traceDest;
 	
 	
-	public ToolTraceDrawer( EditorPanel panel, EditorWorld world, Camera cam, ToolManager manager ) {
-		super( panel, world, cam, manager );
+	
+	public ToolTraceDrawer( ToolManager manager ) {
+		super( manager );
 		this.keyListener     = createKeyListener();
 		this.mouseListener   = createMouseListener();
 		this.repaintListener = createRepaintListener();
 		this.tracePoints     = new Stack<>();
+		this.tracePosNext    = new Vec2();
 	}
 	
 	
@@ -59,10 +63,10 @@ public class ToolTraceDrawer extends Tool
 		if (isAttached())
 			return;
 		
-		panel.addKeyListener( keyListener );
-		panel.addMouseListener      ( mouseListener );
-		panel.addMouseMotionListener( mouseListener );
-		panel.addRepaintListener( repaintListener );
+		getEditorPanel().addKeyListener( keyListener );
+		getEditorPanel().addMouseListener      ( mouseListener );
+		getEditorPanel().addMouseMotionListener( mouseListener );
+		getEditorPanel().addRepaintListener( repaintListener );
 		setAttached( true );
 	}
 	
@@ -72,11 +76,22 @@ public class ToolTraceDrawer extends Tool
 		if ( ! isAttached())
 			return;
 		
-		panel.removeKeyListener( keyListener );
-		panel.removeMouseListener      ( mouseListener );
-		panel.removeMouseMotionListener( mouseListener );
-		panel.removeRepaintListener( repaintListener );
+		getEditorPanel().removeKeyListener( keyListener );
+		getEditorPanel().removeMouseListener      ( mouseListener );
+		getEditorPanel().removeMouseMotionListener( mouseListener );
+		getEditorPanel().removeRepaintListener( repaintListener );
 		setAttached( false );
+	}
+	
+	
+	
+	public void reset() {
+		traceInitiated      = false;
+		traceChoosingOrigin = false;
+		traceArmed          = false;
+		traceSrc            = null;
+		traceDest           = null;
+		tracePoints.clear();
 	}
 	
 	
@@ -104,16 +119,18 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private void drawFeedback( Graphics2D g ) {
-		if (traceChoosingOrigin)
-			Gfx.drawCircle( g, tracePosNext, 5, EditorStyle.colHighlightStroke, true );
+		drawPinHighlights( g );
+		
+		if (traceChoosingOrigin || ! traceInitiated)
+			Gfx.drawCircle( g, tracePosNext, 7, getCol(traceChoosingOrigin), true );
 		
 		if ( (!traceInitiated) || tracePoints.isEmpty())
 			return;
 		
-		Gfx.drawCircle( g, tracePosNext, 5, EditorStyle.colTraceOff, true );
+		Gfx.drawCircle( g, tracePosNext, 5, getCol(traceArmed), true );
 		
 		Gfx.pushStrokeAndSet( g, EditorStyle.strokeTrace );
-			Gfx.pushColorAndSet ( g, EditorStyle.colTraceOff );
+			Gfx.pushColorAndSet( g, EditorStyle.colTraceOff );
 				drawExistingLines( g );
 				drawNextLine( g );
 			Gfx.popColor ( g );
@@ -122,32 +139,44 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
+	private void drawPinHighlights( Graphics2D g ) {
+		SnapInfo snapInfo  = getSnapInfo( getMousePosWorld() );
+		double   thickness = EditorStyle.compThickness + 2;
+		
+		Gfx.pushColorAndSet( g, EditorStyle.colHighlightStroke );
+			if (snapInfo.snapped)
+				Gfx.drawThickRoundedLine( g, snapInfo.pinInfo.gpm.line, thickness );
+			
+			if (traceSrc != null)
+				Gfx.drawThickRoundedLine( g, traceSrc.gpm.line, thickness );
+			
+			if (traceDest != null)
+				Gfx.drawThickRoundedLine( g, traceDest.gpm.line, thickness );
+		Gfx.popColor( g );
+	}
+
+
+
+	private Color getCol( boolean armed ) {
+		return (armed) ? EditorStyle.colHighlightStroke : EditorStyle.colTraceOff;
+	}
+	
+	
+	
 	private void drawNextLine( Graphics2D g ) {
 		Gfx.pushStrokeAndSet( g, EditorStyle.strokeTracePlace );
-			if (traceArmed)
-				 Gfx.pushColorAndSet( g, EditorStyle.colHighlightStroke );
-			else Gfx.pushColorAndSet( g, EditorStyle.colTraceOff );
+			Gfx.pushColorAndSet( g, EditorStyle.colHighlightStroke );
 			
-				Line2 ref = new Line2( tracePoints.peek(), tracePosNext );
-				Line2.IntersectResult ir = null;
-			
-				for (int i=0; i<tracePoints.size()-1; i++) {
-					Line2 com = new Line2( tracePoints.get(i), tracePoints.get(i+1) );
-					Line2.IntersectResult emir = ref.intersect( com );
-					
-					if (emir.intersects)
-					if (Geo.distance( tracePoints.peek(), emir.pos) > 1.0/16.0 )
-						ir = emir;
-				}
+				List<Vec2> points = breakLineToFitSnap( tracePoints.peek(), tracePosNext );
 				
-				if (ir != null && ir.intersects) {
-					drawOverlappedTrace( g, ref.a, ir.pos, ref.b );
-				} else {
-					VecPath polyLineVis = new VecPath();
-					polyLineVis.moveTo( tracePoints.peek() );
-					polyLineVis.lineTo( tracePosNext       );
-					g.draw( polyLineVis );
-				}
+				VecPath polyLineVis = new VecPath();
+				polyLineVis.moveTo( points.get(0) );
+				
+				for (int i=1; i<points.size(); i++)
+					polyLineVis.lineTo( points.get(i) );
+				
+				g.draw( polyLineVis );
+			
 			Gfx.popColor ( g );
 		Gfx.popStroke( g );
 	}
@@ -155,6 +184,9 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private void drawExistingLines( Graphics2D g ) {
+		if (traceSrc != null)
+			drawConnection( g, tracePoints.get(0) );
+		
 		VecPath polyLine = new VecPath();
 		polyLine.moveTo( tracePoints.get(0) );
 		
@@ -173,7 +205,6 @@ public class ToolTraceDrawer extends Tool
 		Vec2   a2i    = Geo.lenDir(radius,angleA).add( intersect );
 		Vec2   b2i    = Geo.lenDir(radius,angleB).add( intersect );
 		
-		Paint lastPaint = g.getPaint();
 		Color   shade = Geo.lerp( g.getColor(), new Color(0,255,0), 0.5 );
 		float[] fracs = { 0.0f, 0.5f, 1.0f };
 		Color[] cols  = { EditorStyle.colTraceOff, shade, EditorStyle.colTraceOff };
@@ -187,11 +218,25 @@ public class ToolTraceDrawer extends Tool
 		
 		g.draw( poly );
 		
-		g.setPaint( shadePaint );
-		Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
-		Gfx.drawArc( g, intersect, radius, angleA, angleB );
+		Gfx.pushPaintAndSet( g, shadePaint );
+			Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
+				Gfx.drawArc( g, intersect, radius, angleA, angleB );
+			Gfx.popStroke( g );
+		Gfx.popPaint( g );
+	}
+	
+	
+	
+	private void drawConnection( Graphics2D g, Vec2 pos ) {
+		double radius = 3;
+		
+		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBubble );
+			Gfx.pushAntialiasingStateAndSet( g, false );
+				Gfx.drawCircle( g, pos, radius, EditorStyle.colBackground, true );
+			Gfx.popAntialiasingState( g );
+			
+			Gfx.drawCircle( g, pos, radius, EditorStyle.colTraceOff, false );
 		Gfx.popStroke( g );
-		g.setPaint( lastPaint );
 	}
 	
 	
@@ -199,7 +244,7 @@ public class ToolTraceDrawer extends Tool
 	private MouseAdapter createMouseListener() {
 		return new MouseAdapter() {
 			public void mousePressed( MouseEvent ev ) {
-				if (SwingUtilities.isLeftMouseButton( ev ))
+				if (isLeft( ev ))
 					if ( ! traceInitiated)
 						 traceStartChoosingOrigin();
 					else traceArm();
@@ -207,12 +252,12 @@ public class ToolTraceDrawer extends Tool
 			
 			
 			public void mouseReleased( MouseEvent ev ) {
-				if (SwingUtilities.isLeftMouseButton( ev ))
+				if (isLeft( ev ))
 					if ( ! traceInitiated) 
 						 traceStart();
 					else traceAdd  ();
 				
-				if (SwingUtilities.isRightMouseButton( ev ))
+				if (isRight( ev ))
 					if (traceInitiated)
 						traceCancel();
 			}
@@ -231,10 +276,10 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
-	private void traceStartChoosingOrigin() {
+	public void traceStartChoosingOrigin() {
 		traceChoosingOrigin = true;
-		tracePosNext        = getSnappedMousePos();
-		panel.repaint();
+		tracePosNext        = getNextPos();
+		repaint();
 	}
 	
 	
@@ -242,25 +287,71 @@ public class ToolTraceDrawer extends Tool
 	private void traceArm() {
 		traceArmed          = true;
 		traceChoosingOrigin = ! traceInitiated;
-		panel.repaint();
+		repaint();
 	}
 	
 	
 	
 	private void traceStart() {
+		traceAdd();
 		traceInitiated      = true;
 		traceChoosingOrigin = false;
-		tracePosNext        = getSnappedMousePos();
-		tracePoints.push( tracePosNext );
-		panel.repaint();
 	}
 	
 	
 	
 	private void traceAdd() {
 		traceArmed = false;
-		tracePoints.push( getSnappedMousePos() );
-		panel.repaint();
+		
+		Vec2    nextPos   = getMousePosWorld();
+		boolean completed = doTraceToPinSnapping( nextPos );
+		
+		tracePoints.push( nextPos );
+		
+		if (completed)
+			traceComplete();
+		
+		repaint();
+	}
+	
+	
+	
+	/**
+	 * Apply snap to Vec2 and update the source/dest info.  If true is returned the trace is completed.
+	 * @return Whether the trace is now completed.
+	 */
+	private boolean doTraceToPinSnapping( Vec2 nextPos ) {
+		SnapInfo snapInfo  = getSnapInfo( nextPos );
+		boolean  completed = false;
+		
+		if (snapInfo.snapped) {
+			boolean dupe = isGpmUsed( snapInfo.pinInfo.gpm );
+			
+			if ( ! dupe) {
+				nextPos.setLocation( snapInfo.pos );
+				
+				boolean hasPoints = ! tracePoints.isEmpty(); 
+				boolean isSource  = (traceChoosingOrigin && traceSrc == null);
+				boolean isDest    = (hasPoints);
+				
+				if (isSource) {
+					traceSrc = snapInfo.pinInfo;
+				} 
+				else if (isDest) {
+					traceDest = snapInfo.pinInfo;
+					completed = true;
+				}
+			}
+		}
+		
+		return completed;
+	}
+	
+	
+	
+	private boolean isGpmUsed( GraphicPinMapping gpm ) {
+		return (traceSrc  != null  &&  traceSrc .gpm == gpm)
+			|| (traceDest != null  &&  traceDest.gpm == gpm);
 	}
 	
 	
@@ -268,34 +359,75 @@ public class ToolTraceDrawer extends Tool
 	private void traceUndo() {
 		if ( ! tracePoints.isEmpty()) {
 			 tracePoints.pop();
-			 panel.repaint();
+			 repaint();
 		}
 	}
 	
 	
 	
+	private void traceMove() {
+		tracePosNext = getNextPos();
+		repaint();
+	}
+	
+	
+	
+	private void traceComplete() {
+		System.out.println( "Trace completed" );
+		traceFinishCommon();
+	}
+	
+	
+	
 	private void traceCancel() {
+		traceFinishCommon();
+	}
+	
+	
+	
+	private void traceFinishCommon() {
 		traceInitiated      = false;
 		traceChoosingOrigin = false;
+		traceSrc            = null;
+		traceDest           = null;
 		tracePoints.clear();
-		panel.repaint();
+		repaint();
 	}
 	
 	
 	
-	private void traceMove() {
-		tracePosNext = getSnappedMousePos();
-		panel.repaint();
-	}
-	
-	
-	
-	private Vec2 getSnappedMousePos() {
-		Vec2 pos = cam.getMousePosWorld();
+	private Vec2 getNextPos() {
+		Vec2     pos      = getMousePosWorld();
+		SnapInfo snapInfo = getSnapInfo( pos );
+		boolean  useSnap  = snapInfo.snapped && ! isGpmUsed(snapInfo.pinInfo.gpm);
 		
-		if (traceInitiated && ! tracePoints.isEmpty())
-			 return snap( tracePoints.peek(), pos );
+		if (useSnap)
+			 return snapInfo.pos;
 		else return pos;
+	}
+	
+	
+	
+	private class SnapInfo {
+		public boolean snapped;
+		public Vec2    pos;
+		public EditorWorld.FindClosestPinResult pinInfo;
+	}
+	
+	
+	
+	private SnapInfo getSnapInfo( Vec2 pos ) {
+		double   snapThresh = 8 / getCamera().getZoom();
+		SnapInfo snapInfo   = new SnapInfo();
+		EditorWorld.FindClosestPinResult fcpRes = getWorld().findClosestPin( pos, snapThresh );
+		
+		if (fcpRes.foundPin) {
+			snapInfo.snapped = true;
+			snapInfo.pos     = fcpRes.gpm.getPinPosEnd();
+			snapInfo.pinInfo = fcpRes;
+		}
+		
+		return snapInfo;
 	}
 	
 	
@@ -307,6 +439,48 @@ public class ToolTraceDrawer extends Tool
 		angle = Geo.roundToMultiple( angle, 45 );
 		
 		return from.add( Geo.lenDir(dist, angle) );
+	}
+	
+	
+	
+	private List<Vec2> breakLineToFitSnap( Vec2 from, Vec2 to ) {
+		List<Vec2> list = new ArrayList<>();
+		
+		Vec2  snapped     = snap( from, to );
+		Line2 lineSnapped = new Line2( from, snapped );
+		Line2.IntersectResult ir = findBestBreakIntersect( lineSnapped, to );
+		
+		list.add( from );
+		
+		if (ir != null)
+			list.add( ir.pos );
+		
+		list.add( to );
+		
+		return list;
+	}
+	
+	
+	
+	private Line2.IntersectResult findBestBreakIntersect( Line2 line, Vec2 radiant ) {
+		Line2.IntersectResult bestIr = null;
+		double bestDist = Double.MAX_VALUE; // Shorter is better
+		
+		for (double dir=0; dir<=360; dir+=45) {
+			Line2 intersector = new Line2( radiant, radiant.addPolar(65536, dir) );
+			Line2.IntersectResult ir = intersector.intersect( line );
+			
+			if (ir.intersects) {
+				double dist = Geo.distance( ir.pos, line.a );
+				
+				if (dist < bestDist) {
+					bestIr   = ir;
+					bestDist = dist;
+				}
+			}
+		}
+		
+		return bestIr;
 	}
 }
 
