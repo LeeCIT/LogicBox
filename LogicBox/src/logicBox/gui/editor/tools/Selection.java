@@ -23,6 +23,7 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	private static final long serialVersionUID = 1L;
 	
 	public Set<EditorComponent> ecoms;
+	public Vec2   pivot;
 	public double angle;
 	
 	
@@ -36,6 +37,12 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	public Vec2 getCentre() {
 		return EditorWorld.getExtent( ecoms ).getCentre();
+	}
+	
+	
+	
+	public void setPivot() {
+		pivot = getCentre();
 	}
 	
 	
@@ -54,7 +61,7 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 		Vec2 delta  = Geo.delta( pos, centre );
 		
 		for (EditorComponent ecom: ecoms) {
-			Vec2 newPos = ecom.getPos().subtract(delta);
+			Vec2 newPos = ecom.getPos().subtract( delta );
 			Vec2 snap   = Geo.snapNear( newPos, 16 );
 			ecom.setPos( snap );
 		}
@@ -73,8 +80,10 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	 * This moves and rotates the ecoms around the centre.
 	 */
 	public void setAngle( double angleTo ) {
-		if (size() == 1)
+		if (size() == 1) {
 			iterator().next().setAngle( angleTo );
+			return;
+		}
 		
 		System.out.println( "setAngle not implemented for multiple selects" );
 	}
