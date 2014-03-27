@@ -3,9 +3,12 @@
 
 package logicBox.gui.editor.menubar;
 
+import java.awt.Insets;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import logicBox.gui.IconEnum;
+import logicBox.gui.IconLoader;
 
 
 
@@ -61,11 +64,11 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupFileMenu() {
 		JMenu m = menuFile = new JMenu( "File" );
-		itemFileNew    = add( m, "New"       , 'N', false );
-		itemFileOpen   = add( m, "Open"      , 'O', false );
-		itemFileSave   = add( m, "Save"      , 'S', false );
-		itemFileSaveAs = add( m, "Save as...", 'A', true  );
-		itemFilePrint  = add( m, "Print..."  , 'P', true  );
+		itemFileNew    = add( m, "New"       , 'N', false, IconEnum.newFile  );
+		itemFileOpen   = add( m, "Open"      , 'O', false, IconEnum.openFile );
+		itemFileSave   = add( m, "Save"      , 'S', false, IconEnum.saveFile );
+		itemFileSaveAs = add( m, "Save as...", 'A', true , IconEnum.saveFile );
+		itemFilePrint  = add( m, "Print..."  , 'P', true , IconEnum.print    );
 		itemFileExit   = add( m, "Exit"      , 'X', false );
 		add( m );
 	}
@@ -74,11 +77,11 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupEditMenu() {
 		JMenu m = menuEdit = new JMenu( "Edit" );
-		itemEditUndo  = add( m, "Undo" , 'U', false );
-		itemEditRedo  = add( m, "Redo" , 'R', true  );
-		itemEditCut   = add( m, "Cut"  , 'T', false );
-		itemEditCopy  = add( m, "Copy" , 'C', false );
-		itemEditPaste = add( m, "Paste", 'P', false );
+		itemEditUndo  = add( m, "Undo" , 'U', false, IconEnum.undo  );
+		itemEditRedo  = add( m, "Redo" , 'R', true , IconEnum.redo  );
+		itemEditCut   = add( m, "Cut"  , 'T', false, IconEnum.cut   );
+		itemEditCopy  = add( m, "Copy" , 'C', false, IconEnum.copy  );
+		itemEditPaste = add( m, "Paste", 'P', false, IconEnum.paste );
 		add( m );
 	}
 	
@@ -86,9 +89,9 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupCloudMenu() {
 		JMenu m = menuCloud = new JMenu( "Cloud" );
-		itemCloudLogin  = add( m, "Login" );
-		itemCloudFiles 	= add( m, "My Circuits");
-		itemCloudLogout = add( m, "Logout" );
+		itemCloudLogin  = add( m, "Login"       );
+		itemCloudFiles 	= add( m, "My Circuits" );
+		itemCloudLogout = add( m, "Logout"      );
 		add( m );
 	}
 	
@@ -96,7 +99,7 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupHelpMenu() {
 		JMenu m = menuHelp = new JMenu( "Help" );
-		itemHelpHelp  = add( m, "Help..." , 'H', true  );
+		itemHelpHelp  = add( m, "Help..." , 'H', true, IconEnum.help );
 		itemHelpAbout = add( m, "About...", 'A', false );
 		add( m );
 	}
@@ -104,19 +107,24 @@ public class EditorMenuBar extends JMenuBar
 	
 	
 	private JMenuItem add( JMenu menu, String name ) {
-		JMenuItem item = new JMenuItem( name );
-		menu.add( item );
-		return item;
+		return add( menu, name, (char) 0, false );
+	}
+	
+	
+	private JMenuItem add( JMenu menu, String name, char mnemonic, boolean sep ) {
+		return add( menu, name, mnemonic, sep, null );
 	}
 	
 	
 	
-	private JMenuItem add( JMenu menu, String name, char mnemonic, boolean sep ) {
-		JMenuItem item = add( menu, name );
-		item.setMnemonic( mnemonic );
+	private JMenuItem add( JMenu menu, String name, char mnemonic, boolean sep, IconEnum icon ) {
+		JMenuItem item = new JMenuItem( name );
 		
-		if (sep)
-			menu.addSeparator();
+		menu.add( item );
+		
+		if (mnemonic != 0) item.setMnemonic( mnemonic );
+		if (icon != null)  item.setIcon( IconLoader.load(icon) );
+		if (sep)           menu.addSeparator();
 		
 		return item;
 	}

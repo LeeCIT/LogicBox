@@ -47,7 +47,7 @@ public class EditorMenuBarEvent
 							Dialog.showError(GUI.getMainFrame(), "Couldn't complete request!", "Request Failure");
 						else
 						{
-							EditorMenuBar.getInstance().setAuthState(false);
+							//EditorMenuBar.getInstance().setAuthState(false);
 							
 							Dialog.showInfo(GUI.getMainFrame(), "Successfully logged out!", "Logout success");
 						}

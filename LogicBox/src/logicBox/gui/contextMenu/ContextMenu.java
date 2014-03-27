@@ -4,8 +4,8 @@
 package logicBox.gui.contextMenu;
 
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
+
 
 
 /**
@@ -14,11 +14,7 @@ import javax.swing.*;
  */
 public class ContextMenu extends MouseAdapter
 {
-	public ContextMenu() {}
-	
-	
-	
-	public ContextMenu(List<ContextMenuItem> items) {
+	public ContextMenu( ContextMenuItem...items ) {
 		JPopupMenu menu = new JPopupMenu();
 		
 		for (ContextMenuItem item: items)
