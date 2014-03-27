@@ -8,8 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import javax.swing.JPanel;
 import logicBox.gui.Gfx;
 import logicBox.gui.editor.tools.ToolManager;
@@ -26,6 +25,7 @@ import logicBox.sim.component.Mux;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
 import logicBox.util.Geo;
+import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
@@ -41,7 +41,7 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 	private ToolManager                 toolManager;
 	private HistoryManager<EditorWorld> historyManager;
 	
-	private List<RepaintListener> repaintListeners;
+	private Set<RepaintListener> repaintListeners;
 	
 	private boolean enableGrid;
 	private boolean enableAntialiasing;
@@ -54,7 +54,7 @@ public class EditorPanel extends JPanel implements HistoryListener<EditorWorld>
 		
 		enableGrid         = true;
 		enableAntialiasing = true;
-		repaintListeners   = new ArrayList<>();
+		repaintListeners   = Util.createIdentityHashSet();
 		
 		world = new EditorWorld();
 		
