@@ -6,7 +6,6 @@ package logicBox.gui.editor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import logicBox.fileManager.FileOpen;
@@ -18,24 +17,55 @@ import logicBox.gui.help.HelpFrame;
 /**
  * Contains actions common to shortcuts, buttons and menu items.
  * Things like opening files, printing and so on.
+ * TODO this stuff should probably be in EditorController.
  * @author John Murphy
  * @author Lee Coakley
  */
 public abstract class CommonActions
 {
+	public static ActionListener getNewAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				// TODO
+			}
+		};
+	}
+	
+	
+	
 	/**
 	 * When a file is opened this is called and the JFile chooser is brought up
 	 */
-	public static void addOpenCircuitListener( AbstractButton abutt, final EditorFrame frame ) {
-		abutt.addActionListener( new ActionListener() {
+	public static ActionListener getOpenAction( final EditorController ctrl ) {
+		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				FileOpen fileOpen = new FileOpen( frame );
+				FileOpen fileOpen = new FileOpen( ctrl.getEditorFrame() );
 				File     file     = fileOpen.getPickedFile();
 				
 				if (file != null)
-					frame.getEditorPanel().getWorld().loadCircuit( file );
+					ctrl.getWorld().loadCircuit( file );
 			}
-		});
+		};
+	}
+	
+	
+	
+	public static ActionListener getSaveAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				// TODO
+			}
+		};
+	}
+	
+	
+	
+	public static ActionListener getSaveAsAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				// TODO
+			}
+		};
 	}
 	
 	
@@ -43,81 +73,71 @@ public abstract class CommonActions
 	/**
 	 * When the print function is called
 	 */
-	public static void addPrintCircuitListener( AbstractButton abutt, final EditorFrame frame ) {
-		abutt.addActionListener( new ActionListener() {
+	public static ActionListener getPrintAction( final EditorController ctrl ) {
+		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				new EditorPrinter( frame );
+				new EditorPrinter( ctrl.getEditorFrame() );
 			}
-		});
+		};
 	}
 	
 	
 	
-	public static void addGridToggleListener( AbstractButton abutt, final EditorFrame frame ) {
-		abutt.addActionListener( new ActionListener() {
+	public static ActionListener getGridToggleAction( final EditorController ctrl ) {
+		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				EditorPanel panel = frame.getEditorPanel();
+				EditorPanel panel = ctrl.getEditorPanel();
 				panel.setGridEnabled( ! panel.getGridEnabled() );
 			}
-		});
+		};
 	}
 	
 	
 	
-	public static void addRecentreCameraListener( AbstractButton abutt, final EditorFrame frame ) {
-		abutt.addActionListener( new ActionListener() {
+	public static ActionListener getRecentreCameraAction( final EditorController ctrl ) {
+		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				frame.getEditorPanel().recentreCamera();
+				ctrl.recentreCamera();
 			}
-		});
+		};
 	}
 	
 	
 	
-	public static void addHelpListener( AbstractButton abutt, final EditorFrame frame ) {
-		abutt.addActionListener( new ActionListener() {
+	public static ActionListener getHelpAction( final EditorController ctrl ) {
+		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				new HelpFrame(); // TODO this is temporary, change it later
 			}
-		});
+		};
 	}
 	
 	
 	
-	public static void addUndoListener( AbstractButton butt, final EditorFrame frame ) {
-		butt.addActionListener( new ActionListener() {
+	public static ActionListener getUndoAction( final EditorController ctrl ) {
+		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				undoAction( frame );
+				historyAction( ctrl, true );
 			}
-		});
+		};
 	}
 	
 	
 	
-	public static void addRedoListener( AbstractButton butt, final EditorFrame frame ) {
-		butt.addActionListener( new ActionListener() {
+	public static ActionListener getRedoAction( final EditorController ctrl ) {
+		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				redoAction( frame );
+				historyAction( ctrl, false );
 			}
-		});
+		};
 	}
 	
 	
 	
-	private static void undoAction( EditorFrame frame ) {
-		historyAction( frame, true );
-	}
-	
-	
-	
-	private static void redoAction( EditorFrame frame ) {
-		historyAction( frame, false );
-	}
-	
-	
-	
-	private static void historyAction( EditorFrame frame, boolean undoing ) {
-		HistoryManager<EditorWorld> manager = frame.getEditorPanel().getHistoryManager();
+	private static void historyAction( EditorController ctrl, boolean undoing ) {
+		EditorFrame                 frame   = ctrl.getEditorFrame();
+		HistoryManager<EditorWorld> manager = ctrl.getHistoryManager();
+		
 		JMenuItem menuUndo = frame.getEditorMenuBar().itemEditUndo;
 		JButton   buttUndo = frame.getEditorToolbar().buttUndo;
 		JMenuItem menuRedo = frame.getEditorMenuBar().itemEditRedo;
