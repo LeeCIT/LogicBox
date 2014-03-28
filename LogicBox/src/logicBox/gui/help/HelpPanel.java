@@ -107,7 +107,6 @@ public class HelpPanel extends JPanel
 	
 	
 	
-	
 	private void createSearchPanel() {
 		List<Searchable<ComponentType>> searchables = new ArrayList<>();
 
@@ -129,15 +128,16 @@ public class HelpPanel extends JPanel
 	
 	
 	private void addComponents() {
-		setLayout( new MigLayout( "", "[grow,fill][grow,fill]", "[grow,fill]" ) );
+		setLayout( new MigLayout( "", "[grow,fill]", "[grow,fill]" ) );
 		
 		createSearchPanel();
 		JScrollPane scrollPane = new JScrollPane( textPane );
-		
-		add( searchPanel, "wmin 192px" );
-		add( scrollPane,  "grow"       );
+		JSplitPane  splitPane  = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT, searchPanel, scrollPane );
 		
 		textPane.setEditable( false ); // Text cannot be edited.
+		splitPane.setResizeWeight( 0.15 );
+		
+		add( splitPane );
 	}
 }
 
