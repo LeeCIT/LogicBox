@@ -258,8 +258,7 @@ public class ToolTraceDrawer extends Tool
 					else traceAdd  ();
 				
 				if (isRight( ev ))
-					if (traceInitiated)
-						traceCancel();
+					traceCancel();
 			}
 			
 			
@@ -306,7 +305,14 @@ public class ToolTraceDrawer extends Tool
 		Vec2    nextPos   = getMousePosWorld();
 		boolean completed = doTraceToPinSnapping( nextPos );
 		
-		tracePoints.push( nextPos );
+		if (tracePoints.isEmpty()) {
+			tracePoints.push( nextPos );
+		} else {
+			List<Vec2> points = breakLineToFitSnap( tracePoints.peek(), nextPos );
+			points.remove( 0 );
+			for (Vec2 v: points)
+				tracePoints.push( v );
+		}
 		
 		if (completed)
 			traceComplete();
@@ -317,8 +323,9 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	/**
-	 * Apply snap to Vec2 and update the source/dest info.  If true is returned the trace is completed.
-	 * @return Whether the trace is now completed.
+	 * Apply snap to Vec2 and update the source/dest info.
+	 * @return Whether the trace is now completed (attached to a component)
+	 * TODO it's also possible to join a trace onto another trace.
 	 */
 	private boolean doTraceToPinSnapping( Vec2 nextPos ) {
 		SnapInfo snapInfo  = getSnapInfo( nextPos );
@@ -381,6 +388,7 @@ public class ToolTraceDrawer extends Tool
 	
 	private void traceCancel() {
 		traceFinishCommon();
+		getToolManager().releaseControl();
 	}
 	
 	
@@ -391,7 +399,7 @@ public class ToolTraceDrawer extends Tool
 		traceSrc            = null;
 		traceDest           = null;
 		tracePoints.clear();
-		repaint();
+		repaint();		
 	}
 	
 	
