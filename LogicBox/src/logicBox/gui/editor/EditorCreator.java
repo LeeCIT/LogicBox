@@ -5,6 +5,8 @@ package logicBox.gui.editor;
 
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -40,7 +42,8 @@ public class EditorCreator
 		frame.setVisible( true );
 		
 		EditorController ctrl = new EditorController( frame );
-		linkPanel( ctrl, panel );
+		linkFrame    ( ctrl, frame   );
+		linkPanel    ( ctrl, panel   );
 		linkScrollbar( ctrl, scrollX );
 		linkScrollbar( ctrl, scrollY );
 		
@@ -52,7 +55,7 @@ public class EditorCreator
 		linkAction( Actions.getNewAction   (ctrl), toolbar.buttNew,   menubar.itemFileNew    );
 		linkAction( Actions.getOpenAction  (ctrl), toolbar.buttOpen,  menubar.itemFileOpen   );
 		linkAction( Actions.getSaveAction  (ctrl), toolbar.buttSave,  menubar.itemFileSave   );
-		linkAction( Actions.getSaveAsAction(ctrl), null, 			    menubar.itemFileSaveAs );
+		linkAction( Actions.getSaveAsAction(ctrl), null, 			  menubar.itemFileSaveAs );
 		linkAction( Actions.getPrintAction (ctrl), toolbar.buttPrint, menubar.itemFilePrint  );
 		
 		linkActionUndoRedo( ctrl, menubar, toolbar );
@@ -64,6 +67,17 @@ public class EditorCreator
 		
 		return frame;
 	}
+	
+	
+	
+	private static void linkFrame( final EditorController ctrl, EditorFrame frame ) {
+		frame.addWindowListener( new WindowAdapter() {
+			public void windowActivated( WindowEvent e ) {
+				Toolbox.getInstance().setActiveToolManager( ctrl.getToolManager() );
+			}
+		});
+	}
+	
 	
 	
 	
