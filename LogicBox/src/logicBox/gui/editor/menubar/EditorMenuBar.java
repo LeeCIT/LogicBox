@@ -3,8 +3,6 @@
 
 package logicBox.gui.editor.menubar;
 
-import java.awt.Event;
-import java.awt.event.KeyEvent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -71,12 +69,12 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupFileMenu() {
 		JMenu m = menuFile = createMenu( "File", 'F' );
-		itemFileNew    = add( m, "New"       , false, 'N', KeyEvent.VK_N, true, false, IconEnum.newFile  );
-		itemFileOpen   = add( m, "Open"      , false, 'O', KeyEvent.VK_O, true, false, IconEnum.openFile );
-		itemFileSave   = add( m, "Save"      , false, 'S', KeyEvent.VK_S, true, false, IconEnum.saveFile );
-		itemFileSaveAs = add( m, "Save as...", true , 'A', KeyEvent.VK_S, true, true , IconEnum.saveFile );
-		itemFilePrint  = add( m, "Print..."  , true , 'P', KeyEvent.VK_N, true, false, IconEnum.print    );
-		itemFileExit   = add( m, "Exit"      , false, 'X' );
+		itemFileNew    = add( m, "New"       , false, 'N', "control       N", IconEnum.newFile  );
+		itemFileOpen   = add( m, "Open"      , false, 'O', "control       O", IconEnum.openFile );
+		itemFileSave   = add( m, "Save"      , false, 'S', "control       S", IconEnum.saveFile );
+		itemFileSaveAs = add( m, "Save as...", false, 'A', "control shift S", IconEnum.saveFile );
+		itemFilePrint  = add( m, "Print..."  , true , 'P', "control       P", IconEnum.print    );
+		itemFileExit   = add( m, "Exit"      , true , 'X' );
 		add( m );
 	}
 	
@@ -84,11 +82,11 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupEditMenu() {
 		JMenu m = menuEdit = createMenu( "Edit", 'E' );
-		itemEditUndo  = add( m, "Undo" , false, 'U', KeyEvent.VK_Z, true, false, IconEnum.undo  );
-		itemEditRedo  = add( m, "Redo" , true , 'R', KeyEvent.VK_Y, true, false, IconEnum.redo  );
-		itemEditCut   = add( m, "Cut"  , false, 'T', KeyEvent.VK_X, true, false, IconEnum.cut   );
-		itemEditCopy  = add( m, "Copy" , false, 'C', KeyEvent.VK_C, true, false, IconEnum.copy  );
-		itemEditPaste = add( m, "Paste", false, 'P', KeyEvent.VK_V, true, false, IconEnum.paste );
+		itemEditUndo  = add( m, "Undo" , false, 'U', "control Z", IconEnum.undo  );
+		itemEditRedo  = add( m, "Redo" , false, 'R', "control Y", IconEnum.redo  );
+		itemEditCut   = add( m, "Cut"  , true , 'T', "control X", IconEnum.cut   );
+		itemEditCopy  = add( m, "Copy" , false, 'C', "control C", IconEnum.copy  );
+		itemEditPaste = add( m, "Paste", false, 'P', "control V", IconEnum.paste );
 		add( m );
 	}
 	
@@ -96,8 +94,8 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupViewMenu() {
 		JMenu m = menuView = createMenu( "View", 'V' );
-		itemViewGrid   = add( m, "Grid On/Off",      false, 'G', KeyEvent.VK_G, true, false, IconEnum.grid   );
-		itemViewCamera = add( m, "Camera Recentre" , true , 'C', KeyEvent.VK_R, true, false, IconEnum.camera );
+		itemViewGrid   = add( m, "Grid On/Off",     false, 'G', "control G", IconEnum.grid   );
+		itemViewCamera = add( m, "Camera Recentre", false, 'C', "control R", IconEnum.camera );
 		add( m );
 	}
 	
@@ -115,8 +113,8 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupHelpMenu() {
 		JMenu m = menuHelp = createMenu( "Help", 'H' );
-		itemHelpHelp  = add( m, "Help..." , true,  'H', KeyEvent.VK_F1, false, false, IconEnum.help );
-		itemHelpAbout = add( m, "About...", false, 'A' );
+		itemHelpHelp  = add( m, "Help..." , false, 'H', "F1", IconEnum.help );
+		itemHelpAbout = add( m, "About...", true , 'A' );
 		add( m );
 	}
 	
@@ -131,44 +129,35 @@ public class EditorMenuBar extends JMenuBar
 	
 	
 	private JMenuItem add( JMenu menu, String name ) {
-		return add( menu, name, false, (char) 0, 0, false, false );
+		return add( menu, name, false, (char) 0, null );
 	}
 	
 	
 	
 	private JMenuItem add( JMenu menu, String name, boolean sep, char mnemonic ) {
-		return add( menu, name, sep, mnemonic, 0, false, false, null );
+		return add( menu, name, sep, mnemonic, null, null );
 	}
 	
 	
 	
-	private JMenuItem add( JMenu menu, String name, boolean sep, char mnemonic, int accelKey, boolean ctrl, boolean shift ) {
-		return add( menu, name, sep, mnemonic, accelKey, ctrl, shift, null );
+	private JMenuItem add( JMenu menu, String name, boolean sep, char mnemonic, String accel ) {
+		return add( menu, name, sep, mnemonic, accel, null );
 	}
 	
 	
 	
-	private JMenuItem add( JMenu menu, String name, boolean sep, char mnemonic, int accelKey, boolean ctrl, boolean shift, IconEnum icon ) {
+	private JMenuItem add( JMenu menu, String name, boolean sep, char mnemonic, String accel, IconEnum icon ) {
 		JMenuItem item = new JMenuItem( name );
-		
-		menu.add( item );
-		
+		item.setMnemonic( mnemonic );
+		item.setAccelerator(KeyStroke.getKeyStroke(accel));
+
 		if (mnemonic != 0) item.setMnemonic( mnemonic );
 		if (icon != null)  item.setIcon( IconLoader.load(icon) );
-		if (accelKey != 0) setAccelerator( item, accelKey, ctrl, shift );
+		if (accel != null) item.setAccelerator( KeyStroke.getKeyStroke(accel) );
 		if (sep)           menu.addSeparator();
 		
+		menu.add( item );
 		return item;
-	}
-	
-	
-	
-	private void setAccelerator( JMenuItem item, int accelKey, boolean ctrl, boolean shift ) {
-		if (accelKey != 0) {
-			int       mask = (ctrl ? Event.CTRL_MASK : 0) | (shift ? Event.SHIFT_MASK : 0);
-			KeyStroke ks   = KeyStroke.getKeyStroke( accelKey, mask );
-			item.setAccelerator( ks );
-		}
 	}
 }
 
