@@ -46,14 +46,23 @@ public abstract class Tool
 	
 	
 	
+	/**
+	 * Allow the tool to receive events from its EditorPanel and draw.
+	 */
 	public abstract void attach();
 	
 	
 	
+	/**
+	 * Stop the tool from receiving events and drawing.
+	 */
 	public abstract void detach();
 	
 	
 	
+	/**
+	 * Set the tool state back to its unused state.
+	 */
 	public abstract void reset();
 	
 	
@@ -107,7 +116,7 @@ public abstract class Tool
 	
 	
 	protected void markHistoryChange() {
-		manager.getEditorPanel().getHistoryManager().markChange();
+		manager.getEditorController().getHistoryManager().markChange();
 	}
 	
 	
@@ -119,13 +128,13 @@ public abstract class Tool
 	
 	
 	protected EditorWorld getWorld() {
-		return manager.getEditorPanel().getWorld();
+		return manager.getEditorController().getWorld();
 	}
 	
 	
 	
 	protected Camera getCamera() {
-		return manager.getEditorPanel().getCamera();
+		return manager.getEditorController().getCamera();
 	}
 	
 	
