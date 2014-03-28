@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
+import logicBox.gui.IconEnum;
+import logicBox.gui.IconLoader;
 import logicBox.gui.editor.EditorCreationCommand;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.sim.component.*;
@@ -101,7 +103,13 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	private void addToolButtons() {
-		//addCategory( "Tools",  ); // TODO
+		ToolboxButton[] butts = {
+			genButtonTrace(),
+			genButtonJunction(),
+			genButtonText()
+		};
+		
+		addCategory( "Tools", butts ); // TODO
 	}
 
 
@@ -158,6 +166,24 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 		};
 		
 		addCategory( "Components", butts );
+	}
+	
+	
+	
+	private ToolboxButton genButtonTrace() {
+		return new ToolboxButton( "Trc" );
+	}
+	
+	
+	
+	private ToolboxButton genButtonJunction() {
+		return new ToolboxButton( "Jnc" );
+	}
+	
+	
+	
+	private ToolboxButton genButtonText() {
+		return new ToolboxButton( IconLoader.load(IconEnum.editText) );
 	}
 	
 	
