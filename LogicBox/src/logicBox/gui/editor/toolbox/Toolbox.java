@@ -171,7 +171,16 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	private ToolboxButton genButtonTrace() {
-		return new ToolboxButton( "Trc" );
+		final ToolboxButton butt = new ToolboxButton( "Trc" );
+		
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
+				ToolManager manager = butt.getTargetToolManager();
+				manager.initiateTraceCreation();
+			}
+		});
+		
+		return butt;
 	}
 	
 	
