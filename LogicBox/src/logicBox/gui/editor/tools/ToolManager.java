@@ -67,8 +67,7 @@ public class ToolManager
 	
 	
 	public void initiateTraceCreation() {
-		System.out.println( "initiateTraceCreation()" );
-		System.out.println( toolTraceDrawer );
+		takeExclusiveControl( toolTraceDrawer );
 	}
 	
 	
