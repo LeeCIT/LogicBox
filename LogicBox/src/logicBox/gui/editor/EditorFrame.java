@@ -3,7 +3,6 @@
 
 package logicBox.gui.editor;
 import javax.swing.JFrame;
-import javax.swing.JScrollBar;
 import logicBox.gui.editor.menubar.EditorMenuBar;
 import logicBox.gui.editor.toolbar.EditorToolbar;
 import net.miginfocom.swing.MigLayout;
@@ -21,13 +20,19 @@ public class EditorFrame extends JFrame
 	private EditorToolbar   toolbar;
 	private EditorScrollBar scrollX;
 	private EditorScrollBar scrollY;
+
 	
 	
-	
-	public EditorFrame() {
+	public EditorFrame( EditorPanel panel, EditorMenuBar menubar, EditorToolbar toolbar,
+						EditorScrollBar scrollX, EditorScrollBar scrollY ) {
 		super( "LogicBox" );
 		
-		setupComponents();
+		this.panel   = panel  ;
+		this.menubar = menubar;
+		this.toolbar = toolbar;
+		this.scrollX = scrollX;
+		this.scrollY = scrollY;
+		
 		setupLayout();
 	}
 	
@@ -47,16 +52,6 @@ public class EditorFrame extends JFrame
 	
 	public EditorMenuBar getEditorMenuBar() {
 		return menubar;
-	}
-	
-	
-	
-	private void setupComponents() {
-		panel   = new EditorPanel();
-		menubar = new EditorMenuBar();
-		toolbar = new EditorToolbar();
-		scrollX = new EditorScrollBar( panel, JScrollBar.HORIZONTAL );
-		scrollY = new EditorScrollBar( panel, JScrollBar.VERTICAL   );
 	}
 	
 	
