@@ -48,9 +48,7 @@ public class Camera
 	
 	
 	
-	public Camera( JComponent attachTo ) {
-		component = attachTo;
-		
+	public Camera() {
 		zoomRate  = 1.0 + (1.0 / 4.0);
 		zoomRange = 8.0;
 		zoomMin   = 1.0 / zoomRange;
@@ -60,7 +58,12 @@ public class Camera
 		pan         = new Vec2( 0 );
 		matrix      = new AffineTransform();
 		onTransform = new CallbackSet();
-		
+	}
+	
+	
+	
+	public void attachTo( JComponent component ) {
+		this.component = component;
 		setupActions();
 	}
 	
@@ -188,6 +191,7 @@ public class Camera
 	 */
 	public void setTransform( AffineTransform matrix ) {
 		this.matrix = matrix;
+		updateTransform();
 	}
 	
 	
@@ -370,17 +374,20 @@ public class Camera
 	
 	
 	
+	/**
+	 * Regenerate the view matrix and notify.
+	 */
+	public void updateTransform() {
+		updateTransform( new Vec2(0.5) );
+	}
+	
+	
+	
 	private void directZoomAndPan( Vec2 pan, double zoom ) {
 		this.zoom = Geo.clamp( zoom, zoomMin, zoomMax );
 		this.pan  = pan.negate();
 		
 		updateTransform();
-	}
-	
-	
-	
-	private void updateTransform() {
-		updateTransform( new Vec2(0.5) );
 	}
 	
 	
