@@ -66,7 +66,7 @@ public class ToolTraceDrawer extends Tool
 		getEditorPanel().addKeyListener( keyListener );
 		getEditorPanel().addMouseListener      ( mouseListener );
 		getEditorPanel().addMouseMotionListener( mouseListener );
-		getEditorPanel().addRepaintListener( repaintListener );
+		getEditorPanel().addWorldRepaintListener( repaintListener );
 		setAttached( true );
 	}
 	
@@ -79,7 +79,7 @@ public class ToolTraceDrawer extends Tool
 		getEditorPanel().removeKeyListener( keyListener );
 		getEditorPanel().removeMouseListener      ( mouseListener );
 		getEditorPanel().removeMouseMotionListener( mouseListener );
-		getEditorPanel().removeRepaintListener( repaintListener );
+		getEditorPanel().removeWorldRepaintListener( repaintListener );
 		setAttached( false );
 	}
 	

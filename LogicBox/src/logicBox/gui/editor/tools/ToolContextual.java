@@ -67,7 +67,7 @@ public class ToolContextual extends Tool
 		getEditorPanel().addMouseMotionListener( dragListener );
 		getEditorPanel().addMouseListener      ( selectListener );
 		getEditorPanel().addMouseMotionListener( selectListener );
-		getEditorPanel().addRepaintListener( repaintListener );
+		getEditorPanel().addWorldRepaintListener( repaintListener );
 		setAttached( true );
 	}
 	
@@ -81,7 +81,7 @@ public class ToolContextual extends Tool
 		getEditorPanel().removeMouseMotionListener( dragListener );
 		getEditorPanel().removeMouseListener      ( selectListener );
 		getEditorPanel().removeMouseMotionListener( selectListener );
-		getEditorPanel().removeRepaintListener( repaintListener );
+		getEditorPanel().removeWorldRepaintListener( repaintListener );
 		setAttached( false );
 	}
 	

@@ -39,7 +39,7 @@ public class ToolHighlighter extends Tool
 			return;
 		
 		getEditorPanel().addMouseMotionListener( eventListener );
-		getEditorPanel().addRepaintListener( repaintListener );
+		getEditorPanel().addWorldRepaintListener( repaintListener );
 		setAttached( true );
 	}
 	
@@ -50,7 +50,7 @@ public class ToolHighlighter extends Tool
 			return;
 		
 		getEditorPanel().removeMouseMotionListener( eventListener );
-		getEditorPanel().removeRepaintListener( repaintListener );
+		getEditorPanel().removeWorldRepaintListener( repaintListener );
 		setAttached( false );
 	}
 	

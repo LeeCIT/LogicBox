@@ -49,7 +49,7 @@ public class ToolPlacer extends Tool
 		
 		getEditorPanel().addMouseListener      ( mouseListener );
 		getEditorPanel().addMouseMotionListener( mouseListener );
-		getEditorPanel().addRepaintListener( repaintListener );
+		getEditorPanel().addWorldRepaintListener( repaintListener );
 		setAttached( true );
 	}
 	
@@ -61,7 +61,7 @@ public class ToolPlacer extends Tool
 		
 		getEditorPanel().removeMouseListener      ( mouseListener );
 		getEditorPanel().removeMouseMotionListener( mouseListener );
-		getEditorPanel().removeRepaintListener( repaintListener );
+		getEditorPanel().removeWorldRepaintListener( repaintListener );
 		setAttached( false );
 	}
 	

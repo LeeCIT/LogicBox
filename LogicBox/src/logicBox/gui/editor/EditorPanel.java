@@ -23,7 +23,8 @@ import logicBox.util.Vec2;
  */
 public class EditorPanel extends JPanel
 {
-	private Set<RepaintListener> repaintListeners;
+	private Set<RepaintListener> repaintWorldListeners;
+	private Set<RepaintListener> repaintScreenListeners;
 	
 	private Camera cam;
 	private Evaluator<List<Graphic>> evalViewables;
@@ -37,25 +38,39 @@ public class EditorPanel extends JPanel
 	public EditorPanel() {
 		super( true );
 		
-		this.enableGrid         = true;
-		this.enableAntialiasing = true;
-		this.repaintListeners   = Util.createIdentityHashSet();
+		this.enableGrid             = true;
+		this.enableAntialiasing     = true;
+		this.repaintWorldListeners  = Util.createIdentityHashSet();
+		this.repaintScreenListeners = Util.createIdentityHashSet();
 	}
 	
 	
 	
+	/**
+	 * Set the camera used by the editor when drawing.
+	 * Setting this is mandatory.
+	 */
 	public void setCamera( Camera cam ) {
 		this.cam = cam;
 	}
 	
 	
 	
+	/**
+	 * Set the evaluator which returns a list of graphics viewable under the camera.
+	 * Setting this is mandatory.
+	 */
 	public void setViewablesEvaluator( Evaluator<List<Graphic>> eval ) {
 		this.evalViewables = eval;
 	}
 	
 	
 	
+	/**
+	 * Enable/disable antialiasing.
+	 * There is a significant performance cost to enable it.
+	 * Enabled by default.
+	 */
 	public void setAntialiasingEnabled( boolean state ) {
 		enableAntialiasing = state;
 		repaint();
@@ -63,12 +78,18 @@ public class EditorPanel extends JPanel
 	
 	
 	
+	/**
+	 * Get the current antialiasing state.
+	 */
 	public boolean getAntialiasingEnabled() {
 		return enableAntialiasing;
 	}
 	
 	
 	
+	/**
+	 * Enable/disable the background grid.
+	 */
 	public void setGridEnabled( boolean state ) {
 		enableGrid = state;
 		repaint();
@@ -76,20 +97,47 @@ public class EditorPanel extends JPanel
 	
 	
 	
+	/**
+	 * Get the current grid rendering state.
+	 */
 	public boolean getGridEnabled() {
 		return enableGrid;
 	}
 	
 	
 	
-	public void addRepaintListener( RepaintListener rl ) {
-		repaintListeners.add( rl );
+	/**
+	 * Add a repaint listener that operates in world-space (the same as the components).
+	 */
+	public void addWorldRepaintListener( RepaintListener rl ) {
+		repaintWorldListeners.add( rl );
 	}
 	
 	
 	
-	public void removeRepaintListener( RepaintListener rl ) {
-		repaintListeners.remove( rl );
+	/**
+	 * Remove a world-space repaint listener.
+	 */
+	public void removeWorldRepaintListener( RepaintListener rl ) {
+		repaintWorldListeners.remove( rl );
+	}
+	
+	
+	
+	/**
+	 * Add a repaint listener that oeprates in screen space (same space as mouse coords)
+	 */
+	public void addScreenRepaintListener( RepaintListener rl ) {
+		repaintWorldListeners.add( rl );
+	}
+	
+	
+	
+	/**
+	 * Remove a screen-space repaint listener.
+	 */
+	public void removeScreenRepaintListener( RepaintListener rl ) {
+		repaintWorldListeners.remove( rl );
 	}
 	
 	
@@ -113,12 +161,16 @@ public class EditorPanel extends JPanel
 		Gfx.pushMatrix( g );
 			Gfx.pushAntialiasingStateAndSet( g, enableAntialiasing );
 				fillBackground( g );
-				applyCameraTransform( g );
-				drawGrid( g );
-				drawComponentGraphics( g );
-				drawRepaintListeners( g );
-			Gfx.popAntialiasingState( g );
-		Gfx.popMatrix( g );
+				
+				Gfx.pushMatrix( g );
+					applyCameraTransform( g );
+					drawGrid( g );
+					drawComponentGraphics( g );
+					drawRepaintListeners( g, repaintWorldListeners );
+				Gfx.popMatrix( g );
+				
+				drawRepaintListeners( g, repaintScreenListeners );
+		Gfx.popAntialiasingState( g );
 	}
 	
 	
@@ -145,8 +197,8 @@ public class EditorPanel extends JPanel
 	
 	
 	
-	private void drawRepaintListeners( Graphics2D g ) {
-		for (RepaintListener rpl: repaintListeners)
+	private void drawRepaintListeners( Graphics2D g, Set<RepaintListener> repaints ) {
+		for (RepaintListener rpl: repaints)
 			rpl.draw( g );
 	}
 	
