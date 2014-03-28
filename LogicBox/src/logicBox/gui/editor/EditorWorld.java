@@ -153,8 +153,8 @@ public class EditorWorld implements Serializable
 	
 	public class FindClosestPinResult {
 		public boolean           foundPin;
-		public GraphicPinMapping gpm;
 		public EditorComponent   ecom;
+		public GraphicPinMapping gpm;
 	}
 	
 	
@@ -238,8 +238,19 @@ public class EditorWorld implements Serializable
 		List<EditorComponent> list = new ArrayList<>();
 		
 		for (EditorComponent ecom: grid.findPotentials( cam.getWorldViewArea() ))
-			if (ecom.graphic.getBbox().overlaps( bbox ))
+			if (ecom.getGraphic().getBbox().overlaps( bbox ))
 				list.add( ecom );
+		
+		return list;
+	}
+	
+	
+	
+	public List<Graphic> getViewableComponentGraphics( Camera cam, double tolerance ) {
+		List<Graphic> list = new ArrayList<>();
+		
+		for (EditorComponent ecom: getViewableComponents( cam, tolerance ))
+			list.add( ecom.getGraphic() );
 		
 		return list;
 	}
