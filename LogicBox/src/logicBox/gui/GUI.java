@@ -141,7 +141,7 @@ public abstract class GUI
 		new EditorMenuController   ( editorFrame.getEditorMenuBar(), editorFrame );
 		new EditorToolbarController( editorFrame.getEditorToolbar(), editorFrame );
 		
-		new KeyboardShortcuts(editorFrame.getEditorPanel());
+		//new KeyboardShortcuts(editorFrame.getEditorPanel()); // TODO I believe this is now redundant, Will check and delete later
 		
 		editorFrame.pack();
 		editorFrame.setSize       ( new Dimension(720, 640) );
