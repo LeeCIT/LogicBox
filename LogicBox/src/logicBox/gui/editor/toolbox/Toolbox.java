@@ -49,7 +49,7 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	
-	public synchronized Toolbox getInstance() {
+	public static synchronized Toolbox getInstance() {
 		return instance;
 	}
 	
