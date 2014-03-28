@@ -34,6 +34,7 @@ public class HelpFrame extends JFrame
 		
 		pack();
 		setDefaultCloseOperation( DISPOSE_ON_CLOSE );
+		setSize( 720, 480 );
 		setVisible( true );
 	}
 	
