@@ -49,18 +49,18 @@ public class EditorCreator
 			toolbox.setActiveToolManager( ctrl.getToolManager() );
 		}
 		
-		linkAction( CommonActions.getNewAction   (ctrl), toolbar.buttNew,   menubar.itemFileNew    );
-		linkAction( CommonActions.getOpenAction  (ctrl), toolbar.buttOpen,  menubar.itemFileOpen   );
-		linkAction( CommonActions.getSaveAction  (ctrl), toolbar.buttSave,  menubar.itemFileSave   );
-		linkAction( CommonActions.getSaveAsAction(ctrl), null, 			    menubar.itemFileSaveAs );
-		linkAction( CommonActions.getPrintAction (ctrl), toolbar.buttPrint, menubar.itemFilePrint  );
+		linkAction( Actions.getNewAction   (ctrl), toolbar.buttNew,   menubar.itemFileNew    );
+		linkAction( Actions.getOpenAction  (ctrl), toolbar.buttOpen,  menubar.itemFileOpen   );
+		linkAction( Actions.getSaveAction  (ctrl), toolbar.buttSave,  menubar.itemFileSave   );
+		linkAction( Actions.getSaveAsAction(ctrl), null, 			    menubar.itemFileSaveAs );
+		linkAction( Actions.getPrintAction (ctrl), toolbar.buttPrint, menubar.itemFilePrint  );
 		
 		linkActionUndoRedo( ctrl, menubar, toolbar );
 		
-		linkAction( CommonActions.getGridToggleAction    (ctrl), toolbar.buttToggleGrid,     menubar.itemViewGrid   );
-		linkAction( CommonActions.getRecentreCameraAction(ctrl), toolbar.buttCameraRecentre, menubar.itemViewCamera );
+		linkAction( Actions.getGridToggleAction    (ctrl), toolbar.buttToggleGrid,     menubar.itemViewGrid   );
+		linkAction( Actions.getRecentreCameraAction(ctrl), toolbar.buttCameraRecentre, menubar.itemViewCamera );
 		
-		linkAction( CommonActions.getHelpAction(ctrl), toolbar.buttHelp, menubar.itemHelpHelp );
+		linkAction( Actions.getHelpAction(ctrl), toolbar.buttHelp, menubar.itemHelpHelp );
 		
 		return frame;
 	}
@@ -99,8 +99,8 @@ public class EditorCreator
 	
 	
 	private static void linkActionUndoRedo( EditorController ctrl, final EditorMenuBar menubar, final EditorToolbar toolbar ) {
-		linkAction( CommonActions.getUndoAction(ctrl), toolbar.buttUndo, menubar.itemEditUndo );
-		linkAction( CommonActions.getRedoAction(ctrl), toolbar.buttRedo, menubar.itemEditRedo );
+		linkAction( Actions.getUndoAction(ctrl), toolbar.buttUndo, menubar.itemEditUndo );
+		linkAction( Actions.getRedoAction(ctrl), toolbar.buttRedo, menubar.itemEditRedo );
 		
 		menubar.itemEditUndo.setEnabled( false );
 		menubar.itemEditRedo.setEnabled( false );

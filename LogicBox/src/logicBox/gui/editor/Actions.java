@@ -21,7 +21,7 @@ import logicBox.gui.help.HelpFrame;
  * @author John Murphy
  * @author Lee Coakley
  */
-public abstract class CommonActions
+public abstract class Actions
 {
 	public static ActionListener getNewAction( final EditorController ctrl ) {
 		return new ActionListener() {
