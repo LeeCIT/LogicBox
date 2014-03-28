@@ -9,6 +9,7 @@ import javax.swing.BoundedRangeModel;
 import javax.swing.JScrollBar;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
+import logicBox.util.Evaluator;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
@@ -16,48 +17,48 @@ import logicBox.util.Vec2;
 
 /**
  * Scrollbar specialised for the editor.
- * It adapts to reflect the viewable area of the camera, and can control the pan position.
+ * It adapts to reflect the viewable area of the camera and can control its position.
  * @author Lee Coakley
  */
 public class EditorScrollBar extends JScrollBar
 {
 	private static final int extentBorder = 1024; // World extent tolerance (more usable with some give)
-	private static final int base         = 256;  // Range of the scrollbar values
+	private static final int scrollRange  = 256;  // Range of the scrollbar values
 	
-	private Camera      cam;
-	private EditorPanel ed;
-	private Bbox2       view;
-	private Bbox2       extent;
-	private boolean     receiveInterlock;
-	private boolean     transmitInterlock;
-	private boolean     isHorizontal;
+	private Camera           cam;
+	private Evaluator<Bbox2> evalWorldExtent;
+	private Evaluator<Bbox2> evalViewExtent;
+	private Bbox2            view;
+	private Bbox2            extent;
+	private boolean          receiveInterlock;
+	private boolean          transmitInterlock;
+	private boolean          isHorizontal;
 	
 	
 	
-	public EditorScrollBar( EditorPanel panel, int orientation ) {
+	public EditorScrollBar( int orientation ) {
 		super( orientation );
-		
-		this.ed  = panel;
-		this.cam = ed.getCamera();
 		this.isHorizontal = (orientation == HORIZONTAL);
+	}
+	
+	
+	
+	public void attachTo( Camera cam, Evaluator<Bbox2> evalWorldExtent, Evaluator<Bbox2> evalViewExtent ) {
+		this.cam             = cam;
+		this.evalWorldExtent = evalWorldExtent;
+		this.evalViewExtent  = evalViewExtent;
 		
-		attach();
+		Callback cb = createCameraSyncCallback();
+		cam.addTransformCallback( cb );
+		cb.execute(); // Ensure view/extent are always non-null
+		
+		setupEvents();
 	}
 	
 	
 	
 	public void setOrientation( int orientation ) {
 		throw new UnsupportedOperationException();
-	}
-	
-	
-	
-	private void attach() {
-		Callback cb = createCameraSyncCallback( ed );
-		cam.addTransformCallback( cb );
-		cb.execute(); // Ensure view/extent are always non-null
-		
-		setupEvents();
 	}
 	
 	
@@ -119,7 +120,7 @@ public class EditorScrollBar extends JScrollBar
 	
 	
 	
-	private Callback createCameraSyncCallback( final EditorPanel ed ) {
+	private Callback createCameraSyncCallback() {
 		return new Callback() {
 			public void execute() {
 				if (receiveInterlock)
@@ -137,8 +138,8 @@ public class EditorScrollBar extends JScrollBar
 	
 	
 	private void updateBounds() {
-		view   = ed.getWorldViewArea();
-		extent = ed.getWorldExtent().expand( extentBorder * 2 );
+		view   = evalViewExtent .evaluate();
+		extent = evalWorldExtent.evaluate().expand( extentBorder * 2 );
 	}
 	
 	
@@ -182,13 +183,11 @@ public class EditorScrollBar extends JScrollBar
 		if (fracMin + fracSize > 1.0)
 			fracMin = 1.0 - fracSize;
 		
-		int val = (int) Geo.roundArith( base * fracMin  );
-		int ext = (int) Geo.roundArith( base * fracSize );
+		int val = (int) Geo.roundArith( scrollRange * fracMin  );
+		int ext = (int) Geo.roundArith( scrollRange * fracSize );
 		
 		transmitInterlock = true;
-		setValueIsAdjusting( true );
-		setValues( val, ext, 0, base );
-		setValueIsAdjusting( false );
+		setValues( val, ext, 0, scrollRange );
 		transmitInterlock = false;		
 	}
 }
