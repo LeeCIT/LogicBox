@@ -6,6 +6,7 @@ package logicBox.util;
 import java.awt.Component;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,13 @@ public class Bbox2 implements Transformable, Serializable
 	
 	
 	public Bbox2( Rectangle rect ) {
+		this.tl = new Vec2( rect.getMinX(), rect.getMinY() );
+		this.br = new Vec2( rect.getMaxX(), rect.getMaxY() );
+	}
+	
+	
+	
+	public Bbox2( Rectangle2D rect ) {
 		this.tl = new Vec2( rect.getMinX(), rect.getMinY() );
 		this.br = new Vec2( rect.getMaxX(), rect.getMaxY() );
 	}
