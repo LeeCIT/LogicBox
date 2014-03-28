@@ -24,6 +24,7 @@ public abstract class Gfx
 	private static Stack<AffineTransform> matrixStack = new Stack<>();
 	private static Stack<Stroke>          strokeStack = new Stack<>();
 	private static Stack<Paint>           paintStack  = new Stack<>();
+	private static Stack<Font>            fontStack   = new Stack<>();
 	
 	
 	
@@ -321,6 +322,16 @@ public abstract class Gfx
 	
 	
 	
+	public static void pushFontAndSet( Graphics2D g, Font font ) {
+		fontStack.push( g.getFont() );
+		g.setFont( font );
+	}
+	
+	
+	
+	public static void popFont( Graphics2D g ) {
+		g.setFont( fontStack.pop() );
+	}
 }
 
 
