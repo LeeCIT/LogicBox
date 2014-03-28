@@ -49,7 +49,7 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	
-	public static synchronized Toolbox getInstance() {
+	public static Toolbox getInstance() {
 		return instance;
 	}
 	
@@ -163,7 +163,7 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	private ToolboxButton genButton( final ComponentActive com ) {
-		ToolboxButton butt = new ToolboxButton( com.getGraphic(), com.getName(), null );
+		ToolboxButton butt = new ToolboxButtonCom( com.getGraphic(), com.getName(), null );
 		attachListener( butt, com );
 		return butt;
 	}
