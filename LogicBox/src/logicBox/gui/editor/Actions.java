@@ -9,6 +9,8 @@ import java.io.File;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import logicBox.fileManager.FileOpen;
+import logicBox.gui.GUI;
+import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.edtior.printing.EditorPrinter;
 import logicBox.gui.help.HelpFrame;
 
@@ -98,6 +100,20 @@ public abstract class Actions
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				ctrl.recentreCamera();
+			}
+		};
+	}
+	
+	
+	
+	public static ActionListener getToolboxToggleAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				Toolbox toolbox = Toolbox.getInstance();
+				
+				if (toolbox == null)
+					 toolbox = new Toolbox( GUI.getMainFrame() );
+				else toolbox.dispose();
 			}
 		};
 	}
