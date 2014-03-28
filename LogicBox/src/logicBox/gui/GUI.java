@@ -4,16 +4,12 @@
 package logicBox.gui;
 
 import java.awt.Component;
-import java.awt.Dimension;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import logicBox.gui.editor.EditorCreator;
 import logicBox.gui.editor.EditorFrame;
-import logicBox.gui.editor.menubar.EditorMenuController;
-import logicBox.gui.editor.toolbar.EditorToolbarController;
 import logicBox.gui.editor.toolbox.Toolbox;
-import logicBox.gui.snapping.ComponentSnapper;
 
 
 
@@ -49,7 +45,7 @@ public abstract class GUI
 	public static void create() {
 		SwingUtilities.invokeLater( new Runnable() {
 			public void run() {
-				constructMainFrame();
+				constructGUI();
 			}
 		});
 	}
@@ -120,7 +116,7 @@ public abstract class GUI
 		JOptionPane.showMessageDialog( parent, message, title, JOptionPane.WARNING_MESSAGE );
 	}
 	
-		
+	
 	
 	/**
 	 * Show a modal error dialogue.
@@ -131,23 +127,8 @@ public abstract class GUI
 	
 	
 	
-	private static void constructMainFrame() {
-		editorFrame = new EditorFrame();
-		toolbox     = new Toolbox( editorFrame );
-		
-		toolbox.addComponentListener( new ComponentSnapper(editorFrame) );
-		toolbox.setActiveEditorPanel( editorFrame.getEditorPanel() );
-		
-		new EditorMenuController   ( editorFrame.getEditorMenuBar(), editorFrame );
-		new EditorToolbarController( editorFrame.getEditorToolbar(), editorFrame );
-		
-		editorFrame.pack();
-		editorFrame.setSize       ( new Dimension(720, 640) );
-		editorFrame.setMinimumSize( new Dimension(640, 480) );
-		editorFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-		editorFrame.setVisible( true );
-		
-		editorFrame.getEditorPanel().addDebugAndDemoStuff();
+	private static void constructGUI() {
+		editorFrame = EditorCreator.createEditorFrame( true );
 	}
 }
 
