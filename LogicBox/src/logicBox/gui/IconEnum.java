@@ -25,7 +25,8 @@ public enum IconEnum
 	camera,
 	toolbox,
 	help,
-	delete;
+	delete,
+	editText;
 	
 	
 	
@@ -47,6 +48,7 @@ public enum IconEnum
 			case toolbox : return "Toolbox"   + suffix;
 			case help    : return "Help"      + suffix;
 			case delete  : return "Delete"    + suffix;
+			case editText: return "EditText"  + suffix;
 			
 			default:
 				throw new RuntimeException( "No filename defined for IconEnum " + this + "." );
