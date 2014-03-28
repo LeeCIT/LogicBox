@@ -8,22 +8,26 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 import logicBox.gui.editor.EditorCreationCommand;
-import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.tools.ToolManager;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
+import logicBox.util.Singleton;
 import logicBox.util.Util;
 
 
 
 /**
  * The editor toolbox, where components are displayed in a palette for easy creation.
+ * There can only be one at a time.
  * @author John Murphy
  * @author Lee Coakley
  */
-public class Toolbox extends JDialog
+public class Toolbox extends JDialog implements Singleton<Toolbox>
 {
-	private EditorPanel            activeEditorPanel;
-	private Evaluator<EditorPanel> evaluator;
+	private static Toolbox instance;
+	
+	private ToolManager            activeToolManager;
+	private Evaluator<ToolManager> evaluator;
 	
 	
 	
@@ -36,25 +40,68 @@ public class Toolbox extends JDialog
 		pack();
 		setResizable( false );
 		setVisible( true );
+		
+		if (instance != null)
+			throw new RuntimeException( "Trying to create duplicate Toolbox" );
+		
+		instance = this;
+	}
+	
+	
+	
+	public synchronized Toolbox getInstance() {
+		return instance;
+	}
+	
+	
+	
+	public void dispose() {
+		super.dispose();
+		instance = null;
+	}
+	
+	
+	
+	/**
+	 * Set the focused editor tool manager.
+	 * Should be called whenever the user focuses on an editor panel.
+	 * It determines where the button events will be sent.
+	 */
+	public void setActiveToolManager( ToolManager manager ) {
+		this.activeToolManager = manager;
+	}
+	
+	
+	
+	private void setupEvaluator() {
+		evaluator = new Evaluator<ToolManager>() {
+			public ToolManager evaluate() {
+				return activeToolManager;
+			}
+		};
 	}
 	
 	
 	
 	private void addButtons() {
+		addPowerButtons();
+		addToolButtons();
 		addGateButtons();
 		addDisplayButtons();
 		addSourceButtons();
 		addComplexButtons();
 	}
-
-
-
-	private void setupEvaluator() {
-		evaluator = new Evaluator<EditorPanel>() {
-			public EditorPanel evaluate() {
-				return activeEditorPanel;
-			}
-		};
+	
+	
+	
+	private void addPowerButtons() {
+		//addCategory( "Power", );  // TODO
+	}
+	
+	
+	
+	private void addToolButtons() {
+		//addCategory( "Tools",  ); // TODO
 	}
 
 
@@ -126,8 +173,8 @@ public class Toolbox extends JDialog
 	private void attachListener( final ToolboxButton butt, final ComponentActive com ) {
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {		
-				EditorPanel ed = butt.getEditorPanelEvaluator().evaluate();
-				ed.getToolManager().initiateComponentCreation( genCommand(com) );
+				ToolManager manager = butt.getTargetToolManager();
+				manager.initiateComponentCreation( genCommand(com) );
 			}
 		});
 	}
@@ -141,22 +188,11 @@ public class Toolbox extends JDialog
 	
 	
 	/**
-	 * Set the focused editor panel.
-	 * Should be called whenever the user focuses on an editor panel.
-	 * It determines where the button events will be sent. 
-	 */
-	public void setActiveEditorPanel( EditorPanel ed ) {
-		this.activeEditorPanel = ed;
-	}
-	
-	
-	
-	/**
 	 * Add a logical group of buttons.  IE gates, components, etc.
 	 * @param category
 	 * @param items
 	 */
-	public void addCategory( String title, ToolboxButton...buttons ) {
+	private void addCategory( String title, ToolboxButton...buttons ) {
 		setButtonEvaluators( buttons );
 		JPanel panel = new ToolboxCategoryPanel( title, buttons );
 		add( panel );
@@ -166,7 +202,7 @@ public class Toolbox extends JDialog
 	
 	private void setButtonEvaluators( ToolboxButton...buttons ) {
 		for (ToolboxButton butt: buttons)
-			butt.setEditorPanelEvaluator( evaluator );
+			butt.setToolManagerEvaluator( evaluator );
 	}
 }
 
