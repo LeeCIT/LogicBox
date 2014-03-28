@@ -3,9 +3,13 @@
 
 package logicBox.gui.editor.menubar;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.KeyStroke;
 
 
 
@@ -61,12 +65,12 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupFileMenu() {
 		JMenu m = menuFile = new JMenu( "File" );
-		itemFileNew    = add( m, "New"       , 'N', false );
-		itemFileOpen   = add( m, "Open"      , 'O', false );
-		itemFileSave   = add( m, "Save"      , 'S', false );
-		itemFileSaveAs = add( m, "Save as...", 'A', true  );
-		itemFilePrint  = add( m, "Print..."  , 'P', true  );
-		itemFileExit   = add( m, "Exit"      , 'X', false );
+		itemFileNew    = add( m, "New"       , 'N', false, "control N" );
+		itemFileOpen   = add( m, "Open"      , 'O', false, "control O" );
+		itemFileSave   = add( m, "Save"      , 'S', false, "control S" );
+		itemFileSaveAs = add( m, "Save as...", 'A', true , "");
+		itemFilePrint  = add( m, "Print..."  , 'P', true , "control P" );
+		itemFileExit   = add( m, "Exit"      , 'X', false, "control E");
 		add( m );
 	}
 	
@@ -74,11 +78,11 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupEditMenu() {
 		JMenu m = menuEdit = new JMenu( "Edit" );
-		itemEditUndo  = add( m, "Undo" , 'U', false );
-		itemEditRedo  = add( m, "Redo" , 'R', true  );
-		itemEditCut   = add( m, "Cut"  , 'T', false );
-		itemEditCopy  = add( m, "Copy" , 'C', false );
-		itemEditPaste = add( m, "Paste", 'P', false );
+		itemEditUndo  = add( m, "Undo" , 'U', false , "control Z");
+		itemEditRedo  = add( m, "Redo" , 'R', true  , "control Y");
+		itemEditCut   = add( m, "Cut"  , 'T', false , "control X");
+		itemEditCopy  = add( m, "Copy" , 'C', false , "control C");
+		itemEditPaste = add( m, "Paste", 'P', false , "control V");
 		add( m );
 	}
 	
@@ -96,8 +100,8 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupHelpMenu() {
 		JMenu m = menuHelp = new JMenu( "Help" );
-		itemHelpHelp  = add( m, "Help..." , 'H', true  );
-		itemHelpAbout = add( m, "About...", 'A', false );
+		itemHelpHelp  = add( m, "Help..." , 'H', true  , "control H");
+		itemHelpAbout = add( m, "About...", 'A', false , "control A");
 		add( m );
 	}
 	
@@ -111,9 +115,10 @@ public class EditorMenuBar extends JMenuBar
 	
 	
 	
-	private JMenuItem add( JMenu menu, String name, char mnemonic, boolean sep ) {
+	private JMenuItem add( JMenu menu, String name, char mnemonic, boolean sep, String accel ) {
 		JMenuItem item = add( menu, name );
 		item.setMnemonic( mnemonic );
+		item.setAccelerator(KeyStroke.getKeyStroke(accel));
 		
 		if (sep)
 			menu.addSeparator();

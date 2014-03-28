@@ -97,7 +97,7 @@ public class KeyboardShortcuts {
 	private void setUpHelpFrameAction() {
 		String help = "displayHelp";
 		
-		panel.getInputMap().put(KeyStroke.getKeyStroke("F1"), help);
+		panel.getInputMap().put( KeyStroke.getKeyStroke("F1" ), help);
 		panel.getActionMap().put(help, new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				new HelpFrame();
