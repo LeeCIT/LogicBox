@@ -9,14 +9,14 @@ import logicBox.gui.GUI;
 
 
 
-public class SaveFile 
+public class FileSave 
 {
 	/**
 	 * Saves chooses a location to save the program state
 	 * TODO Must save
 	 * @param frame
 	 */
-	public SaveFile(JFrame frame) {		
+	public FileSave(JFrame frame) {		
 		JFileChooser chooser = new JFileChooser();
 
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Logicbox", "lbx");
@@ -63,7 +63,7 @@ public class SaveFile
 
 		saveFile.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new SaveFile(frame);
+				new FileSave(frame);
 			}
 		});
 
