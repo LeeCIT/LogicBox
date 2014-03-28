@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.EditorController;
 import logicBox.gui.editor.EditorCreationCommand;
 import logicBox.gui.editor.EditorCreationParam;
 import logicBox.gui.editor.EditorPanel;
@@ -24,56 +25,28 @@ import logicBox.util.CallbackParam;
  */
 public class ToolManager
 {
-	private EditorPanel     panel;
-	private ToolContextual  toolContextual;
-	private ToolHighlighter toolHighlighter;
-	private ToolPlacer      toolPlacer;
-	private ToolTraceDrawer toolTraceDrawer;
+	private EditorController controller;
+	private ToolContextual   toolContextual;
+	private ToolHighlighter  toolHighlighter;
+	private ToolPlacer       toolPlacer;
+	private ToolTraceDrawer  toolTraceDrawer;
 	
 	private List<Tool> tools;
 	
 	
 	
-	public ToolManager( EditorPanel panel ) {
-		this.panel = panel;
-		this.tools = new ArrayList<>();
+	public ToolManager( EditorController ctrl ) {
+		this.controller  = ctrl;
+		this.tools       = new ArrayList<>();
 		
-		setupTools( panel, panel.getWorld(), panel.getCamera() );
+		setupTools( getEditorPanel(), controller.getWorld(), controller.getCamera() );
 		releaseControl();
 	}
 	
 	
 	
-	public ToolContextual  getContextual()  { return toolContextual;  }
-	public ToolHighlighter getHighlighter() { return toolHighlighter; }
-	public ToolPlacer      getPlacer()      { return toolPlacer;      }
-	public ToolTraceDrawer getTraceDrawer() { return toolTraceDrawer; }
-	
-	
-	
 	public EditorPanel getEditorPanel() {
-		return panel;
-	}
-	
-	
-	
-	public void takeExclusiveControl( Tool tool ) {
-		detachAndResetAll();
-		tool.attach();
-	}
-	
-	
-	
-	public void takeCooperativeControl( Tool a, Tool b ) {
-		detachAndResetAll();
-		a.attach();
-		b.attach();
-	}
-	
-	
-	
-	public void releaseControl() {
-		takeCooperativeControl( toolContextual, toolHighlighter );
+		return controller.getEditorPanel();
 	}
 	
 	
@@ -86,9 +59,43 @@ public class ToolManager
 				ComponentActive  scom = ecc.getComponentPayload();
 				GraphicComActive gca  = scom.getGraphic();
 				EditorComponent  ecom = new EditorComponent( scom, gca, param.pos, param.angle );
-				panel.getWorld().add( ecom );
+				controller.getWorld().add( ecom );
 			}
 		});
+	}
+	
+	
+	
+	public void initiateTraceCreation() {
+		System.out.println( "initiateTraceCreation()" );
+		System.out.println( toolTraceDrawer );
+	}
+	
+	
+	
+	protected void takeExclusiveControl( Tool tool ) {
+		detachAndResetAll();
+		tool.attach();
+	}
+	
+	
+	
+	protected void takeCooperativeControl( Tool a, Tool b ) {
+		detachAndResetAll();
+		a.attach();
+		b.attach();
+	}
+	
+	
+	
+	protected void releaseControl() {
+		takeCooperativeControl( toolContextual, toolHighlighter );
+	}
+	
+	
+	
+	protected EditorController getEditorController() {
+		return controller;
 	}
 	
 	
@@ -114,7 +121,7 @@ public class ToolManager
 	
 	
 	private void addUndoDeselectCallback() {
-		panel.getHistoryManager().addOnChangeCallback( new Callback() {
+		controller.getHistoryManager().addOnChangeCallback( new Callback() {
 			public void execute() {
 				toolContextual.getSelection().clear();
 			}
