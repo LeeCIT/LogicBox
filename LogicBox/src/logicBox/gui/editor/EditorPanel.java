@@ -128,7 +128,7 @@ public class EditorPanel extends JPanel
 	 * Add a repaint listener that oeprates in screen space (same space as mouse coords)
 	 */
 	public void addScreenRepaintListener( RepaintListener rl ) {
-		repaintWorldListeners.add( rl );
+		repaintScreenListeners.add( rl );
 	}
 	
 	
@@ -137,7 +137,7 @@ public class EditorPanel extends JPanel
 	 * Remove a screen-space repaint listener.
 	 */
 	public void removeScreenRepaintListener( RepaintListener rl ) {
-		repaintWorldListeners.remove( rl );
+		repaintScreenListeners.remove( rl );
 	}
 	
 	
@@ -158,18 +158,17 @@ public class EditorPanel extends JPanel
 	
 	
 	private void draw( Graphics2D g ) {
-		Gfx.pushMatrix( g );
-			Gfx.pushAntialiasingStateAndSet( g, enableAntialiasing );
-				fillBackground( g );
+		Gfx.pushAntialiasingStateAndSet( g, enableAntialiasing );
+			fillBackground( g );
+			
+			Gfx.pushMatrix( g );
+				applyCameraTransform( g );
+				drawGrid( g );
+				drawComponentGraphics( g );
+				drawRepaintListeners( g, repaintWorldListeners );
+			Gfx.popMatrix( g );
 				
-				Gfx.pushMatrix( g );
-					applyCameraTransform( g );
-					drawGrid( g );
-					drawComponentGraphics( g );
-					drawRepaintListeners( g, repaintWorldListeners );
-				Gfx.popMatrix( g );
-				
-				drawRepaintListeners( g, repaintScreenListeners );
+			drawRepaintListeners( g, repaintScreenListeners );
 		Gfx.popAntialiasingState( g );
 	}
 	
@@ -177,7 +176,7 @@ public class EditorPanel extends JPanel
 	
 	private void applyCameraTransform( Graphics2D g ) {
 		if (cam != null)
-			cam.applyTransform( g );
+			cam.applyTransform( g, false );
 	}
 	
 	
