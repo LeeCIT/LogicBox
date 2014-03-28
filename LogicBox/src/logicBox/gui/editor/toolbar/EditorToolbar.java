@@ -5,6 +5,7 @@ package logicBox.gui.editor.toolbar;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JToolBar;
+import logicBox.gui.IconEnum;
 import logicBox.gui.IconLoader;
 import logicBox.gui.editor.toolbar.EditorToolBarButton;
 import net.miginfocom.swing.MigLayout;
@@ -49,29 +50,29 @@ public class EditorToolbar extends JToolBar
 	private void createButtons() {
 		setLayout( new MigLayout( "gap 0, insets 0", "[]", "[]" ) );
 		
-		buttNew            = addButton( "New16px.png"      , "New file"         , false );
-		buttOpen           = addButton( "Open16px.png"     , "Open file"        , false );
-		buttSave           = addButton( "Save16px.png"     , "Save file"        , false );
-		buttPrint          = addButton( "Print16px.png"    , "Print file"       , false );
-		                   
-		buttUndo           = addButton( "Undo16px.png"     , "Undo"             , true  );
-		buttRedo           = addButton( "Redo16px.png"     , "Redo"             , false );
+		buttNew            = addButton( IconEnum.newFile,  "New file"         , false );
+		buttOpen           = addButton( IconEnum.openFile, "Open file"        , false );
+		buttSave           = addButton( IconEnum.saveFile, "Save file"        , false );
+		buttPrint          = addButton( IconEnum.print,    "Print file"       , false );
 		
-		buttCut            = addButton( "Cut16px.png"      , "Cut"              , true  );
-		buttCopy           = addButton( "Copy16px.png"     , "Copy"             , false );
-		buttPaste          = addButton( "Paste16px.png"    , "Paste"            , false );
+		buttUndo           = addButton( IconEnum.undo,     "Undo"             , true  );
+		buttRedo           = addButton( IconEnum.redo,     "Redo"             , false );
 		
-		buttToggleGrid     = addButton( "Grid16px.png"     , "Show/hide grid"   , true  );
-		buttCameraRecentre = addButton( "CentreCam16px.png", "Centre camera"    , false );
-		buttToggleToolbox  = addButton( "ToolBox16px.png"  , "Show/hide toolbox", false );
+		buttCut            = addButton( IconEnum.cut,      "Cut"              , true  );
+		buttCopy           = addButton( IconEnum.copy,     "Copy"             , false );
+		buttPaste          = addButton( IconEnum.paste,    "Paste"            , false );
 		
-		buttHelp           = addButton( "Help16px.png"     , "Show help"        , true  );
+		buttToggleGrid     = addButton( IconEnum.grid,     "Show/hide grid"   , true  );
+		buttCameraRecentre = addButton( IconEnum.camera,   "Centre camera"    , false );
+		buttToggleToolbox  = addButton( IconEnum.toolbox,  "Show/hide toolbox", false );
+		
+		buttHelp           = addButton( IconEnum.help,     "Show help"        , true  );
 	}
 	
 	
 	
-	private EditorToolBarButton addButton( String icoName, String tooltip, boolean sepBefore ) {
-		Icon                icon  = IconLoader.load( icoName );		
+	private EditorToolBarButton addButton( IconEnum iconEnum, String tooltip, boolean sepBefore ) {
+		Icon                icon  = IconLoader.load( iconEnum );		
 		EditorToolBarButton butt  = new EditorToolBarButton( icon, tooltip );
 		String              param = (sepBefore) ? "gap 12px" : "";
 		

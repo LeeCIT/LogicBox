@@ -8,6 +8,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Set;
 import logicBox.gui.Gfx;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorStyle;
@@ -15,6 +16,7 @@ import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.RepaintListener;
 import logicBox.util.Bbox2;
 import logicBox.util.Geo;
+import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
@@ -105,6 +107,26 @@ public class ToolContextual extends Tool
 	
 	public boolean hasSelection() {
 		return ! getSelection().isEmpty();
+	}
+	
+	
+	
+	public void selectAll() {
+		selection.addAll( getWorld().getComponents() );
+	}
+	
+	
+	
+	public void selectNone() {
+		selection.clear();
+	}
+	
+	
+	
+	public void selectInvert() {
+		Set<EditorComponent> set = Util.createIdentityHashSet( getWorld().getComponents() );
+		set.removeAll( selection.ecoms );
+		selection.set( set );
 	}
 	
 	

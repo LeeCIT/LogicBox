@@ -3,14 +3,16 @@
 
 package logicBox.gui.editor.menubar;
 
+
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-
+import java.awt.Insets;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
-
+import logicBox.gui.IconEnum;
+import logicBox.gui.IconLoader;
 
 
 /**
@@ -65,12 +67,13 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupFileMenu() {
 		JMenu m = menuFile = new JMenu( "File" );
-		itemFileNew    = add( m, "New"       , 'N', false, "control N" );
-		itemFileOpen   = add( m, "Open"      , 'O', false, "control O" );
-		itemFileSave   = add( m, "Save"      , 'S', false, "control S" );
-		itemFileSaveAs = add( m, "Save as...", 'A', true , "");
-		itemFilePrint  = add( m, "Print..."  , 'P', true , "control P" );
-		itemFileExit   = add( m, "Exit"      , 'X', false, "control E");
+		itemFileNew    = add( m, "New"       , 'N', false, IconEnum.newFile , "control N");
+		itemFileOpen   = add( m, "Open"      , 'O', false, IconEnum.openFile, "control O");
+		itemFileSave   = add( m, "Save"      , 'S', false, IconEnum.saveFile, "control S");
+		itemFileSaveAs = add( m, "Save as...", 'A', true , IconEnum.saveFile, "");       
+		itemFilePrint  = add( m, "Print..."  , 'P', true , IconEnum.print   , "control P");
+		itemFileExit   = add( m, "Exit"      , 'X', false );
+
 		add( m );
 	}
 	
@@ -78,11 +81,11 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupEditMenu() {
 		JMenu m = menuEdit = new JMenu( "Edit" );
-		itemEditUndo  = add( m, "Undo" , 'U', false , "control Z");
-		itemEditRedo  = add( m, "Redo" , 'R', true  , "control Y");
-		itemEditCut   = add( m, "Cut"  , 'T', false , "control X");
-		itemEditCopy  = add( m, "Copy" , 'C', false , "control C");
-		itemEditPaste = add( m, "Paste", 'P', false , "control V");
+		itemEditUndo  = add( m, "Undo" , 'U', false, IconEnum.undo  , "control Z");
+		itemEditRedo  = add( m, "Redo" , 'R', true , IconEnum.redo  , "control Y");
+		itemEditCut   = add( m, "Cut"  , 'T', false, IconEnum.cut   , "control X");
+		itemEditCopy  = add( m, "Copy" , 'C', false, IconEnum.copy  , "control C");
+		itemEditPaste = add( m, "Paste", 'P', false, IconEnum.paste , "control V");
 		add( m );
 	}
 	
@@ -90,9 +93,9 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupCloudMenu() {
 		JMenu m = menuCloud = new JMenu( "Cloud" );
-		itemCloudLogin  = add( m, "Login" );
-		itemCloudFiles 	= add( m, "My Circuits");
-		itemCloudLogout = add( m, "Logout" );
+		itemCloudLogin  = add( m, "Login"       );
+		itemCloudFiles 	= add( m, "My Circuits" );
+		itemCloudLogout = add( m, "Logout"      );
 		add( m );
 	}
 	
@@ -100,28 +103,40 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupHelpMenu() {
 		JMenu m = menuHelp = new JMenu( "Help" );
-		itemHelpHelp  = add( m, "Help..." , 'H', true  , "control H");
-		itemHelpAbout = add( m, "About...", 'A', false , "control A");
+		itemHelpHelp  = add( m, "Help..." , 'H', true, IconEnum.help, "control H" );
+		itemHelpAbout = add( m, "About...", 'A', false );
 		add( m );
 	}
 	
 	
 	
 	private JMenuItem add( JMenu menu, String name ) {
-		JMenuItem item = new JMenuItem( name );
-		menu.add( item );
-		return item;
+		return add( menu, name, (char) 0, false );
+	}
+	
+	
+	private JMenuItem add( JMenu menu, String name, char mnemonic, boolean sep ) {
+		return add( menu, name, mnemonic, sep, null );
+	}
+	
+	
+	private JMenuItem add( JMenu menu, String name, char mnemonic, boolean sep, String accel) {
+		return add( menu, name, mnemonic, sep, null, accel );
 	}
 	
 	
 	
-	private JMenuItem add( JMenu menu, String name, char mnemonic, boolean sep, String accel ) {
-		JMenuItem item = add( menu, name );
+
+	private JMenuItem add( JMenu menu, String name, char mnemonic, boolean sep, IconEnum icon, String accel ) {
+		JMenuItem item = new JMenuItem( name );
 		item.setMnemonic( mnemonic );
 		item.setAccelerator(KeyStroke.getKeyStroke(accel));
+
+		menu.add( item );
 		
-		if (sep)
-			menu.addSeparator();
+		if (mnemonic != 0) item.setMnemonic( mnemonic );
+		if (icon != null)  item.setIcon( IconLoader.load(icon) );
+		if (sep)           menu.addSeparator();
 		
 		return item;
 	}

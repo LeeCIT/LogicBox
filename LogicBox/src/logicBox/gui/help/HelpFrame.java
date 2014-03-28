@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JFrame;
 import logicBox.gui.GUI;
+import logicBox.gui.IconEnum;
 import logicBox.gui.IconLoader;
 import logicBox.sim.component.*;
 
@@ -46,7 +47,7 @@ public class HelpFrame extends JFrame
 	
 	private void setHelpIcon() {
 		try {
-			setIconImage( IconLoader.load("Help16px.png").getImage() );
+			setIconImage( IconLoader.load(IconEnum.help).getImage() );
 		}
 		catch (Exception ex) {
 			ex.printStackTrace(); // Don't give a crap if this fails.

@@ -99,7 +99,7 @@ public class LoginPanel extends JDialog implements RequestInterface
 				Dialog.showErrorList(parent, req.getErrors(), "Login Failure");
 			else
 			{
-				EditorMenuBar.getInstance().setAuthState(true);
+				//EditorMenuBar.getInstance().setAuthState(true);
 				
 				dispose();
 			}
