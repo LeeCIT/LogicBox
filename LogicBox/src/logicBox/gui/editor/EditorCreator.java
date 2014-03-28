@@ -27,7 +27,7 @@ import logicBox.util.Evaluator;
  */
 public class EditorCreator
 {
-	public static EditorFrame createEditorFrame( boolean withToolbox ) {
+	public static EditorFrame createEditorFrame( boolean createToolbox ) {
 		EditorPanel     panel   = new EditorPanel();
 		EditorMenuBar   menubar = new EditorMenuBar();
 		EditorToolbar   toolbar = new EditorToolbar();
@@ -47,7 +47,7 @@ public class EditorCreator
 		linkScrollbar( ctrl, scrollX );
 		linkScrollbar( ctrl, scrollY );
 		
-		if (withToolbox) {
+		if (createToolbox) {
 			Toolbox toolbox = new Toolbox( frame );
 			toolbox.setActiveToolManager( ctrl.getToolManager() );
 		}
@@ -63,7 +63,8 @@ public class EditorCreator
 		linkAction( Actions.getGridToggleAction    (ctrl), toolbar.buttToggleGrid,     menubar.itemViewGrid   );
 		linkAction( Actions.getRecentreCameraAction(ctrl), toolbar.buttCameraRecentre, menubar.itemViewCamera );
 		
-		linkAction( Actions.getHelpAction(ctrl), toolbar.buttHelp, menubar.itemHelpHelp );
+		linkAction( Actions.getHelpAction(ctrl),          toolbar.buttHelp,          menubar.itemHelpHelp );
+		linkAction( Actions.getToolboxToggleAction(ctrl), toolbar.buttToggleToolbox, null );
 		
 		return frame;
 	}
@@ -73,17 +74,19 @@ public class EditorCreator
 	private static void linkFrame( final EditorController ctrl, EditorFrame frame ) {
 		frame.addWindowListener( new WindowAdapter() {
 			public void windowActivated( WindowEvent e ) {
-				Toolbox.getInstance().setActiveToolManager( ctrl.getToolManager() );
+				Toolbox toolbox = Toolbox.getInstance();
+				
+				if (toolbox != null)
+					Toolbox.getInstance().setActiveToolManager( ctrl.getToolManager() );
 			}
 		});
 	}
 	
 	
 	
-	
 	private static void linkPanel( EditorController ctrl, EditorPanel panel ) {
-		Camera                   cam  = ctrl.getCamera();
 		Evaluator<List<Graphic>> eval = ctrl.getViewableGraphicsEvaluator();
+		Camera                   cam  = ctrl.getCamera();
 		
 		panel.setCamera( cam );
 		panel.setViewablesEvaluator( eval );
