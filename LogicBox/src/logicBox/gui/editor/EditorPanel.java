@@ -176,7 +176,7 @@ public class EditorPanel extends JPanel
 	
 	private void applyCameraTransform( Graphics2D g ) {
 		if (cam != null)
-			cam.applyTransform( g, false );
+			cam.applyTransform( g );
 	}
 	
 	
