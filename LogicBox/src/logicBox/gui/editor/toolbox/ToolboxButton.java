@@ -8,8 +8,8 @@ import java.awt.Graphics2D;
 import javax.swing.JButton;
 import logicBox.gui.Gfx;
 import logicBox.gui.contextMenu.ContextMenu;
-import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.tools.ToolManager;
 import logicBox.util.Bbox2;
 import logicBox.util.Evaluator;
 import logicBox.util.Geo;
@@ -23,15 +23,15 @@ import logicBox.util.Vec2;
  */
 public class ToolboxButton extends JButton
 {
-	private GraphicComActive       gca;
+	private Evaluator<ToolManager> targetEvaluator;
 	private ContextMenu            contextMenu;
-	private Evaluator<EditorPanel> targetEvaluator;
+	private GraphicComActive       gca;
 	
 	
 	
 	/**
 	 * Create a toolbox button.
-	 * Note that the Graphic is modified by the button.  Make a fresh copy.
+	 * The Graphic is modified by the button.  Make a fresh copy.
 	 */
 	public ToolboxButton( GraphicComActive gca, String tooltip, ContextMenu contextMenu ) {
 		super();
@@ -48,14 +48,14 @@ public class ToolboxButton extends JButton
 	
 	
 	
-	protected void setEditorPanelEvaluator( Evaluator<EditorPanel> targetEvaluator ) {
+	protected void setToolManagerEvaluator( Evaluator<ToolManager> targetEvaluator ) {
 		this.targetEvaluator = targetEvaluator;
 	}
 	
 	
 	
-	protected Evaluator<EditorPanel> getEditorPanelEvaluator() {
-		return targetEvaluator;
+	protected ToolManager getTargetToolManager() {
+		return targetEvaluator.evaluate();
 	}
 	
 	
