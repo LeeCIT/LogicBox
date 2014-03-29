@@ -16,7 +16,7 @@ import logicBox.util.Vec2;
  * Operates in screen-space.
  * @author Lee Coakley
  */
-public class GraphicTransHint implements Drawable
+public class GraphicTransHint implements Drawable, RepaintListener 
 {
 	private Vec2   pos;
 	private String text;
