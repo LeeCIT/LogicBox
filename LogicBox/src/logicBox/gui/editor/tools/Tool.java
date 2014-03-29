@@ -10,6 +10,7 @@ import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.GraphicTransHint;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
@@ -21,9 +22,10 @@ import logicBox.util.Vec2;
  */
 public abstract class Tool
 {
-	private final ToolManager manager;
-	private final double      dragThreshold;
-	private       boolean     attached;
+	private final ToolManager      manager;
+	private final double           dragThreshold;
+	private       boolean          attached;
+	private       GraphicTransHint hint;
 	
 	
 	
@@ -64,6 +66,23 @@ public abstract class Tool
 	 * Set the tool state back to its unused state.
 	 */
 	public abstract void reset();
+	
+	
+	
+	protected void setTransHint( String text ) {
+		removeTransHint();
+		hint = new GraphicTransHint( text ); 
+		getEditorPanel().addScreenRepaintListener( hint );
+	}
+	
+	
+	
+	protected void removeTransHint() {
+		if (hint != null)
+			getEditorPanel().removeScreenRepaintListener( hint );
+		
+		hint = null;
+	}
 	
 	
 	
