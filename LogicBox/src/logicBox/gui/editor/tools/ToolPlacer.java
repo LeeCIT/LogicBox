@@ -50,11 +50,12 @@ public class ToolPlacer extends Tool
 		getEditorPanel().addMouseListener      ( mouseListener );
 		getEditorPanel().addMouseMotionListener( mouseListener );
 		getEditorPanel().addWorldRepaintListener( repaintListener );
+		setTransHint();
 		setAttached( true );
 	}
-	
-	
-	
+
+
+
 	public void detach() {
 		if ( ! isAttached())
 			return;
@@ -62,6 +63,7 @@ public class ToolPlacer extends Tool
 		getEditorPanel().removeMouseListener      ( mouseListener );
 		getEditorPanel().removeMouseMotionListener( mouseListener );
 		getEditorPanel().removeWorldRepaintListener( repaintListener );
+		removeTransHint();
 		setAttached( false );
 	}
 	
@@ -72,6 +74,16 @@ public class ToolPlacer extends Tool
 		placementCallback  = null;
 		placementInitiated = false;
 		placementArmed     = false;
+	}
+	
+	
+	
+	private void setTransHint() {
+		setTransHint(
+		    "Left-click to place.\n" +
+		    "Right-click to cancel.\n" +
+		    "Hold down shift key to rotate."
+		);
 	}
 	
 	
