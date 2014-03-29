@@ -37,18 +37,20 @@ public class GraphicTransHint implements Drawable
 	
 	
 	public void draw( Graphics2D g ) {
-		Bbox2  bbox    = new Bbox2( g.getFontMetrics(g.getFont()).getStringBounds(text, g) );
-		double yOffset = bbox.getSize().y;
-		double expand  = 16;
+		Bbox2  bbox     = new Bbox2( g.getFontMetrics(g.getFont()).getStringBounds(text, g) );
+		double yOffset  = bbox.getSize().y;
+		double expand   = 16;
+		double rounding = 12;
+		double opacity  = 0.5;
 		
 		Vec2 pos = this.pos.add( 0, yOffset );
 		
 		bbox = bbox.translate( pos );
 		bbox = bbox.expand( expand );
 		
-		Gfx.pushCompositeAndSet( g, 0.5 );
+		Gfx.pushCompositeAndSet( g, opacity );
 		Gfx.pushColorAndSet( g, Color.black );
-			Gfx.drawBboxRounded( g, bbox, 12, true );
+			Gfx.drawBboxRounded( g, bbox, rounding, true );
 		Gfx.popColor( g );
 		Gfx.popComposite( g );
 		
