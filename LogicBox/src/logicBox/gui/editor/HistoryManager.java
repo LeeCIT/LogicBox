@@ -24,13 +24,12 @@ import logicBox.util.Vec2;
  */
 public class HistoryManager<T extends Serializable>
 {
-	private final int maxSize;
-	
-	private HistoryListener<T> listener;
-	private Stack<byte[]>      history;
-	private int                index;
-	private CallbackSet        onChange;
-	private CallbackSet        onUndoRedo;
+	private final HistoryListener<T> listener;
+	private final Stack<byte[]>      history;
+	private       int                index;
+	private final int                maxSize;
+	private final CallbackSet        onChange;
+	private final CallbackSet        onUndoRedo;
 	
 	
 	
@@ -70,6 +69,16 @@ public class HistoryManager<T extends Serializable>
 	
 	
 	/**
+	 * Clear state, making it as if nothing ever happened.
+	 */
+	public void clear() {
+		history.clear();
+		index = -1;
+	}
+	
+	
+	
+	/**
 	 * Add a point to the undo/redo timeline.
 	 */
 	public void markChange() {
@@ -90,7 +99,7 @@ public class HistoryManager<T extends Serializable>
 		if ( ! canUndo())
 			throw new RuntimeException( "Can't undo: already at beginning of history." );
 		
-		applyStateToStreamer( --index );
+		applyStateToListener( --index );
 	}
 	
 	
@@ -99,7 +108,7 @@ public class HistoryManager<T extends Serializable>
 		if ( ! canRedo())
 			throw new RuntimeException( "Can't redo: already at end of history." );
 		
-		applyStateToStreamer( ++index );
+		applyStateToListener( ++index );
 	}
 	
 	
@@ -165,7 +174,7 @@ public class HistoryManager<T extends Serializable>
 	
 	
 	
-	private void applyStateToStreamer( int index ) {
+	private void applyStateToListener( int index ) {
 		listener.setStateFromHistory( decompress( history.get(index) ) );
 		onUndoRedo.execute();
 	}
@@ -306,6 +315,11 @@ public class HistoryManager<T extends Serializable>
 		System.out.println( "MARK" );
 		v.setLocation( new Vec2(363) );
 		stream.markChange();
+		stream.debugPrint();
+		
+		
+		System.out.println( "CLEAR" );
+		stream.clear();
 		stream.debugPrint();
 	}
 }
