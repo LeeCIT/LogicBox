@@ -141,9 +141,9 @@ public class ToolManager
 	
 	
 	private void addUndoDeselectCallback() {
-		controller.getHistoryManager().addOnChangeCallback( new Callback() {
+		controller.getHistoryManager().addOnUndoRedoCallback( new Callback() {
 			public void execute() {
-				toolContextual.getSelection().clear();
+				toolContextual.selectNone();
 			}
 		});
 	}
