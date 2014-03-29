@@ -123,6 +123,29 @@ public abstract class StringUtil
 	
 	
 	/**
+	 * Get the longest line out of an array of lines.
+	 * Doesn't account for newlines; lines must be pre-split.
+	 */
+	public static String findLongest( String[] lines ) {
+		if (lines.length == 0)
+			return null;
+		
+		String longest = lines[0];
+		int    bestLen = longest.length();
+		
+		for (String str: lines) {
+			if (str.length() > bestLen) {
+				longest = str;
+				bestLen = str.length();
+			}
+		}
+		
+		return longest;
+	}
+	
+	
+	
+	/**
 	 * Capitalise a word.
 	 */
 	public static String capitalise( String word ) {
