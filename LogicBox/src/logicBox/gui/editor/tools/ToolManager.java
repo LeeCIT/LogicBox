@@ -72,6 +72,27 @@ public class ToolManager
 	
 	
 	
+	public void selectAll() {
+		releaseControl();
+		toolContextual.selectAll();
+	}
+	
+	
+	
+	public void selectNone() {
+		releaseControl();
+		toolContextual.selectNone();
+	}
+	
+	
+	
+	public void selectInvert() {
+		releaseControl();
+		toolContextual.selectInvert();
+	}
+	
+	
+	
 	protected void takeExclusiveControl( Tool tool ) {
 		detachAndResetAll();
 		tool.attach();
