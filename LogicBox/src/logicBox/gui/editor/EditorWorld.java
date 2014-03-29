@@ -22,6 +22,7 @@ import logicBox.util.Vec2;
 
 /**
  * Stores and queries the "world" of the editor.
+ * It houses the simulation and is the element which gets saved.
  * @author Lee Coakley
  */
 public class EditorWorld implements Serializable

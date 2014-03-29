@@ -111,9 +111,12 @@ public abstract class Actions
 			public void actionPerformed( ActionEvent ev ) {
 				Toolbox toolbox = Toolbox.getInstance();
 				
-				if (toolbox == null)
-					 toolbox = new Toolbox( GUI.getMainFrame() );
-				else toolbox.dispose();
+				if (toolbox == null) {
+					toolbox = new Toolbox( GUI.getMainFrame() );
+					toolbox.setActiveToolManager( ctrl.getToolManager() );
+				} else {
+					toolbox.dispose();
+				}
 			}
 		};
 	}
