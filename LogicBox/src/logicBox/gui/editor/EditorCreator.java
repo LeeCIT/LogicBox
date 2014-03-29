@@ -59,6 +59,9 @@ public class EditorCreator
 		linkAction( Actions.getPrintAction (ctrl), toolbar.buttPrint, menubar.itemFilePrint  );
 		
 		linkActionUndoRedo( ctrl, menubar, toolbar );
+		linkAction( Actions.getSelectAllAction   (ctrl), null, menubar.itemEditSelectAll    );
+		linkAction( Actions.getSelectNoneAction  (ctrl), null, menubar.itemEditSelectNone   );
+		linkAction( Actions.getSelectInvertAction(ctrl), null, menubar.itemEditSelectInvert );
 		
 		linkAction( Actions.getGridToggleAction    (ctrl), toolbar.buttToggleGrid,     menubar.itemViewGrid   );
 		linkAction( Actions.getRecentreCameraAction(ctrl), toolbar.buttCameraRecentre, menubar.itemViewCamera );
