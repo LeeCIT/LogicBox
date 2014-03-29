@@ -8,8 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
 import java.awt.Paint;
 import java.awt.MultipleGradientPaint.CycleMethod;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -39,7 +37,6 @@ public class ToolTraceDrawer extends Tool
 	private boolean         traceArmed;
 	private Stack<Vec2>     tracePoints;
 	private Vec2            tracePosNext;
-	private KeyAdapter      keyListener;
 	private MouseAdapter    mouseListener;
 	private RepaintListener repaintListener;
 	
@@ -50,7 +47,6 @@ public class ToolTraceDrawer extends Tool
 	
 	public ToolTraceDrawer( ToolManager manager ) {
 		super( manager );
-		this.keyListener     = createKeyListener();
 		this.mouseListener   = createMouseListener();
 		this.repaintListener = createRepaintListener();
 		this.tracePoints     = new Stack<>();
@@ -63,7 +59,6 @@ public class ToolTraceDrawer extends Tool
 		if (isAttached())
 			return;
 		
-		getEditorPanel().addKeyListener( keyListener );
 		getEditorPanel().addMouseListener      ( mouseListener );
 		getEditorPanel().addMouseMotionListener( mouseListener );
 		getEditorPanel().addWorldRepaintListener( repaintListener );
@@ -76,7 +71,6 @@ public class ToolTraceDrawer extends Tool
 		if ( ! isAttached())
 			return;
 		
-		getEditorPanel().removeKeyListener( keyListener );
 		getEditorPanel().removeMouseListener      ( mouseListener );
 		getEditorPanel().removeMouseMotionListener( mouseListener );
 		getEditorPanel().removeWorldRepaintListener( repaintListener );
@@ -92,18 +86,6 @@ public class ToolTraceDrawer extends Tool
 		traceSrc            = null;
 		traceDest           = null;
 		tracePoints.clear();
-	}
-	
-	
-	
-	private KeyAdapter createKeyListener() {
-		return new KeyAdapter() {
-			public void keyReleased( KeyEvent ev ) {
-				if (ev.getKeyCode() == KeyEvent.VK_BACK_SPACE) // TODO doesn't work; use swing keybindings api
-					if (traceInitiated)
-						traceUndo();
-			}
-		};
 	}
 	
 	
