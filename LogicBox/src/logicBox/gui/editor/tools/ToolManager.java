@@ -72,6 +72,27 @@ public class ToolManager
 	
 	
 	
+	public void selectAll() {
+		releaseControl();
+		toolContextual.selectAll();
+	}
+	
+	
+	
+	public void selectNone() {
+		releaseControl();
+		toolContextual.selectNone();
+	}
+	
+	
+	
+	public void selectInvert() {
+		releaseControl();
+		toolContextual.selectInvert();
+	}
+	
+	
+	
 	protected void takeExclusiveControl( Tool tool ) {
 		detachAndResetAll();
 		tool.attach();
@@ -120,9 +141,9 @@ public class ToolManager
 	
 	
 	private void addUndoDeselectCallback() {
-		controller.getHistoryManager().addOnChangeCallback( new Callback() {
+		controller.getHistoryManager().addOnUndoRedoCallback( new Callback() {
 			public void execute() {
-				toolContextual.getSelection().clear();
+				toolContextual.selectNone();
 			}
 		});
 	}

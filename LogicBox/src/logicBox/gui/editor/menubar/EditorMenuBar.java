@@ -34,6 +34,9 @@ public class EditorMenuBar extends JMenuBar
 	public JMenuItem itemEditCut;
 	public JMenuItem itemEditCopy;
 	public JMenuItem itemEditPaste;
+	public JMenuItem itemEditSelectAll;
+	public JMenuItem itemEditSelectNone;
+	public JMenuItem itemEditSelectInvert;
 	
 	public JMenu     menuView;
 	public JMenuItem itemViewGrid;
@@ -74,7 +77,7 @@ public class EditorMenuBar extends JMenuBar
 		itemFileSave   = add( m, "Save"      , false, 'S', "control       S", IconEnum.saveFile );
 		itemFileSaveAs = add( m, "Save as...", false, 'A', "control shift S", IconEnum.saveFile );
 		itemFilePrint  = add( m, "Print..."  , true , 'P', "control       P", IconEnum.print    );
-		itemFileExit   = add( m, "Exit"      , true , 'X' );
+		itemFileExit   = add( m, "Exit"      , true , 'X', "alt F4" );
 		add( m );
 	}
 	
@@ -82,11 +85,14 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupEditMenu() {
 		JMenu m = menuEdit = createMenu( "Edit", 'E' );
-		itemEditUndo  = add( m, "Undo" , false, 'U', "control Z", IconEnum.undo  );
-		itemEditRedo  = add( m, "Redo" , false, 'R', "control Y", IconEnum.redo  );
-		itemEditCut   = add( m, "Cut"  , true , 'T', "control X", IconEnum.cut   );
-		itemEditCopy  = add( m, "Copy" , false, 'C', "control C", IconEnum.copy  );
-		itemEditPaste = add( m, "Paste", false, 'P', "control V", IconEnum.paste );
+		itemEditUndo         = add( m, "Undo"            , false, 'U', "control       Z", IconEnum.undo          );
+		itemEditRedo         = add( m, "Redo"            , false, 'R', "control       Y", IconEnum.redo          );
+		itemEditCut          = add( m, "Cut"             , true , 'T', "control       X", IconEnum.cut           );
+		itemEditCopy         = add( m, "Copy"            , false, 'C', "control       C", IconEnum.copy          );
+		itemEditPaste        = add( m, "Paste"           , false, 'P', "control       V", IconEnum.paste         );
+		itemEditSelectAll    = add( m, "Select All"      , true , 'A', "control       A", IconEnum.selectAll     );
+		itemEditSelectNone   = add( m, "Select None"     , false, 'N', "control shift A", IconEnum.selectNone    );
+		itemEditSelectInvert = add( m, "Invert Selection", false, 'I', null             , IconEnum.selectInverse );
 		add( m );
 	}
 	

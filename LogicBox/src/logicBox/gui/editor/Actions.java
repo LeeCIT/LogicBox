@@ -85,6 +85,66 @@ public abstract class Actions
 	
 	
 	
+	public static ActionListener getCutAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				
+			}
+		};
+	}
+	
+	
+	
+	public static ActionListener getCopyAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				
+			}
+		};
+	}
+	
+	
+	
+	public static ActionListener getPasteAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				
+			}
+		};
+	}
+	
+	
+	
+	public static ActionListener getSelectAllAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				ctrl.getToolManager().selectAll();
+			}
+		};
+	}
+	
+	
+	
+	public static ActionListener getSelectNoneAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				ctrl.getToolManager().selectNone();
+			}
+		};
+	}
+	
+	
+	
+	public static ActionListener getSelectInvertAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				ctrl.getToolManager().selectInvert();
+			}
+		};
+	}
+	
+	
+	
 	public static ActionListener getGridToggleAction( final EditorController ctrl ) {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
@@ -111,9 +171,12 @@ public abstract class Actions
 			public void actionPerformed( ActionEvent ev ) {
 				Toolbox toolbox = Toolbox.getInstance();
 				
-				if (toolbox == null)
-					 toolbox = new Toolbox( GUI.getMainFrame() );
-				else toolbox.dispose();
+				if (toolbox == null) {
+					toolbox = new Toolbox( GUI.getMainFrame() );
+					toolbox.setActiveToolManager( ctrl.getToolManager() );
+				} else {
+					toolbox.dispose();
+				}
 			}
 		};
 	}

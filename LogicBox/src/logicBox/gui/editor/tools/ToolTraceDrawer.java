@@ -8,8 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
 import java.awt.Paint;
 import java.awt.MultipleGradientPaint.CycleMethod;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -39,7 +37,6 @@ public class ToolTraceDrawer extends Tool
 	private boolean         traceArmed;
 	private Stack<Vec2>     tracePoints;
 	private Vec2            tracePosNext;
-	private KeyAdapter      keyListener;
 	private MouseAdapter    mouseListener;
 	private RepaintListener repaintListener;
 	
@@ -50,7 +47,6 @@ public class ToolTraceDrawer extends Tool
 	
 	public ToolTraceDrawer( ToolManager manager ) {
 		super( manager );
-		this.keyListener     = createKeyListener();
 		this.mouseListener   = createMouseListener();
 		this.repaintListener = createRepaintListener();
 		this.tracePoints     = new Stack<>();
@@ -63,7 +59,6 @@ public class ToolTraceDrawer extends Tool
 		if (isAttached())
 			return;
 		
-		getEditorPanel().addKeyListener( keyListener );
 		getEditorPanel().addMouseListener      ( mouseListener );
 		getEditorPanel().addMouseMotionListener( mouseListener );
 		getEditorPanel().addWorldRepaintListener( repaintListener );
@@ -76,7 +71,6 @@ public class ToolTraceDrawer extends Tool
 		if ( ! isAttached())
 			return;
 		
-		getEditorPanel().removeKeyListener( keyListener );
 		getEditorPanel().removeMouseListener      ( mouseListener );
 		getEditorPanel().removeMouseMotionListener( mouseListener );
 		getEditorPanel().removeWorldRepaintListener( repaintListener );
@@ -92,18 +86,6 @@ public class ToolTraceDrawer extends Tool
 		traceSrc            = null;
 		traceDest           = null;
 		tracePoints.clear();
-	}
-	
-	
-	
-	private KeyAdapter createKeyListener() {
-		return new KeyAdapter() {
-			public void keyReleased( KeyEvent ev ) {
-				if (ev.getKeyCode() == KeyEvent.VK_BACK_SPACE) // TODO doesn't work; use swing keybindings api
-					if (traceInitiated)
-						traceUndo();
-			}
-		};
 	}
 	
 	
@@ -258,7 +240,9 @@ public class ToolTraceDrawer extends Tool
 					else traceAdd  ();
 				
 				if (isRight( ev ))
-					traceCancel();
+					if (traceHasPoints())
+						 traceUndo();
+					else traceCancel();
 			}
 			
 			
@@ -305,7 +289,7 @@ public class ToolTraceDrawer extends Tool
 		Vec2    nextPos   = getMousePosWorld();
 		boolean completed = doTraceToPinSnapping( nextPos );
 		
-		if (tracePoints.isEmpty()) {
+		if ( ! traceHasPoints()) {
 			tracePoints.push( nextPos );
 		} else {
 			List<Vec2> points = breakLineToFitSnap( tracePoints.peek(), nextPos );
@@ -337,7 +321,7 @@ public class ToolTraceDrawer extends Tool
 			if ( ! dupe) {
 				nextPos.setLocation( snapInfo.pos );
 				
-				boolean hasPoints = ! tracePoints.isEmpty(); 
+				boolean hasPoints = traceHasPoints(); 
 				boolean isSource  = (traceChoosingOrigin && traceSrc == null);
 				boolean isDest    = (hasPoints);
 				
@@ -363,10 +347,19 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
+	private boolean traceHasPoints() {
+		return ! tracePoints.isEmpty();
+	}
+	
+	
+	
 	private void traceUndo() {
-		if ( ! tracePoints.isEmpty()) {
-			 tracePoints.pop();
-			 repaint();
+		if (traceHasPoints()) {
+			tracePoints.pop();
+			repaint();
+			
+			if ( ! traceHasPoints())
+				reset();
 		}
 	}
 	
@@ -380,7 +373,7 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private void traceComplete() {
-		System.out.println( "Trace completed" );
+		System.out.println( "Trace completed" ); // TODO 
 		traceFinishCommon();
 	}
 	
