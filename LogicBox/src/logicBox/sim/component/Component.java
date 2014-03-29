@@ -18,13 +18,6 @@ public abstract class Component implements Serializable
 	
 	
 	/**
-	 * Get the human-readable name of the component.
-	 */
-	public abstract String getName();
-	
-	
-	
-	/**
 	 * Reset the component to its initial state, as if the simulation was never run.
 	 */
 	public abstract void reset();
@@ -35,6 +28,13 @@ public abstract class Component implements Serializable
 	 * Get the enum type of the component.
 	 */
 	public abstract ComponentType getType();
+	
+	
+	
+	/**
+	 * Get the human-readable name of the component.
+	 */
+	public abstract String getName();
 	
 	
 	
