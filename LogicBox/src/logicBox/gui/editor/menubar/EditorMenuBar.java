@@ -77,7 +77,7 @@ public class EditorMenuBar extends JMenuBar
 		itemFileSave   = add( m, "Save"      , false, 'S', "control       S", IconEnum.saveFile );
 		itemFileSaveAs = add( m, "Save as...", false, 'A', "control shift S", IconEnum.saveFile );
 		itemFilePrint  = add( m, "Print..."  , true , 'P', "control       P", IconEnum.print    );
-		itemFileExit   = add( m, "Exit"      , true , 'X' );
+		itemFileExit   = add( m, "Exit"      , true , 'X', "alt F4" );
 		add( m );
 	}
 	
