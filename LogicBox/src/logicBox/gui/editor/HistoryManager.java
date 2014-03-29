@@ -30,27 +30,41 @@ public class HistoryManager<T extends Serializable>
 	private Stack<byte[]>      history;
 	private int                index;
 	private CallbackSet        onChange;
+	private CallbackSet        onUndoRedo;
 	
 	
 	
 	public HistoryManager( HistoryListener<T> listener ) {
-		this.history  = new Stack<>();
-		this.onChange = new CallbackSet();
-		this.listener = listener;
-		this.index    = -1;
-		this.maxSize  = 512; // With compression each step is quite small.
+		this.history    = new Stack<>();
+		this.onChange   = new CallbackSet();
+		this.onUndoRedo = new CallbackSet();
+		this.listener   = listener;
+		this.index      = -1;
+		this.maxSize    = 512; // With compression each step is quite small.
 	}
 	
 	
 	
-	public void addOnChangeCallback( Callback onChange ) {
-		this.onChange.add( onChange );
+	public void addOnChangeCallback( Callback cb ) {
+		onChange.add( cb );
 	}
 	
 	
 	
-	public void removeOnChangeCallback( Callback onChange ) {
-		this.onChange.remove( onChange );
+	public void removeOnChangeCallback( Callback cb ) {
+		onChange.remove( cb );
+	}
+	
+	
+	
+	public void addOnUndoRedoCallback( Callback cb ) {
+		onUndoRedo.add( cb );
+	}
+	
+	
+	
+	public void removeOnUndoRedoCallback( Callback cb ) {
+		onUndoRedo.remove( cb );
 	}
 	
 	
@@ -153,6 +167,7 @@ public class HistoryManager<T extends Serializable>
 	
 	private void applyStateToStreamer( int index ) {
 		listener.setStateFromHistory( decompress( history.get(index) ) );
+		onUndoRedo.execute();
 	}
 	
 	
