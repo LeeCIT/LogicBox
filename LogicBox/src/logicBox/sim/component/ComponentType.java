@@ -6,8 +6,7 @@ package logicBox.sim.component;
 
 
 /**
- * Types of components the simulation should implement.
- * This is more for reference than anything.
+ * Types of components the simulation implements.
  * @author Lee Coakley
  */
 public enum ComponentType
