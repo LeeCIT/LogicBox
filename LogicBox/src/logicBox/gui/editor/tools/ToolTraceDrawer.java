@@ -240,7 +240,9 @@ public class ToolTraceDrawer extends Tool
 					else traceAdd  ();
 				
 				if (isRight( ev ))
-					traceCancel();
+					if (traceHasPoints())
+						 traceUndo();
+					else traceCancel();
 			}
 			
 			
@@ -287,7 +289,7 @@ public class ToolTraceDrawer extends Tool
 		Vec2    nextPos   = getMousePosWorld();
 		boolean completed = doTraceToPinSnapping( nextPos );
 		
-		if (tracePoints.isEmpty()) {
+		if ( ! traceHasPoints()) {
 			tracePoints.push( nextPos );
 		} else {
 			List<Vec2> points = breakLineToFitSnap( tracePoints.peek(), nextPos );
@@ -319,7 +321,7 @@ public class ToolTraceDrawer extends Tool
 			if ( ! dupe) {
 				nextPos.setLocation( snapInfo.pos );
 				
-				boolean hasPoints = ! tracePoints.isEmpty(); 
+				boolean hasPoints = traceHasPoints(); 
 				boolean isSource  = (traceChoosingOrigin && traceSrc == null);
 				boolean isDest    = (hasPoints);
 				
@@ -345,10 +347,19 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
+	private boolean traceHasPoints() {
+		return ! tracePoints.isEmpty();
+	}
+	
+	
+	
 	private void traceUndo() {
-		if ( ! tracePoints.isEmpty()) {
-			 tracePoints.pop();
-			 repaint();
+		if (traceHasPoints()) {
+			tracePoints.pop();
+			repaint();
+			
+			if ( ! traceHasPoints())
+				reset();
 		}
 	}
 	
@@ -362,7 +373,7 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private void traceComplete() {
-		System.out.println( "Trace completed" );
+		System.out.println( "Trace completed" ); // TODO 
 		traceFinishCommon();
 	}
 	
