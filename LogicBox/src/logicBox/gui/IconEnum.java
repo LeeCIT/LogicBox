@@ -21,12 +21,16 @@ public enum IconEnum
 	cut,
 	copy,
 	paste,
+	selectAll,
+	selectNone,
+	selectInverse,
 	grid,
 	camera,
 	toolbox,
 	help,
 	delete,
-	editText;
+	editText,
+	;
 	
 	
 	
@@ -34,21 +38,24 @@ public enum IconEnum
 		String suffix = "16px.png";
 		
 		switch (this) {
-			case newFile : return "New"       + suffix;
-			case openFile: return "Open"      + suffix;
-			case saveFile: return "Save"      + suffix;
-			case print   : return "Print"     + suffix;
-			case undo    : return "Undo"      + suffix;
-			case redo    : return "Redo"      + suffix;
-			case cut     : return "Cut"       + suffix;
-			case copy    : return "Copy"      + suffix;
-			case paste   : return "Paste"     + suffix;
-			case grid    : return "Grid"      + suffix;
-			case camera  : return "CentreCam" + suffix;
-			case toolbox : return "Toolbox"   + suffix;
-			case help    : return "Help"      + suffix;
-			case delete  : return "Delete"    + suffix;
-			case editText: return "EditText"  + suffix;
+			case newFile      : return "New"           + suffix;
+			case openFile     : return "Open"          + suffix;
+			case saveFile     : return "Save"          + suffix;
+			case print        : return "Print"         + suffix;
+			case undo         : return "Undo"          + suffix;
+			case redo         : return "Redo"          + suffix;
+			case cut          : return "Cut"           + suffix;
+			case copy         : return "Copy"          + suffix;
+			case paste        : return "Paste"         + suffix;
+			case selectAll    : return "SelectAll"     + suffix;
+			case selectNone   : return "SelectNone"    + suffix;
+			case selectInverse: return "SelectInverse" + suffix;
+			case grid         : return "Grid"          + suffix;
+			case camera       : return "CentreCam"     + suffix;
+			case toolbox      : return "Toolbox"       + suffix;
+			case help         : return "Help"          + suffix;
+			case delete       : return "Delete"        + suffix;
+			case editText     : return "EditText"      + suffix;
 			
 			default:
 				throw new RuntimeException( "No filename defined for IconEnum " + this + "." );
