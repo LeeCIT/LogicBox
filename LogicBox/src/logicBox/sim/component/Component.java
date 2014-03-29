@@ -31,6 +31,13 @@ public abstract class Component implements Serializable
 	
 	
 	
+	/**
+	 * Get the enum type of the component.
+	 */
+	public abstract ComponentType getType();
+	
+	
+	
 	public String toString() {
 		return getName();
 	}

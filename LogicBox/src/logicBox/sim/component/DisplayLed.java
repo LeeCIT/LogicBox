@@ -30,6 +30,12 @@ public class DisplayLed extends Display
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.displayLed;
+	}
+	
+	
+	
 	public String getName() {
 		return "LED";
 	}

@@ -29,6 +29,12 @@ public class GateNot extends GateBuffer
 	public boolean evaluate() {
 		return ! super.evaluate();
 	}
+	
+	
+	
+	public ComponentType getType() {
+		return ComponentType.gateNot;
+	}
 
 
 

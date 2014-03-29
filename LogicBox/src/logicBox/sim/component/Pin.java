@@ -82,6 +82,12 @@ public class Pin extends ComponentPassive
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.pin;
+	}
+	
+	
+	
 	public String getName() {
 		return "Pin";
 	}

@@ -27,6 +27,12 @@ public class SourceToggle extends SourceFixed
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.sourceToggle;
+	}
+	
+	
+	
 	public String getName() {
 		return "Switchable source";
 	}

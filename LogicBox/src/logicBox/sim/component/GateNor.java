@@ -40,6 +40,12 @@ public class GateNor extends GateOr
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.gateNor;
+	}
+	
+	
+	
 	public String getName() {
 		return "NOR gate";
 	}

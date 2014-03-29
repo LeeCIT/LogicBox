@@ -40,6 +40,12 @@ public class GateNand extends GateAnd
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.gateNand;
+	}
+	
+	
+	
 	public String getName() {
 		return "NAND gate";
 	}

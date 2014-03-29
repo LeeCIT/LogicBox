@@ -40,6 +40,12 @@ public class GateXnor extends GateXor
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.gateXnor;
+	}
+	
+	
+	
 	public String getName() {
 		return "XNOR gate";
 	}

@@ -46,6 +46,12 @@ public class Decoder extends ComponentActive
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.decoder;
+	}
+	
+	
+	
 	
 	
 	public static void main( String[] args ) {

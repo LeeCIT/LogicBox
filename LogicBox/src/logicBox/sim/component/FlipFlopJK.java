@@ -74,6 +74,12 @@ public class FlipFlopJK extends FlipFlop
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.flipFlopJK;
+	}
+	
+	
+	
 	public String getName() {
 		return "JK flip-flop";
 	}

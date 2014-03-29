@@ -27,6 +27,7 @@ public enum ComponentType
 	
 	junction,
 	trace,
+	pin,
 	
 	displayLed,
 	displaySevenSeg,

@@ -135,6 +135,12 @@ public class DisplayLCD extends Display
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.displayLCD;
+	}
+	
+	
+	
 	public String getName() {
 		return "LCD Display [" + resX + "x" + resY + "]";
 	}

@@ -83,6 +83,12 @@ public class Junction extends ComponentPassive
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.junction;
+	}
+	
+	
+	
 	public String getName() {
 		return "Junction";
 	}

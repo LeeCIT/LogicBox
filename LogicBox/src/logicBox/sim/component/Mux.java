@@ -42,6 +42,12 @@ public class Mux extends Plexer
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.mux;
+	}
+	
+	
+	
 	public String getName() {
 		return (getPinInputCount() - getPinSelects().size()) + "-to-1 Multiplexer";
 	}

@@ -22,6 +22,12 @@ public class SourceFixed extends Source
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.sourceFixed;
+	}
+	
+	
+	
 	public String getName() {
 		return "Fixed source (" + (getState()?1:0) + ")";
 	}

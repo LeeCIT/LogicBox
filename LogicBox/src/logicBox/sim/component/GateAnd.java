@@ -46,6 +46,12 @@ public class GateAnd extends Gate
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.gateAnd;
+	}
+	
+	
+	
 	public String getName() {
 		return "AND gate";
 	}

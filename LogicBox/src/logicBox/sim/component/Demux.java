@@ -42,6 +42,12 @@ public class Demux extends Plexer
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.demux;
+	}
+	
+	
+	
 	public String getName() {
 		return "1-to-" + getPinOutputCount() + " Demultiplexer";
 	}

@@ -48,6 +48,12 @@ public class GateXor extends Gate
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.gateXor;
+	}
+	
+	
+	
 	public String getName() {
 		return "XOR gate";
 	}

@@ -35,6 +35,12 @@ public class BlackBox extends ComponentActive
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.blackBox;
+	}
+	
+	
+	
 	public String getName() {
 		return name;
 	}

@@ -71,6 +71,12 @@ public class DisplaySevenSeg extends Display
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.displaySevenSeg;
+	}
+	
+	
+	
 	public String getName() {
 		return "Seven segment display";
 	}

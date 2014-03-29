@@ -32,6 +32,12 @@ public class GateBuffer extends Gate
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.gateBuffer;
+	}
+	
+	
+	
 	public String getName() {
 		return "Buffer";
 	}

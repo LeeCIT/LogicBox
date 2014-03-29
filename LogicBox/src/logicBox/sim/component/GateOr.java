@@ -45,6 +45,12 @@ public class GateOr extends Gate
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.gateOr;
+	}
+	
+	
+	
 	public String getName() {
 		return "OR gate";
 	}

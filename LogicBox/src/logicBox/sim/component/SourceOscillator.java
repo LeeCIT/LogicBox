@@ -38,6 +38,12 @@ public class SourceOscillator extends Source
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.sourceOscillator;
+	}
+	
+	
+	
 	public String getName() {
 		return "Oscillator (" + (baseFrequencyHz * frequencyDivisor) + "hz)";
 	}

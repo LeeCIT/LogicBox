@@ -42,6 +42,12 @@ public class FlipFlopT extends FlipFlop
 	
 	
 	
+	public ComponentType getType() {
+		return ComponentType.flipFlopT;
+	}
+	
+	
+	
 	public String getName() {
 		return "T flip-flop";
 	}

@@ -48,6 +48,12 @@ public class Trace extends ComponentPassive
 	public Pin getPinOtherSide( Pin pin ) {
 		return (pin == dest) ? source : dest;
 	}
+	
+	
+	
+	public ComponentType getType() {
+		return ComponentType.trace;
+	}
 
 
 
