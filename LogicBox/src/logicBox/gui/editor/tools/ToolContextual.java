@@ -113,20 +113,27 @@ public class ToolContextual extends Tool
 	
 	public void selectAll() {
 		selection.addAll( getWorld().getComponents() );
+		repaint();
 	}
 	
 	
 	
 	public void selectNone() {
 		selection.clear();
+		repaint();
 	}
 	
 	
 	
-	public void selectInvert() {
+	public void selectInvert() { // TODO doesn't work
 		Set<EditorComponent> set = Util.createIdentityHashSet( getWorld().getComponents() );
 		set.removeAll( selection.ecoms );
 		selection.set( set );
+		
+		for (EditorComponent ecom: set)
+			System.out.println( "Selected: " + ecom );
+		
+		repaint();
 	}
 	
 	
