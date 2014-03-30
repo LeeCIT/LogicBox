@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.EditorComponentActive;
 import logicBox.gui.editor.EditorController;
 import logicBox.gui.editor.EditorCreationCommand;
 import logicBox.gui.editor.EditorCreationParam;
@@ -58,7 +59,7 @@ public class ToolManager
 			public void execute( EditorCreationParam param ) {
 				ComponentActive  scom = ecc.getComponentPayload();
 				GraphicComActive gca  = scom.getGraphic();
-				EditorComponent  ecom = new EditorComponent( scom, gca, param.pos, param.angle );
+				EditorComponent  ecom = new EditorComponentActive( scom, gca, param.pos, param.angle );
 				controller.getWorld().add( ecom );
 			}
 		});
