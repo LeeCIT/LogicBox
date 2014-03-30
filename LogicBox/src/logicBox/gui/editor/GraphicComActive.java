@@ -49,6 +49,7 @@ public class GraphicComActive extends Graphic
 	
 	
 	public GraphicComActive( VecPath polyBody, VecPath polyPins, VecPath polyAux, List<GraphicPinMapping> pinMap ) {
+		super();
 		this.polyBody  = polyBody;
 		this.polyPins  = polyPins;
 		this.polyAux   = polyAux;
@@ -101,7 +102,7 @@ public class GraphicComActive extends Graphic
 				return true;
 		}
 		
-		double pinDistComp = Geo.sqr(EditorStyle.compThickness) * 0.5;
+		double pinDistComp = Geo.sqr(EditorStyle.compThickness * 0.5);
 		for (GraphicPinMapping gpm: pinMap)
 			if (Geo.distanceSqr( gpm.line.closestPoint(pos), pos) <= pinDistComp)
 				return true;
