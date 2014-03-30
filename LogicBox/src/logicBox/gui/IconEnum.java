@@ -16,6 +16,7 @@ public enum IconEnum
 	openFile,
 	saveFile,
 	print,
+	cancel,
 	undo,
 	redo,
 	cut,
@@ -42,6 +43,7 @@ public enum IconEnum
 			case openFile     : return "Open"          + suffix;
 			case saveFile     : return "Save"          + suffix;
 			case print        : return "Print"         + suffix;
+			case cancel       : return "Cancel"        + suffix;
 			case undo         : return "Undo"          + suffix;
 			case redo         : return "Redo"          + suffix;
 			case cut          : return "Cut"           + suffix;
