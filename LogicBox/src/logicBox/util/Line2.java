@@ -36,7 +36,13 @@ public class Line2 implements Transformable, Serializable
 	
 	
 	public double distanceToPoint( Vec2 point ) {
-		return Geo.distance( point, closestPoint(point) );
+		return Math.sqrt( distanceSqrToPoint(point) );
+	}
+	
+	
+	
+	public double distanceSqrToPoint( Vec2 point ) {
+		return Geo.distanceSqr( point, closestPoint(point) );
 	}
 	
 	
