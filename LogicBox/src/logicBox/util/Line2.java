@@ -22,8 +22,8 @@ public class Line2 implements Transformable, Serializable
 	
 	
 	public Line2( Vec2 a, Vec2 b ) {
-		this.a = a;
-		this.b = b;
+		this.a = a.copy();
+		this.b = b.copy();
 	}
 	
 	
