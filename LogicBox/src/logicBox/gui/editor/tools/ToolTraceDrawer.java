@@ -5,9 +5,6 @@ package logicBox.gui.editor.tools;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.LinearGradientPaint;
-import java.awt.Paint;
-import java.awt.MultipleGradientPaint.CycleMethod;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -15,10 +12,13 @@ import java.util.List;
 import java.util.Stack;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
+import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.EditorComponentTrace;
 import logicBox.gui.editor.EditorStyle;
 import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.GraphicPinMapping;
 import logicBox.gui.editor.RepaintListener;
+import logicBox.sim.component.Trace;
 import logicBox.util.Geo;
 import logicBox.util.Line2;
 import logicBox.util.Vec2;
@@ -176,35 +176,6 @@ public class ToolTraceDrawer extends Tool
 			polyLine.lineTo( tracePoints.get(i) );
 			
 		g.draw( polyLine );
-	}
-	
-	
-	
-	private void drawOverlappedTrace( Graphics2D g, Vec2 a, Vec2 intersect, Vec2 b ) {
-		double radius = EditorStyle.compThickness * 2;
-		double angleB = Geo.angleBetween( a, b );
-		double angleA = angleB + 180;
-		Vec2   a2i    = Geo.lenDir(radius,angleA).add( intersect );
-		Vec2   b2i    = Geo.lenDir(radius,angleB).add( intersect );
-		
-		Color   shade = Geo.lerp( g.getColor(), new Color(0,255,0), 0.5 );
-		float[] fracs = { 0.0f, 0.5f, 1.0f };
-		Color[] cols  = { EditorStyle.colTraceOff, shade, EditorStyle.colTraceOff };
-		Paint shadePaint = new LinearGradientPaint( a2i, b2i, fracs, cols, CycleMethod.NO_CYCLE );
-		
-		VecPath poly = new VecPath();
-		poly.moveTo( a   );
-		poly.lineTo( a2i );
-		poly.moveTo( b2i );
-		poly.lineTo( b   );
-		
-		g.draw( poly );
-		
-		Gfx.pushPaintAndSet( g, shadePaint );
-			Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
-				Gfx.drawArc( g, intersect, radius, angleA, angleB );
-			Gfx.popStroke( g );
-		Gfx.popPaint( g );
 	}
 	
 	
@@ -372,8 +343,18 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
+	private void traceCreate() {
+		EditorComponent ecom = new EditorComponentTrace( new Trace(), tracePoints );
+		getWorld().add( ecom );
+		
+		markHistoryChange();
+		repaint();
+	}
+	
+	
+	
 	private void traceComplete() {
-		System.out.println( "Trace completed" ); // TODO 
+		traceCreate();
 		traceFinishCommon();
 	}
 	
