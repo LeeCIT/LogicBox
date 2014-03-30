@@ -142,6 +142,17 @@ public class Line2 implements Transformable, Serializable
 	public String toString() {
 		return "" + a + " -> " + b;
 	}
+	
+	
+	
+	public static List<Line2> toLines( List<Vec2> points ) {
+		List<Line2> lines = new ArrayList<>();
+		
+		for (int i=0; i<points.size()-1; i++)
+			lines.add( new Line2( points.get(i), points.get(i+1) ) );
+		
+		return lines;
+	}
 }
 
 
