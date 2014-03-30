@@ -115,6 +115,16 @@ public abstract class Actions
 	
 	
 	
+	public static ActionListener getDeleteAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				ctrl.getToolManager().delete();
+			}
+		};
+	}
+	
+	
+	
 	public static ActionListener getSelectAllAction( final EditorController ctrl ) {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
