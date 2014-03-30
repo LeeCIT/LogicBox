@@ -73,6 +73,15 @@ public class ToolManager
 	
 	
 	
+	public void delete() {
+		if ( ! toolContextual.isAttached())
+			releaseControl();
+		
+		toolContextual.delete();
+	}
+	
+	
+	
 	public void selectAll() {
 		releaseControl();
 		toolContextual.selectAll();
