@@ -10,6 +10,8 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
+import java.util.List;
+import logicBox.util.Line2;
 import logicBox.util.Transformable;
 import logicBox.util.Vec2;
 
@@ -29,6 +31,23 @@ public class VecPath implements Serializable, Transformable, Shape
 	
 	public VecPath() {
 		path = new Path2D.Double();
+	}
+	
+	
+	
+	public VecPath( List<Vec2> points, boolean close ) {
+		this();
+		
+		if (points.isEmpty())
+			return;
+		
+		moveTo( points.get(0) );
+		
+		for (int i=1; i<points.size(); i++)
+			lineTo( points.get(i) );
+		
+		if (close)
+			closePath();
 	}
 	
 	
