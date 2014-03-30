@@ -24,7 +24,7 @@ import logicBox.util.Vec2;
  * By default the graphic is centred on [0,0] at angle 0.
  * @author Lee Coakley
  */
-public class GraphicComActive extends Graphic
+public class GraphicComActive extends Graphic implements GraphicIntersector
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -91,10 +91,6 @@ public class GraphicComActive extends Graphic
 	
 	
 	
-	/**
-	 * Test whether pos is contained inside the graphic.
-	 * Intended for mouse-over usage, so it's fairly precise.
-	 */
 	public boolean contains( Vec2 pos ) {
 		if (hasBubble) {
 			double bubbleComp = Geo.sqr( bubbleRadius );
@@ -112,9 +108,6 @@ public class GraphicComActive extends Graphic
 	
 	
 	
-	/**
-	 * Test whether the bounding box intersects the graphic.
-	 */
 	public boolean overlaps( Bbox2 bbox ) {
 		Vec2 size = bbox.getSize();
 		
