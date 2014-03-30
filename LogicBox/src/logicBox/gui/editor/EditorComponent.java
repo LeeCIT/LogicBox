@@ -14,72 +14,48 @@ import logicBox.util.Vec2;
  * Not sure if traces will be classified this way.  They may be a special case.
  * @author Lee Coakley
  */
-public class EditorComponent implements Serializable, Drawable
+public abstract class EditorComponent implements Serializable, Drawable
 {
 	private static final long serialVersionUID = 1L;
 	
-	protected Component        com;
-	protected GraphicComActive graphic;
-	private   EditorWorld      world;
+	protected Component   com;
+	private   EditorWorld world;
 	
 	
 	
-	public EditorComponent( Component com, GraphicComActive gca, Vec2 pos, double angle ) {
-		this.com     = com;
-		this.graphic = gca;
-		setPosAngle( pos, angle );
+	public EditorComponent( Component com ) {
+		this.com = com;
 	}
 	
 	
 	
-	public EditorComponent( Component com, GraphicComActive gca, Vec2 pos ) {
-		this( com, gca, pos, gca.getAngle() );
-	}
+	public abstract void setPos( Vec2 pos );
+	public abstract Vec2 getPos();
+	
+	public abstract void   setAngle( double angle );
+	public abstract double getAngle();
 	
 	
 	
-	public GraphicComActive getGraphic() {
-		return graphic;
-	}
+	/**
+	 * Get the graphical representation of the component.
+	 * Use return type covariance to return the appropriate graphic type.
+	 */
+	public abstract Graphic getGraphic();
 	
 	
 	
 	public void draw( Graphics2D g ) {
-		graphic.draw( g );
+		getGraphic().draw( g );
 	}
 	
 	
 	
-	public void setPos( Vec2 pos ) {
-		graphic.transformTo( pos, getAngle() );
-		signalTransformChange();
-	}	
-	
-	
-	
-	public void setAngle( double angle ) {
-		graphic.transformTo( getPos(), angle );
-		signalTransformChange();
-	}
-	
-	
-	
-	public void setPosAngle( Vec2 pos, double angle ) {
-		graphic.transformTo( pos, angle );
-		signalTransformChange();
-	}	
-	
-	
-	
-	public Vec2 getPos() {
-		return graphic.getPos();
-	}
-	
-	
-	
-	public double getAngle() {
-		return graphic.getAngle();
-	}
+	/**
+	 * Find the pin nearest to POS within the given radius.
+	 * Returns null if no pins meet the criterion.
+	 */
+	public abstract GraphicPinMapping findPinNear( Vec2 pos, double radius );
 	
 	
 	
@@ -98,7 +74,7 @@ public class EditorComponent implements Serializable, Drawable
 	
 	
 	
-	private void signalTransformChange() {
+	protected void signalTransformChange() {
 		if (world != null)
 			world.onComponentTransform( this );
 	}
