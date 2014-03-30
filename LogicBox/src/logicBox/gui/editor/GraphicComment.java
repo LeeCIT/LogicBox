@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import logicBox.gui.Gfx;
+import logicBox.util.Bbox2;
+import logicBox.util.Vec2;
 
 
 
@@ -57,5 +59,23 @@ public class GraphicComment extends Graphic
 	
 	private void wrapText() {
 		// TODO
+	}
+
+
+
+	public boolean contains( Vec2 pos ) {
+		return false;
+	}
+
+
+
+	public boolean overlaps( Bbox2 bbox ) {
+		return false;
+	}
+
+
+
+	public Bbox2 getBbox() {
+		return null;
 	}
 }
