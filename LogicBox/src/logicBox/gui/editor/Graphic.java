@@ -12,7 +12,7 @@ import java.io.Serializable;
  * All graphics which can be drawn in the EditorPanel derive from this class.
  * @author Lee Coakley
  */
-public abstract class Graphic implements Serializable, Drawable
+public abstract class Graphic implements Serializable, Drawable, GraphicIntersector
 {
 	private static final long serialVersionUID = 1L;
 	
