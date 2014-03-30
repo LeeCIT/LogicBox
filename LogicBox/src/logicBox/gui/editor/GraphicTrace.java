@@ -8,9 +8,13 @@ import java.awt.Graphics2D;
 import java.awt.LinearGradientPaint;
 import java.awt.Paint;
 import java.awt.MultipleGradientPaint.CycleMethod;
+import java.util.ArrayList;
+import java.util.List;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
+import logicBox.util.Bbox2;
 import logicBox.util.Geo;
+import logicBox.util.Line2;
 import logicBox.util.Vec2;
 
 
@@ -20,35 +24,69 @@ import logicBox.util.Vec2;
  * TODO
  * @author Lee Coakley
  */
-public class GraphicTrace extends Graphic
+public class GraphicTrace extends Graphic implements GraphicIntersector
 {
+	private List<Line2>       lines;
+	private List<Vec2>        points;
+	private VecPath           polyLine;
+	private GraphicPinMapping gpmSrc;
+	private GraphicPinMapping gpmDest;
+	
+	
+	
+	public GraphicTrace( List<Vec2> points, GraphicPinMapping gpmSrc, GraphicPinMapping gpmDest ) {
+		super();
+		this.points   = new ArrayList<>( points );
+		this.lines    = Line2.toLines( points );
+		this.polyLine = new VecPath( points, false );
+	}
+	
+	
+	
 	public void draw( Graphics2D g ) {
+		drawTrace( g );
 		
+		if (hasGpmSrc())  drawConnection( g, gpmSrc .getPinPosEnd() );
+		if (hasGpmDest()) drawConnection( g, gpmDest.getPinPosEnd() );
+	}
+	
+	
+	
+	public boolean contains( Vec2 pos ) {		
+		double distComp = Geo.sqr(EditorStyle.traceThickness * 0.5);
+		
+		for (Line2 line: lines)
+			if (line.distanceSqrToPoint(pos) <= distComp)
+				return true;
+		
+		return false;
+	}
+	
+	
+	
+	public boolean overlaps( Bbox2 bbox ) {
+		Vec2 size = bbox.getSize();
+		return polyLine.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y );
+	}
+	
+	
+	
+	private boolean hasGpmSrc() {
+		return gpmSrc != null;
+	}
+	
+	
+	
+	private boolean hasGpmDest() {
+		return gpmDest != null;
 	}
 	
 	
 	
 	private void drawTrace( Graphics2D g ) {
-		Vec2 a = new Vec2( 256+64,256 );
-		Vec2 j = a.add( 64 );
-		Vec2 c = j.add( new Vec2(64,0) );
-		Vec2 d = c.add( new Vec2(0,64) );
-		Vec2 e = j.subtract( new Vec2(64,0) );
-		
-		VecPath poly = new VecPath();
-		poly.moveTo( a );
-		poly.lineTo( j );
-		poly.lineTo( c );
-		poly.lineTo( d );
-		poly.moveTo( j );
-		poly.lineTo( e );
-		
 		Gfx.pushColorAndSet ( g, EditorStyle.colTraceOff );
 			Gfx.pushStrokeAndSet( g, EditorStyle.strokeTrace );
-				g.draw( poly );
-				drawJunction( g, j );
-				drawConnection( g, a );
-				drawConnection( g, d );
+				g.draw( polyLine );
 			Gfx.popStroke( g );
 		Gfx.popColor( g );
 	}
