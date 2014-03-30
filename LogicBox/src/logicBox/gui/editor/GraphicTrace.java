@@ -26,8 +26,10 @@ import logicBox.util.Vec2;
  */
 public class GraphicTrace extends Graphic implements GraphicIntersector
 {
-	private List<Line2>       lines;
+	private static final long serialVersionUID = 1L;
+	
 	private List<Vec2>        points;
+	private List<Line2>       lines;
 	private VecPath           polyLine;
 	private GraphicPinMapping gpmSrc;
 	private GraphicPinMapping gpmDest;
@@ -39,6 +41,12 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 		this.points   = new ArrayList<>( points );
 		this.lines    = Line2.toLines( points );
 		this.polyLine = new VecPath( points, false );
+	}
+	
+	
+	
+	public List<Line2> getLines() {
+		return lines;
 	}
 	
 	
@@ -67,6 +75,12 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	public boolean overlaps( Bbox2 bbox ) {
 		Vec2 size = bbox.getSize();
 		return polyLine.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y );
+	}
+	
+	
+	
+	public Bbox2 getBbox() {
+		return Bbox2.createFromPoints( points );
 	}
 	
 	
