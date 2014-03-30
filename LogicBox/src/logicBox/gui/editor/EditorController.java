@@ -163,20 +163,20 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	public void addDebugAndDemoStuff() {
-		world.add( new EditorComponent( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, -128) ) );
-		world.add( new EditorComponent( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, -256) ) );
+		world.add( new EditorComponentActive( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, -128) ) );
+		world.add( new EditorComponentActive( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, -256) ) );
 		
 		historyManager.markChange();
 		
 		for (int i=2; i<=4; i++) {
 			double xo = 192 * (i-2);
 			
-			world.add( new EditorComponent( new GateAnd(i),  GraphicGen.generateGateAnd(i),  new Vec2(xo, 0)   ) );
-			world.add( new EditorComponent( new GateNand(i), GraphicGen.generateGateNand(i), new Vec2(xo, 128) ) );
-			world.add( new EditorComponent( new GateOr(i),   GraphicGen.generateGateOr(i),   new Vec2(xo, 256) ) );
-			world.add( new EditorComponent( new GateNor(i),  GraphicGen.generateGateNor(i),  new Vec2(xo, 384) ) );
-			world.add( new EditorComponent( new GateXor(i),  GraphicGen.generateGateXor(i),  new Vec2(xo, 512) ) );
-			world.add( new EditorComponent( new GateXnor(i), GraphicGen.generateGateXnor(i), new Vec2(xo, 640) ) );
+			world.add( new EditorComponentActive( new GateAnd(i),  GraphicGen.generateGateAnd(i),  new Vec2(xo, 0)   ) );
+			world.add( new EditorComponentActive( new GateNand(i), GraphicGen.generateGateNand(i), new Vec2(xo, 128) ) );
+			world.add( new EditorComponentActive( new GateOr(i),   GraphicGen.generateGateOr(i),   new Vec2(xo, 256) ) );
+			world.add( new EditorComponentActive( new GateNor(i),  GraphicGen.generateGateNor(i),  new Vec2(xo, 384) ) );
+			world.add( new EditorComponentActive( new GateXor(i),  GraphicGen.generateGateXor(i),  new Vec2(xo, 512) ) );
+			world.add( new EditorComponentActive( new GateXnor(i), GraphicGen.generateGateXnor(i), new Vec2(xo, 640) ) );
 		}
 		
 		historyManager.markChange();
@@ -184,8 +184,8 @@ public class EditorController implements HistoryListener<EditorWorld>
 		for (int i=2; i<=8; i++) {
 			double xo = 192 * (i-2);
 			
-			world.add( new EditorComponent( new Mux(i),   new Mux(i)  .getGraphic(), new Vec2(xo,-512) ) );
-			world.add( new EditorComponent( new Demux(i), new Demux(i).getGraphic(), new Vec2(xo,-768) ) );
+			world.add( new EditorComponentActive( new Mux(i),   new Mux(i)  .getGraphic(), new Vec2(xo,-512) ) );
+			world.add( new EditorComponentActive( new Demux(i), new Demux(i).getGraphic(), new Vec2(xo,-768) ) );
 		}
 		
 		historyManager.markChange();
@@ -241,7 +241,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		getEditorPanel().addMouseMotionListener( new MouseMotionAdapter() {
 			public void mouseMoved( MouseEvent ev ) {
 				for (EditorComponent ecom: world.find( cam.getMousePosWorld() )) {
-					GraphicPinMapping gpm = ecom.graphic.findClosestPin( cam.getMousePosWorld(), 5 );
+					GraphicPinMapping gpm = ecom.findPinNear( cam.getMousePosWorld(), 5 );
 					System.out.println( "Ed: " + ecom.com.getName() );
 					System.out.println( "Ed: " + gpm );					
 				}
