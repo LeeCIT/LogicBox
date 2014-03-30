@@ -14,23 +14,59 @@ import logicBox.util.Vec2;
 /**
  * A representation of a trace in the editor GUI.
  * @author Lee Coakley
- * TODO
  */
 public class EditorComponentTrace extends EditorComponent
 {
-	private List<Line2>       lines;
-	private GraphicPinMapping attachStart;
-	private GraphicPinMapping attachEnd;
+	private static final long serialVersionUID = 1L;
+	
+	private GraphicTrace graphic;
 	
 	
 	
-	public EditorComponentTrace( Component com, GraphicComActive gca, Vec2 pos ) {
-		super( com, gca, pos );
+	public EditorComponentTrace( Component com, List<Vec2> points ) {
+		super( com );
+		graphic = new GraphicTrace( points, null, null );
+	}
+	
+	
+	
+	public GraphicTrace getGraphic() {
+		return graphic;
 	}
 	
 	
 	
 	public void draw( Graphics2D g ) {
-		
+		graphic.draw( g );
+	}
+
+
+
+	public void setPos( Vec2 pos ) {
+		// Do nothing
+	}
+
+
+
+	public Vec2 getPos() {
+		return new Vec2();
+	}
+
+
+
+	public void setAngle( double angle ) {
+		// Do nothing
+	}
+
+
+
+	public double getAngle() {
+		return 0;
+	}
+
+
+
+	public GraphicPinMapping findPinNear( Vec2 pos, double radius ) {
+		return null;
 	}
 }
