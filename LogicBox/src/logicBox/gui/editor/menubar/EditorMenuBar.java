@@ -34,6 +34,7 @@ public class EditorMenuBar extends JMenuBar
 	public JMenuItem itemEditCut;
 	public JMenuItem itemEditCopy;
 	public JMenuItem itemEditPaste;
+	public JMenuItem itemEditDelete;
 	public JMenuItem itemEditSelectAll;
 	public JMenuItem itemEditSelectNone;
 	public JMenuItem itemEditSelectInvert;
@@ -77,7 +78,7 @@ public class EditorMenuBar extends JMenuBar
 		itemFileSave   = add( m, "Save"      , false, 'S', "control       S", IconEnum.saveFile );
 		itemFileSaveAs = add( m, "Save as...", false, 'A', "control shift S", IconEnum.saveFile );
 		itemFilePrint  = add( m, "Print..."  , true , 'P', "control       P", IconEnum.print    );
-		itemFileExit   = add( m, "Exit"      , true , 'X', "alt F4" );
+		itemFileExit   = add( m, "Exit"      , true , 'X', "alt F4"         , IconEnum.cancel   );
 		add( m );
 	}
 	
@@ -90,6 +91,7 @@ public class EditorMenuBar extends JMenuBar
 		itemEditCut          = add( m, "Cut"             , true , 'T', "control       X", IconEnum.cut           );
 		itemEditCopy         = add( m, "Copy"            , false, 'C', "control       C", IconEnum.copy          );
 		itemEditPaste        = add( m, "Paste"           , false, 'P', "control       V", IconEnum.paste         );
+		itemEditDelete       = add( m, "Delete"          , true,  'D', "DELETE",          IconEnum.delete        );
 		itemEditSelectAll    = add( m, "Select All"      , true , 'A', "control       A", IconEnum.selectAll     );
 		itemEditSelectNone   = add( m, "Select None"     , false, 'N', "control shift A", IconEnum.selectNone    );
 		itemEditSelectInvert = add( m, "Invert Selection", false, 'I', null             , IconEnum.selectInverse );
@@ -156,7 +158,7 @@ public class EditorMenuBar extends JMenuBar
 		JMenuItem item = new JMenuItem( name );
 		item.setMnemonic( mnemonic );
 		item.setAccelerator(KeyStroke.getKeyStroke(accel));
-
+		
 		if (mnemonic != 0) item.setMnemonic( mnemonic );
 		if (icon != null)  item.setIcon( IconLoader.load(icon) );
 		if (accel != null) item.setAccelerator( KeyStroke.getKeyStroke(accel) );
