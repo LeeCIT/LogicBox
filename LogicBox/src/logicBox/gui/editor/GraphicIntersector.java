@@ -22,7 +22,14 @@ public interface GraphicIntersector {
 	
 	/**
 	 * Test whether the bounding box intersects the graphic.
-	 * Usually uses for selection.
+	 * Usually used for selection.
 	 */
 	public boolean overlaps( Bbox2 bbox );
+	
+	
+	
+	/**
+	 * Get the bounding box of the graphic.
+	 */
+	public Bbox2 getBbox();
 }
