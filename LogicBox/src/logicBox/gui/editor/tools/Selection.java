@@ -105,6 +105,7 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	public void delete() {
 		// TODO
+		System.out.println( "Delete: " + ecoms );
 	}
 	
 	
