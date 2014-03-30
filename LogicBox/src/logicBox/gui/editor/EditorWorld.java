@@ -9,12 +9,15 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import logicBox.gui.Gfx;
 import logicBox.sim.Simulation;
 import logicBox.util.Bbox2;
 import logicBox.util.BinaryFunctor;
 import logicBox.util.Geo;
+import logicBox.util.Line2;
 import logicBox.util.SpatialGrid;
 import logicBox.util.Vec2;
 
@@ -60,15 +63,28 @@ public class EditorWorld implements Serializable
 	 * To remove it you have to use remove().
 	 */
 	public void add( EditorComponent ecom ) {
-		Bbox2 bbox = ecom.graphic.getBbox();
-		
+		addToGrid( ecom );		
 		ecoms.add( ecom );
-		grid.add( bbox, ecom );
 		ecom.linkToWorld( this );
 	}
 	
 	
 	
+	private void addToGrid( EditorComponent ecom ) {
+		if ( ! (ecom instanceof EditorComponentTrace))
+			 grid.add( ecom.getGraphic().getBbox(), ecom );
+		else addToGrid( (EditorComponentTrace) ecom );
+	}
+	
+	
+	
+	private void addToGrid( EditorComponentTrace trace ) {
+		 for (Line2 line: trace.getGraphic().getLines())
+			 grid.add( line, trace );
+	}
+
+
+
 	/**
 	 * Remove a component from the world.
 	 * This doesn't actually remove it from the simulation or anything.
@@ -76,8 +92,8 @@ public class EditorWorld implements Serializable
 	 * @param ecom
 	 */
 	public void remove( EditorComponent ecom ) {
-		ecoms.remove( ecom );
-		grid .remove( ecom );
+		ecoms   .remove( ecom );
+		grid.remove( ecom );
 		ecom.unlinkFromWorld();
 	}
 	
@@ -110,6 +126,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Find one component at the given position.
 	 * It is always the most recently modified or moved component.
+	 * This is the component highlighted or affected by any editor tool.
 	 * Returns null if no component is found.
 	 */
 	public EditorComponent findTopmostAt( Vec2 pos ) {
@@ -129,7 +146,7 @@ public class EditorWorld implements Serializable
 		List<EditorComponent> list = new ArrayList<>();
 		
 		for (EditorComponent ecom: grid.findPotentials( pos ))
-			if (ecom.graphic.contains( pos ))
+			if (ecom.getGraphic().contains( pos ))
 				list.add( ecom );
 		
 		return list;
@@ -144,7 +161,7 @@ public class EditorWorld implements Serializable
 		List<EditorComponent> list = new ArrayList<>(); 
 		
 		for (EditorComponent ecom: grid.findPotentials( bbox ))
-			if (ecom.graphic.overlaps( bbox ))
+			if (ecom.getGraphic().overlaps( bbox ))
 				list.add( ecom );
 		
 		return list;
@@ -169,7 +186,7 @@ public class EditorWorld implements Serializable
 		double bestDist = Double.MAX_VALUE;
 		
 		for (EditorComponent ecom: find( bbox )) {
-			GraphicPinMapping gpm = ecom.getGraphic().findClosestPin( pos, radius );
+			GraphicPinMapping gpm = ecom.findPinNear( pos, radius );
 			
 			if (gpm != null) {
 				double dist = gpm.line.distanceToPoint( pos );
@@ -219,7 +236,7 @@ public class EditorWorld implements Serializable
 		List<Bbox2> bboxes = new ArrayList<>();
 		
 		for (EditorComponent ecom: ecoms)
-			bboxes.add( ecom.graphic.getBbox() );
+			bboxes.add( ecom.getGraphic().getBbox() );
 		
 		return Geo.reduce( bboxes, new BinaryFunctor<Bbox2>() {
 			public Bbox2 call( Bbox2 a, Bbox2 b ) {
@@ -253,7 +270,33 @@ public class EditorWorld implements Serializable
 		for (EditorComponent ecom: getViewableComponents( cam, tolerance ))
 			list.add( ecom.getGraphic() );
 		
+		putTracesUnderneathActives( list );
+		
 		return list;
+	}
+	
+	
+	
+	/**
+	 * Sort so traces are underneath actives.
+	 * @param list
+	 */
+	private void putTracesUnderneathActives( List<Graphic> list ) {
+		Collections.sort( list, new Comparator<Graphic>() { 
+			public int compare( Graphic a, Graphic b ) {
+				boolean aTrace = a instanceof GraphicTrace;
+				boolean bTrace = b instanceof GraphicTrace;
+				
+				if (aTrace != bTrace)
+					 return boolToInt(bTrace) - boolToInt(aTrace);
+				else return 0; 
+			}
+			
+			
+			public int boolToInt( boolean b ) {
+				return (b) ? 1 : 0;
+			}
+		});
 	}
 	
 	
@@ -299,6 +342,7 @@ public class EditorWorld implements Serializable
 		};
 	}
 }
+
 
 
 
