@@ -13,6 +13,7 @@ import logicBox.gui.editor.GraphicComActive;
 import logicBox.gui.editor.RepaintListener;
 import logicBox.util.CallbackParam;
 import logicBox.util.Geo;
+import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
@@ -53,9 +54,9 @@ public class ToolPlacer extends Tool
 		setTransHint();
 		setAttached( true );
 	}
-
-
-
+	
+	
+	
 	public void detach() {
 		if ( ! isAttached())
 			return;
@@ -159,12 +160,11 @@ public class ToolPlacer extends Tool
 	/**
 	 * Begin placing a component.
 	 * @param createCallback What to do when the placement completes.  Note that it can be cancelled.
-	 * @param graphic The graphic used to show where the component will be placed.  
-	 * 				  The graphic will be modified by the tool, so don't reuse it.
+	 * @param graphic The graphic used to show where the component will be placed.
 	 */
 	public void placementStart( GraphicComActive graphic, CallbackParam<EditorCreationParam> createCallback ) {
 		placementCallback  = createCallback;
-		placementGraphic   = graphic;
+		placementGraphic   = Util.deepCopy( graphic );
 		placementInitiated = true;
 		placementArmed     = false;
 		
