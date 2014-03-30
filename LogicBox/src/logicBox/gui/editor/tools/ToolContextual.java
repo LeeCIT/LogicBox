@@ -99,6 +99,16 @@ public class ToolContextual extends Tool
 	
 	
 	
+	public void delete() {
+		if (selection.isEmpty())
+			selectUnderlying();
+		
+		if ( ! selection.isEmpty())
+			selection.delete();
+	}
+	
+	
+	
 	public Selection getSelection() {
 		return selection;
 	}
@@ -522,6 +532,17 @@ public class ToolContextual extends Tool
 		}
 		
 		repaint();
+	}
+    
+    
+    
+    private void selectUnderlying() {
+		selection.clear();
+		
+		EditorComponent ecom = getComponentAt( getMousePosWorld() );
+		
+		if (ecom != null)
+			selection.set( ecom );
 	}
 }
 
