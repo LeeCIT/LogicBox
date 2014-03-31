@@ -79,8 +79,8 @@ public class EditorWorld implements Serializable
 	
 	
 	private void addToGrid( EditorComponentTrace trace ) {
-		 for (Line2 line: trace.getGraphic().getLines())
-			 grid.add( line, trace );
+		for (Line2 line: trace.getGraphic().getLines())
+			grid.add( line, trace );
 	}
 
 
@@ -92,8 +92,8 @@ public class EditorWorld implements Serializable
 	 * @param ecom
 	 */
 	public void remove( EditorComponent ecom ) {
-		ecoms   .remove( ecom );
-		grid.remove( ecom );
+		ecoms.remove( ecom );
+		grid .remove( ecom );
 		ecom.unlinkFromWorld();
 	}
 	

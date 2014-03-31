@@ -256,7 +256,7 @@ public class SpatialGrid<T> implements Serializable
 			for (int x=0; x<g[0].length; x++) {
 				int    count = g[y][x];
 				String s;
-					 if (count == 0) s = " ";
+					 if (count == 0) s = ".";
 				else if (count <= 9) s = ""+count;
 				else				 s = "+";
 				System.out.print( s );
