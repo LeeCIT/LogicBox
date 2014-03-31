@@ -37,7 +37,7 @@ public class LineDDA
 		
 		for (int i=0; i<2; i++) {
 			negs[i] = maxNegDeltaZ( a.get(i), b.get(i) );
-			offs[i] = (int) (Geo.ceilToMultiple(negs[0], cs) / cs);
+			offs[i] = (int) (Geo.ceilToMultiple(negs[i], cs) / cs);
 		}
 		
 		for (int v=0; v<2; v++) {
