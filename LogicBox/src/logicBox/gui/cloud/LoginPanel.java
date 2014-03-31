@@ -1,18 +1,20 @@
+
 package logicBox.gui.cloud;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
-
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
-
 import logicBox.gui.GUI;
-import logicBox.gui.editor.menubar.EditorMenuBar;
 import logicBox.web.*;
 import net.miginfocom.swing.MigLayout;
 
+/**
+ * Makes the log in panel
+ * @author John, Lee, Robert
+ *
+ */
 public class LoginPanel extends JDialog implements RequestInterface
 {
 	private static final long serialVersionUID = 8403323633746161165L;

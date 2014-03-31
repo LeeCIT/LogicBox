@@ -52,6 +52,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		toolManager = new ToolManager( this );
 		
 		addDebugAndDemoStuff();
+		//getEditorPanel().addWorldRepaintListener( world.getSpatialGridDebugRepainter() );
 	}
 	
 	
