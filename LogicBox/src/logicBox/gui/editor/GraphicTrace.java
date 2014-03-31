@@ -41,12 +41,7 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 		this.points   = new ArrayList<>( points );
 		this.lines    = Line2.toLines( points );
 		this.polyLine = new VecPath( points, false );
-	}
-	
-	
-	
-	public List<Line2> getLines() {
-		return lines;
+		setColors( false );
 	}
 	
 	
@@ -56,6 +51,12 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 		
 		if (hasGpmSrc())  drawConnection( g, gpmSrc .getPinPosEnd() );
 		if (hasGpmDest()) drawConnection( g, gpmDest.getPinPosEnd() );
+	}
+	
+	
+	
+	public List<Line2> getLines() {
+		return lines;
 	}
 	
 	
@@ -85,6 +86,19 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	
 	
+	private void setColors( boolean powered ) {
+		colStrokeNormal = (powered) ? EditorStyle.colTraceOn : EditorStyle.colTraceOff;
+		colStroke       = colStrokeNormal;
+	}
+	
+	
+	
+	public void setInverted( boolean state ) {
+		// Do nothing
+	}
+	
+	
+	
 	private boolean hasGpmSrc() {
 		return gpmSrc != null;
 	}
@@ -98,7 +112,7 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	
 	private void drawTrace( Graphics2D g ) {
-		Gfx.pushColorAndSet ( g, EditorStyle.colTraceOff );
+		Gfx.pushColorAndSet ( g, colStroke );
 			Gfx.pushStrokeAndSet( g, EditorStyle.strokeTrace );
 				g.draw( polyLine );
 			Gfx.popStroke( g );
@@ -125,8 +139,8 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 		poly.moveTo( b2i );
 		poly.lineTo( b   );
 		
-		Gfx.pushColorAndSet ( g, EditorStyle.colTraceOff );
-			Gfx.pushStrokeAndSet( g, EditorStyle.strokeBody );
+		Gfx.pushColorAndSet ( g, colStroke );
+			Gfx.pushStrokeAndSet( g, EditorStyle.strokeTrace );
 				g.draw( poly );
 				
 				Gfx.pushPaintAndSet( g, shadePaint );
