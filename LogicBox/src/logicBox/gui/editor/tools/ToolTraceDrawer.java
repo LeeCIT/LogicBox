@@ -62,6 +62,7 @@ public class ToolTraceDrawer extends Tool
 		getEditorPanel().addMouseListener      ( mouseListener );
 		getEditorPanel().addMouseMotionListener( mouseListener );
 		getEditorPanel().addWorldRepaintListener( repaintListener );
+		setTransHint();
 		setAttached( true );
 	}
 	
@@ -74,6 +75,7 @@ public class ToolTraceDrawer extends Tool
 		getEditorPanel().removeMouseListener      ( mouseListener );
 		getEditorPanel().removeMouseMotionListener( mouseListener );
 		getEditorPanel().removeWorldRepaintListener( repaintListener );
+		removeTransHint();
 		setAttached( false );
 	}
 	
@@ -86,6 +88,17 @@ public class ToolTraceDrawer extends Tool
 		traceSrc            = null;
 		traceDest           = null;
 		tracePoints.clear();
+	}
+	
+	
+	
+	private void setTransHint() {
+		setTransHint(
+		    "Left-click to add to the trace.\n" +
+		    "Right-click to remove the last segment added, or cancel if there are no more segments.\n" +
+		    "The trace ends when you connect it to another component.\n" +
+		    "Hold down the Control key and left-click to end the trace without attaching to anything."
+		);
 	}
 	
 	
@@ -206,9 +219,13 @@ public class ToolTraceDrawer extends Tool
 			
 			public void mouseReleased( MouseEvent ev ) {
 				if (isLeft( ev ))
-					if ( ! traceInitiated) 
+					if ( ! traceInitiated) { 
 						 traceStart();
-					else traceAdd  ();
+					} else {
+						if (ev.isControlDown() && traceHasPoints())
+							 traceCompleteForce();
+						else traceAdd();
+					}
 				
 				if (isRight( ev ))
 					if (traceHasPoints())
@@ -273,6 +290,13 @@ public class ToolTraceDrawer extends Tool
 			traceComplete();
 		
 		repaint();
+	}
+	
+	
+	
+	private void traceCompleteForce() {
+		traceAdd();
+		traceComplete();
 	}
 	
 	
