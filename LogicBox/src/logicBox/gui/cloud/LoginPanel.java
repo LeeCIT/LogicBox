@@ -19,12 +19,11 @@ public class LoginPanel extends JDialog implements RequestInterface
 {
 	private static final long serialVersionUID = 8403323633746161165L;
 	
-	private JTextField txtEmail = new JTextField("");
-	private JPasswordField txtPassword = new JPasswordField("");
-	private JButton btnLogin = new JButton("Login");
+	private JTextField 		txtEmail 			= new JTextField( 16 );
+	private JPasswordField 	txtPassword 		= new JPasswordField( 16 );
+	private JButton 		btnLogin 			= new JButton("Login");
 	
 	private Request r = new Request();
-	
 	private JFrame parent;
 	
 	private static LoginPanel instance = null;
@@ -33,28 +32,35 @@ public class LoginPanel extends JDialog implements RequestInterface
 	{
 		super(frame, "Login to BoxCloud");
 		parent = frame;
-
-		MigLayout layout = new MigLayout("fillx", "[right]rel[grow,fill]", "[]10[]");
 		
-		setSize(400, 135);
-		setResizable(false);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
-		JPanel panel = new JPanel(layout);
-		
-		panel.add(new JLabel("Email:"), "");
-		panel.add(txtEmail, "wrap");
-		panel.add(new JLabel("Password:"), "");
-		panel.add(txtPassword, "wrap");
-		panel.add(btnLogin, "span 2,align 50% 50%");
-
-		add(panel);
-		
+		setupComponents();		
 		HandleLoginAttempt();
-		r.setRequestInterface(this);
+		r.setRequestInterface(this);		
 		
 		setVisible(true);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
+	
+	
+	
+	
+	private void setupComponents() {
+		MigLayout 	layout 	= new MigLayout( "", "128px[][]128px", "128px[][][]128px" );
+		JPanel 		panel 	= new JPanel(layout);
+		
+		panel.add(new JLabel("Email:"), 	"alignx right");
+		panel.add(txtEmail, "wrap");
+		
+		panel.add(new JLabel("Password:"), 	"alignx right");
+		panel.add(txtPassword, "wrap");
+		
+		panel.add(btnLogin, "skip 1, alignx right");		
+		setSize( 600, 400 );		
+		add(panel);
+	}
+
+	
+	
 	
 	public static LoginPanel getInstance()
 	{
