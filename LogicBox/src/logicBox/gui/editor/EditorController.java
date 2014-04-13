@@ -48,6 +48,9 @@ public class EditorController implements HistoryListener<EditorWorld>
 	private ToolManager                 toolManager;
 	private HistoryManager<EditorWorld> historyManager;
 	
+	private boolean isUnsaved;
+	private boolean needsToSave;
+	
 	
 	
 	public EditorController( EditorFrame edframe ) {
@@ -58,11 +61,13 @@ public class EditorController implements HistoryListener<EditorWorld>
 		
 		historyManager = new HistoryManager<>( this );
 		historyManager.markChange( "Initial state" );
+		addNeedToSaveCallback();
 		
 		toolManager = new ToolManager( this );
 		
+		makeNewCircuit();
+		
 		addDebugAndDemoStuff();
-		//getEditorPanel().addWorldRepaintListener( world.getSpatialGridDebugRepainter() );
 	}
 	
 	
@@ -173,10 +178,63 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public static ActionListener getNewAction( final EditorController ctrl ) {
+	private boolean canDiscardCircuit() {
+		boolean unsavedAndNotEmpty = isUnsaved && !world.isEmpty();
+		if (unsavedAndNotEmpty || needsToSave)
+			if ( ! askUserToDiscard())
+				return false;
+		
+		return true;
+	}
+	
+	
+	
+	private boolean askUserToDiscard() {
+		return GUI.askConfirm(
+			getEditorFrame(),
+			"Discard Unsaved Changes?",
+			"You have unsaved changes.  Do you really want to delete them?"
+		);
+	}
+	
+	
+	
+	private void addNeedToSaveCallback() {
+		Callback onChange = new Callback() {
+			public void execute() {
+				needsToSave = true;
+				frame.setCircuitModified( true );
+			}
+		};
+		
+		historyManager.addOnChangeCallback  ( onChange );
+		historyManager.addOnUndoRedoCallback( onChange );
+	}
+	
+	
+	
+	private void makeNewCircuit() {
+		isUnsaved   = true;
+		needsToSave = false;
+		
+		world.clear();
+		historyManager.clear();
+		historyManager.markChange( "<initial state>" );
+		
+		frame.setCircuitName    ( "New Circuit" );
+		frame.setCircuitModified( false );
+		frame.repaint();
+	}
+	
+	
+	
+	public ActionListener getNewAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				// TODO
+				if ( ! canDiscardCircuit())
+					return;
+				
+				makeNewCircuit();
 			}
 		};
 	}
@@ -189,6 +247,9 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getOpenAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
+				if ( ! canDiscardCircuit())
+					return;
+				
 				FileOpen fileOpen = new FileOpen( getEditorFrame() );
 				File     file     = fileOpen.getPickedFile();
 				
@@ -203,7 +264,15 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getSaveAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				// TODO
+				if (isUnsaved) {
+					getSaveAsAction().actionPerformed( ev );
+					return;
+				}
+				
+				System.out.println( "save" );
+				
+				isUnsaved   = false;
+				needsToSave = false;
 			}
 		};
 	}
@@ -213,16 +282,13 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getSaveAsAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				// TODO
+				System.out.println( "save as" );
 			}
 		};
 	}
 	
 	
 	
-	/**
-	 * When the print function is called
-	 */
 	public ActionListener getPrintAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
@@ -341,7 +407,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public static ActionListener getHelpAction() {
+	public ActionListener getHelpAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				new HelpFrame(); // TODO this is temporary, change it later
