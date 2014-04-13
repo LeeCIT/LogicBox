@@ -58,6 +58,20 @@ public class EditorWorld implements Serializable
 	
 	
 	
+	public void clear() {
+		grid .clear();
+		ecoms.clear();
+		sim  .clear();
+	}
+	
+	
+	
+	public boolean isEmpty() {
+		return ecoms.isEmpty();
+	}
+	
+	
+	
 	/**
 	 * Add a component to the world.
 	 * To remove it you have to use remove().
