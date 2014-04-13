@@ -186,8 +186,9 @@ public class ToolPlacer extends Tool
 		placementPos = getSnappedMousePos();
 		EditorCreationParam param = new EditorCreationParam( placementPos, placementAngle );
 		placementCallback.execute( param );
-		markHistoryChange();
 		placementGraphic.setHighlighted( false );
+		
+		markHistoryChange( "Create component" );
 		repaint();
 	}
 	

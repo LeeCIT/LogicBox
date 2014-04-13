@@ -371,7 +371,7 @@ public class ToolTraceDrawer extends Tool
 		EditorComponent ecom = new EditorComponentTrace( new Trace(), tracePoints );
 		getWorld().add( ecom );
 		
-		markHistoryChange();
+		markHistoryChange( "Create trace" );
 		repaint();
 	}
 	

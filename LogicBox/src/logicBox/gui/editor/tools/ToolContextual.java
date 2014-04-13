@@ -273,7 +273,7 @@ public class ToolContextual extends Tool
 		if ( ! dragging)
 			return;
 		
-		markHistoryChange();
+		markHistoryChange( "Drag/Rotate" );
 		dragFinishedCommon();
 	}
 	
