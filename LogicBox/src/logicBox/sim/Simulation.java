@@ -59,6 +59,14 @@ public class Simulation implements Serializable
 	
 	
 	
+	public void clear() {
+		comps  .clear();
+		actives.clear();
+		sources.clear();
+	}
+	
+	
+	
 	/**
 	 * Reset the simulation to its initial state, as if simulate() were never called.
 	 */
