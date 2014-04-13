@@ -80,10 +80,11 @@ public class HistoryManager<T extends Serializable>
 	
 	/**
 	 * Add a point to the undo/redo timeline.
+	 * Should be called before making the change (so it undoes the change you're about to make)
 	 */
 	public void markChange() {
 		purgeRedo();
-		history.push( getStreamerState() );
+		history.push( getListenerState() );
 		index = history.size() - 1;
 		cullHistory();
 		onChange.execute();
@@ -168,7 +169,7 @@ public class HistoryManager<T extends Serializable>
 	
 	
 	
-	private byte[] getStreamerState() {
+	private byte[] getListenerState() {
 		return compress( listener.getHistoryState() );
 	}
 	
