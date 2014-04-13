@@ -52,23 +52,23 @@ public class EditorCreator
 			toolbox.setActiveToolManager( ctrl.getToolManager() );
 		}
 		
-		linkAction( Actions.getNewAction   (ctrl), toolbar.buttNew,   menubar.itemFileNew    );
-		linkAction( Actions.getOpenAction  (ctrl), toolbar.buttOpen,  menubar.itemFileOpen   );
-		linkAction( Actions.getSaveAction  (ctrl), toolbar.buttSave,  menubar.itemFileSave   );
-		linkAction( Actions.getSaveAsAction(ctrl), null, 			  menubar.itemFileSaveAs );
-		linkAction( Actions.getPrintAction (ctrl), toolbar.buttPrint, menubar.itemFilePrint  );
+		linkAction( ctrl.getNewAction   (), toolbar.buttNew,   menubar.itemFileNew    );
+		linkAction( ctrl.getOpenAction  (), toolbar.buttOpen,  menubar.itemFileOpen   );
+		linkAction( ctrl.getSaveAction  (), toolbar.buttSave,  menubar.itemFileSave   );
+		linkAction( ctrl.getSaveAsAction(), null, 			   menubar.itemFileSaveAs );
+		linkAction( ctrl.getPrintAction (), toolbar.buttPrint, menubar.itemFilePrint  );
 		
 		linkActionUndoRedo( ctrl, menubar, toolbar );
-		linkAction( Actions.getDeleteAction      (ctrl), null, menubar.itemEditDelete       );
-		linkAction( Actions.getSelectAllAction   (ctrl), null, menubar.itemEditSelectAll    );
-		linkAction( Actions.getSelectNoneAction  (ctrl), null, menubar.itemEditSelectNone   );
-		linkAction( Actions.getSelectInvertAction(ctrl), null, menubar.itemEditSelectInvert );
+		linkAction( ctrl.getDeleteAction      (), null, menubar.itemEditDelete       );
+		linkAction( ctrl.getSelectAllAction   (), null, menubar.itemEditSelectAll    );
+		linkAction( ctrl.getSelectNoneAction  (), null, menubar.itemEditSelectNone   );
+		linkAction( ctrl.getSelectInvertAction(), null, menubar.itemEditSelectInvert );
 		
-		linkAction( Actions.getGridToggleAction    (ctrl), toolbar.buttToggleGrid,     menubar.itemViewGrid   );
-		linkAction( Actions.getRecentreCameraAction(ctrl), toolbar.buttCameraRecentre, menubar.itemViewCamera );
+		linkAction( ctrl.getGridToggleAction    (), toolbar.buttToggleGrid,     menubar.itemViewGrid   );
+		linkAction( ctrl.getRecentreCameraAction(), toolbar.buttCameraRecentre, menubar.itemViewCamera );
 		
-		linkAction( Actions.getHelpAction(ctrl),          toolbar.buttHelp,          menubar.itemHelpHelp );
-		linkAction( Actions.getToolboxToggleAction(ctrl), toolbar.buttToggleToolbox, null );
+		linkAction( ctrl.getHelpAction(),          toolbar.buttHelp,          menubar.itemHelpHelp );
+		linkAction( ctrl.getToolboxToggleAction(), toolbar.buttToggleToolbox, null );
 		
 		return frame;
 	}
@@ -120,8 +120,8 @@ public class EditorCreator
 	
 	
 	private static void linkActionUndoRedo( EditorController ctrl, final EditorMenuBar menubar, final EditorToolbar toolbar ) {
-		linkAction( Actions.getUndoAction(ctrl), toolbar.buttUndo, menubar.itemEditUndo );
-		linkAction( Actions.getRedoAction(ctrl), toolbar.buttRedo, menubar.itemEditRedo );
+		linkAction( ctrl.getUndoAction(), toolbar.buttUndo, menubar.itemEditUndo );
+		linkAction( ctrl.getRedoAction(), toolbar.buttRedo, menubar.itemEditRedo );
 		
 		menubar.itemEditUndo.setEnabled( false );
 		menubar.itemEditRedo.setEnabled( false );
