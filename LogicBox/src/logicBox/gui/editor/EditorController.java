@@ -56,18 +56,13 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public EditorController( EditorFrame edframe ) {
 		frame = edframe;
 		
-		world = new EditorWorld();
-		cam   = new Camera();
-		
+		world          = new EditorWorld();
+		cam            = new Camera();
 		historyManager = new HistoryManager<>( this );
-		historyManager.markChange( "Initial state" );
+		toolManager    = new ToolManager( this );
+		
 		addNeedToSaveCallback();
-		
-		toolManager = new ToolManager( this );
-		
 		makeNewCircuit();
-		
-		addDebugAndDemoStuff();
 	}
 	
 	
@@ -180,11 +175,10 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	private boolean canDiscardCircuit() {
 		boolean unsavedAndNotEmpty = isUnsaved && !world.isEmpty();
-		if (unsavedAndNotEmpty || needsToSave)
-			if ( ! askUserToDiscard())
-				return false;
 		
-		return true;
+		if (unsavedAndNotEmpty || needsToSave)
+			 return askUserToDiscard();
+		else return true;
 	}
 	
 	
@@ -214,9 +208,6 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	private void makeNewCircuit() {
-		isUnsaved   = true;
-		needsToSave = false;
-		
 		world.clear();
 		historyManager.clear();
 		historyManager.markChange( "<initial state>" );
@@ -224,6 +215,9 @@ public class EditorController implements HistoryListener<EditorWorld>
 		frame.setCircuitName    ( "New Circuit" );
 		frame.setCircuitModified( false );
 		frame.repaint();
+		
+		isUnsaved   = true;
+		needsToSave = false;
 	}
 	
 	
@@ -461,7 +455,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public void addDebugAndDemoStuff() {
+	private void addDebugAndDemoStuff() {
 		world.add( new EditorComponentActive( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, -128) ) );
 		world.add( new EditorComponentActive( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, -256) ) );
 		
