@@ -4,9 +4,13 @@
 package logicBox.gui;
 
 import java.awt.Component;
+import java.util.ArrayList;
+
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+
 import logicBox.gui.editor.EditorCreator;
 import logicBox.gui.editor.EditorFrame;
 import logicBox.gui.editor.toolbox.Toolbox;
@@ -129,6 +133,26 @@ public abstract class GUI
 	
 	private static void constructGUI() {
 		editorFrame = EditorCreator.createEditorFrame( true );
+	}
+	
+	
+	
+	/**
+	 * Print a list of errors
+	 * @param f
+	 * @param errors
+	 * @param title
+	 */
+	public static void showErrorList(JFrame f, ArrayList<String> errors, String title)
+	{
+		String message = "<html><ul>";
+		
+		for(String error : errors)
+			message += "<li>" + error + "</li>";
+		
+		message += "</ul></html>";
+		
+		JOptionPane.showMessageDialog(f, message, title, JOptionPane.ERROR_MESSAGE);
 	}
 }
 
