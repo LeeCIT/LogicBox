@@ -3,11 +3,21 @@
 
 package logicBox.gui.editor;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import java.util.List;
+import javax.swing.JButton;
+import javax.swing.JMenuItem;
+import logicBox.fileManager.FileOpen;
+import logicBox.gui.GUI;
+import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
+import logicBox.gui.edtior.printing.EditorPrinter;
+import logicBox.gui.help.HelpFrame;
 import logicBox.sim.component.Demux;
 import logicBox.sim.component.GateAnd;
 import logicBox.sim.component.GateBuffer;
@@ -47,7 +57,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		cam   = new Camera();
 		
 		historyManager = new HistoryManager<>( this );
-		historyManager.markChange();
+		historyManager.markChange( "Initial state" );
 		
 		toolManager = new ToolManager( this );
 		
@@ -163,11 +173,233 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
+	public static ActionListener getNewAction( final EditorController ctrl ) {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				// TODO
+			}
+		};
+	}
+	
+	
+	
+	/**
+	 * When a file is opened this is called and the JFile chooser is brought up
+	 */
+	public ActionListener getOpenAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				FileOpen fileOpen = new FileOpen( getEditorFrame() );
+				File     file     = fileOpen.getPickedFile();
+				
+				if (file != null)
+					getWorld().loadCircuit( file );
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getSaveAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				// TODO
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getSaveAsAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				// TODO
+			}
+		};
+	}
+	
+	
+	
+	/**
+	 * When the print function is called
+	 */
+	public ActionListener getPrintAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				new EditorPrinter( getEditorFrame() );
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getCutAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getCopyAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getPasteAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getDeleteAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				getToolManager().delete();
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getSelectAllAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				getToolManager().selectAll();
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getSelectNoneAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				getToolManager().selectNone();
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getSelectInvertAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				getToolManager().selectInvert();
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getGridToggleAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				EditorPanel panel = getEditorPanel();
+				panel.setGridEnabled( ! panel.getGridEnabled() );
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getRecentreCameraAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				recentreCamera();
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getToolboxToggleAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				Toolbox toolbox = Toolbox.getInstance();
+				
+				if (toolbox == null) {
+					toolbox = new Toolbox( GUI.getMainFrame() );
+					toolbox.setActiveToolManager( getToolManager() );
+				} else {
+					toolbox.dispose();
+				}
+			}
+		};
+	}
+	
+	
+	
+	public static ActionListener getHelpAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				new HelpFrame(); // TODO this is temporary, change it later
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getUndoAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				historyAction( true );
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getRedoAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				historyAction( false );
+			}
+		};
+	}
+	
+	
+	
+	private void historyAction( boolean undoing ) {
+		EditorFrame                 frame   = getEditorFrame();
+		HistoryManager<EditorWorld> manager = getHistoryManager();
+		
+		JMenuItem menuUndo = frame.getEditorMenuBar().itemEditUndo;
+		JButton   buttUndo = frame.getEditorToolbar().buttUndo;
+		JMenuItem menuRedo = frame.getEditorMenuBar().itemEditRedo;
+		JButton   buttRedo = frame.getEditorToolbar().buttRedo;
+		
+		if (undoing)
+			 manager.undo();
+		else manager.redo();
+		
+		boolean canUndo = manager.canUndo();
+		boolean canRedo = manager.canRedo();
+		
+		menuUndo.setEnabled( canUndo );
+		buttUndo.setEnabled( canUndo );
+		menuRedo.setEnabled( canRedo );
+		buttRedo.setEnabled( canRedo );
+	}
+	
+	
+	
 	public void addDebugAndDemoStuff() {
 		world.add( new EditorComponentActive( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, -128) ) );
 		world.add( new EditorComponentActive( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, -256) ) );
 		
-		historyManager.markChange();
+		historyManager.markChange( "test" );
 		
 		for (int i=2; i<=4; i++) {
 			double xo = 192 * (i-2);
@@ -180,7 +412,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 			world.add( new EditorComponentActive( new GateXnor(i), GraphicGen.generateGateXnor(i), new Vec2(xo, 640) ) );
 		}
 		
-		historyManager.markChange();
+		historyManager.markChange( "test" );
 		
 		for (int i=2; i<=8; i++) {
 			double xo = 192 * (i-2);
@@ -189,7 +421,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 			world.add( new EditorComponentActive( new Demux(i), new Demux(i).getGraphic(), new Vec2(xo,-768) ) );
 		}
 		
-		historyManager.markChange();
+		historyManager.markChange( "test" );
 		
 		addMouseOverTest();
 	}
