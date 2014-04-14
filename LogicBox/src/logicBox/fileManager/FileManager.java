@@ -20,6 +20,8 @@ import logicBox.gui.GUI;
  */
 public class FileManager 
 {
+	public static final String fileExtension = ".lbx";
+	
 	private static String lastDir;
 	
 	private JFrame       frame;

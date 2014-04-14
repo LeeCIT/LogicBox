@@ -177,8 +177,10 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	public void onCloseButtonPressed() {
-		if (canDiscardCircuit())
+		if (canDiscardCircuit()) {
+			// TODO save prefs, cloud sync, etc
 			System.exit( 0 );
+		}
 	}
 	
 	
@@ -197,7 +199,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		return GUI.askConfirm(
 			getEditorFrame(),
 			"Overwrite File?",
-			"A file called " + file.getName() + " already exists." + "Do you really want to overwrite it?"
+			"A file called " + file.getName() + " already exists.  Do you really want to overwrite it?"
 		);
 	}
 	
@@ -207,7 +209,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		return GUI.askConfirm(
 			getEditorFrame(),
 			"Discard Unsaved Changes?",
-			"You have unsaved changes.  Do you really want to lose them?"
+			"You have unsaved changes.  Do you really want to discard them?"
 		);
 	}
 	
@@ -349,6 +351,9 @@ public class EditorController implements HistoryListener<EditorWorld>
 				File        file        = fileManager.saveFile();
 				
 				if (file != null) {
+					if ( ! file.getPath().endsWith( FileManager.fileExtension ))
+						file = new File( file + FileManager.fileExtension );
+					
 					if (file.exists())
 					if ( ! askUserToOverwrite( file ))
 						return;
