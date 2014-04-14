@@ -65,7 +65,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		toolManager    = new ToolManager( this );
 		
 		addNeedToSaveCallback();
-		makeNewCircuit();
+		initialiseCircuit();
 	}
 	
 	
@@ -176,6 +176,13 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
+	public void onCloseButtonPressed() {
+		if (canDiscardCircuit())
+			System.exit( 0 );
+	}
+	
+	
+	
 	private boolean canDiscardCircuit() {
 		boolean unsavedAndNotEmpty = isUnsaved && !world.isEmpty();
 		
@@ -200,7 +207,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		return GUI.askConfirm(
 			getEditorFrame(),
 			"Discard Unsaved Changes?",
-			"You have unsaved changes.  Do you really want to delete them?"
+			"You have unsaved changes.  Do you really want to lose them?"
 		);
 	}
 	
@@ -220,7 +227,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	private void makeNewCircuit() {
+	private void initialiseCircuit() {
 		world.clear();
 		historyManager.clear();
 		historyManager.markChange( "<initial state>" );
@@ -262,16 +269,10 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	private void openCircuitFromFile( File file ) {
+		EditorWorld world = null;
+		
 		try {
-			EditorWorld world = Storage.read( file.getPath(), EditorWorld.class );
-			
-			makeNewCircuit();
-			isUnsaved = false;
-			
-			circuitFile = file;
-			frame.setCircuitName( circuitFile.getName() );
-			
-			EditorController.this.world = world;
+			world = Storage.read( file.getPath(), EditorWorld.class );
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -281,6 +282,16 @@ public class EditorController implements HistoryListener<EditorWorld>
 				"Couldn't open the file.  This is bad!\n\n" +
 				"Technical details:\n" + ex
 			);
+		}
+		
+		if (world != null) {
+			initialiseCircuit();
+			isUnsaved = false;
+			
+			circuitFile = file;
+			frame.setCircuitName( circuitFile.getName() );
+			
+			this.world = world;
 		}
 	}
 	
@@ -292,7 +303,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 				if ( ! canDiscardCircuit())
 					return;
 				
-				makeNewCircuit();
+				initialiseCircuit();
 			}
 		};
 	}

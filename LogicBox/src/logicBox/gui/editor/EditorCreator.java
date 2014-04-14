@@ -38,7 +38,7 @@ public class EditorCreator
 		frame.pack();
 		frame.setSize       ( new Dimension(720, 640) );
 		frame.setMinimumSize( new Dimension(640, 480) );
-		frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+		frame.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
 		frame.setVisible( true );
 		
 		EditorController ctrl = new EditorController( frame );
@@ -77,11 +77,18 @@ public class EditorCreator
 	
 	private static void linkFrame( final EditorController ctrl, EditorFrame frame ) {
 		frame.addWindowListener( new WindowAdapter() {
-			public void windowActivated( WindowEvent e ) {
+			public void windowActivated( WindowEvent ev ) {
 				Toolbox toolbox = Toolbox.getInstance();
 				
 				if (toolbox != null)
 					Toolbox.getInstance().setActiveToolManager( ctrl.getToolManager() );
+			}
+		});
+		
+		
+		frame.addWindowListener( new WindowAdapter() {
+			public void windowClosing( WindowEvent ev ) {
+				ctrl.onCloseButtonPressed();
 			}
 		});
 	}
