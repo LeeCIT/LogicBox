@@ -12,7 +12,7 @@ import java.io.File;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
-import logicBox.fileManager.FileOpen;
+import logicBox.fileManager.FileManager;
 import logicBox.gui.GUI;
 import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
@@ -32,6 +32,8 @@ import logicBox.util.Bbox2;
 import logicBox.util.Callback;
 import logicBox.util.Evaluator;
 import logicBox.util.Geo;
+import logicBox.util.Storage;
+import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
@@ -48,8 +50,9 @@ public class EditorController implements HistoryListener<EditorWorld>
 	private ToolManager                 toolManager;
 	private HistoryManager<EditorWorld> historyManager;
 	
-	private boolean isUnsaved;
-	private boolean needsToSave;
+	private File    circuitFile; // File currently being affected by save command
+	private boolean isUnsaved;   // File is new and unsaved
+	private boolean needsToSave; // File exists on disk, but in different form
 	
 	
 	
@@ -183,6 +186,16 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
+	private boolean askUserToOverwrite( File file ) {
+		return GUI.askConfirm(
+			getEditorFrame(),
+			"Overwrite File?",
+			"A file called " + file.getName() + " already exists." + "Do you really want to overwrite it?"
+		);
+	}
+	
+	
+	
 	private boolean askUserToDiscard() {
 		return GUI.askConfirm(
 			getEditorFrame(),
@@ -216,8 +229,59 @@ public class EditorController implements HistoryListener<EditorWorld>
 		frame.setCircuitModified( false );
 		frame.repaint();
 		
+		circuitFile = null;
 		isUnsaved   = true;
 		needsToSave = false;
+	}
+	
+	
+	
+	private void saveToCircuitFile() {
+		try {
+			EditorWorld saveMe = Util.deepCopy( world );
+			saveMe.clearGraphicSelectionAndHighlightStates();
+			
+			Storage.write( circuitFile.getPath(), saveMe ); // TODO compress + version
+			frame.setCircuitName( circuitFile.getName() );
+			frame.setCircuitModified( false );
+			isUnsaved   = false;
+			needsToSave = false;
+			// TODO cloud stuff here - sync file in background thread
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			GUI.showError(
+				frame,
+				"Save Failed",
+				"Couldn't save!  Try saving it somewhere else.\n\n" +
+				"Technical details:\n" + ex
+			);
+		}
+	}
+	
+	
+	
+	private void openCircuitFromFile( File file ) {
+		try {
+			EditorWorld world = Storage.read( file.getPath(), EditorWorld.class );
+			
+			makeNewCircuit();
+			isUnsaved = false;
+			
+			circuitFile = file;
+			frame.setCircuitName( circuitFile.getName() );
+			
+			EditorController.this.world = world;
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			GUI.showError(
+				frame,
+				"Failed to Open Circuit",
+				"Couldn't open the file.  This is bad!\n\n" +
+				"Technical details:\n" + ex
+			);
+		}
 	}
 	
 	
@@ -235,20 +299,17 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	/**
-	 * When a file is opened this is called and the JFile chooser is brought up
-	 */
 	public ActionListener getOpenAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				if ( ! canDiscardCircuit())
 					return;
 				
-				FileOpen fileOpen = new FileOpen( getEditorFrame() );
-				File     file     = fileOpen.getPickedFile();
+				FileManager fileManager = new FileManager( frame );
+				File        file        = fileManager.openFile();
 				
 				if (file != null)
-					getWorld().loadCircuit( file );
+					openCircuitFromFile( file );
 			}
 		};
 	}
@@ -258,15 +319,12 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getSaveAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				if (isUnsaved) {
+				if (isUnsaved) { // Redirect to save-as if unsaved
 					getSaveAsAction().actionPerformed( ev );
 					return;
 				}
 				
-				System.out.println( "save" );
-				
-				isUnsaved   = false;
-				needsToSave = false;
+				saveToCircuitFile();
 			}
 		};
 	}
@@ -276,13 +334,23 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getSaveAsAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				System.out.println( "save as" );
+				FileManager fileManager = new FileManager( frame );
+				File        file        = fileManager.saveFile();
+				
+				if (file != null) {
+					if (file.exists())
+					if ( ! askUserToOverwrite( file ))
+						return;
+					
+					circuitFile = file;
+					saveToCircuitFile();
+				}
 			}
 		};
 	}
-	
-	
-	
+
+
+
 	public ActionListener getPrintAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
