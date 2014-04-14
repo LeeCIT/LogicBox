@@ -277,8 +277,6 @@ public class ToolContextual extends Tool
 		
 		markHistoryChange( "Drag/Rotate" );
 		dragFinishedCommon();
-		
-		System.out.println( "complete" );
 	}
 	
 	
