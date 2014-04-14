@@ -5,6 +5,8 @@ package logicBox.gui.editor.toolbox;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 import logicBox.gui.IconEnum;
@@ -15,6 +17,7 @@ import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
 import logicBox.util.Singleton;
 import logicBox.util.Util;
+import logicBox.util.Vec2;
 
 
 
@@ -26,6 +29,7 @@ import logicBox.util.Util;
  */
 public class Toolbox extends JDialog implements Singleton<Toolbox>
 {
+	private static Vec2    lastPosition;
 	private static Toolbox instance;
 	
 	private ToolManager            activeToolManager;
@@ -43,10 +47,19 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 		setResizable( false );
 		setVisible( true );
 		
+		if (lastPosition != null)
+			setLocation( (int) lastPosition.x, (int) lastPosition.y );
+		
 		if (instance != null)
 			throw new RuntimeException( "Trying to create duplicate Toolbox" );
 		
 		instance = this;
+		
+		addComponentListener( new ComponentAdapter() {
+			public void componentMoved( ComponentEvent ev ) {
+				lastPosition = new Vec2( getLocation() );
+			}
+		});
 	}
 	
 	
