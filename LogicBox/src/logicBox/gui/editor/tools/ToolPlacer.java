@@ -75,6 +75,7 @@ public class ToolPlacer extends Tool
 		placementCallback  = null;
 		placementInitiated = false;
 		placementArmed     = false;
+		placementAngle     = 0;
 	}
 	
 	

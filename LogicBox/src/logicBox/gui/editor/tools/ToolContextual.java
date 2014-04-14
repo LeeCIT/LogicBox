@@ -25,6 +25,7 @@ import logicBox.util.Vec2;
  * Handles dragging, rotating and selection.
  * @author Lee Coakley
  * TODO add support for context menus on components
+ * TODO allow components to be clicked on (switches need to be toggled, etc)
  */
 public class ToolContextual extends Tool
 {
