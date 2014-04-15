@@ -108,6 +108,8 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 			ecom.getComponent().disconnect();
 			world.remove( ecom );
 		}
+		
+		clear();
 	}
 	
 	
