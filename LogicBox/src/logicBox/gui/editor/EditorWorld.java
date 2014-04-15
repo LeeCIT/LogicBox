@@ -90,8 +90,6 @@ public class EditorWorld implements Serializable
 	
 	/**
 	 * Remove a component from the world.
-	 * This doesn't actually remove it from the simulation or anything.
-	 * Only the world stops knowing about it.
 	 * @param ecom
 	 */
 	public void remove( EditorComponent ecom ) {
@@ -307,7 +305,12 @@ public class EditorWorld implements Serializable
 	
 	
 	public String toString() {
-		return "EditorWorld with " + ecoms.size() + " components.";
+		String str = "EditorWorld with " + ecoms.size() + " components:\n";
+		
+		for (EditorComponent ecom: ecoms)
+			str += "\t" + ecom + " \t[" + ecom.com + "]\n"; 
+		
+		return str;
 	}
 	
 	
