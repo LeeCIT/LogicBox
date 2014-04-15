@@ -105,7 +105,11 @@ public class ToolContextual extends Tool
 			selectUnderlying();
 		
 		if ( ! selection.isEmpty())
-			selection.delete();
+			selection.delete( getWorld() );
+		
+		markHistoryChange( "Delete" );
+		
+		repaint();
 	}
 	
 	
