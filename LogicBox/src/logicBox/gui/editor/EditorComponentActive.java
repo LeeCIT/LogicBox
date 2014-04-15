@@ -3,8 +3,6 @@
 
 package logicBox.gui.editor;
 import java.awt.Graphics2D;
-import java.io.Serializable;
-import logicBox.sim.component.Component;
 import logicBox.sim.component.ComponentActive;
 import logicBox.util.Vec2;
 
