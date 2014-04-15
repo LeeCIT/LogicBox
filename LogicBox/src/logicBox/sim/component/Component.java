@@ -25,7 +25,7 @@ public abstract class Component implements Serializable
 	
 	
 	/**
-	 * Detach from all connected components.
+	 * Disconnect from all logically connected components.
 	 */
 	public abstract void disconnect();
 	
