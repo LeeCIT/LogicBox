@@ -15,7 +15,7 @@ public class Trace extends ComponentPassive
 {
 	private static final long serialVersionUID = 1L;
 	
-	protected Pin source, dest;
+	protected Pin source, dest; // These names are arbitrary!  Assume nothing.
 	
 	
 	
