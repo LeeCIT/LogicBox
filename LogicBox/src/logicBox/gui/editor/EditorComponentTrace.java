@@ -23,9 +23,10 @@ public class EditorComponentTrace extends EditorComponent
 	
 	
 	
-	public EditorComponentTrace( Trace com, GraphicPinMapping gpmA, GraphicPinMapping gpmB, List<Vec2> points ) {
+	public EditorComponentTrace( Trace com, List<Vec2> points ) {
 		super( com );
-		graphic = new GraphicTrace( points, gpmA, gpmB );
+		this.com     = com;
+		this.graphic = new GraphicTrace( points, null, null );
 	}
 	
 	
