@@ -33,6 +33,7 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	private VecPath           polyLine;
 	private GraphicPinMapping gpmSrc;
 	private GraphicPinMapping gpmDest;
+	private boolean           isPowered;
 	
 	
 	
@@ -42,6 +43,12 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 		this.lines    = Line2.toLines( points );
 		this.polyLine = new VecPath( points, false );
 		setColors( false );
+	}
+	
+	
+	
+	public void setPowered( boolean status ) {
+		isPowered = status;
 	}
 	
 	
@@ -112,6 +119,8 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	
 	private void drawTrace( Graphics2D g ) {
+		setColors( isPowered );
+		
 		Gfx.pushColorAndSet ( g, colStroke );
 			Gfx.pushStrokeAndSet( g, EditorStyle.strokeTrace );
 				g.draw( polyLine );
