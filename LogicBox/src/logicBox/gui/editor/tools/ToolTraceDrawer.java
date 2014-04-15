@@ -426,6 +426,9 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private Pin getSnappedPin( SnapInfo si ) {
+		if ( ! si.snapped)
+			return null;
+		
 		return SimMapper.getMappedPin( (EditorComponentActive) si.pinInfo.ecom, si.pinInfo.gpm );
 	}
 	
