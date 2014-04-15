@@ -41,7 +41,7 @@ public class Simulation implements Serializable
 	
 	/**
 	 * Add a component to the simulation.
-	 * At the moment, only active components need to be added.
+	 * At the moment only active components need to be added, though it does no harm to add everything.
 	 */
 	public void add( Component...coms ) {
 		for (Component com: coms) {
@@ -59,6 +59,23 @@ public class Simulation implements Serializable
 	
 	
 	
+	/**
+	 * Remove an element from the simulation.
+	 * You have to disconnect it separately, or the results will not be what you expect.
+	 */
+	public void remove( Component com ) {
+		comps  .remove( com );
+		actives.remove( com );
+		sources.remove( com );
+		
+		cacheInvalidated = true;
+	}
+	
+	
+	
+	/**
+	 * Remove all elements from the simulation.
+	 */
 	public void clear() {
 		comps  .clear();
 		actives.clear();
@@ -82,7 +99,7 @@ public class Simulation implements Serializable
 	
 	
 	/**
-	 * Run the simulation.
+	 * Run the simulation for one time step.
 	 */
 	public void simulate() {
 		validateCache();
