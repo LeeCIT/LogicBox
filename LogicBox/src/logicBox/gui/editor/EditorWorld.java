@@ -5,7 +5,6 @@ package logicBox.gui.editor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,18 +45,6 @@ public class EditorWorld implements Serializable
 	
 	
 	
-	public void newCircuit() {
-		System.out.println( "newCircuit" );
-	}
-	
-	
-	
-	public void loadCircuit( File file ) {
-		System.out.println( "loadCircuit: " + file );
-	}
-	
-	
-	
 	public void clear() {
 		grid .clear();
 		ecoms.clear();
@@ -80,6 +67,8 @@ public class EditorWorld implements Serializable
 		addToGrid( ecom );		
 		ecoms.add( ecom );
 		ecom.linkToWorld( this );
+		
+		sim.add( ecom.com );
 	}
 	
 	
@@ -96,9 +85,9 @@ public class EditorWorld implements Serializable
 		for (Line2 line: trace.getGraphic().getLines())
 			grid.add( line, trace );
 	}
-
-
-
+	
+	
+	
 	/**
 	 * Remove a component from the world.
 	 * This doesn't actually remove it from the simulation or anything.
@@ -109,6 +98,8 @@ public class EditorWorld implements Serializable
 		ecoms.remove( ecom );
 		grid .remove( ecom );
 		ecom.unlinkFromWorld();
+		
+		sim.remove( ecom.com );
 	}
 	
 	
