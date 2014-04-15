@@ -38,6 +38,15 @@ public abstract class EditorComponent implements Serializable, Drawable
 	
 	
 	/**
+	 * Get the simulation component represented by this instance.
+	 */
+	public Component getComponent() {
+		return com;
+	}
+	
+	
+	
+	/**
 	 * Get the graphical representation of the component.
 	 * Use return type covariance to return the appropriate graphic type.
 	 */
