@@ -217,6 +217,9 @@ public class EditorPanel extends JPanel
 		if ( ! enableGrid || isPrinting)
 			return;
 		
+		if (cam == null)
+			return;
+		
 		Bbox2 worldRegion  = cam.getWorldViewArea();
 		Vec2  cellSize     = new Vec2( 64 );
 		Vec2  cellSizeHalf = cellSize.multiply( 0.5 );
