@@ -57,7 +57,8 @@ public class ToolHighlighter extends Tool
 	
 	
 	public void reset() {
-		// Do nothing
+		lastComponent = null;
+		curComponent  = null;
 	}
 	
 	
