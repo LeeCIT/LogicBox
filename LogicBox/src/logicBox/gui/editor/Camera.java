@@ -314,6 +314,10 @@ public class Camera
 	 * Automatically pan and zoom the camera such that it is looking at the given region in world space.
 	 */
 	public void interpolateToBbox( Bbox2 bbox, double border, double timeInSeconds ) {
+		if (component == null
+		||  ! component.isVisible())
+			return;
+		
 		Vec2   sizeMe  = new Bbox2( component ).getSize();
 		Vec2   sizeYou = bbox.expand( border ) .getSize();
 		Vec2   pos     = bbox.getCentre();
