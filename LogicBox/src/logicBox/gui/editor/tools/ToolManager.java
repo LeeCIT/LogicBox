@@ -78,6 +78,7 @@ public class ToolManager
 			releaseControl();
 		
 		toolContextual.delete();
+		toolHighlighter.reset(); // Ensure no residiuals
 	}
 	
 	
