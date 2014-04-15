@@ -51,6 +51,13 @@ public class Trace extends ComponentPassive
 	
 	
 	
+	public void disconnect() {
+		source = null;
+		dest   = null;
+	}
+	
+	
+	
 	public ComponentType getType() {
 		return ComponentType.trace;
 	}

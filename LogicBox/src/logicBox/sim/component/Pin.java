@@ -82,6 +82,12 @@ public class Pin extends ComponentPassive
 	
 	
 	
+	public void disconnect() {
+		trace = null;
+	}
+	
+	
+	
 	public ComponentType getType() {
 		return ComponentType.pin;
 	}

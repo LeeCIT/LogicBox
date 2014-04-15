@@ -83,6 +83,15 @@ public class Junction extends ComponentPassive
 	
 	
 	
+	public void disconnect() {
+		for (Pin pin: vpins)
+			pin.disconnect();
+		
+		vpins.clear();
+	}
+	
+	
+	
 	public ComponentType getType() {
 		return ComponentType.junction;
 	}

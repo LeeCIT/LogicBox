@@ -25,6 +25,13 @@ public abstract class Component implements Serializable
 	
 	
 	/**
+	 * Detach from all connected components.
+	 */
+	public abstract void disconnect();
+	
+	
+	
+	/**
 	 * Get the enum type of the component.
 	 */
 	public abstract ComponentType getType();
