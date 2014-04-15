@@ -482,8 +482,32 @@ public class Simulation implements Serializable
 	
 	public static Trace connectPins( Pin pinOut, Pin pinIn ) {
 		Trace trace = new Trace( pinOut, pinIn );
-		pinOut.connectTrace( trace );
-		pinIn .connectTrace( trace );
+		
+		if (pinOut != null)	pinOut.connectTrace( trace );
+		if (pinIn  != null) pinIn .connectTrace( trace );
+		
 		return trace;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
