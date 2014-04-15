@@ -23,10 +23,10 @@ import logicBox.sim.component.*;
 public class HelpFrame extends JFrame 
 {
 	private HelpPanel helpPanel;
+	private static HelpFrame instance = null;
 	
 	
-	
-	public HelpFrame() {	
+	private HelpFrame() {	
 		super( "LogicBox - Help" );
 		
 		setHelpIcon();
@@ -40,8 +40,19 @@ public class HelpFrame extends JFrame
 	
 	
 	
-	public HelpPanel getHelpPanel() {
+	private HelpPanel getHelpPanel() {
 		return helpPanel;
+	}
+	
+	
+	
+	public HelpFrame getInstance() {
+		if ( instance == null ) {
+			instance = new HelpFrame();
+			return instance;
+		}
+		else
+			return instance;
 	}
 	
 	
