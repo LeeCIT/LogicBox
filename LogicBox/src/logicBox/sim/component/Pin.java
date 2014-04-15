@@ -83,6 +83,11 @@ public class Pin extends ComponentPassive
 	
 	
 	public void disconnect() {
+		if (hasTrace()) {
+			if (trace.source == this) trace.source = null;
+			if (trace.dest   == this) trace.dest   = null;
+		}
+		
 		trace = null;
 	}
 	
