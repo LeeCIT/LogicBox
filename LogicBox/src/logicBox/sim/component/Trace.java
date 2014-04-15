@@ -15,7 +15,7 @@ public class Trace extends ComponentPassive
 {
 	private static final long serialVersionUID = 1L;
 	
-	private Pin source, dest;
+	protected Pin source, dest;
 	
 	
 	
@@ -51,6 +51,10 @@ public class Trace extends ComponentPassive
 	
 	
 	
+	/**
+	 * The main means of disconnection for traces is done through pins.
+	 * Traces are dumb objects and are not allowed to modify others.
+	 */
 	public void disconnect() {
 		source = null;
 		dest   = null;
