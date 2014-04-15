@@ -53,9 +53,12 @@ public class Trace extends ComponentPassive
 	
 	/**
 	 * The main means of disconnection for traces is done through pins.
-	 * Traces are dumb objects and are not allowed to modify others.
+	 * Traces are dumb objects.
 	 */
 	public void disconnect() {
+		if (source != null) source.disconnect();
+		if (dest   != null) dest  .disconnect();
+		
 		source = null;
 		dest   = null;
 	}
