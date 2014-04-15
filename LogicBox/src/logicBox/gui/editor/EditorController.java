@@ -66,6 +66,8 @@ public class EditorController implements HistoryListener<EditorWorld>
 		
 		addNeedToSaveCallback();
 		initialiseCircuit();
+		
+		addDebugAndDemoStuff();
 	}
 	
 	
@@ -241,6 +243,8 @@ public class EditorController implements HistoryListener<EditorWorld>
 		circuitFile = null;
 		isUnsaved   = true;
 		needsToSave = false;
+		
+		recentreCamera();
 	}
 	
 	
@@ -260,7 +264,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		catch (Exception ex) {
 			ex.printStackTrace();
 			GUI.showError(
-				frame,
+				getEditorFrame(),
 				"Save Failed",
 				"Couldn't save!  Try saving it somewhere else.\n\n" +
 				"Technical details:\n" + ex
@@ -279,7 +283,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		catch (Exception ex) {
 			ex.printStackTrace();
 			GUI.showError(
-				frame,
+				getEditorFrame(),
 				"Failed to Open Circuit",
 				"Couldn't open the file.  This is bad!\n\n" +
 				"Technical details:\n" + ex
