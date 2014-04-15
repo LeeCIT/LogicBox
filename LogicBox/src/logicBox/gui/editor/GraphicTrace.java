@@ -47,8 +47,9 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	
 	
-	public void setPowered( boolean status ) {
-		isPowered = status;
+	public void setPowered( boolean powered ) {
+		isPowered = powered;
+		setColors( powered );
 	}
 	
 	
@@ -119,8 +120,6 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	
 	private void drawTrace( Graphics2D g ) {
-		setColors( isPowered );
-		
 		Gfx.pushColorAndSet ( g, colStroke );
 			Gfx.pushStrokeAndSet( g, EditorStyle.strokeTrace );
 				g.draw( polyLine );
