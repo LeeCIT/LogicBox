@@ -110,7 +110,13 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	private void addPowerButtons() {
-		//addCategory( "Power", );  // TODO
+		ToolboxButton[] butts = {
+			genButtonPowerOn(),
+			genButtonPowerReset(),
+			genButtonPowerOff()
+		};
+		
+		addCategory( "Power", butts );
 	}
 	
 	
@@ -183,13 +189,54 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	
+	private ToolboxButton genButtonPowerOn() {
+		final ToolboxButton butt = new ToolboxButton( "Power" );
+		
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				butt.getTargetToolManager().powerOn();
+			}
+		});
+		
+		return butt;
+	}
+	
+	
+	
+	private ToolboxButton genButtonPowerReset() {
+		final ToolboxButton butt = new ToolboxButton( "RST" );
+		
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				butt.getTargetToolManager().powerReset();
+			}
+		});
+		
+		return butt;
+	}
+	
+	
+	
+	private ToolboxButton genButtonPowerOff() {
+		final ToolboxButton butt = new ToolboxButton( "Off" );
+		
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				butt.getTargetToolManager().powerOff();
+			}
+		});
+		
+		return butt;
+	}
+	
+	
+	
 	private ToolboxButton genButtonTrace() {
 		final ToolboxButton butt = new ToolboxButton( "Trc" );
 		
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
-				ToolManager manager = butt.getTargetToolManager();
-				manager.initiateTraceCreation();
+				butt.getTargetToolManager().initiateTraceCreation();
 			}
 		});
 		
