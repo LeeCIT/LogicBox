@@ -189,18 +189,21 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	public void powerOn() {
 		world.simPowerOn();
+		getEditorPanel().repaint();
 	}
 	
 	
 	
 	public void powerReset() {
 		world.simPowerReset();
+		getEditorPanel().repaint();
 	}
 	
 	
 	
 	public void powerOff() {
 		world.simPowerOff();
+		getEditorPanel().repaint();
 	}
 	
 	
