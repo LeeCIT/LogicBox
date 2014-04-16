@@ -35,6 +35,12 @@ public class Line2 implements Transformable, Serializable
 	
 	
 	
+	public Line2 translate( double x, double y ) {
+		return new Line2( a.add(x,y), b.add(x,y ) );
+	}
+	
+	
+	
 	public double distanceToPoint( Vec2 point ) {
 		return Math.sqrt( distanceSqrToPoint(point) );
 	}
