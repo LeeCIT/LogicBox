@@ -4,6 +4,8 @@
 package logicBox.sim.component;
 
 import java.util.Arrays;
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
 
 
 
@@ -82,6 +84,12 @@ public class FlipFlopJK extends FlipFlop
 	
 	public String getName() {
 		return "JK flip-flop";
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateFlipFlopJK(); 
 	}
 	
 	
