@@ -79,31 +79,4 @@ public class FileManager
 		
 		return null;
 	}
-	
-	
-	
-	
-	
-	
-	
-	public static void main(String[] args) {
-		GUI.setNativeStyle();
-		
-		final JFrame frame = new JFrame("Open file demo");
-		JButton openFile = new JButton("Open file");
-
-
-		openFile.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new FileManager(frame);
-			}
-		});
-
-
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.add("Center", openFile);
-		frame.pack();
-		frame.setVisible(true);
-		frame.setLocationRelativeTo(null);
-	}
 }
