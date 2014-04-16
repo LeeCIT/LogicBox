@@ -18,8 +18,8 @@ public abstract class EditorComponent implements Serializable, Drawable
 {
 	private static final long serialVersionUID = 1L;
 	
-	protected Component   com;
-	private   EditorWorld world;
+	private Component   com;
+	private EditorWorld world;
 	
 	
 	

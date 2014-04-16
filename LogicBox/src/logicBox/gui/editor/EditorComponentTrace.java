@@ -18,8 +18,8 @@ public class EditorComponentTrace extends EditorComponent
 {
 	private static final long serialVersionUID = 1L;
 	
-	protected Trace        com;
-	private   GraphicTrace graphic;
+	private Trace        com;
+	private GraphicTrace graphic;
 	
 	
 	

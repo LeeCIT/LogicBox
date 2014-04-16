@@ -16,8 +16,8 @@ public class EditorComponentActive extends EditorComponent
 {
 	private static final long serialVersionUID = 1L;
 	
-	protected ComponentActive  com;
-	protected GraphicComActive graphic;
+	private ComponentActive  com;
+	private GraphicComActive graphic;
 	
 	
 	
