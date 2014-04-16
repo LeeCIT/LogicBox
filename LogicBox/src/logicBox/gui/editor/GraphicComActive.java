@@ -240,8 +240,8 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 		
 		Gfx.pushColorAndSet( g, colStroke );
 			Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
-				if (polyPins != null) g.draw( polyPins );
-				if (polyAux  != null) g.draw( polyAux );
+				if (polyPins != null)
+					g.draw( polyPins );
 			Gfx.popStroke( g );
 				
 			Gfx.pushColorAndSet( g, colFill );
@@ -252,6 +252,11 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 			
 			Gfx.pushStrokeAndSet( g, EditorStyle.strokeBody );
 				g.draw( polyBody );
+			Gfx.popStroke( g );
+			
+			Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
+				if (polyAux  != null)
+					g.draw( polyAux );
 			Gfx.popStroke( g );
 			
 			if (hasBubble) {
