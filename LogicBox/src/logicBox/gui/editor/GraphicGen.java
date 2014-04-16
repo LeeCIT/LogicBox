@@ -327,22 +327,10 @@ public abstract class GraphicGen
 	
 	
 	
-	public static GraphicComActive generateFlipFlopD() {
-		
-	}
-	
-	
-	
-	public static GraphicComActive generateFlipFlopT() {
-		
-	}
-	
-	
-	
-	public static GraphicComActive generateFlipFlopJK() {
+	public static GraphicComActive generateFlipFlop( int inputCount ) {
 		Bbox2 r = getBaseRegion();
-		  	  r.transform( Geo.createTransform( new Vec2(0), new Vec2(1,2), 0) );
-		
+	  	  	  r.transform( Geo.createTransform( new Vec2(0), new Vec2(1,2), 0) );
+	
 		Vec2 tl = r.getTopLeft();
 		Vec2 tr = r.getTopRight();
 		Vec2 bl = r.getBottomLeft();
@@ -354,21 +342,21 @@ public abstract class GraphicGen
 		Line2 leftTerminal  = leftContact .translate( -pinLength, 0 );
 		Line2 rightTerminal = rightContact.translate( +pinLength, 0 );
 		
-		List<Line2> pinInLines  = genPinLines( leftTerminal,  leftContact,  new Vec2(+1,0), 3, true );
-		List<Line2> pinOutLines = genPinLines( rightTerminal, rightContact, new Vec2(-1,0), 2, true );
+		List<Line2> pinInLines  = genPinLines( leftTerminal,  leftContact,  new Vec2(+1,0), inputCount, true );
+		List<Line2> pinOutLines = genPinLines( rightTerminal, rightContact, new Vec2(-1,0), 2,          true );
 		
 		List<Line2> pinLines = new ArrayList<>();
 		pinLines.addAll( pinOutLines );
 		pinLines.addAll( pinInLines  );
 		
-		List<GraphicPinMapping> gpms = genPinMappings( pinLines, 2 );
+		List<GraphicPinMapping> gpms = genPinMappings( pinLines, inputCount-1 );
 		
 		Vec2    arrowPos  = gpms.get(2+1).getPinPosBody();
-		double  arrowOffs = r.getSize().x * 0.1;
+		double  arrowOffs = r.getSize().x * 0.2;
 		VecPath polyArrow = new VecPath();
-		polyArrow.moveTo( arrowPos.add( 0,        -arrowOffs ) );
-		polyArrow.lineTo( arrowPos.add( arrowOffs, 0         ) );
-		polyArrow.lineTo( arrowPos.add( 0,        +arrowOffs ) );
+		polyArrow.moveTo( arrowPos.add( 0,        -arrowOffs*0.5 ) );
+		polyArrow.lineTo( arrowPos.add( arrowOffs, 0             ) );
+		polyArrow.lineTo( arrowPos.add( 0,        +arrowOffs*0.5 ) );
 		
 		return new GraphicComActive(
 			genPolyBody( true, br, tr, tl, bl ),
@@ -376,6 +364,24 @@ public abstract class GraphicGen
 			polyArrow,
 			gpms
 		);
+	}
+	
+	
+	
+	public static GraphicComActive generateFlipFlopD() {
+		return generateFlipFlop( 2 );
+	}
+	
+	
+	
+	public static GraphicComActive generateFlipFlopT() {
+		return generateFlipFlop( 2 );
+	}
+	
+	
+	
+	public static GraphicComActive generateFlipFlopJK() {
+		return generateFlipFlop( 3 );
 	}
 	
 	
