@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 /**
@@ -50,6 +53,12 @@ public class FlipFlopT extends FlipFlop
 	
 	public String getName() {
 		return "T flip-flop";
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateFlipFlopT();
 	}
 }
 
