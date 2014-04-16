@@ -52,15 +52,16 @@ public class EditorWorld implements Serializable
 	
 	
 	
-	public void simPowerOn() { 
+	public void simPowerOn() {
 		sim.simulate();
 		setTraceGraphicPowerStates();
-		// TODO if oscillators are present, trigger them in a thread
+		// TODO if oscillators are present, start them in a thread
 	}
 	
 	
 	
 	public void simPowerReset() { 
+		sim.reset();
 		sim.simulate();
 		setTraceGraphicPowerStates();
 	}
