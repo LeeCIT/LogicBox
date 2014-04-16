@@ -45,6 +45,47 @@ public class EditorWorld implements Serializable
 	
 	
 	
+	public synchronized void simStep() { 
+		sim.simulate();
+		setTraceGraphicPowerStates();
+	}
+	
+	
+	
+	public void simPowerOn() { 
+		sim.simulate();
+		setTraceGraphicPowerStates();
+		// TODO if oscillators are present, trigger them in a thread
+	}
+	
+	
+	
+	public void simPowerReset() { 
+		sim.simulate();
+		setTraceGraphicPowerStates();
+	}
+	
+	
+	
+	public void simPowerOff() { 
+		sim.reset();
+		setTraceGraphicPowerStates();
+		// TODO stop oscillators
+	}
+	
+	
+	
+	public void setTraceGraphicPowerStates() {
+		for (EditorComponent ecom: ecoms) {
+			if (ecom instanceof EditorComponentTrace) {
+				EditorComponentTrace trace = (EditorComponentTrace) ecom;
+				trace.getGraphic().setPowered( trace.getComponent().getState() );
+			}
+		}
+	}
+	
+	
+	
 	public void clear() {
 		grid .clear();
 		ecoms.clear();
@@ -68,7 +109,7 @@ public class EditorWorld implements Serializable
 		ecoms.add( ecom );
 		ecom.linkToWorld( this );
 		
-		sim.add( ecom.com );
+		sim.add( ecom.getComponent() );
 	}
 	
 	
@@ -97,7 +138,7 @@ public class EditorWorld implements Serializable
 		grid .remove( ecom );
 		ecom.unlinkFromWorld();
 		
-		sim.remove( ecom.com );
+		sim.remove( ecom.getComponent() );
 	}
 	
 	
@@ -308,7 +349,7 @@ public class EditorWorld implements Serializable
 		String str = "EditorWorld with " + ecoms.size() + " components:\n";
 		
 		for (EditorComponent ecom: ecoms)
-			str += "\t" + ecom + " \t[" + ecom.com + "]\n"; 
+			str += "\t" + ecom + " \t[" + ecom.getComponent() + "]\n"; 
 		
 		return str;
 	}
