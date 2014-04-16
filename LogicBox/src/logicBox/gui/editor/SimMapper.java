@@ -21,7 +21,7 @@ public abstract class SimMapper
 		int index = gpm.index;
 		
 		if (gpm.mode == PinIoMode.input)
-			 return ecom.com.getPinInput ( index );
-		else return ecom.com.getPinOutput( index );
+			 return ecom.getComponent().getPinInput ( index );
+		else return ecom.getComponent().getPinOutput( index );
 	}
 }

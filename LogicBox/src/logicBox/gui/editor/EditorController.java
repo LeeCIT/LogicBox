@@ -187,6 +187,24 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
+	public void powerOn() {
+		world.simPowerOn();
+	}
+	
+	
+	
+	public void powerReset() {
+		world.simPowerReset();
+	}
+	
+	
+	
+	public void powerOff() {
+		world.simPowerOff();
+	}
+	
+	
+	
 	private boolean canDiscardCircuit() {
 		boolean unsavedAndNotEmpty = isUnsaved && !world.isEmpty();
 		
@@ -623,7 +641,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 			public void mouseMoved( MouseEvent ev ) {
 				for (EditorComponent ecom: world.find( cam.getMousePosWorld() )) {
 					GraphicPinMapping gpm = ecom.findPinNear( cam.getMousePosWorld(), 5 );
-					System.out.println( "Ed: " + ecom.com.getName() );
+					System.out.println( "Ed: " + ecom.getComponent().getName() );
 					System.out.println( "Ed: " + gpm );					
 				}
 			}

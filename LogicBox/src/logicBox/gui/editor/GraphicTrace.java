@@ -21,7 +21,6 @@ import logicBox.util.Vec2;
 
 /**
  * Draws trace graphics.
- * TODO
  * @author Lee Coakley
  */
 public class GraphicTrace extends Graphic implements GraphicIntersector
