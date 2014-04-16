@@ -51,6 +51,12 @@ public class Trace extends ComponentPassive
 	
 	
 	
+	public boolean hasPinOtherSide( Pin pin ) {
+		return null != getPinOtherSide( pin );
+	}
+	
+	
+	
 	/**
 	 * The main means of disconnection for traces is done through pins.
 	 * Traces are dumb objects.

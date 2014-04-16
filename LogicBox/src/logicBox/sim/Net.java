@@ -205,8 +205,13 @@ public class Net implements Stateful, Updateable, Serializable, Iterable<Compone
 		if ( ! pin.hasTrace())
 			return;
 		
-		Trace     trace    = pin.getTrace();
-		Pin       otherPin = trace.getPinOtherSide( pin );
+		Trace trace    = pin.getTrace();
+		Pin   otherPin = trace.getPinOtherSide( pin );
+		
+		if (otherPin == null
+		||  ! trace.hasPinOtherSide( otherPin ))
+			return;
+		
 		Component attached = otherPin.getAttachedComponent();
 		boolean   isJunc   = attached instanceof Junction;
 		
