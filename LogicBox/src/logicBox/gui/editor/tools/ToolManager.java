@@ -67,6 +67,24 @@ public class ToolManager
 	
 	
 	
+	public void powerOn() {
+		controller.powerOn();
+	}
+	
+	
+	
+	public void powerReset() {
+		controller.powerReset();
+	}
+	
+	
+	
+	public void powerOff() {
+		controller.powerOff();
+	}
+	
+	
+	
 	public void initiateTraceCreation() {
 		takeExclusiveControl( toolTraceDrawer );
 	}
