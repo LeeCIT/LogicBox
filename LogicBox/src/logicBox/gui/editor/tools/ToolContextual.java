@@ -156,7 +156,7 @@ public class ToolContextual extends Tool
 	
 	
 	//////////////////////////////////////////////////
-	// Dragging
+	// Dragging / Clicking
 	////////////////////////////////////////////////
 	
 	private MouseAdapter createDragListener() {
@@ -164,7 +164,21 @@ public class ToolContextual extends Tool
 			public void mousePressed ( MouseEvent ev ) { onDragPress  ( ev ); }
 			public void mouseReleased( MouseEvent ev ) { onDragRelease( ev ); }
 			public void mouseDragged ( MouseEvent ev ) { onDragDrag   ( ev ); }
+			public void mouseClicked ( MouseEvent ev ) { onDragClick  ( ev ); }
 		};
+	}
+	
+	
+	
+	private void onDragClick( MouseEvent ev ) {
+		if (selectHasLock || dragHasLock)
+			return;
+		
+		Vec2            pos  = getMousePosWorld();
+		EditorComponent ecom = getComponentAt( pos );
+		
+		if (ecom != null)
+			ecom.onMouseClick();
 	}
 	
 	
