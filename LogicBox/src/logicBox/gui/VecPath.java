@@ -70,6 +70,12 @@ public class VecPath implements Serializable, Transformable, Shape
 	
 	
 	
+	public void curveTo( Vec2 c, Vec2 end ) {
+		path.quadTo( c.x, c.y, end.x, end.y );
+	}
+	
+	
+	
 	public void closePath() {
 		path.closePath();
 	}
