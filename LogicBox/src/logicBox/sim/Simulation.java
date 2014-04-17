@@ -253,7 +253,7 @@ public class Simulation implements Serializable
 	 */
 	public boolean isLevelisable( Island island ) {
 		for (ComponentActive com: island)
-			if ( ! com.hasInputsConnected())
+			if (com.hasInputsConnected())
 				for (Pin pin: com.getPinOutputs())
 					if ( ! isLevelisableHelper( pin ))
 						return false;
@@ -309,7 +309,7 @@ public class Simulation implements Serializable
 	 */
 	private Map<ComponentActive,Integer> leveliseActives( List<ComponentActive> actives ) {
 		if ( ! isLevelisable())
-			throw new RuntimeException( "Can't levelise: circuit contains feedback loops." );
+			throw new NonLevelisableCircuitException( "Can't levelise: circuit contains feedback loops." );
 		
 		Map<ComponentActive,Integer> levels   = genBaseLevelMap( actives );
 		Deque<ComponentActive>       deferred = new ArrayDeque<>( actives );
@@ -487,6 +487,22 @@ public class Simulation implements Serializable
 		if (pinIn  != null) pinIn .connectTrace( trace );
 		
 		return trace;
+	}
+	
+	
+	
+	
+	
+	public class NonLevelisableCircuitException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+
+		public NonLevelisableCircuitException() {
+			super();
+		}
+
+		public NonLevelisableCircuitException( String message ) {
+			super( message );
+		}
 	}
 }
 
