@@ -35,8 +35,14 @@ public class Line2 implements Transformable, Serializable
 	
 	
 	
+	public Line2 translate( Vec2 v ) {
+		return new Line2( a.add(v), b.add(v) );
+	}
+	
+	
+	
 	public Line2 translate( double x, double y ) {
-		return new Line2( a.add(x,y), b.add(x,y ) );
+		return new Line2( a.add(x,y), b.add(x,y) );
 	}
 	
 	

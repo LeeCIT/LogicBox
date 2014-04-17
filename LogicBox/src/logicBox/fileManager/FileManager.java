@@ -35,7 +35,8 @@ public class FileManager
 	 * @param frame	The frame that the dialog is to come from
 	 */
 	public FileManager( JFrame frame ) {
-		chooser = new JFileChooser( lastDir );
+		this.frame   = frame;
+		this.chooser = new JFileChooser( lastDir );
 		
 		FileNameExtensionFilter filter = new FileNameExtensionFilter( "LogicBox circuit", "lbx" );
 		chooser.setFileFilter( filter );
