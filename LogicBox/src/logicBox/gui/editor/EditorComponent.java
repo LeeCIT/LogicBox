@@ -29,6 +29,12 @@ public abstract class EditorComponent implements Serializable, Drawable
 	
 	
 	
+	public void onMouseClick() {
+		com.interactClick();
+	}
+	
+	
+	
 	public abstract void setPos( Vec2 pos );
 	public abstract Vec2 getPos();
 	
