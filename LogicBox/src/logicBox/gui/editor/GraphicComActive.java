@@ -9,12 +9,15 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.util.Bbox2;
 import logicBox.util.Geo;
 import logicBox.util.Transformable;
+import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
@@ -45,6 +48,7 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 	private Bbox2           bbox;
 	
 	private List<GraphicPinMapping> pinMap;
+	private HashMap<GraphicPinMapping,String> pinLabels;
 	
 	
 	
@@ -61,6 +65,7 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 		this.bbox      = computeBbox();
 		this.pos       = new Vec2( 0, 0 );
 		this.angle     = 0;
+		this.pinLabels = new HashMap<>();
 	}
 	
 	
@@ -77,10 +82,22 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 	
 	
 	
+	public List<GraphicPinMapping> getGraphicPinMappings() {
+		return pinMap;
+	}
+	
+	
+	
 	public void enableBubble( Vec2 pos, double radius ) {
 		bubblePos    = pos;
 		bubbleRadius = radius;
 		hasBubble    = true;
+	}
+	
+	
+	
+	public void setPinLabels( HashMap<GraphicPinMapping,String> pinLabels ) {
+		this.pinLabels = pinLabels;
 	}
 	
 	
@@ -217,14 +234,9 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 		
 		trans.add( polyBody );
 		
-		if (polyPins != null)
-			trans.add( polyPins );
-		
-		if (polyAux != null)
-			trans.add( polyAux );
-		
-		if (hasBubble)
-			trans.add( bubblePos );
+		if (polyPins != null) trans.add( polyPins  );
+		if (polyAux  != null) trans.add( polyAux   );
+		if (hasBubble)        trans.add( bubblePos );
 		
 		for (GraphicPinMapping gpm: pinMap)
 			trans.add( gpm.line );
@@ -270,7 +282,24 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 					Gfx.drawCircle( g, bubblePos, bubbleRadius, false );
 				Gfx.popStroke( g );
 			}
+			
+			Gfx.pushFontAndSet( g, EditorStyle.componentFont );
+				for (GraphicPinMapping gpm: pinLabels.keySet())
+					drawPinText( g, pinLabels.get(gpm), gpm );
+			Gfx.popFont( g );
 		Gfx.popColor( g );
+	}
+	
+	
+	
+	private void drawPinText( Graphics2D g, String str, GraphicPinMapping gpm ) {
+		Vec2   delta  = Geo.delta( gpm.getPinPosEnd(), gpm.getPinPosBody() );
+		Vec2   pinVec = Geo.normalise( delta );
+		Vec2   offset = new Vec2( -6, 6 );
+		double len    = 12 + (4 * (str.length()-1));
+		Vec2   pos    = gpm.getPinPosBody().add( pinVec.multiply(len) ).add( offset );
+		
+		g.drawString( str, (int) pos.x, (int) pos.y );
 	}
 }
 
