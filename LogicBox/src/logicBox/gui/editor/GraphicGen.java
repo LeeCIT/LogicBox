@@ -3,14 +3,11 @@
 
 package logicBox.gui.editor;
 
-import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.sim.component.PinIoMode;
 import logicBox.util.Bbox2;
@@ -429,7 +426,32 @@ public abstract class GraphicGen
 	
 	
 	public static GraphicComActive generateDisplayLED() {
+		Bbox2 r = getBaseRegion();
 		
+		VecPath polyBody = new VecPath();
+		polyBody.moveTo ( r.getBottomMiddle() );
+		polyBody.curveTo( r.getBottomRight(),  r.getRightMiddle()  );
+		polyBody.curveTo( r.getTopRight(),     r.getTopMiddle()    );
+		polyBody.curveTo( r.getTopLeft(),      r.getLeftMiddle()   );
+		polyBody.curveTo( r.getBottomLeft(),   r.getBottomMiddle() );
+		polyBody.closePath();
+		
+		Vec2 leftMid = r.getLeftMiddle();
+		Line2 pinLine = new Line2( leftMid, leftMid.add(-pinLength,0) );
+		
+		List<Line2> pinLines = new ArrayList<>();
+		pinLines.add( pinLine );
+		
+		GraphicComActive graphic =  new GraphicComActive(
+			polyBody,
+			genPolyPins( pinLines ),
+			null, 
+			genPinMappings( pinLines, 0 )
+		);
+		
+		graphic.enableBubble( new Vec2(0), r.getSmallest() / 10 );
+		
+		return graphic;
 	}
 	
 	
