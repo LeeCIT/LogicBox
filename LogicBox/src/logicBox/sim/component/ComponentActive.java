@@ -124,6 +124,13 @@ public abstract class ComponentActive extends Component implements Updateable, P
 	
 	
 	
+	public void disconnect() {
+		for (Pin pin: getPins())
+			pin.disconnect();
+	}
+	
+	
+	
 	public boolean hasInputsConnected() {
 		for (Pin pin: getPinInputs())
 			if (pin.hasTrace())

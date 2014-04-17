@@ -103,9 +103,13 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	
 	
-	public void delete() {
-		// TODO
-		System.out.println( "Delete: " + ecoms );
+	public void delete( EditorWorld world ) {
+		for (EditorComponent ecom: ecoms) {
+			ecom.getComponent().disconnect();
+			world.remove( ecom );
+		}
+		
+		clear();
 	}
 	
 	

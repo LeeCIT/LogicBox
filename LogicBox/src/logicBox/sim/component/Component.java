@@ -18,9 +18,25 @@ public abstract class Component implements Serializable
 	
 	
 	/**
+	 * Called when the user clicks on this component.
+	 * At the moment only toggles and oscillators need this.
+	 */
+	public void interactClick() {
+		// Do nothing; most classes don't need this
+	}
+	
+	
+	/**
 	 * Reset the component to its initial state, as if the simulation was never run.
 	 */
 	public abstract void reset();
+	
+	
+	
+	/**
+	 * Disconnect from all logically connected components.
+	 */
+	public abstract void disconnect();
 	
 	
 	

@@ -18,8 +18,8 @@ public abstract class EditorComponent implements Serializable, Drawable
 {
 	private static final long serialVersionUID = 1L;
 	
-	protected Component   com;
-	private   EditorWorld world;
+	private Component   com;
+	private EditorWorld world;
 	
 	
 	
@@ -29,11 +29,26 @@ public abstract class EditorComponent implements Serializable, Drawable
 	
 	
 	
+	public void onMouseClick() {
+		com.interactClick();
+	}
+	
+	
+	
 	public abstract void setPos( Vec2 pos );
 	public abstract Vec2 getPos();
 	
 	public abstract void   setAngle( double angle );
 	public abstract double getAngle();
+	
+	
+	
+	/**
+	 * Get the simulation component represented by this instance.
+	 */
+	public Component getComponent() {
+		return com;
+	}
 	
 	
 	

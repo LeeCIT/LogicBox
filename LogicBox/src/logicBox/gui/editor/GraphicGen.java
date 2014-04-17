@@ -3,10 +3,14 @@
 
 package logicBox.gui.editor;
 
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.sim.component.PinIoMode;
 import logicBox.util.Bbox2;
@@ -75,6 +79,7 @@ public abstract class GraphicGen
 	private static final double pinLength       = baseSize * pinLenFrac;
 	private static final double bubbleRadius    = baseSize * bubbleFrac;
 	private static final double thickness       = EditorStyle.compThickness;
+	//private static final Font   font            = EditorStyle.componentFont;
 	
 	
 	
@@ -258,8 +263,8 @@ public abstract class GraphicGen
 	
 	
 	private static GraphicComActive generatePlexer( int inputs, int selects, int outputs, boolean isDemux ) {
-		Bbox2  r = getBaseRegion();
-			   r.transform( Geo.createTransform( new Vec2(0), new Vec2(2,2), 0) );
+		Bbox2 r = getBaseRegion();
+			  r.transform( Geo.createTransform( new Vec2(0), new Vec2(2,2), 0) );
 		
 		applyPinGrowth( r, Math.max(inputs,outputs) );
 		
@@ -323,6 +328,108 @@ public abstract class GraphicGen
 		graphic.transform( matrix, true );
 		
 		return graphic;
+	}
+	
+	
+	
+	public static GraphicComActive generateFlipFlop( int inputCount ) {
+		Bbox2 r = getBaseRegion();
+	  	  	  r.transform( Geo.createTransform( new Vec2(0), new Vec2(1,2), 0) );
+	
+		Vec2 tl = r.getTopLeft();
+		Vec2 tr = r.getTopRight();
+		Vec2 bl = r.getBottomLeft();
+		Vec2 br = r.getBottomRight();
+		
+		Line2 leftContact  = new Line2( tl, bl );
+		Line2 rightContact = new Line2( tr, br );
+		
+		Line2 leftTerminal  = leftContact .translate( -pinLength, 0 );
+		Line2 rightTerminal = rightContact.translate( +pinLength, 0 );
+		
+		List<Line2> pinInLines  = genPinLines( leftTerminal,  leftContact,  new Vec2(+1,0), inputCount, true );
+		List<Line2> pinOutLines = genPinLines( rightTerminal, rightContact, new Vec2(-1,0), 2,          true );
+		
+		List<Line2> pinLines = new ArrayList<>();
+		pinLines.addAll( pinOutLines );
+		pinLines.addAll( pinInLines  );
+		
+		final List<GraphicPinMapping> gpms = genPinMappings( pinLines, pinOutLines.size() );
+		
+		Vec2    arrowPos  = gpms.get(2+1).getPinPosBody();
+		double  arrowOffs = r.getSize().x * 0.2;
+		VecPath polyArrow = new VecPath();
+		polyArrow.moveTo( arrowPos.add( 2,        -arrowOffs*0.5 ) );
+		polyArrow.lineTo( arrowPos.add( arrowOffs, 0             ) );
+		polyArrow.lineTo( arrowPos.add( 2,        +arrowOffs*0.5 ) );
+		
+		return new GraphicComActive(
+			genPolyBody( true, br, tr, tl, bl ),
+			genPolyPins( pinLines ),
+			polyArrow,
+			gpms
+		);
+	}
+	
+	
+	
+	private static HashMap<GraphicPinMapping,String> genLabelMap( List<GraphicPinMapping> gpms, String...labels ) {
+		HashMap<GraphicPinMapping,String> labelMap = new HashMap<>();
+		
+		for (int i=0; i<labels.length; i++) {
+			String str = labels[i];
+			labelMap.put( gpms.get(i), str );
+		}
+		
+		return labelMap;
+	}
+	
+	
+	
+	public static GraphicComActive generateFlipFlopD() {
+		GraphicComActive        graphic = generateFlipFlop( 2 );
+		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
+		
+		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "D", "E" ) );		
+		return graphic;
+	}
+	
+	
+	
+	public static GraphicComActive generateFlipFlopT() {
+		GraphicComActive        graphic = generateFlipFlop( 2 );
+		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
+		
+		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "T", "C" ) );
+		return graphic;
+	}
+	
+	
+	
+	public static GraphicComActive generateFlipFlopJK() {
+		GraphicComActive        graphic = generateFlipFlop( 3 );
+		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
+		
+		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "J", "C", "K" ) );		
+		return graphic;
+	}
+	
+	
+	
+	public static GraphicComActive generateSourceFixed( boolean level ) {
+		
+	}
+	
+	
+	
+	public static GraphicComActive generateSourceToggle() {
+		
+	}
+	
+	
+	
+	public static GraphicComActive generateDisplayLED() {
+		
 	}
 	
 	

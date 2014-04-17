@@ -13,11 +13,15 @@ import java.util.Stack;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.EditorComponentActive;
 import logicBox.gui.editor.EditorComponentTrace;
 import logicBox.gui.editor.EditorStyle;
 import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.GraphicPinMapping;
 import logicBox.gui.editor.RepaintListener;
+import logicBox.gui.editor.SimMapper;
+import logicBox.sim.Simulation;
+import logicBox.sim.component.Pin;
 import logicBox.sim.component.Trace;
 import logicBox.util.Geo;
 import logicBox.util.Line2;
@@ -368,10 +372,17 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private void traceCreate() {
-		EditorComponent ecom = new EditorComponentTrace( new Trace(), tracePoints );
+		SnapInfo siA = getSnapInfo( tracePoints.firstElement() );
+		SnapInfo siB = getSnapInfo( tracePoints.lastElement()  );
+		
+		Pin   pinA  = getSnappedPin( siA );
+		Pin   pinB  = getSnappedPin( siB );
+		Trace trace = Simulation.connectPins( pinA, pinB );
+		
+		EditorComponent ecom = new EditorComponentTrace( trace, tracePoints );
 		getWorld().add( ecom );
 		
-		markHistoryChange();
+		markHistoryChange( "Trace create" );
 		repaint();
 	}
 	
@@ -414,9 +425,18 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
+	private Pin getSnappedPin( SnapInfo si ) {
+		if ( ! si.snapped)
+			return null;
+		
+		return SimMapper.getMappedPin( (EditorComponentActive) si.pinInfo.ecom, si.pinInfo.gpm );
+	}
+	
+	
+	
 	private class SnapInfo {
-		public boolean snapped;
-		public Vec2    pos;
+		public boolean snapped; // True if found a pin to snap onto
+		public Vec2    pos;		// Endpoint of the pin, where the trace should attach
 		public EditorWorld.FindClosestPinResult pinInfo;
 	}
 	

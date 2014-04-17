@@ -25,6 +25,7 @@ import logicBox.util.Vec2;
  * Handles dragging, rotating and selection.
  * @author Lee Coakley
  * TODO add support for context menus on components
+ * TODO allow components to be clicked on (switches need to be toggled, etc)
  */
 public class ToolContextual extends Tool
 {
@@ -103,8 +104,12 @@ public class ToolContextual extends Tool
 		if (selection.isEmpty())
 			selectUnderlying();
 		
-		if ( ! selection.isEmpty())
-			selection.delete();
+		if ( ! selection.isEmpty()) {
+			selection.delete( getWorld() );		
+			markHistoryChange( "Delete" );
+		}
+		
+		repaint();
 	}
 	
 	
@@ -151,7 +156,7 @@ public class ToolContextual extends Tool
 	
 	
 	//////////////////////////////////////////////////
-	// Dragging
+	// Dragging / Clicking
 	////////////////////////////////////////////////
 	
 	private MouseAdapter createDragListener() {
@@ -159,7 +164,21 @@ public class ToolContextual extends Tool
 			public void mousePressed ( MouseEvent ev ) { onDragPress  ( ev ); }
 			public void mouseReleased( MouseEvent ev ) { onDragRelease( ev ); }
 			public void mouseDragged ( MouseEvent ev ) { onDragDrag   ( ev ); }
+			public void mouseClicked ( MouseEvent ev ) { onDragClick  ( ev ); }
 		};
+	}
+	
+	
+	
+	private void onDragClick( MouseEvent ev ) {
+		if (selectHasLock || dragHasLock)
+			return;
+		
+		Vec2            pos  = getMousePosWorld();
+		EditorComponent ecom = getComponentAt( pos );
+		
+		if (ecom != null)
+			ecom.onMouseClick();
 	}
 	
 	
@@ -179,6 +198,8 @@ public class ToolContextual extends Tool
 	private void onDragRelease( MouseEvent ev ) {
 		if (selectHasLock)
 			return;
+		
+		dragInitiated = false;
 		
 		if (isLeft(ev))
 			dragComplete();
@@ -273,7 +294,7 @@ public class ToolContextual extends Tool
 		if ( ! dragging)
 			return;
 		
-		markHistoryChange();
+		markHistoryChange( "Drag/Rotate" );
 		dragFinishedCommon();
 	}
 	

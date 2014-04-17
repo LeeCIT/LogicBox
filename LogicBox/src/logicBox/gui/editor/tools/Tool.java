@@ -134,8 +134,8 @@ public abstract class Tool
 	
 	
 	
-	protected void markHistoryChange() {
-		manager.getEditorController().getHistoryManager().markChange();
+	protected void markHistoryChange( String what ) {
+		manager.getEditorController().getHistoryManager().markChange( what );
 	}
 	
 	

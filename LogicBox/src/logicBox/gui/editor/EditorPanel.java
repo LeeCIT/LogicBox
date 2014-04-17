@@ -167,7 +167,7 @@ public class EditorPanel extends JPanel
 				drawComponentGraphics( g );
 				drawRepaintListeners( g, repaintWorldListeners );
 			Gfx.popMatrix( g );
-				
+			
 			drawRepaintListeners( g, repaintScreenListeners );
 		Gfx.popAntialiasingState( g );
 	}
@@ -215,6 +215,9 @@ public class EditorPanel extends JPanel
 	
 	private void drawGrid( Graphics2D g ) {
 		if ( ! enableGrid || isPrinting)
+			return;
+		
+		if (cam == null)
 			return;
 		
 		Bbox2 worldRegion  = cam.getWorldViewArea();

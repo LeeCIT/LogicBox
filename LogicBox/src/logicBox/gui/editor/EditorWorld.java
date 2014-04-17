@@ -5,7 +5,6 @@ package logicBox.gui.editor;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -46,14 +45,58 @@ public class EditorWorld implements Serializable
 	
 	
 	
-	public void newCircuit() {
-		System.out.println( "newCircuit" );
+	public synchronized void simStep() { 
+		sim.simulate();
+		setTraceGraphicPowerStates();
 	}
 	
 	
 	
-	public void loadCircuit( File file ) {
-		System.out.println( "loadCircuit: " + file );
+	public void simPowerOn() {
+		sim.simulate();
+		setTraceGraphicPowerStates();
+		// TODO if oscillators are present, start them in a thread
+	}
+	
+	
+	
+	public void simPowerReset() { 
+		sim.reset();
+		sim.simulate();
+		setTraceGraphicPowerStates();
+	}
+	
+	
+	
+	public void simPowerOff() { 
+		sim.reset();
+		setTraceGraphicPowerStates();
+		// TODO stop oscillators
+	}
+	
+	
+	
+	public void setTraceGraphicPowerStates() {
+		for (EditorComponent ecom: ecoms) {
+			if (ecom instanceof EditorComponentTrace) {
+				EditorComponentTrace trace = (EditorComponentTrace) ecom;
+				trace.getGraphic().setPowered( trace.getComponent().getState() );
+			}
+		}
+	}
+	
+	
+	
+	public void clear() {
+		grid .clear();
+		ecoms.clear();
+		sim  .clear();
+	}
+	
+	
+	
+	public boolean isEmpty() {
+		return ecoms.isEmpty();
 	}
 	
 	
@@ -66,6 +109,8 @@ public class EditorWorld implements Serializable
 		addToGrid( ecom );		
 		ecoms.add( ecom );
 		ecom.linkToWorld( this );
+		
+		sim.add( ecom.getComponent() );
 	}
 	
 	
@@ -82,19 +127,19 @@ public class EditorWorld implements Serializable
 		for (Line2 line: trace.getGraphic().getLines())
 			grid.add( line, trace );
 	}
-
-
-
+	
+	
+	
 	/**
 	 * Remove a component from the world.
-	 * This doesn't actually remove it from the simulation or anything.
-	 * Only the world stops knowing about it.
 	 * @param ecom
 	 */
 	public void remove( EditorComponent ecom ) {
 		ecoms.remove( ecom );
 		grid .remove( ecom );
 		ecom.unlinkFromWorld();
+		
+		sim.remove( ecom.getComponent() );
 	}
 	
 	
@@ -302,7 +347,12 @@ public class EditorWorld implements Serializable
 	
 	
 	public String toString() {
-		return "EditorWorld with " + ecoms.size() + " components.";
+		String str = "EditorWorld with " + ecoms.size() + " components:\n";
+		
+		for (EditorComponent ecom: ecoms)
+			str += "\t" + ecom + " \t[" + ecom.getComponent() + "]\n"; 
+		
+		return str;
 	}
 	
 	

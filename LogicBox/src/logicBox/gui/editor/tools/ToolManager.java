@@ -67,6 +67,24 @@ public class ToolManager
 	
 	
 	
+	public void powerOn() {
+		controller.powerOn();
+	}
+	
+	
+	
+	public void powerReset() {
+		controller.powerReset();
+	}
+	
+	
+	
+	public void powerOff() {
+		controller.powerOff();
+	}
+	
+	
+	
 	public void initiateTraceCreation() {
 		takeExclusiveControl( toolTraceDrawer );
 	}
@@ -77,6 +95,7 @@ public class ToolManager
 		if ( ! toolContextual.isAttached())
 			releaseControl();
 		
+		toolHighlighter.reset(); // Ensure no residual drawing is done
 		toolContextual.delete();
 	}
 	
@@ -106,6 +125,8 @@ public class ToolManager
 	protected void takeExclusiveControl( Tool tool ) {
 		detachAndResetAll();
 		tool.attach();
+		
+		getEditorPanel().repaint();
 	}
 	
 	
@@ -114,6 +135,8 @@ public class ToolManager
 		detachAndResetAll();
 		a.attach();
 		b.attach();
+		
+		getEditorPanel().repaint();
 	}
 	
 	

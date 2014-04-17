@@ -4,6 +4,7 @@
 package logicBox.gui.editor;
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Stroke;
 
 
@@ -38,6 +39,7 @@ public abstract class EditorStyle
 	public static Stroke strokeTrace      = new BasicStroke( compThickness, BasicStroke.CAP_BUTT,  BasicStroke.JOIN_ROUND );
 	public static Stroke strokeTracePlace = makeTracePlacerStroke();
 	public static Stroke strokeBubble     = new BasicStroke( compThickness * 0.5f );
+	public static Font   componentFont    = new Font( "Ariel", Font.BOLD, 16 );
 	
 	
 	

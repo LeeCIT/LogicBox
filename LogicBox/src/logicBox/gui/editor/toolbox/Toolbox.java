@@ -5,6 +5,8 @@ package logicBox.gui.editor.toolbox;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 import logicBox.gui.IconEnum;
@@ -15,6 +17,7 @@ import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
 import logicBox.util.Singleton;
 import logicBox.util.Util;
+import logicBox.util.Vec2;
 
 
 
@@ -26,6 +29,7 @@ import logicBox.util.Util;
  */
 public class Toolbox extends JDialog implements Singleton<Toolbox>
 {
+	private static Vec2    lastPosition;
 	private static Toolbox instance;
 	
 	private ToolManager            activeToolManager;
@@ -43,10 +47,19 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 		setResizable( false );
 		setVisible( true );
 		
+		if (lastPosition != null)
+			setLocation( (int) lastPosition.x, (int) lastPosition.y );
+		
 		if (instance != null)
 			throw new RuntimeException( "Trying to create duplicate Toolbox" );
 		
 		instance = this;
+		
+		addComponentListener( new ComponentAdapter() {
+			public void componentMoved( ComponentEvent ev ) {
+				lastPosition = new Vec2( getLocation() );
+			}
+		});
 	}
 	
 	
@@ -97,7 +110,13 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	private void addPowerButtons() {
-		//addCategory( "Power", );  // TODO
+		ToolboxButton[] butts = {
+			genButtonPowerOn(),
+			genButtonPowerReset(),
+			genButtonPowerOff()
+		};
+		
+		addCategory( "Power", butts );
 	}
 	
 	
@@ -170,13 +189,54 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	
+	private ToolboxButton genButtonPowerOn() {
+		final ToolboxButton butt = new ToolboxButton( "Power" );
+		
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				butt.getTargetToolManager().powerOn();
+			}
+		});
+		
+		return butt;
+	}
+	
+	
+	
+	private ToolboxButton genButtonPowerReset() {
+		final ToolboxButton butt = new ToolboxButton( "RST" );
+		
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				butt.getTargetToolManager().powerReset();
+			}
+		});
+		
+		return butt;
+	}
+	
+	
+	
+	private ToolboxButton genButtonPowerOff() {
+		final ToolboxButton butt = new ToolboxButton( "Off" );
+		
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				butt.getTargetToolManager().powerOff();
+			}
+		});
+		
+		return butt;
+	}
+	
+	
+	
 	private ToolboxButton genButtonTrace() {
 		final ToolboxButton butt = new ToolboxButton( "Trc" );
 		
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
-				ToolManager manager = butt.getTargetToolManager();
-				manager.initiateTraceCreation();
+				butt.getTargetToolManager().initiateTraceCreation();
 			}
 		});
 		

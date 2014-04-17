@@ -4,6 +4,7 @@
 package logicBox.util;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -187,7 +188,7 @@ public class SpatialGrid<T> implements Serializable
 	
 	
 	
-	private class Cell extends ArrayList<T> {
+	private class Cell extends HashSet<T> {
 		private static final long serialVersionUID = 1L;
 	};
 	

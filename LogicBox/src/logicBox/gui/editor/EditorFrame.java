@@ -15,6 +15,11 @@ import net.miginfocom.swing.MigLayout;
  */
 public class EditorFrame extends JFrame
 {
+	private static final String baseTitle = "LogicBox";
+	private String  circuitName;
+	private boolean isCircuitModified;
+	
+	
 	private EditorPanel     panel;
 	private EditorMenuBar   menubar;
 	private EditorToolbar   toolbar;
@@ -25,7 +30,7 @@ public class EditorFrame extends JFrame
 	
 	public EditorFrame( EditorPanel panel, EditorMenuBar menubar, EditorToolbar toolbar,
 						EditorScrollBar scrollX, EditorScrollBar scrollY ) {
-		super( "LogicBox" );
+		super( baseTitle );
 		
 		this.panel   = panel  ;
 		this.menubar = menubar;
@@ -33,7 +38,35 @@ public class EditorFrame extends JFrame
 		this.scrollX = scrollX;
 		this.scrollY = scrollY;
 		
+		circuitName       = "New Circuit";
+		isCircuitModified = false;
+		
 		setupLayout();
+	}
+	
+	
+	
+	public void setCircuitName( String name ) {
+		circuitName = name;
+		updateTitle();
+	}
+	
+	
+	
+	public void setCircuitModified( boolean modified ) {
+		isCircuitModified = modified;
+		updateTitle();
+	}
+	
+	
+	
+	private void updateTitle() {
+		String title = baseTitle + " - " + circuitName;
+		
+		if (isCircuitModified)
+			title += "*";
+		
+		setTitle( title );
 	}
 	
 	

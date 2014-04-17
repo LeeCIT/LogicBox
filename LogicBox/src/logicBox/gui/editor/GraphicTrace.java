@@ -21,7 +21,6 @@ import logicBox.util.Vec2;
 
 /**
  * Draws trace graphics.
- * TODO
  * @author Lee Coakley
  */
 public class GraphicTrace extends Graphic implements GraphicIntersector
@@ -33,6 +32,7 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	private VecPath           polyLine;
 	private GraphicPinMapping gpmSrc;
 	private GraphicPinMapping gpmDest;
+	private boolean           isPowered;
 	
 	
 	
@@ -42,6 +42,13 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 		this.lines    = Line2.toLines( points );
 		this.polyLine = new VecPath( points, false );
 		setColors( false );
+	}
+	
+	
+	
+	public void setPowered( boolean powered ) {
+		isPowered = powered;
+		setColors( powered );
 	}
 	
 	

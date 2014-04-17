@@ -25,11 +25,23 @@ import logicBox.util.Vec2;
 public class HistoryManager<T extends Serializable>
 {
 	private final HistoryListener<T> listener;
-	private final Stack<byte[]>      history;
+	private final Stack<Change>      history;
 	private       int                index;
 	private final int                maxSize;
 	private final CallbackSet        onChange;
 	private final CallbackSet        onUndoRedo;
+	
+	
+	
+	private class Change {
+		public final byte[] item;
+		public final String name;
+		
+		public Change( byte[] item, String name ) {
+			this.item = item;
+			this.name = name;
+		}
+	}
 	
 	
 	
@@ -80,10 +92,21 @@ public class HistoryManager<T extends Serializable>
 	
 	/**
 	 * Add a point to the undo/redo timeline.
+	 * Should be called before making the change (so it undoes the change you're about to make)
 	 */
 	public void markChange() {
+		markChange( "<no name>" );
+	}
+	
+	
+	
+	/**
+	 * Add a point to the undo/redo timeline.
+	 * Should be called before making the change (so it undoes the change you're about to make)
+	 */
+	public void markChange( String what ) {
 		purgeRedo();
-		history.push( getStreamerState() );
+		history.push( new Change(getListenerState(), what) );
 		index = history.size() - 1;
 		cullHistory();
 		onChange.execute();
@@ -130,8 +153,9 @@ public class HistoryManager<T extends Serializable>
 		String str = "HistoryManager: " + history.size() + " steps, " + getTotalBytes() + " bytes\n";
 		
 		for (int i=0; i<history.size(); i++) {
-			T obj = decompress( history.get(i) );
-			str += (i) + ": \t" + obj;
+			Change change = history.get(i);
+			T      obj    = decompress( change.item );
+			str += (i) + ": \t" + change.name + " \t" + obj;
 			str += (i==index) ? " < now" : "";
 			str += "\n";
 		}
@@ -144,8 +168,8 @@ public class HistoryManager<T extends Serializable>
 	private long getTotalBytes() {
 		long acc = 0;
 		
-		for (byte[] item: history)
-			acc += item.length;
+		for (Change change: history)
+			acc += change.item.length;
 		
 		return acc;
 	}
@@ -168,14 +192,14 @@ public class HistoryManager<T extends Serializable>
 	
 	
 	
-	private byte[] getStreamerState() {
+	private byte[] getListenerState() {
 		return compress( listener.getHistoryState() );
 	}
 	
 	
 	
 	private void applyStateToListener( int index ) {
-		listener.setStateFromHistory( decompress( history.get(index) ) );
+		listener.setStateFromHistory( decompress( history.get(index).item ) );
 		onUndoRedo.execute();
 	}
 	

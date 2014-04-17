@@ -3,8 +3,7 @@
 
 package logicBox.gui.editor;
 import java.awt.Graphics2D;
-import java.io.Serializable;
-import logicBox.sim.component.Component;
+import logicBox.sim.component.ComponentActive;
 import logicBox.util.Vec2;
 
 
@@ -17,13 +16,12 @@ public class EditorComponentActive extends EditorComponent
 {
 	private static final long serialVersionUID = 1L;
 	
-	protected Component        com;
-	protected GraphicComActive graphic;
-	private   EditorWorld      world;
+	private ComponentActive  com;
+	private GraphicComActive graphic;
 	
 	
 	
-	public EditorComponentActive( Component com, GraphicComActive gca, Vec2 pos, double angle ) {
+	public EditorComponentActive( ComponentActive com, GraphicComActive gca, Vec2 pos, double angle ) {
 		super( com );
 		this.com     = com;
 		this.graphic = gca;
@@ -32,8 +30,14 @@ public class EditorComponentActive extends EditorComponent
 	
 	
 	
-	public EditorComponentActive( Component com, GraphicComActive gca, Vec2 pos ) {
+	public EditorComponentActive( ComponentActive com, GraphicComActive gca, Vec2 pos ) {
 		this( com, gca, pos, gca.getAngle() );
+	}
+	
+	
+	
+	public ComponentActive getComponent() {
+		return com;
 	}
 	
 	
