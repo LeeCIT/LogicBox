@@ -425,6 +425,20 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
+	private boolean isSnappedPinConnected( SnapInfo si ) {
+		Pin pin = getSnappedPin( si );
+		
+		if (pin == null)
+			return false;
+		
+		if (pin.hasTrace())
+			return true;
+		
+		return false;
+	}
+	
+	
+	
 	private Pin getSnappedPin( SnapInfo si ) {
 		if ( ! si.snapped)
 			return null;
@@ -451,6 +465,9 @@ public class ToolTraceDrawer extends Tool
 			snapInfo.snapped = true;
 			snapInfo.pos     = fcpRes.gpm.getPinPosEnd();
 			snapInfo.pinInfo = fcpRes;
+			
+			if (isSnappedPinConnected( snapInfo ))
+				return new SnapInfo();
 		}
 		
 		return snapInfo;
