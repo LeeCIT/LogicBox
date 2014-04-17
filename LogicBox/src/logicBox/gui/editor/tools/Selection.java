@@ -62,7 +62,7 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 		
 		for (EditorComponent ecom: ecoms) {
 			Vec2 newPos = ecom.getPos().subtract( delta );
-			Vec2 snap   = Geo.snapNear( newPos, 16 );
+			Vec2 snap   = newPos;//Geo.snapNear( newPos, 16 );
 			ecom.setPos( snap );
 		}
 	}

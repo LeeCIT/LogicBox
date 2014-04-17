@@ -229,7 +229,8 @@ public class ToolPlacer extends Tool
 	
 	
 	private Vec2 getSnappedMousePos() {
-		return Geo.snapNear( getMousePosWorld(), 16 );
+		return getMousePosWorld();
+		//return Geo.snapNear( getMousePosWorld(), 16 );
 	}
 }
 
