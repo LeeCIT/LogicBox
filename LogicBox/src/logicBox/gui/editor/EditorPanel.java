@@ -167,13 +167,13 @@ public class EditorPanel extends JPanel
 				drawComponentGraphics( g );
 				drawRepaintListeners( g, repaintWorldListeners );
 			Gfx.popMatrix( g );
-				
+			
 			drawRepaintListeners( g, repaintScreenListeners );
 		Gfx.popAntialiasingState( g );
 	}
-	
-	
-	
+
+
+
 	private void applyCameraTransform( Graphics2D g ) {
 		if (cam != null)
 			cam.applyTransform( g );
