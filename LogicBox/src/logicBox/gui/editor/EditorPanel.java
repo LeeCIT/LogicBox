@@ -171,9 +171,9 @@ public class EditorPanel extends JPanel
 			drawRepaintListeners( g, repaintScreenListeners );
 		Gfx.popAntialiasingState( g );
 	}
-
-
-
+	
+	
+	
 	private void applyCameraTransform( Graphics2D g ) {
 		if (cam != null)
 			cam.applyTransform( g );

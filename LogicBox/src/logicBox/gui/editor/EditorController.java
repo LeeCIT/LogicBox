@@ -65,7 +65,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		toolManager    = new ToolManager( this );
 		
 		addNeedToSaveCallback();
-		initialiseCircuit();
+		initialiseCircuit( false );
 		
 		addDebugAndDemoStuff();
 	}
@@ -252,7 +252,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	private void initialiseCircuit() {
+	private void initialiseCircuit( boolean recentre ) {
 		world.clear();
 		historyManager.clear();
 		historyManager.markChange( "<initial state>" );
@@ -265,7 +265,8 @@ public class EditorController implements HistoryListener<EditorWorld>
 		isUnsaved   = true;
 		needsToSave = false;
 		
-		recentreCamera();
+		if (recentre)
+			recentreCamera();
 	}
 	
 	
@@ -312,13 +313,15 @@ public class EditorController implements HistoryListener<EditorWorld>
 		}
 		
 		if (world != null) {
-			initialiseCircuit();
+			initialiseCircuit( false );
 			isUnsaved = false;
 			
 			circuitFile = file;
 			frame.setCircuitName( circuitFile.getName() );
 			
 			this.world = world;
+			
+			recentreCamera();
 		}
 	}
 	
@@ -330,7 +333,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 				if ( ! canDiscardCircuit())
 					return;
 				
-				initialiseCircuit();
+				initialiseCircuit( true );
 			}
 		};
 	}
