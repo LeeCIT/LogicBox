@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 /**
@@ -51,5 +54,11 @@ public class DisplayLed extends Display
 	public void reset() {
 		super.reset();
 		lit = false;
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateDisplayLED();
 	}
 }
