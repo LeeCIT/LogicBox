@@ -3,10 +3,14 @@
 
 package logicBox.gui.editor;
 
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.sim.component.PinIoMode;
 import logicBox.util.Bbox2;
@@ -75,6 +79,7 @@ public abstract class GraphicGen
 	private static final double pinLength       = baseSize * pinLenFrac;
 	private static final double bubbleRadius    = baseSize * bubbleFrac;
 	private static final double thickness       = EditorStyle.compThickness;
+	//private static final Font   font            = EditorStyle.componentFont;
 	
 	
 	
@@ -349,14 +354,14 @@ public abstract class GraphicGen
 		pinLines.addAll( pinOutLines );
 		pinLines.addAll( pinInLines  );
 		
-		List<GraphicPinMapping> gpms = genPinMappings( pinLines, inputCount-1 );
+		final List<GraphicPinMapping> gpms = genPinMappings( pinLines, pinOutLines.size() );
 		
 		Vec2    arrowPos  = gpms.get(2+1).getPinPosBody();
 		double  arrowOffs = r.getSize().x * 0.2;
 		VecPath polyArrow = new VecPath();
-		polyArrow.moveTo( arrowPos.add( 0,        -arrowOffs*0.5 ) );
+		polyArrow.moveTo( arrowPos.add( 2,        -arrowOffs*0.5 ) );
 		polyArrow.lineTo( arrowPos.add( arrowOffs, 0             ) );
-		polyArrow.lineTo( arrowPos.add( 0,        +arrowOffs*0.5 ) );
+		polyArrow.lineTo( arrowPos.add( 2,        +arrowOffs*0.5 ) );
 		
 		return new GraphicComActive(
 			genPolyBody( true, br, tr, tl, bl ),
@@ -368,25 +373,50 @@ public abstract class GraphicGen
 	
 	
 	
+	private static HashMap<GraphicPinMapping,String> genLabelMap( List<GraphicPinMapping> gpms, String...labels ) {
+		HashMap<GraphicPinMapping,String> labelMap = new HashMap<>();
+		
+		for (int i=0; i<labels.length; i++) {
+			String str = labels[i];
+			labelMap.put( gpms.get(i), str );
+		}
+		
+		return labelMap;
+	}
+	
+	
+	
 	public static GraphicComActive generateFlipFlopD() {
-		return generateFlipFlop( 2 );
+		GraphicComActive        graphic = generateFlipFlop( 2 );
+		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
+		
+		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "D", "E" ) );		
+		return graphic;
 	}
 	
 	
 	
 	public static GraphicComActive generateFlipFlopT() {
-		return generateFlipFlop( 2 );
+		GraphicComActive        graphic = generateFlipFlop( 2 );
+		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
+		
+		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "T", "C" ) );
+		return graphic;
 	}
 	
 	
 	
 	public static GraphicComActive generateFlipFlopJK() {
-		return generateFlipFlop( 3 );
+		GraphicComActive        graphic = generateFlipFlop( 3 );
+		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
+		
+		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "J", "C", "K" ) );		
+		return graphic;
 	}
 	
 	
 	
-	public static GraphicComActive generateSourceFixed( boolean state ) {
+	public static GraphicComActive generateSourceFixed( boolean level ) {
 		
 	}
 	
