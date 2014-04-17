@@ -13,6 +13,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import logicBox.fileManager.FileManager;
+import logicBox.gui.DialogueAnswer;
 import logicBox.gui.GUI;
 import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
@@ -227,7 +228,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		}
 		catch (Simulation.NonLevelisableCircuitException ex) {
 			GUI.showError(
-				frame,
+				getEditorFrame(),
 				"Circuit Contains Loop",
 				"The circuit contains a loop.  This version of LogicBox does not support loops."
 			);
@@ -257,7 +258,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	private boolean askUserToDiscard() {
-		return GUI.askConfirm(
+		return DialogueAnswer.YES == GUI.askYesNoCancel(
 			getEditorFrame(),
 			"Discard Unsaved Changes?",
 			"You have unsaved changes.  Do you really want to discard them?"
