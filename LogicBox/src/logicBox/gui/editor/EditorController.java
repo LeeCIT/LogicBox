@@ -18,6 +18,7 @@ import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
 import logicBox.gui.help.HelpFrame;
+import logicBox.sim.Simulation;
 import logicBox.sim.component.Demux;
 import logicBox.sim.component.GateAnd;
 import logicBox.sim.component.GateBuffer;
@@ -188,22 +189,49 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	public void powerOn() {
-		world.simPowerOn();
-		getEditorPanel().repaint();
+		doWithLoopErrorDetect( new Callback() {
+			public void execute() {
+				world.simPowerOn();
+				getEditorPanel().repaint();
+			}
+		});
 	}
 	
 	
 	
 	public void powerReset() {
-		world.simPowerReset();
-		getEditorPanel().repaint();
+		doWithLoopErrorDetect( new Callback() {
+			public void execute() {
+				world.simPowerReset();
+				getEditorPanel().repaint();
+			}
+		});
 	}
 	
 	
 	
 	public void powerOff() {
-		world.simPowerOff();
-		getEditorPanel().repaint();
+		doWithLoopErrorDetect( new Callback() {
+			public void execute() {
+				world.simPowerOff();
+				getEditorPanel().repaint();
+			}
+		});
+	}
+	
+	
+	
+	private void doWithLoopErrorDetect( Callback cb ) {
+		try {
+			cb.execute();
+		}
+		catch (Simulation.NonLevelisableCircuitException ex) {
+			GUI.showError(
+				frame,
+				"Circuit Contains Loop",
+				"The circuit contains a loop.  This version of LogicBox does not support loops."
+			);
+		}
 	}
 	
 	
@@ -322,6 +350,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 			this.world = world;
 			
 			recentreCamera();
+			powerOff();
 		}
 	}
 	
