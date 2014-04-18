@@ -21,8 +21,9 @@ public class SourceToggle extends SourceFixed
 	
 	
 	
-	public void interactClick() {
+	public boolean interactClick() {
 		toggleState();
+		return true;
 	}
 	
 	
