@@ -267,7 +267,7 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	private void attachListener( final ToolboxButton butt, final ComponentActive com ) {
 		butt.addActionListener( new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {		
+			public void actionPerformed( ActionEvent ev ) {
 				ToolManager manager = butt.getTargetToolManager();
 				manager.initiateComponentCreation( genCommand(com) );
 			}
@@ -284,8 +284,6 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	/**
 	 * Add a logical group of buttons.  IE gates, components, etc.
-	 * @param category
-	 * @param items
 	 */
 	private void addCategory( String title, ToolboxButton...buttons ) {
 		setButtonEvaluators( buttons );
