@@ -12,7 +12,7 @@ import logicBox.util.Vec2;
 
 
 /**
- * 
+ * Junction for splitting out traces.
  * @author Lee Coakley
  */
 public class GraphicJunction extends Graphic implements GraphicIntersector
@@ -30,6 +30,18 @@ public class GraphicJunction extends Graphic implements GraphicIntersector
 	
 	
 	
+	public void setPos( Vec2 pos ) {
+		this.pos = pos;
+	}
+	
+	
+	
+	public Vec2 getPos() {
+		return pos;
+	}
+	
+	
+	
 	public boolean contains( Vec2 pos ) {
 		double dist = Geo.distance(this.pos, pos);
 		double ref  = radius + (0.5 * EditorStyle.compThickness); 
@@ -39,7 +51,7 @@ public class GraphicJunction extends Graphic implements GraphicIntersector
 	
 	
 	public boolean overlaps( Bbox2 bbox ) {
-		return false;
+		return getBbox().overlaps( bbox );
 	}
 	
 	
