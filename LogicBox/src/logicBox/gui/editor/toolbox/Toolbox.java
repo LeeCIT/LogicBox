@@ -15,7 +15,6 @@ import logicBox.gui.editor.EditorCreationCommand;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
-import logicBox.util.Singleton;
 import logicBox.util.Util;
 import logicBox.util.Vec2;
 
@@ -27,7 +26,7 @@ import logicBox.util.Vec2;
  * @author John Murphy
  * @author Lee Coakley
  */
-public class Toolbox extends JDialog implements Singleton<Toolbox>
+public class Toolbox extends JDialog
 {
 	private static Vec2    lastPosition;
 	private static Toolbox instance;

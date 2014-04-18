@@ -32,7 +32,7 @@ public class ToolboxButtonTrace extends ToolboxButtonGraphic
 		points.add( new Vec2(  14, -18) );
 		points.add( new Vec2(  28,   0) );
 		
-		GraphicTrace graphic = new GraphicTrace( points, null, null );
+		GraphicTrace graphic = new GraphicTrace( points );
 		graphic.setConnectedSource( true );
 		graphic.setConnectedDest  ( true );
 		return graphic;

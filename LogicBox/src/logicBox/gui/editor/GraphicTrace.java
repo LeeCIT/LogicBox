@@ -36,7 +36,7 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	
 	
-	public GraphicTrace( List<Vec2> points, GraphicPinMapping gpmSrc, GraphicPinMapping gpmDest ) {
+	public GraphicTrace( List<Vec2> points ) {
 		super();
 		setFromPoints( points );
 		setColors( false );
@@ -174,22 +174,8 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	
 	
-	private void drawJunction( Graphics2D g, Vec2 pos ) {
-		double radius = 4;
-		
-		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBubble );
-			Gfx.pushAntialiasingStateAndSet( g, false );
-				Gfx.drawCircle( g, pos, radius, EditorStyle.colJunctionOff, true );
-			Gfx.popAntialiasingState( g );
-			
-			Gfx.drawCircle( g, pos, radius, EditorStyle.colJunctionOn, false );
-		Gfx.popStroke( g );
-	}
-	
-	
-	
 	private void drawConnection( Graphics2D g, Vec2 pos ) {
-		double radius = 3;
+		double radius = 4;
 		
 		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBubble );
 			Gfx.pushAntialiasingStateAndSet( g, false );
