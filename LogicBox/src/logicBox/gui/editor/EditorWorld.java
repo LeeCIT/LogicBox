@@ -84,7 +84,7 @@ public class EditorWorld implements Serializable
 				trace.getGraphic().setPowered( trace.getComponent().getState() );
 			}
 			
-			if (ecom.getComponent() instanceof DisplayLed) {
+			if (ecom.getComponent() instanceof DisplayLed) { // TODO move into class
 				boolean lit = ((DisplayLed) ecom.getComponent()).isLit();
 				ecom.getGraphic().colFillNormal = (lit) ? EditorStyle.colLedOn : EditorStyle.colLedOff;
 				ecom.getGraphic().setHighlighted( false );
@@ -118,6 +118,22 @@ public class EditorWorld implements Serializable
 		ecom.linkToWorld( this );
 		
 		sim.add( ecom.getComponent() );
+		simStep();
+	}
+	
+	
+	
+	/**
+	 * Remove a component from the world.
+	 * @param ecom
+	 */
+	public void remove( EditorComponent ecom ) {
+		ecoms.remove( ecom );
+		grid .remove( ecom );
+		ecom.unlinkFromWorld();
+		
+		sim.remove( ecom.getComponent() );
+		simStep();
 	}
 	
 	
@@ -133,20 +149,6 @@ public class EditorWorld implements Serializable
 	private void addToGrid( EditorComponentTrace trace ) {
 		for (Line2 line: trace.getGraphic().getLines())
 			grid.add( line, trace );
-	}
-	
-	
-	
-	/**
-	 * Remove a component from the world.
-	 * @param ecom
-	 */
-	public void remove( EditorComponent ecom ) {
-		ecoms.remove( ecom );
-		grid .remove( ecom );
-		ecom.unlinkFromWorld();
-		
-		sim.remove( ecom.getComponent() );
 	}
 	
 	
