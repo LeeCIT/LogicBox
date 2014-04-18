@@ -30,9 +30,9 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	private List<Vec2>        points;
 	private List<Line2>       lines;
 	private VecPath           polyLine;
-	private GraphicPinMapping gpmSrc;
-	private GraphicPinMapping gpmDest;
 	private boolean           isPowered;
+	private boolean 		  connectedSource;
+	private boolean 		  connectedDest;
 	
 	
 	
@@ -53,11 +53,23 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	
 	
+	public void setConnectedSource( boolean b ) {
+		connectedSource = b;
+	}
+	
+	
+	
+	public void setConnectedDest( boolean b ) {
+		connectedDest = b;
+	}
+	
+	
+	
 	public void draw( Graphics2D g ) {
 		drawTrace( g );
 		
-		if (hasGpmSrc())  drawConnection( g, gpmSrc .getPinPosEnd() );
-		if (hasGpmDest()) drawConnection( g, gpmDest.getPinPosEnd() );
+		if (connectedSource) drawConnection( g, points.get(0)               );
+		if (connectedDest)   drawConnection( g, points.get(points.size()-1) );
 	}
 	
 	
@@ -102,18 +114,6 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	public void setInverted( boolean state ) {
 		// Do nothing
-	}
-	
-	
-	
-	private boolean hasGpmSrc() {
-		return gpmSrc != null;
-	}
-	
-	
-	
-	private boolean hasGpmDest() {
-		return gpmDest != null;
 	}
 	
 	
@@ -184,7 +184,7 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 				Gfx.drawCircle( g, pos, radius, EditorStyle.colBackground, true );
 			Gfx.popAntialiasingState( g );
 			
-			Gfx.drawCircle( g, pos, radius, EditorStyle.colTraceOff, false );
+			Gfx.drawCircle( g, pos, radius, colStroke, false );
 		Gfx.popStroke( g );
 	}
 }
