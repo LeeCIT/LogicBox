@@ -44,6 +44,18 @@ public class Trace extends ComponentPassive
 	
 	
 	
+	public boolean isSourceConnected() {
+		return (source != null);
+	}
+	
+	
+	
+	public boolean isDestConnected() {
+		return (dest != null);
+	}
+	
+	
+	
 	public Pin getPinSource() {
 		return source;
 	}
