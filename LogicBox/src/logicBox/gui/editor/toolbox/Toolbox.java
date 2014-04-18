@@ -232,7 +232,7 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	private ToolboxButton genButtonTrace() {
-		final ToolboxButton butt = new ToolboxButton( "Trc" );
+		final ToolboxButton butt = new ToolboxButtonTrace();
 		
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
@@ -258,7 +258,7 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	private ToolboxButton genButton( final ComponentActive com ) {
-		ToolboxButton butt = new ToolboxButtonCom( com.getGraphic(), com.getName(), null );
+		ToolboxButton butt = new ToolboxButtonCom( com.getGraphic(), com.getName() );
 		attachListener( butt, com );
 		return butt;
 	}
