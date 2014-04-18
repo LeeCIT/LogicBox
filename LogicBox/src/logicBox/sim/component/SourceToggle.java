@@ -41,6 +41,6 @@ public class SourceToggle extends SourceFixed
 	
 	
 	public String getName() {
-		return "Switchable source";
+		return "Switchable source (click to switch)";
 	}
 }

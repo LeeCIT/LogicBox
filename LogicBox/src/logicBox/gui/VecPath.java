@@ -144,7 +144,8 @@ public class VecPath implements Serializable, Transformable, Shape
 	
 	public PathIterator getPathIterator( AffineTransform at, double flatness ) {
 		return path.getPathIterator( at, flatness );
-	}}
+	}
+}
 
 
 
