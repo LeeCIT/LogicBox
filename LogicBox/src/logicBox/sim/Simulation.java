@@ -68,7 +68,18 @@ public class Simulation implements Serializable
 		actives.remove( com );
 		sources.remove( com );
 		
+		resetIsolatedInputPins();
+		
 		cacheInvalidated = true;
+	}
+	
+	
+	
+	private void resetIsolatedInputPins() {
+		for (ComponentActive com: actives)
+			for (Pin pin: com.getPinInputs())
+				if ( ! pin.hasTrace())
+					pin.setState( false );
 	}
 	
 	
