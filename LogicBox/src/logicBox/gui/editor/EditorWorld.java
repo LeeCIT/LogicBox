@@ -46,7 +46,7 @@ public class EditorWorld implements Serializable
 	
 	
 	
-	public synchronized void simStep() { 
+	public synchronized void simUpdate() {
 		sim.simulate();
 		setGraphicPowerStates();
 	}
@@ -69,7 +69,7 @@ public class EditorWorld implements Serializable
 	
 	
 	
-	public synchronized void simPowerOff() { 
+	public synchronized void simPowerOff() {
 		sim.reset();
 		setGraphicPowerStates();
 		// TODO stop oscillators
@@ -87,7 +87,7 @@ public class EditorWorld implements Serializable
 			if (ecom.getComponent() instanceof DisplayLed) { // TODO move into class
 				boolean lit = ((DisplayLed) ecom.getComponent()).isLit();
 				ecom.getGraphic().colFillNormal = (lit) ? EditorStyle.colLedOn : EditorStyle.colLedOff;
-				ecom.getGraphic().setHighlighted( false );
+				ecom.getGraphic().updateColours();
 			}
 		}
 	}
@@ -110,7 +110,6 @@ public class EditorWorld implements Serializable
 	
 	/**
 	 * Add a component to the world.
-	 * To remove it you have to use remove().
 	 */
 	public void add( EditorComponent ecom ) {
 		addToGrid( ecom );		
@@ -118,14 +117,13 @@ public class EditorWorld implements Serializable
 		ecom.linkToWorld( this );
 		
 		sim.add( ecom.getComponent() );
-		simStep();
+		simUpdate();
 	}
 	
 	
 	
 	/**
 	 * Remove a component from the world.
-	 * @param ecom
 	 */
 	public void remove( EditorComponent ecom ) {
 		ecoms.remove( ecom );
@@ -133,7 +131,17 @@ public class EditorWorld implements Serializable
 		ecom.unlinkFromWorld();
 		
 		sim.remove( ecom.getComponent() );
-		simStep();
+		simUpdate();
+	}
+	
+	
+	
+	public void move( EditorComponent ecom ) {
+		ecoms.remove( ecom );
+		grid .remove( ecom );
+		
+		addToGrid( ecom );		
+		ecoms.add( ecom );
 	}
 	
 	
@@ -159,8 +167,7 @@ public class EditorWorld implements Serializable
 	 * EditorComponents should call this method automatically.
 	 */
 	public void onComponentTransform( EditorComponent ecom ) {
-		remove( ecom );
-		add   ( ecom );
+		move( ecom );
 	}
 	
 	
