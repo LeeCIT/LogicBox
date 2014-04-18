@@ -266,6 +266,43 @@ public class EditorWorld implements Serializable
 	
 	
 	
+	public class FindClosestTraceResult {
+		public boolean              foundTrace;
+		public EditorComponentTrace ecom;
+	}
+	
+	
+	
+	/**
+	 * Find the closest trace within the given radius.
+	 */
+	public FindClosestTraceResult findClosestTrace( Vec2 pos, double radius ) {
+		FindClosestTraceResult result = new FindClosestTraceResult();
+		Bbox2  bbox     = new Bbox2(pos,pos).expand( radius * 2 );
+		double bestDist = Double.MAX_VALUE;
+		
+		for (EditorComponent ecom: find( bbox )) {
+			if ( ! (ecom instanceof EditorComponentTrace))
+				continue;
+			
+			EditorComponentTrace trace = (EditorComponentTrace) ecom;
+			
+			for (Line2 line: trace.getGraphic().getLines()) {
+				double dist = line.distanceToPoint( pos );
+				
+				if (dist <= bestDist) {
+					bestDist = dist;
+					result.foundTrace = true;
+					result.ecom       = trace;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	
+	
 	/**
 	 * Get a list of all components.
 	 */
