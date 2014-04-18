@@ -11,13 +11,11 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.util.Bbox2;
 import logicBox.util.Geo;
 import logicBox.util.Transformable;
-import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
@@ -251,11 +249,12 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 		Color colFill   = (isInverted()) ? this.colStroke : this.colFill;
 		
 		Gfx.pushColorAndSet( g, colStroke );
-			Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
-				if (polyPins != null)
+			if (polyPins != null) {
+				Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
 					g.draw( polyPins );
-			Gfx.popStroke( g );
-				
+				Gfx.popStroke( g );
+			}
+			
 			Gfx.pushColorAndSet( g, colFill );
 				Gfx.pushAntialiasingStateAndSet( g, isFillAntialised );
 					g.fill( polyBody );
@@ -266,10 +265,11 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 				g.draw( polyBody );
 			Gfx.popStroke( g );
 			
-			Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
-				if (polyAux  != null)
+			if (polyAux != null) {
+				Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
 					g.draw( polyAux );
-			Gfx.popStroke( g );
+				Gfx.popStroke( g );
+			}
 			
 			if (hasBubble) {
 				Gfx.pushColorAndSet( g, colFill );
@@ -283,10 +283,12 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 				Gfx.popStroke( g );
 			}
 			
-			Gfx.pushFontAndSet( g, EditorStyle.componentFont );
-				for (GraphicPinMapping gpm: pinLabels.keySet())
-					drawPinText( g, pinLabels.get(gpm), gpm );
-			Gfx.popFont( g );
+			if (! pinLabels.isEmpty()) {
+				Gfx.pushFontAndSet( g, EditorStyle.componentFont );
+					for (GraphicPinMapping gpm: pinLabels.keySet())
+						drawPinText( g, pinLabels.get(gpm), gpm );
+				Gfx.popFont( g );
+			}
 		Gfx.popColor( g );
 	}
 	
