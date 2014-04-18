@@ -27,7 +27,9 @@ public class EditorComponentTrace extends EditorComponent
 	public EditorComponentTrace( Trace com, List<Vec2> points ) {
 		super( com );
 		this.com     = com;
-		this.graphic = new GraphicTrace( points, null, null );
+		this.graphic = new GraphicTrace( points );
+		this.graphic.setConnectedSource( com.isSourceConnected() );
+		this.graphic.setConnectedDest  ( com.isDestConnected()   );
 	}
 	
 	
@@ -44,21 +46,14 @@ public class EditorComponentTrace extends EditorComponent
 	
 	
 	
-	public void draw( Graphics2D g ) {
-		graphic.setPowered( com.getState() );
-		graphic.draw( g );
-	}
-	
-	
-	
 	public void setPos( Vec2 pos ) {
-		List<Vec2> points = getGraphic().getPoints();
+		List<Vec2> points = graphic.getPoints();
 		Vec2       delta  = Geo.delta( getPosStart(), pos );
 		
 		for (Vec2 v: points)
 			v.setLocation( v.add(delta) );
 		
-		getGraphic().setFromPoints( points );
+		graphic.setFromPoints( points );
 		signalTransformChange();
 	}
 	
