@@ -2,7 +2,6 @@
 
 
 package logicBox.gui.editor;
-import java.awt.Graphics2D;
 import java.io.Serializable;
 import logicBox.sim.component.Component;
 import logicBox.util.Vec2;
@@ -14,7 +13,7 @@ import logicBox.util.Vec2;
  * Not sure if traces will be classified this way.  They may be a special case.
  * @author Lee Coakley
  */
-public abstract class EditorComponent implements Serializable, Drawable
+public abstract class EditorComponent implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -67,12 +66,6 @@ public abstract class EditorComponent implements Serializable, Drawable
 	 * Use return type covariance to return the appropriate graphic type.
 	 */
 	public abstract Graphic getGraphic();
-	
-	
-	
-	public void draw( Graphics2D g ) {
-		getGraphic().draw( g );
-	}
 	
 	
 	
