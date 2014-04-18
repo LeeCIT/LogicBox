@@ -59,6 +59,7 @@ public class ToolHighlighter extends Tool
 	public void reset() {
 		lastComponent = null;
 		curComponent  = null;
+		removeTransHint();
 	}
 	
 	
@@ -100,6 +101,7 @@ public class ToolHighlighter extends Tool
 		if (lastComponent != null) {
 			lastComponent = null;
 			changed = true;
+			removeTransHint();
 		}
 		
 		curComponent = getComponentAt( getMousePosWorld() );
@@ -107,6 +109,7 @@ public class ToolHighlighter extends Tool
 		if (curComponent != null) {
 			lastComponent = curComponent;
 			changed = true;
+			setTransHint( curComponent.getComponentName() );
 		}
 		
 		if (changed)
