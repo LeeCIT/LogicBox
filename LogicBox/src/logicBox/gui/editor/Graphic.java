@@ -89,7 +89,7 @@ public abstract class Graphic implements Serializable, Drawable, GraphicIntersec
 	
 	
 	
-	private void updateColours() {
+	protected void updateColours() {
 		if (isHighlighted) {
 			if (isSelected) {
 				colStroke = colStrokeSelectHighlight;
