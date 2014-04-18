@@ -20,9 +20,10 @@ public abstract class Component implements Serializable
 	/**
 	 * Called when the user clicks on this component.
 	 * At the moment only toggles and oscillators need this.
+	 * return: did sim change state
 	 */
-	public void interactClick() {
-		// Do nothing; most classes don't need this
+	public boolean interactClick() {
+		return false; // Do nothing; most classes don't need this
 	}
 	
 	
