@@ -53,6 +53,15 @@ public abstract class EditorComponent implements Serializable, Drawable
 	
 	
 	/**
+	 * Get the name of the component represented by this object.
+	 */
+	public String getComponentName() {
+		return com.getName();
+	}
+	
+	
+	
+	/**
 	 * Get the graphical representation of the component.
 	 * Use return type covariance to return the appropriate graphic type.
 	 */
