@@ -17,6 +17,7 @@ import logicBox.gui.editor.GraphicComActive;
 import logicBox.sim.component.ComponentActive;
 import logicBox.util.Callback;
 import logicBox.util.CallbackParam;
+import logicBox.util.Util;
 
 
 
@@ -57,8 +58,8 @@ public class ToolManager
 		
 		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<EditorCreationParam>() {
 			public void execute( EditorCreationParam param ) {
-				ComponentActive  scom = ecc.getComponentPayload();
-				GraphicComActive gca  = scom.getGraphic();
+				ComponentActive  scom = Util.deepCopy( ecc.getComponentPayload() );
+				GraphicComActive gca  = Util.deepCopy( scom.getGraphic() );
 				EditorComponent  ecom = new EditorComponentActive( scom, gca, param.pos, param.angle );
 				controller.getWorld().add( ecom );
 			}
