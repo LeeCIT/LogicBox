@@ -269,6 +269,8 @@ public class EditorWorld implements Serializable
 	public class FindClosestTraceResult {
 		public boolean              foundTrace;
 		public EditorComponentTrace ecom;
+		public Vec2                 closestPos;
+		public int                  lineIndex;
 	}
 	
 	
@@ -287,13 +289,17 @@ public class EditorWorld implements Serializable
 			
 			EditorComponentTrace trace = (EditorComponentTrace) ecom;
 			
-			for (Line2 line: trace.getGraphic().getLines()) {
+			List<Line2> lines = trace.getGraphic().getLines();
+			for (int i=0; i<lines.size(); i++) {
+				Line2  line = lines.get( i );
 				double dist = line.distanceToPoint( pos );
 				
 				if (dist <= bestDist) {
 					bestDist = dist;
 					result.foundTrace = true;
 					result.ecom       = trace;
+					result.closestPos = line.closestPoint( pos );
+					result.lineIndex  = i;
 				}
 			}
 		}
