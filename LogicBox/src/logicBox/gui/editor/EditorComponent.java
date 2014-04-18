@@ -30,7 +30,8 @@ public abstract class EditorComponent implements Serializable, Drawable
 	
 	
 	public void onMouseClick() {
-		com.interactClick();
+		if (getComponent().interactClick())
+			world.simUpdate();
 	}
 	
 	
