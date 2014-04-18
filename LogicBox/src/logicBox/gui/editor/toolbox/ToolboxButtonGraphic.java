@@ -26,16 +26,24 @@ import logicBox.util.Vec2;
 public class ToolboxButtonGraphic extends ToolboxButton
 {
 	private Graphic graphic;
+	private Vec2    scaleAux;
 	
 	
 	
 	public ToolboxButtonGraphic( Graphic gca, String tooltip ) {
 		super();
 		
-		this.graphic = Util.deepCopy( gca );
+		this.graphic  = Util.deepCopy( gca );
+		this.scaleAux = new Vec2( 1.0 );
 		
 		setToolTipText( tooltip );
 	    setRolloverEnabled( true );
+	}
+	
+	
+	
+	public void setScaleAux( double scale ) {
+		scaleAux = new Vec2( scale );
 	}
 	
 	
@@ -56,8 +64,9 @@ public class ToolboxButtonGraphic extends ToolboxButton
 		Graphics2D g = (Graphics2D) gx;
 		
 		Gfx.pushMatrix( g );
-			Gfx.translate( g, trans );
-			Gfx.scale    ( g, scale );
+			Gfx.translate( g, trans    );
+			Gfx.scale    ( g, scale    );
+			Gfx.scale    ( g, scaleAux );
 			
 			Gfx.pushAntialiasingStateAndSet( g, true );
 				graphic.setHighlighted( rollover );
