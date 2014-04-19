@@ -43,6 +43,8 @@ public class Simulation implements Serializable
 	 * Disconnect all components which are not in the given set.
 	 */
 	public void disconnectAllNotIn( Set<Component> coms ) {
+		System.out.println( "disconnectAllNotIn()" );
+		
 		for (Island island: findIslands())
 			for (ComponentActive coma: island)
 				if ( ! coms.contains( coma ))

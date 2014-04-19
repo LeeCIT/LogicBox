@@ -27,6 +27,7 @@ public abstract class Component implements Serializable
 	}
 	
 	
+	
 	/**
 	 * Reset the component to its initial state, as if the simulation was never run.
 	 */

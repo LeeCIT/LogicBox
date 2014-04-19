@@ -10,7 +10,7 @@ import logicBox.util.Vec2;
 
 
 /**
- * 
+ * Specialised for the LED.
  * @author Lee Coakley
  */
 public class EditorComponentLed extends EditorComponentActive
