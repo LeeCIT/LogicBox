@@ -119,6 +119,8 @@ public class EditorWorld implements Serializable
 			ecom.getComponent().disconnect();
 			removeInternal( ecom );
 		}
+		
+		simUpdate();
 	}
 	
 	
