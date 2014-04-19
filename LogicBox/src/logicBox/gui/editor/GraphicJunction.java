@@ -3,6 +3,7 @@
 
 package logicBox.gui.editor;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import logicBox.gui.Gfx;
 import logicBox.util.Bbox2;
@@ -73,12 +74,31 @@ public class GraphicJunction extends Graphic implements GraphicIntersector
 	
 	
 	private void drawJunction( Graphics2D g, Vec2 pos ) {
+		Color inside  = (isInverted()) ? colStroke : colFill;
+		Color outside = (isInverted()) ? colFill   : colStroke;
+		
 		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBubble );
 			Gfx.pushAntialiasingStateAndSet( g, false );
-				Gfx.drawCircle( g, pos, radius, colStroke, true );
+				Gfx.drawCircle( g, pos, radius, outside, true );
 			Gfx.popAntialiasingState( g );
 			
-			Gfx.drawCircle( g, pos, radius, colFill, false );
+			Gfx.drawCircle( g, pos, radius, inside, false );
 		Gfx.popStroke( g );
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
