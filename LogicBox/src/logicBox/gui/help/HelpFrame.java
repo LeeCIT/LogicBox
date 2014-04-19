@@ -26,7 +26,8 @@ public class HelpFrame extends JFrame
 	private static HelpFrame instance = null;
 	
 	
-	private HelpFrame() {	
+	
+	private HelpFrame() {
 		super( "LogicBox - Help" );
 		
 		setHelpIcon();
@@ -47,12 +48,10 @@ public class HelpFrame extends JFrame
 	
 	
 	public HelpFrame getInstance() {
-		if ( instance == null ) {
+		if (instance == null)
 			instance = new HelpFrame();
-			return instance;
-		}
-		else
-			return instance;
+		
+		return instance;
 	}
 	
 	

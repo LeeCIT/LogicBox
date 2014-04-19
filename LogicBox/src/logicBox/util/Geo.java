@@ -490,9 +490,10 @@ public abstract class Geo
 	
 	
 	
-	/** Apply a function to a list, accumulating the result.
-	 *  Example: reduce() a list of numbers [0,1,2,3] using addition.
-	 * 			 The result is 6: ((0+1)+2)+3).
+	/** 
+	 * Apply a function to a list, accumulating the result.
+	 * Example: reduce() a list of numbers [0,1,2,3] using addition.
+	 * 			The result is 6: ((0+1)+2)+3).
 	 * @param list
 	 * @param functor
 	 * @return T, or null if the list is empty.

@@ -24,7 +24,7 @@ public class Simulation implements Serializable
 	private List<ComponentActive> actives; // Event-generating components
 	private List<Source>          sources; // Primary/const inputs
 	
-	// Caches are regenerated on deserialisation.
+	// Caches are regenerated at deserialisation time.
 	transient private Set<Net>         cacheNets;
 	transient private List<Updateable> cacheUpdateables;
 	transient private boolean          cacheInvalidated;
@@ -35,6 +35,20 @@ public class Simulation implements Serializable
 		comps   = new ArrayList<>();
 		actives = new ArrayList<>();
 		sources = new ArrayList<>();
+	}
+	
+	
+	
+	/**
+	 * Disconnect all components which are not in the given set.
+	 */
+	public void disconnectAllNotIn( Set<Component> coms ) {
+		for (Island island: findIslands())
+			for (ComponentActive coma: island)
+				if ( ! coms.contains( coma ))
+					coma.disconnect();
+		
+		System.out.println( this );
 	}
 	
 	
@@ -445,6 +459,23 @@ public class Simulation implements Serializable
 	private void readObject( ObjectInputStream in ) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
 		regenerateCaches();
+	}
+	
+	
+	
+	public String toString() {
+		String str = "Simulation with " + actives.size() + " actives.\n\n";
+		
+		for (Island island: findIslands()) {
+			str += "=== Island ===\n";
+			
+			for (Component com: island)
+				str += "\t" + com + "\n";
+			
+			str += "\n";
+		}
+		
+		return str;
 	}
 	
 	
