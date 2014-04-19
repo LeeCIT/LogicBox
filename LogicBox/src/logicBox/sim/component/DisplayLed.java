@@ -59,6 +59,6 @@ public class DisplayLed extends Display
 	
 	
 	public GraphicComActive getGraphic() {
-		return GraphicGen.generateDisplayLED();
+		return GraphicGen.generateDisplayLed();
 	}
 }
