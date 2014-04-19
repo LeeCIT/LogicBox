@@ -13,7 +13,6 @@ import java.util.Comparator;
 import java.util.List;
 import logicBox.gui.Gfx;
 import logicBox.sim.Simulation;
-import logicBox.sim.component.DisplayLed;
 import logicBox.util.Bbox2;
 import logicBox.util.BinaryFunctor;
 import logicBox.util.Geo;
@@ -48,15 +47,15 @@ public class EditorWorld implements Serializable
 	
 	public synchronized void simUpdate() {
 		sim.simulate();
-		setGraphicPowerStates();
+		signalWorldChange();
 	}
 	
 	
 	
 	public synchronized void simPowerOn() {
 		sim.simulate();
-		setGraphicPowerStates();
 		// TODO if oscillators are present, start them in a thread
+		signalWorldChange();
 	}
 	
 	
@@ -64,32 +63,23 @@ public class EditorWorld implements Serializable
 	public synchronized void simPowerReset() { 
 		sim.reset();
 		sim.simulate();
-		setGraphicPowerStates();
+		signalWorldChange();
 	}
 	
 	
 	
 	public synchronized void simPowerOff() {
 		sim.reset();
-		setGraphicPowerStates();
 		// TODO stop oscillators
+		
+		signalWorldChange();
 	}
 	
 	
 	
-	public void setGraphicPowerStates() {
-		for (EditorComponent ecom: ecoms) {
-			if (ecom instanceof EditorComponentTrace) {
-				EditorComponentTrace trace = (EditorComponentTrace) ecom;
-				trace.getGraphic().setPowered( trace.getComponent().getState() );
-			}
-			
-			if (ecom.getComponent() instanceof DisplayLed) { // TODO move into class
-				boolean lit = ((DisplayLed) ecom.getComponent()).isLit();
-				ecom.getGraphic().colFillNormal = (lit) ? EditorStyle.colLedOn : EditorStyle.colLedOff;
-				ecom.getGraphic().updateColours();
-			}
-		}
+	private void signalWorldChange() {
+		for (EditorComponent ecom: ecoms)
+			ecom.onWorldChange();
 	}
 	
 	
