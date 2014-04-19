@@ -117,7 +117,7 @@ public class EditorWorld implements Serializable
 	public void delete( Selection sel ) {
 		for (EditorComponent ecom: sel) {
 			ecom.getComponent().disconnect();
-			remove( ecom );
+			removeInternal( ecom );
 		}
 	}
 	
@@ -146,12 +146,17 @@ public class EditorWorld implements Serializable
 	 * Remove a component from the world.
 	 */
 	public void remove( EditorComponent ecom ) {
+		removeInternal( ecom );
+		simUpdate();
+	}
+	
+	
+	
+	private void removeInternal( EditorComponent ecom ) {
 		ecoms.remove( ecom );
 		grid .remove( ecom );
 		ecom.unlinkFromWorld();
-		
 		sim.remove( ecom.getComponent() );
-		simUpdate();
 	}
 	
 	
