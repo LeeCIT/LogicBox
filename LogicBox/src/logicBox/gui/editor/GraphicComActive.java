@@ -48,6 +48,8 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 	private List<GraphicPinMapping> pinMap;
 	private HashMap<GraphicPinMapping,String> pinLabels;
 	
+	private boolean hasFillOverride;
+	private Color   colFillOverride;
 	
 	
 	public GraphicComActive( VecPath polyBody, VecPath polyPins, VecPath polyAux, List<GraphicPinMapping> pinMap ) {
@@ -86,10 +88,17 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 	
 	
 	
-	public void enableBubble( Vec2 pos, double radius ) {
+	public void setBubble( boolean state, Vec2 pos, double radius ) {
+		hasBubble    = state;
 		bubblePos    = pos;
 		bubbleRadius = radius;
-		hasBubble    = true;
+	}
+	
+	
+	
+	public void setFillOverride( boolean state, Color col ) {
+		hasFillOverride = state;
+		colFillOverride = col;
 	}
 	
 	
@@ -248,6 +257,9 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 		Color colStroke = (isInverted()) ? this.colFill   : this.colStroke;
 		Color colFill   = (isInverted()) ? this.colStroke : this.colFill;
 		
+		if (hasFillOverride && !isSelected() && !isHighlighted()) 
+			colFill = colFillOverride;
+			
 		Gfx.pushColorAndSet( g, colStroke );
 			if (polyPins != null) {
 				Gfx.pushStrokeAndSet( g, EditorStyle.strokePin );
@@ -283,7 +295,7 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 				Gfx.popStroke( g );
 			}
 			
-			if (! pinLabels.isEmpty()) {
+			if ( ! pinLabels.isEmpty()) {
 				Gfx.pushFontAndSet( g, EditorStyle.componentFont );
 					for (GraphicPinMapping gpm: pinLabels.keySet())
 						drawPinText( g, pinLabels.get(gpm), gpm );
