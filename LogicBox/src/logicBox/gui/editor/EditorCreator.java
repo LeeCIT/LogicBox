@@ -59,10 +59,13 @@ public class EditorCreator
 		linkAction( ctrl.getPrintAction (), toolbar.buttPrint, menubar.itemFilePrint  );
 		
 		linkActionUndoRedo( ctrl, menubar, toolbar );
-		linkAction( ctrl.getDeleteAction      (), null, menubar.itemEditDelete       );
-		linkAction( ctrl.getSelectAllAction   (), null, menubar.itemEditSelectAll    );
-		linkAction( ctrl.getSelectNoneAction  (), null, menubar.itemEditSelectNone   );
-		linkAction( ctrl.getSelectInvertAction(), null, menubar.itemEditSelectInvert );
+		linkAction( ctrl.getCutAction         (), toolbar.buttCut,   menubar.itemEditCut          );
+		linkAction( ctrl.getCopyAction        (), toolbar.buttCopy,  menubar.itemEditCopy         );
+		linkAction( ctrl.getPasteAction       (), toolbar.buttPaste, menubar.itemEditPaste        );
+		linkAction( ctrl.getDeleteAction      (), null,              menubar.itemEditDelete       );
+		linkAction( ctrl.getSelectAllAction   (), null,              menubar.itemEditSelectAll    );
+		linkAction( ctrl.getSelectNoneAction  (), null,              menubar.itemEditSelectNone   );
+		linkAction( ctrl.getSelectInvertAction(), null,              menubar.itemEditSelectInvert );
 		
 		linkAction( ctrl.getGridToggleAction    (), toolbar.buttToggleGrid,     menubar.itemViewGrid   );
 		linkAction( ctrl.getRecentreCameraAction(), toolbar.buttCameraRecentre, menubar.itemViewCamera );
