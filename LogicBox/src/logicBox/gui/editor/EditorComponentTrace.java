@@ -27,6 +27,13 @@ public class EditorComponentTrace extends EditorComponent
 		super( com );
 		this.com     = com;
 		this.graphic = new GraphicTrace( points );
+		onWorldChange();
+	}
+	
+	
+	
+	public void onWorldChange() {
+		graphic.setPowered( com.getState() );
 		this.graphic.setConnectedSource( com.isSourceConnected() );
 		this.graphic.setConnectedDest  ( com.isDestConnected()   );
 	}
