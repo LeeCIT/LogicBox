@@ -18,7 +18,6 @@ import logicBox.gui.GUI;
 import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
-import logicBox.gui.help.HelpFrame;
 import logicBox.sim.Simulation;
 import logicBox.sim.component.Demux;
 import logicBox.sim.component.GateAnd;
@@ -58,13 +57,12 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public EditorController( EditorFrame edframe ) {
-		frame = edframe;
-		
-		world          = new EditorWorld();
-		cam            = new Camera();
-		historyManager = new HistoryManager<>( this );
-		toolManager    = new ToolManager( this );
+	public EditorController( EditorFrame frame ) {
+		this.frame          = frame;
+		this.world          = new EditorWorld();
+		this.cam            = new Camera();
+		this.historyManager = new HistoryManager<>( this );
+		this.toolManager    = new ToolManager( this );
 		
 		addNeedToSaveCallback();
 		initialiseCircuit( false );
@@ -440,7 +438,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getCutAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				
+				toolManager.cut();
 			}
 		};
 	}
@@ -450,7 +448,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getCopyAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				
+				toolManager.copy();
 			}
 		};
 	}
@@ -460,7 +458,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getPasteAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				
+				toolManager.paste();
 			}
 		};
 	}
@@ -548,7 +546,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getHelpAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				new HelpFrame(); // TODO this is temporary, change it later
+				System.out.println( "implement" );
 			}
 		};
 	}
