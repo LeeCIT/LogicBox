@@ -17,7 +17,7 @@ import logicBox.util.Util;
  */
 public abstract class Clipboard
 {
-	private static Selection selection;
+	private static Selection clipboardSelection;
 	
 	
 	
@@ -26,7 +26,7 @@ public abstract class Clipboard
 	 * There is no need to modify it in any way, this is all done internally.
 	 */
 	public static void set( Selection sel ) {
-		if (selection.isEmpty()) {
+		if (sel.isEmpty()) {
 			clear();
 			return;
 		}
@@ -43,7 +43,7 @@ public abstract class Clipboard
 		
 		tsim.disconnectAllNotIn( coms );
 		
-		selection = copy;
+		clipboardSelection = copy;
 	}
 	
 	
@@ -55,18 +55,18 @@ public abstract class Clipboard
 		if (isEmpty())
 			throw new RuntimeException( "Clipboard is empty!" );
 		
-		return Util.deepCopy( selection );
+		return Util.deepCopy( clipboardSelection );
 	}
 	
 	
 	
 	public static void clear() {
-		selection = null;
+		clipboardSelection = null;
 	}
 	
 	
 	
 	public static boolean isEmpty() {
-		return selection == null;
+		return clipboardSelection == null;
 	}
 }
