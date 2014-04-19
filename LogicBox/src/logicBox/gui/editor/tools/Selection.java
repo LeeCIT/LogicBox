@@ -90,30 +90,6 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	
 	
 	
-	public Selection cut() {
-		// TODO
-		return null;
-	}
-	
-	
-	
-	public Selection copy() { // TODO it ain't quite this simple...
-		return Util.deepCopy( this );
-	}
-	
-	
-	
-	public void delete( EditorWorld world ) {
-		for (EditorComponent ecom: ecoms) {
-			ecom.getComponent().disconnect();
-			world.remove( ecom );
-		}
-		
-		clear();
-	}
-	
-	
-	
 	public void set( EditorComponent ecom ) {
 		clear();
 		add( ecom );
