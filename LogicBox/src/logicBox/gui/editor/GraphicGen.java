@@ -122,7 +122,7 @@ public abstract class GraphicGen
 		);
 		
 		if (invert)
-			gate.enableBubble( bubblePos, bubbleRadius );
+			gate.setBubble( true, bubblePos, bubbleRadius );
 		
 		return gate;
 	}
@@ -178,7 +178,7 @@ public abstract class GraphicGen
 		);
 		
 		if (invert)
-			gate.enableBubble( bubblePos, bubbleRadius );
+			gate.setBubble( true, bubblePos, bubbleRadius );
 		
 		return gate;
 	}
@@ -252,7 +252,7 @@ public abstract class GraphicGen
 		);
 		
 		if (invert)
-			gate.enableBubble( bubblePos, bubbleRadius );
+			gate.setBubble( true, bubblePos, bubbleRadius );
 		
 		return gate;
 	}
@@ -446,7 +446,7 @@ public abstract class GraphicGen
 	
 	
 	
-	public static GraphicComActive generateDisplayLED() {
+	public static GraphicComActive generateDisplayLed() {
 		Bbox2 r = getBaseRegion();
 		
 		VecPath polyBody = new VecPath();
@@ -470,9 +470,8 @@ public abstract class GraphicGen
 			genPinMappings( pinLines, 0 )
 		);
 		
-		graphic.enableBubble( new Vec2(0), r.getSmallest() / 16 );
-		graphic.colFillNormal = EditorStyle.colLedOff;
-		graphic.updateColours();
+		graphic.setBubble( true, new Vec2(0), r.getSmallest() / 16 );
+		graphic.setFillOverride( true, EditorStyle.colLedOn );
 		
 		return graphic;
 	}
