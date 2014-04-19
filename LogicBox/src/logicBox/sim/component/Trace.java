@@ -28,8 +28,8 @@ public class Trace extends ComponentPassive
 	public boolean getState() {
 		boolean state = false;
 		
-		if (source != null) state |= source.getState();
-		if (dest   != null) state |= dest  .getState();
+		if (source != null && source.isOutput()) state |= source.getState();
+		if (dest   != null && dest  .isOutput()) state |= dest  .getState();
 			
 		return state;
 	}
