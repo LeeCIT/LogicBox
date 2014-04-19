@@ -18,14 +18,18 @@ import logicBox.util.Vec2;
 public class GraphicJunction extends Graphic implements GraphicIntersector
 {
 	private static final long   serialVersionUID = 1L;
-	private static final double radius = 4;
+	private static final double radius = 6;
 	
 	private Vec2 pos;
 	
 	
 	
 	public GraphicJunction( Vec2 pos ) {
-		this.pos = pos;
+		super();
+		this.pos             = pos;
+		this.colStrokeNormal = EditorStyle.colJunctionOff;
+		this.colFillNormal   = EditorStyle.colJunctionOn;
+		updateColours();
 	}
 	
 	
@@ -71,10 +75,10 @@ public class GraphicJunction extends Graphic implements GraphicIntersector
 	private void drawJunction( Graphics2D g, Vec2 pos ) {
 		Gfx.pushStrokeAndSet( g, EditorStyle.strokeBubble );
 			Gfx.pushAntialiasingStateAndSet( g, false );
-				Gfx.drawCircle( g, pos, radius, EditorStyle.colJunctionOff, true );
+				Gfx.drawCircle( g, pos, radius, colStroke, true );
 			Gfx.popAntialiasingState( g );
 			
-			Gfx.drawCircle( g, pos, radius, EditorStyle.colJunctionOn, false );
+			Gfx.drawCircle( g, pos, radius, colFill, false );
 		Gfx.popStroke( g );
 	}
 }
