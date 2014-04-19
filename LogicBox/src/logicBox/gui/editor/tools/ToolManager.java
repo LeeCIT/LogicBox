@@ -74,35 +74,31 @@ public class ToolManager
 	
 	
 	
-	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
-		takeExclusiveControl( toolPlacer );
+	public boolean cut() {
+		if ( ! toolContextual.isAttached())
+			releaseControl();
 		
-		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<EditorCreationParam>() {
-			public void execute( EditorCreationParam param ) {
-				ComponentActive  scom = Util.deepCopy( ecc.getComponentPayload() );
-				GraphicComActive gca  = Util.deepCopy( scom.getGraphic() );
-				EditorComponent  ecom;
-				
-				if (scom instanceof DisplayLed)
-					 ecom = new EditorComponentLed   ( (DisplayLed) scom, gca, param.pos, param.angle );
-				else ecom = new EditorComponentActive(              scom, gca, param.pos, param.angle );
-				
-				controller.getWorld().add( ecom );
-			}
-		});
+		toolHighlighter.reset(); // Ensure no residual drawing is done
+		return toolContextual.cut();
 	}
 	
 	
 	
-	public void initiateTraceCreation() {
-		takeExclusiveControl( toolTraceDrawer );
+	public boolean copy() {
+		if ( ! toolContextual.isAttached())
+			releaseControl();
+		
+		return toolContextual.copy();
 	}
 	
 	
 	
-	public void initiateJunctionCreation() {
-		takeExclusiveControl( toolJunctionPlacer );
-		toolJunctionPlacer.placementStart();
+	public void paste() {
+		if ( ! toolContextual.isAttached())
+			releaseControl();
+		
+		toolContextual.paste();
+		getEditorPanel().repaint();
 	}
 	
 	
@@ -134,6 +130,39 @@ public class ToolManager
 	public void selectInvert() {
 		releaseControl();
 		toolContextual.selectInvert();
+	}
+	
+	
+	
+	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
+		takeExclusiveControl( toolPlacer );
+		
+		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<EditorCreationParam>() {
+			public void execute( EditorCreationParam param ) {
+				ComponentActive  scom = Util.deepCopy( ecc.getComponentPayload() );
+				GraphicComActive gca  = Util.deepCopy( scom.getGraphic() );
+				EditorComponent  ecom;
+				
+				if (scom instanceof DisplayLed)
+					 ecom = new EditorComponentLed   ( (DisplayLed) scom, gca, param.pos, param.angle );
+				else ecom = new EditorComponentActive(              scom, gca, param.pos, param.angle );
+				
+				controller.getWorld().add( ecom );
+			}
+		});
+	}
+	
+	
+	
+	public void initiateTraceCreation() {
+		takeExclusiveControl( toolTraceDrawer );
+	}
+	
+	
+	
+	public void initiateJunctionCreation() {
+		takeExclusiveControl( toolJunctionPlacer );
+		toolJunctionPlacer.placementStart();
 	}
 	
 	
