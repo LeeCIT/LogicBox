@@ -7,36 +7,29 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import logicBox.gui.Gfx;
-import logicBox.gui.editor.EditorCreationParam;
-import logicBox.gui.editor.EditorStyle;
-import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.GraphicJunction;
 import logicBox.gui.editor.RepaintListener;
-import logicBox.util.CallbackParam;
-import logicBox.util.Geo;
-import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
 
 /**
- * Places components.
+ * Places junctions onto traces.
  * @author Lee Coakley
  */
-public class ToolPlacer extends Tool
+public class ToolJunctionPlacer extends Tool
 {
 	private MouseAdapter    mouseListener;
 	private RepaintListener repaintListener;
 	
-	private CallbackParam<EditorCreationParam> placementCallback;
-	private GraphicComActive placementGraphic;
-	private boolean          placementInitiated;
-	private boolean          placementArmed;
-	private Vec2             placementPos;
-	private double           placementAngle;
+	private boolean placementInitiated;
+	private boolean placementArmed;
+	private Vec2    placementPos;
 	
 	
 	
-	public ToolPlacer( ToolManager manager ) {
+	public ToolJunctionPlacer( ToolManager manager ) {
 		super( manager );
 		this.mouseListener   = createEventListener();
 		this.repaintListener = createRepaintListener();
@@ -71,20 +64,16 @@ public class ToolPlacer extends Tool
 	
 	
 	public void reset() {
-		placementGraphic   = null;
-		placementCallback  = null;
 		placementInitiated = false;
 		placementArmed     = false;
-		placementAngle     = 0;
 	}
 	
 	
 	
 	private void setTransHint() {
 		setTransHint(
-		    "Left-click to place.\n" +
-		    "Right-click to cancel.\n" +
-		    "Hold down shift key to rotate."
+		    "Left-click on a trace to insert a junction.\n" +
+		    "Right-click to cancel."
 		);
 	}
 	
@@ -116,9 +105,7 @@ public class ToolPlacer extends Tool
 				if ( ! placementInitiated)
 					return;
 				
-				if (ev.isShiftDown())
-					 placementRotate();
-				else placementMove();
+				placementMove();
 			}
 			
 			
@@ -134,10 +121,8 @@ public class ToolPlacer extends Tool
 		return new RepaintListener() {
 			public void draw( Graphics2D g ) {
 				if (placementInitiated) {
-					drawOverlay( g );
-					
-					Gfx.pushCompositeAndSet( g, 0.5 );
-						placementGraphic.draw( g );
+					Gfx.pushCompositeAndSet( g, 0.75 );
+						drawPlacementIndicator( g );
 					Gfx.popComposite( g );
 				}
 			}
@@ -146,14 +131,13 @@ public class ToolPlacer extends Tool
 	
 	
 	
-	private void drawOverlay( Graphics2D g ) {
-		Vec2   pos    = placementGraphic.getPos();
-		double angle  = placementGraphic.getAngle();
-		double radius = placementGraphic.getBbox().getEnclosingRadius() * 1.5;
+	private void drawPlacementIndicator( Graphics2D g ) {
+		EditorWorld.FindClosestTraceResult result = getWorld().findClosestTrace( getMousePosWorld(), 16 );
 		
-		Gfx.pushColorAndSet( g, EditorStyle.colSelectionStroke );
-			Gfx.drawOrientationOverlay( g, pos, radius, angle );
-		Gfx.popColor( g );
+		if (result.foundTrace) {
+			new GraphicJunction( result.closestPos ).draw( g );
+			System.out.println( result.ecom );
+		}
 	}
 	
 	
@@ -163,13 +147,9 @@ public class ToolPlacer extends Tool
 	 * @param createCallback What to do when the placement completes.  Note that it can be cancelled.
 	 * @param graphic The graphic used to show where the component will be placed.
 	 */
-	public void placementStart( GraphicComActive graphic, CallbackParam<EditorCreationParam> createCallback ) {
-		placementCallback  = createCallback;
-		placementGraphic   = Util.deepCopy( graphic );
+	public void placementStart() {
 		placementInitiated = true;
 		placementArmed     = false;
-		
-		graphic.transformTo( getSnappedMousePos(), 0 );
 		repaint();
 	}
 	
@@ -177,7 +157,6 @@ public class ToolPlacer extends Tool
 	
 	private void placementArm() {
 		placementArmed = true;
-		placementGraphic.setHighlighted( true );
 		repaint();
 	}
 	
@@ -185,11 +164,8 @@ public class ToolPlacer extends Tool
 	
 	private void placementComplete() {
 		placementPos = getSnappedMousePos();
-		EditorCreationParam param = new EditorCreationParam( placementPos, placementAngle );
-		placementCallback.execute( param );
-		placementGraphic.setHighlighted( false );
 		
-		markHistoryChange( "Create component" );
+		markHistoryChange( "Create junction" );
 		repaint();
 	}
 	
@@ -197,19 +173,6 @@ public class ToolPlacer extends Tool
 	
 	private void placementMove() {
 		placementPos = getSnappedMousePos();
-		placementGraphic.transformTo( placementPos, placementAngle );
-		repaint();
-	}
-	
-	
-	
-	private void placementRotate() {
-		Vec2   pos     = getMousePosWorld();
-		double angle   = Geo.angleBetween( placementPos, pos );
-		double snapped = Geo.roundToMultiple( angle, 45 );
-		
-		placementAngle = snapped;
-		placementGraphic.transformTo( placementPos, placementAngle );
 		repaint();
 	}
 	
@@ -218,12 +181,10 @@ public class ToolPlacer extends Tool
 	private void placementCancel() {
 		placementInitiated = false;
 		placementArmed     = false;
-		placementGraphic   = null;
-		placementCallback  = null;
 		placementPos       = null;
-		repaint();
 		
 		getToolManager().releaseControl();
+		repaint();
 	}
 	
 	

@@ -21,8 +21,9 @@ public class SourceToggle extends SourceFixed
 	
 	
 	
-	public void interactClick() {
+	public boolean interactClick() {
 		toggleState();
+		return true;
 	}
 	
 	
@@ -40,6 +41,6 @@ public class SourceToggle extends SourceFixed
 	
 	
 	public String getName() {
-		return "Switchable source";
+		return "Switchable source (click to switch)";
 	}
 }

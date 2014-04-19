@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 /**
@@ -30,5 +33,11 @@ public class SourceFixed extends Source
 	
 	public String getName() {
 		return "Fixed source (" + (getState()?1:0) + ")";
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateSourceFixed( getState() );
 	}
 }

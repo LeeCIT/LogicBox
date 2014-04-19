@@ -2,7 +2,6 @@
 
 
 package logicBox.gui.editor;
-import java.awt.Graphics2D;
 import logicBox.sim.component.ComponentActive;
 import logicBox.util.Vec2;
 
@@ -44,12 +43,6 @@ public class EditorComponentActive extends EditorComponent
 	
 	public GraphicComActive getGraphic() {
 		return graphic;
-	}
-	
-	
-	
-	public void draw( Graphics2D g ) {
-		graphic.draw( g );
 	}
 	
 	

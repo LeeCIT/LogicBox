@@ -3,9 +3,9 @@
 
 package logicBox.gui.editor;
 
-import java.awt.Graphics2D;
 import java.util.List;
 import logicBox.sim.component.Trace;
+import logicBox.util.Geo;
 import logicBox.util.Vec2;
 
 
@@ -26,7 +26,16 @@ public class EditorComponentTrace extends EditorComponent
 	public EditorComponentTrace( Trace com, List<Vec2> points ) {
 		super( com );
 		this.com     = com;
-		this.graphic = new GraphicTrace( points, null, null );
+		this.graphic = new GraphicTrace( points );
+		onWorldChange();
+	}
+	
+	
+	
+	public void onWorldChange() {
+		graphic.setPowered( com.getState() );
+		this.graphic.setConnectedSource( com.isSourceConnected() );
+		this.graphic.setConnectedDest  ( com.isDestConnected()   );
 	}
 	
 	
@@ -43,21 +52,21 @@ public class EditorComponentTrace extends EditorComponent
 	
 	
 	
-	public void draw( Graphics2D g ) {
-		graphic.setPowered( com.getState() );
-		graphic.draw( g );
-	}
-	
-	
-	
 	public void setPos( Vec2 pos ) {
-		// Do nothing
+		List<Vec2> points = graphic.getPoints();
+		Vec2       delta  = Geo.delta( getPosStart(), pos );
+		
+		for (Vec2 v: points)
+			v.setLocation( v.add(delta) );
+		
+		graphic.setFromPoints( points );
+		signalTransformChange();
 	}
 	
 	
 	
 	public Vec2 getPos() {
-		return new Vec2();
+		return getPosStart();
 	}
 	
 	
@@ -76,5 +85,18 @@ public class EditorComponentTrace extends EditorComponent
 	
 	public GraphicPinMapping findPinNear( Vec2 pos, double radius ) {
 		return null;
+	}
+	
+	
+	
+	private Vec2 getPosStart() {
+		return graphic.getPoints().get(0);
+	}
+	
+	
+	
+	private Vec2 getPosEnd() {
+		List<Vec2> points = getGraphic().getPoints();
+		return points.get( points.size() - 1 );
 	}
 }

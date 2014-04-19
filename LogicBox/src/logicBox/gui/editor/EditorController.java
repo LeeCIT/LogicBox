@@ -300,31 +300,6 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	private void saveToCircuitFile() {
-		try {
-			EditorWorld saveMe = Util.deepCopy( world );
-			saveMe.clearGraphicSelectionAndHighlightStates();
-			
-			Storage.write( circuitFile.getPath(), saveMe ); // TODO compress + version
-			frame.setCircuitName( circuitFile.getName() );
-			frame.setCircuitModified( false );
-			isUnsaved   = false;
-			needsToSave = false;
-			// TODO cloud stuff here - sync file in background thread
-		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-			GUI.showError(
-				getEditorFrame(),
-				"Save Failed",
-				"Couldn't save!  Try saving it somewhere else.\n\n" +
-				"Technical details:\n" + ex
-			);
-		}
-	}
-	
-	
-	
 	private void openCircuitFromFile( File file ) {
 		EditorWorld world = null;
 		
@@ -349,9 +324,36 @@ public class EditorController implements HistoryListener<EditorWorld>
 			frame.setCircuitName( circuitFile.getName() );
 			
 			this.world = world;
+			historyManager.clear();
+			historyManager.markChange( "<initial state>" );
 			
 			recentreCamera();
 			powerOff();
+		}
+	}
+	
+	
+	
+	private void saveToCircuitFile() {
+		try {
+			EditorWorld saveMe = Util.deepCopy( world );
+			saveMe.clearGraphicSelectionAndHighlightStates();
+			
+			Storage.write( circuitFile.getPath(), saveMe ); // TODO compress + version
+			frame.setCircuitName( circuitFile.getName() );
+			frame.setCircuitModified( false );
+			isUnsaved   = false;
+			needsToSave = false;
+			// TODO cloud stuff here - sync file in background thread
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			GUI.showError(
+				getEditorFrame(),
+				"Save Failed",
+				"Couldn't save!  Try saving it somewhere else.\n\n" +
+				"Technical details:\n" + ex
+			);
 		}
 	}
 	

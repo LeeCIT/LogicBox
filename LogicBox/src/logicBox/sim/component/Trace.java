@@ -25,10 +25,33 @@ public class Trace extends ComponentPassive
 	
 	
 	
+	public boolean getState() {
+		boolean state = false;
+		
+		if (source != null) state |= source.getState();
+		if (dest   != null) state |= dest  .getState();
+			
+		return state;
+	}
+	
+	
+	
 	public Trace( Pin source, Pin dest ) {
 		this();
 		this.source = source;
 		this.dest   = dest;
+	}
+	
+	
+	
+	public boolean isSourceConnected() {
+		return (source != null);
+	}
+	
+	
+	
+	public boolean isDestConnected() {
+		return (dest != null);
 	}
 	
 	

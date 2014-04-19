@@ -45,44 +45,41 @@ public class EditorWorld implements Serializable
 	
 	
 	
-	public synchronized void simStep() { 
+	public synchronized void simUpdate() {
 		sim.simulate();
-		setTraceGraphicPowerStates();
+		signalWorldChange();
 	}
 	
 	
 	
-	public void simPowerOn() {
+	public synchronized void simPowerOn() {
 		sim.simulate();
-		setTraceGraphicPowerStates();
 		// TODO if oscillators are present, start them in a thread
+		signalWorldChange();
 	}
 	
 	
 	
-	public void simPowerReset() { 
+	public synchronized void simPowerReset() { 
 		sim.reset();
 		sim.simulate();
-		setTraceGraphicPowerStates();
+		signalWorldChange();
 	}
 	
 	
 	
-	public void simPowerOff() { 
+	public synchronized void simPowerOff() {
 		sim.reset();
-		setTraceGraphicPowerStates();
 		// TODO stop oscillators
+		
+		signalWorldChange();
 	}
 	
 	
 	
-	public void setTraceGraphicPowerStates() {
-		for (EditorComponent ecom: ecoms) {
-			if (ecom instanceof EditorComponentTrace) {
-				EditorComponentTrace trace = (EditorComponentTrace) ecom;
-				trace.getGraphic().setPowered( trace.getComponent().getState() );
-			}
-		}
+	private void signalWorldChange() {
+		for (EditorComponent ecom: ecoms)
+			ecom.onWorldChange();
 	}
 	
 	
@@ -103,7 +100,6 @@ public class EditorWorld implements Serializable
 	
 	/**
 	 * Add a component to the world.
-	 * To remove it you have to use remove().
 	 */
 	public void add( EditorComponent ecom ) {
 		addToGrid( ecom );		
@@ -111,6 +107,31 @@ public class EditorWorld implements Serializable
 		ecom.linkToWorld( this );
 		
 		sim.add( ecom.getComponent() );
+		simUpdate();
+	}
+	
+	
+	
+	/**
+	 * Remove a component from the world.
+	 */
+	public void remove( EditorComponent ecom ) {
+		ecoms.remove( ecom );
+		grid .remove( ecom );
+		ecom.unlinkFromWorld();
+		
+		sim.remove( ecom.getComponent() );
+		simUpdate();
+	}
+	
+	
+	
+	public void move( EditorComponent ecom ) {
+		ecoms.remove( ecom );
+		grid .remove( ecom );
+		
+		addToGrid( ecom );		
+		ecoms.add( ecom );
 	}
 	
 	
@@ -131,27 +152,12 @@ public class EditorWorld implements Serializable
 	
 	
 	/**
-	 * Remove a component from the world.
-	 * @param ecom
-	 */
-	public void remove( EditorComponent ecom ) {
-		ecoms.remove( ecom );
-		grid .remove( ecom );
-		ecom.unlinkFromWorld();
-		
-		sim.remove( ecom.getComponent() );
-	}
-	
-	
-	
-	/**
 	 * Update the underlying world structures in response to
 	 * a component orientation or position change.
 	 * EditorComponents should call this method automatically.
 	 */
 	public void onComponentTransform( EditorComponent ecom ) {
-		remove( ecom );
-		add   ( ecom );
+		move( ecom );
 	}
 	
 	
@@ -241,6 +247,49 @@ public class EditorWorld implements Serializable
 					result.foundPin = true;
 					result.gpm      = gpm;
 					result.ecom     = ecom;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
+	
+	
+	public class FindClosestTraceResult {
+		public boolean              foundTrace;
+		public EditorComponentTrace ecom;
+		public Vec2                 closestPos;
+		public int                  lineIndex;
+	}
+	
+	
+	
+	/**
+	 * Find the closest trace within the given radius.
+	 */
+	public FindClosestTraceResult findClosestTrace( Vec2 pos, double radius ) {
+		FindClosestTraceResult result = new FindClosestTraceResult();
+		Bbox2  bbox     = new Bbox2(pos,pos).expand( radius * 2 );
+		double bestDist = Double.MAX_VALUE;
+		
+		for (EditorComponent ecom: find( bbox )) {
+			if ( ! (ecom instanceof EditorComponentTrace))
+				continue;
+			
+			EditorComponentTrace trace = (EditorComponentTrace) ecom;
+			
+			List<Line2> lines = trace.getGraphic().getLines();
+			for (int i=0; i<lines.size(); i++) {
+				Line2  line = lines.get( i );
+				double dist = line.distanceToPoint( pos );
+				
+				if (dist <= bestDist) {
+					bestDist = dist;
+					result.foundTrace = true;
+					result.ecom       = trace;
+					result.closestPos = line.closestPoint( pos );
+					result.lineIndex  = i;
 				}
 			}
 		}

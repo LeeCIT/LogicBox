@@ -79,6 +79,7 @@ public abstract class Graphic implements Serializable, Drawable, GraphicIntersec
 	
 	public void setInverted( boolean state ) {	
 		isInverted = state;
+		updateColours();
 	}
 	
 	
@@ -89,7 +90,7 @@ public abstract class Graphic implements Serializable, Drawable, GraphicIntersec
 	
 	
 	
-	private void updateColours() {
+	protected void updateColours() {
 		if (isHighlighted) {
 			if (isSelected) {
 				colStroke = colStrokeSelectHighlight;
@@ -109,3 +110,18 @@ public abstract class Graphic implements Serializable, Drawable, GraphicIntersec
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

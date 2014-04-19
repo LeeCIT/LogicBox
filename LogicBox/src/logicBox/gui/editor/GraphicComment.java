@@ -18,11 +18,14 @@ import logicBox.util.Vec2;
  */
 public class GraphicComment extends Graphic
 {
+	private static final long serialVersionUID = 1L;
+	
 	private String text;
 	
 	
 	
 	public GraphicComment( String text ) {
+		super();
 		this.text = text;
 	}
 	

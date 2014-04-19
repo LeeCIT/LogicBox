@@ -3,14 +3,11 @@
 
 package logicBox.gui.editor;
 
-import java.awt.Font;
-import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.sim.component.PinIoMode;
 import logicBox.util.Bbox2;
@@ -125,7 +122,7 @@ public abstract class GraphicGen
 		);
 		
 		if (invert)
-			gate.enableBubble( bubblePos, bubbleRadius );
+			gate.setBubble( true, bubblePos, bubbleRadius );
 		
 		return gate;
 	}
@@ -181,7 +178,7 @@ public abstract class GraphicGen
 		);
 		
 		if (invert)
-			gate.enableBubble( bubblePos, bubbleRadius );
+			gate.setBubble( true, bubblePos, bubbleRadius );
 		
 		return gate;
 	}
@@ -255,7 +252,7 @@ public abstract class GraphicGen
 		);
 		
 		if (invert)
-			gate.enableBubble( bubblePos, bubbleRadius );
+			gate.setBubble( true, bubblePos, bubbleRadius );
 		
 		return gate;
 	}
@@ -417,7 +414,28 @@ public abstract class GraphicGen
 	
 	
 	public static GraphicComActive generateSourceFixed( boolean level ) {
+		Bbox2 r = getBaseRegion();
+		Vec2  a = r.getNorm( 0.5, 1.0 );
+		Vec2  b = r.getNorm( 1.0, 0.5 );
+		Vec2  c = r.getNorm( 0.5, 0.0 );
+		Vec2  d = r.getNorm( 0.0, 0.5 );
 		
+		Line2 pinLine = new Line2( b, b.add(pinLength,0) );
+		List<Line2> pinLines = new ArrayList<>();
+		pinLines.add( pinLine );
+		
+		List<GraphicPinMapping> gpms = genPinMappings( pinLines, pinLines.size() );
+		
+		GraphicComActive graphic = new GraphicComActive(
+			genPolyBody( true, a, b, c, d ),
+			genPolyPins( pinLines ),
+			null,
+			gpms
+		);
+		
+		graphic.setPinLabels( genLabelMap( gpms, level ? "1" : "0" ) );		
+		
+		return graphic;
 	}
 	
 	
@@ -428,8 +446,34 @@ public abstract class GraphicGen
 	
 	
 	
-	public static GraphicComActive generateDisplayLED() {
+	public static GraphicComActive generateDisplayLed() {
+		Bbox2 r = getBaseRegion();
 		
+		VecPath polyBody = new VecPath();
+		polyBody.moveTo ( r.getBottomMiddle() );
+		polyBody.curveTo( r.getBottomRight(), r.getRightMiddle()  );
+		polyBody.curveTo( r.getTopRight(),    r.getTopMiddle()    );
+		polyBody.curveTo( r.getTopLeft(),     r.getLeftMiddle()   );
+		polyBody.curveTo( r.getBottomLeft(),  r.getBottomMiddle() );
+		polyBody.closePath();
+		
+		Vec2 leftMid = r.getLeftMiddle();
+		Line2 pinLine = new Line2( leftMid, leftMid.add(-pinLength,0) );
+		
+		List<Line2> pinLines = new ArrayList<>();
+		pinLines.add( pinLine );
+		
+		GraphicComActive graphic =  new GraphicComActive(
+			polyBody,
+			genPolyPins( pinLines ),
+			null, 
+			genPinMappings( pinLines, 0 )
+		);
+		
+		graphic.setBubble( true, new Vec2(0), r.getSmallest() / 16 );
+		graphic.setFillOverride( true, EditorStyle.colLedOn );
+		
+		return graphic;
 	}
 	
 	

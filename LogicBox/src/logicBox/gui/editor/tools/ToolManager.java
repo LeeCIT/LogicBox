@@ -8,6 +8,7 @@ import java.util.List;
 import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorComponentActive;
+import logicBox.gui.editor.EditorComponentLed;
 import logicBox.gui.editor.EditorController;
 import logicBox.gui.editor.EditorCreationCommand;
 import logicBox.gui.editor.EditorCreationParam;
@@ -15,8 +16,10 @@ import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.sim.component.ComponentActive;
+import logicBox.sim.component.DisplayLed;
 import logicBox.util.Callback;
 import logicBox.util.CallbackParam;
+import logicBox.util.Util;
 
 
 
@@ -26,11 +29,12 @@ import logicBox.util.CallbackParam;
  */
 public class ToolManager
 {
-	private EditorController controller;
-	private ToolContextual   toolContextual;
-	private ToolHighlighter  toolHighlighter;
-	private ToolPlacer       toolPlacer;
-	private ToolTraceDrawer  toolTraceDrawer;
+	private EditorController   controller;
+	private ToolContextual     toolContextual;
+	private ToolHighlighter    toolHighlighter;
+	private ToolJunctionPlacer toolJunctionPlacer;
+	private ToolPlacer         toolPlacer;
+	private ToolTraceDrawer    toolTraceDrawer;
 	
 	private List<Tool> tools;
 	
@@ -48,21 +52,6 @@ public class ToolManager
 	
 	public EditorPanel getEditorPanel() {
 		return controller.getEditorPanel();
-	}
-	
-	
-	
-	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
-		takeExclusiveControl( toolPlacer );
-		
-		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<EditorCreationParam>() {
-			public void execute( EditorCreationParam param ) {
-				ComponentActive  scom = ecc.getComponentPayload();
-				GraphicComActive gca  = scom.getGraphic();
-				EditorComponent  ecom = new EditorComponentActive( scom, gca, param.pos, param.angle );
-				controller.getWorld().add( ecom );
-			}
-		});
 	}
 	
 	
@@ -85,8 +74,35 @@ public class ToolManager
 	
 	
 	
+	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
+		takeExclusiveControl( toolPlacer );
+		
+		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<EditorCreationParam>() {
+			public void execute( EditorCreationParam param ) {
+				ComponentActive  scom = Util.deepCopy( ecc.getComponentPayload() );
+				GraphicComActive gca  = Util.deepCopy( scom.getGraphic() );
+				EditorComponent  ecom;
+				
+				if (scom instanceof DisplayLed)
+					 ecom = new EditorComponentLed   ( (DisplayLed) scom, gca, param.pos, param.angle );
+				else ecom = new EditorComponentActive(              scom, gca, param.pos, param.angle );
+				
+				controller.getWorld().add( ecom );
+			}
+		});
+	}
+	
+	
+	
 	public void initiateTraceCreation() {
 		takeExclusiveControl( toolTraceDrawer );
+	}
+	
+	
+	
+	public void initiateJunctionCreation() {
+		takeExclusiveControl( toolJunctionPlacer );
+		toolJunctionPlacer.placementStart();
 	}
 	
 	
@@ -163,10 +179,11 @@ public class ToolManager
 	
 	
 	private void setupTools( EditorPanel panel, EditorWorld world, Camera cam ) {
-		toolContextual  = add( new ToolContextual (this) );
-		toolHighlighter = add( new ToolHighlighter(this) );
-		toolPlacer      = add( new ToolPlacer     (this) );
-		toolTraceDrawer = add( new ToolTraceDrawer(this) );
+		toolContextual     = add( new ToolContextual    ( this ) );
+		toolHighlighter    = add( new ToolHighlighter   ( this ) );
+		toolJunctionPlacer = add( new ToolJunctionPlacer( this ) );
+		toolPlacer         = add( new ToolPlacer        ( this ) );
+		toolTraceDrawer    = add( new ToolTraceDrawer   ( this ) );
 		
 		addUndoDeselectCallback();
 	}

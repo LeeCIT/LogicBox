@@ -15,7 +15,6 @@ import logicBox.gui.editor.EditorCreationCommand;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
-import logicBox.util.Singleton;
 import logicBox.util.Util;
 import logicBox.util.Vec2;
 
@@ -27,7 +26,7 @@ import logicBox.util.Vec2;
  * @author John Murphy
  * @author Lee Coakley
  */
-public class Toolbox extends JDialog implements Singleton<Toolbox>
+public class Toolbox extends JDialog
 {
 	private static Vec2    lastPosition;
 	private static Toolbox instance;
@@ -232,7 +231,7 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	private ToolboxButton genButtonTrace() {
-		final ToolboxButton butt = new ToolboxButton( "Trc" );
+		final ToolboxButton butt = new ToolboxButtonTrace();
 		
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
@@ -246,7 +245,15 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	private ToolboxButton genButtonJunction() {
-		return new ToolboxButton( "Jnc" );
+		final ToolboxButton butt = new ToolboxButtonJunction();
+		
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				butt.getTargetToolManager().initiateJunctionCreation();
+			}
+		});
+		
+		return butt;
 	}
 	
 	
@@ -258,7 +265,7 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	
 	private ToolboxButton genButton( final ComponentActive com ) {
-		ToolboxButton butt = new ToolboxButtonCom( com.getGraphic(), com.getName(), null );
+		ToolboxButton butt = new ToolboxButtonCom( com.getGraphic(), com.getName() );
 		attachListener( butt, com );
 		return butt;
 	}
@@ -267,9 +274,8 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	private void attachListener( final ToolboxButton butt, final ComponentActive com ) {
 		butt.addActionListener( new ActionListener() {
-			public void actionPerformed( ActionEvent e ) {		
-				ToolManager manager = butt.getTargetToolManager();
-				manager.initiateComponentCreation( genCommand(com) );
+			public void actionPerformed( ActionEvent ev ) {
+				butt.getTargetToolManager().initiateComponentCreation( genCommand(com) );
 			}
 		});
 	}
@@ -284,8 +290,6 @@ public class Toolbox extends JDialog implements Singleton<Toolbox>
 	
 	/**
 	 * Add a logical group of buttons.  IE gates, components, etc.
-	 * @param category
-	 * @param items
 	 */
 	private void addCategory( String title, ToolboxButton...buttons ) {
 		setButtonEvaluators( buttons );
