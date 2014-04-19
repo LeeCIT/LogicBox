@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import logicBox.gui.Gfx;
+import logicBox.gui.editor.tools.Selection;
 import logicBox.sim.Simulation;
 import logicBox.util.Bbox2;
 import logicBox.util.BinaryFunctor;
@@ -71,7 +72,6 @@ public class EditorWorld implements Serializable
 	public synchronized void simPowerOff() {
 		sim.reset();
 		// TODO stop oscillators
-		
 		signalWorldChange();
 	}
 	
@@ -88,6 +88,7 @@ public class EditorWorld implements Serializable
 		grid .clear();
 		ecoms.clear();
 		sim  .clear();
+		// TODO kill osc thread
 	}
 	
 	
@@ -99,15 +100,44 @@ public class EditorWorld implements Serializable
 	
 	
 	/**
+	 * Paste from the clipboard.
+	 */
+	public void paste( Selection sel ) {
+		for (EditorComponent ecom: sel)
+			addInternal( ecom );
+		
+		simUpdate();
+	}
+	
+	
+	
+	/**
+	 * Delete a selection.
+	 */
+	public void delete( Selection sel ) {
+		for (EditorComponent ecom: sel) {
+			ecom.getComponent().disconnect();
+			remove( ecom );
+		}
+	}
+	
+	
+	
+	/**
 	 * Add a component to the world.
 	 */
 	public void add( EditorComponent ecom ) {
+		addInternal( ecom );
+		simUpdate();
+	}
+	
+	
+	
+	private void addInternal( EditorComponent ecom ) {
 		addToGrid( ecom );		
 		ecoms.add( ecom );
 		ecom.linkToWorld( this );
-		
 		sim.add( ecom.getComponent() );
-		simUpdate();
 	}
 	
 	
@@ -126,7 +156,7 @@ public class EditorWorld implements Serializable
 	
 	
 	
-	public void move( EditorComponent ecom ) {
+	private void move( EditorComponent ecom ) {
 		ecoms.remove( ecom );
 		grid .remove( ecom );
 		
