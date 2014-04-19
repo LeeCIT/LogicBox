@@ -6,9 +6,7 @@ package logicBox.gui.editor.toolbox;
 import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.editor.Graphic;
-import logicBox.gui.editor.GraphicComActive;
 import logicBox.gui.editor.GraphicTrace;
-import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
@@ -21,6 +19,7 @@ public class ToolboxButtonTrace extends ToolboxButtonGraphic
 {
 	public ToolboxButtonTrace() {
 		super( makeGraphic(), "Trace" );
+		setScaleAux( 0.75 );
 	}
 	
 	
