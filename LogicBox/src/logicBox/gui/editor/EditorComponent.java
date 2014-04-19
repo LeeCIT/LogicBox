@@ -35,6 +35,15 @@ public abstract class EditorComponent implements Serializable
 	
 	
 	
+	/**
+	 * Do something if the world state changes (deleted component or whatever).
+	 */
+	public void onWorldChange() {
+		
+	}
+	
+	
+	
 	public abstract void setPos( Vec2 pos );
 	public abstract Vec2 getPos();
 	

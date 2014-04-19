@@ -79,6 +79,7 @@ public abstract class Graphic implements Serializable, Drawable, GraphicIntersec
 	
 	public void setInverted( boolean state ) {	
 		isInverted = state;
+		updateColours();
 	}
 	
 	
@@ -109,3 +110,18 @@ public abstract class Graphic implements Serializable, Drawable, GraphicIntersec
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
