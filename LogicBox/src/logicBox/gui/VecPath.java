@@ -11,7 +11,6 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.List;
-import logicBox.util.Line2;
 import logicBox.util.Transformable;
 import logicBox.util.Vec2;
 

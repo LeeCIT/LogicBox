@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Set;
 import logicBox.gui.Gfx;
+import logicBox.gui.editor.Clipboard;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorStyle;
 import logicBox.gui.editor.Graphic;
@@ -100,12 +101,59 @@ public class ToolContextual extends Tool
 	
 	
 	
+	public boolean cut() {	
+		if ( ! selection.isEmpty()) {
+			Clipboard.set( selection );
+			getWorld().delete( selection );		
+			markHistoryChange( "Cut" );
+			repaint();
+			return true;
+		} else {
+			Clipboard.clear();
+			return false;
+		}
+	}
+	
+	
+	
+	public boolean copy() {
+		if (hasSelection()) {
+			Clipboard.set( selection );
+			return true;
+		} else {
+			Clipboard.clear();
+			return false;
+		}
+	}
+	
+	
+	
+	public void paste() {
+		if (Clipboard.isEmpty())
+			return;
+		
+		Selection sel = Clipboard.get();
+		sel.setPos( getMousePosWorld() );
+		getWorld().paste( sel );
+		
+		this.selection.clear();
+		this.selection = sel;
+		
+		for (EditorComponent ecom: sel)
+			ecom.getGraphic().setSelected( true );
+		
+		markHistoryChange( "Paste" );
+		repaint();
+	}
+	
+	
+	
 	public void delete() {
 		if (selection.isEmpty())
 			selectUnderlying();
 		
 		if ( ! selection.isEmpty()) {
-			selection.delete( getWorld() );		
+			getWorld().delete( selection );		
 			markHistoryChange( "Delete" );
 		}
 		
