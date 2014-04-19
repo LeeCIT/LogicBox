@@ -27,11 +27,12 @@ import logicBox.util.Util;
  */
 public class ToolManager
 {
-	private EditorController controller;
-	private ToolContextual   toolContextual;
-	private ToolHighlighter  toolHighlighter;
-	private ToolPlacer       toolPlacer;
-	private ToolTraceDrawer  toolTraceDrawer;
+	private EditorController   controller;
+	private ToolContextual     toolContextual;
+	private ToolHighlighter    toolHighlighter;
+	private ToolJunctionPlacer toolJunctionPlacer;
+	private ToolPlacer         toolPlacer;
+	private ToolTraceDrawer    toolTraceDrawer;
 	
 	private List<Tool> tools;
 	
@@ -49,21 +50,6 @@ public class ToolManager
 	
 	public EditorPanel getEditorPanel() {
 		return controller.getEditorPanel();
-	}
-	
-	
-	
-	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
-		takeExclusiveControl( toolPlacer );
-		
-		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<EditorCreationParam>() {
-			public void execute( EditorCreationParam param ) {
-				ComponentActive  scom = Util.deepCopy( ecc.getComponentPayload() );
-				GraphicComActive gca  = Util.deepCopy( scom.getGraphic() );
-				EditorComponent  ecom = new EditorComponentActive( scom, gca, param.pos, param.angle );
-				controller.getWorld().add( ecom );
-			}
-		});
 	}
 	
 	
@@ -86,8 +72,30 @@ public class ToolManager
 	
 	
 	
+	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
+		takeExclusiveControl( toolPlacer );
+		
+		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<EditorCreationParam>() {
+			public void execute( EditorCreationParam param ) {
+				ComponentActive  scom = Util.deepCopy( ecc.getComponentPayload() );
+				GraphicComActive gca  = Util.deepCopy( scom.getGraphic() );
+				EditorComponent  ecom = new EditorComponentActive( scom, gca, param.pos, param.angle );
+				controller.getWorld().add( ecom );
+			}
+		});
+	}
+	
+	
+	
 	public void initiateTraceCreation() {
 		takeExclusiveControl( toolTraceDrawer );
+	}
+	
+	
+	
+	public void initiateJunctionCreation() {
+		takeExclusiveControl( toolJunctionPlacer );
+		toolJunctionPlacer.placementStart();
 	}
 	
 	
@@ -164,10 +172,11 @@ public class ToolManager
 	
 	
 	private void setupTools( EditorPanel panel, EditorWorld world, Camera cam ) {
-		toolContextual  = add( new ToolContextual (this) );
-		toolHighlighter = add( new ToolHighlighter(this) );
-		toolPlacer      = add( new ToolPlacer     (this) );
-		toolTraceDrawer = add( new ToolTraceDrawer(this) );
+		toolContextual     = add( new ToolContextual    ( this ) );
+		toolHighlighter    = add( new ToolHighlighter   ( this ) );
+		toolJunctionPlacer = add( new ToolJunctionPlacer( this ) );
+		toolPlacer         = add( new ToolPlacer        ( this ) );
+		toolTraceDrawer    = add( new ToolTraceDrawer   ( this ) );
 		
 		addUndoDeselectCallback();
 	}
