@@ -12,6 +12,8 @@ import net.miginfocom.swing.MigLayout;
 import logicBox.gui.IconEnum;
 import logicBox.gui.IconLoader;
 import logicBox.gui.editor.EditorCreationCommand;
+import logicBox.gui.editor.Graphic;
+import logicBox.gui.editor.GraphicJunction;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
@@ -245,7 +247,15 @@ public class Toolbox extends JDialog
 	
 	
 	private ToolboxButton genButtonJunction() {
-		return new ToolboxButton( "Jnc" );
+		final ToolboxButton butt = new ToolboxButtonJunction();
+		
+		butt.addActionListener( new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				butt.getTargetToolManager().initiateJunctionCreation();
+			}
+		});
+		
+		return butt;
 	}
 	
 	
@@ -267,8 +277,7 @@ public class Toolbox extends JDialog
 	private void attachListener( final ToolboxButton butt, final ComponentActive com ) {
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				ToolManager manager = butt.getTargetToolManager();
-				manager.initiateComponentCreation( genCommand(com) );
+				butt.getTargetToolManager().initiateComponentCreation( genCommand(com) );
 			}
 		});
 	}
