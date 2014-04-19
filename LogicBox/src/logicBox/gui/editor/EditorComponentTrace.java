@@ -3,7 +3,6 @@
 
 package logicBox.gui.editor;
 
-import java.awt.Graphics2D;
 import java.util.List;
 import logicBox.sim.component.Trace;
 import logicBox.util.Geo;
