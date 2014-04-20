@@ -120,11 +120,8 @@ public class ToolJunctionPlacer extends Tool
 	private RepaintListener createRepaintListener() {
 		return new RepaintListener() {
 			public void draw( Graphics2D g ) {
-				if (placementInitiated) {
-					Gfx.pushCompositeAndSet( g, 0.75 );
-						drawPlacementIndicator( g );
-					Gfx.popComposite( g );
-				}
+				if (placementInitiated)
+					drawPlacementIndicator( g );
 			}
 		};
 	}
