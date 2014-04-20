@@ -104,7 +104,8 @@ public class ToolContextual extends Tool
 	public boolean cut() {	
 		if ( ! selection.isEmpty()) {
 			Clipboard.set( selection );
-			getWorld().delete( selection );		
+			getWorld().delete( selection );
+			selection.clear();
 			markHistoryChange( "Cut" );
 			repaint();
 			return true;
@@ -153,7 +154,8 @@ public class ToolContextual extends Tool
 			selectUnderlying();
 		
 		if ( ! selection.isEmpty()) {
-			getWorld().delete( selection );		
+			getWorld().delete( selection );
+			selection.clear();
 			markHistoryChange( "Delete" );
 		}
 		
