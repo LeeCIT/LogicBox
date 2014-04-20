@@ -14,6 +14,7 @@ import java.util.List;
 import logicBox.gui.Gfx;
 import logicBox.gui.editor.tools.Selection;
 import logicBox.sim.Simulation;
+import logicBox.sim.component.SourceOscillator;
 import logicBox.util.Bbox2;
 import logicBox.util.BinaryFunctor;
 import logicBox.util.Geo;
@@ -35,44 +36,99 @@ public class EditorWorld implements Serializable
 	private SpatialGrid<EditorComponent> grid;
 	private List       <EditorComponent> ecoms;
 	private Simulation                   sim;
+	private boolean                      isPowerOn;
 	
 	
 	
 	public EditorWorld() {
-		grid  = new SpatialGrid<>( 2048, 2048, 128 );
-		ecoms = new ArrayList<>(); 
-		sim   = new Simulation();
+		grid      = new SpatialGrid<>( 2048, 2048, 128 );
+		ecoms     = new ArrayList<>(); 
+		sim       = new Simulation();
+		isPowerOn = false;
 	}
 	
 	
 	
+	/**
+	 * Send the clock signal which oscillators sync from.
+	 * @return Whether the sim changed state.
+	 */
+	public synchronized boolean sendClockSignal() {
+		if (isPowerOn) {
+			boolean simChanged = false;
+			
+			for (SourceOscillator osc: sim.getOscillators())
+				simChanged |= osc.sendClockSignal();
+			
+			if (simChanged)
+				simUpdate();
+			
+			return simChanged;
+		}
+		
+		return false;
+	}
+	
+	
+	
+	/**
+	 * Check whether the sim is powered on.
+	 */
+	public synchronized boolean isPowerOn() {
+		return isPowerOn;
+	}
+	
+	
+	
+	/**
+	 * Run the sim for one timestep.
+	 * If unpowered, nothing happens.
+	 */
 	public synchronized void simUpdate() {
-		sim.simulate();
-		signalWorldChange();
+		if (isPowerOn) {
+			sim.simulate();
+			signalWorldChange();
+		}
 	}
 	
 	
 	
+	/**
+	 * Turn the power on.
+	 * If already on, nothing happens.
+	 */
 	public synchronized void simPowerOn() {
-		sim.simulate();
-		// TODO if oscillators are present, start them in a thread
-		signalWorldChange();
+		if ( ! isPowerOn) {
+			isPowerOn = true;
+			sim.reset();
+			simUpdate();
+		}
 	}
 	
 	
 	
-	public synchronized void simPowerReset() { 
+	/**
+	 * Reset the sim to its initial state.
+	 * This also turns the power back on.
+	 */
+	public synchronized void simPowerReset() {
+		isPowerOn = true;
 		sim.reset();
-		sim.simulate();
-		signalWorldChange();
+		simUpdate();
 	}
 	
 	
 	
+	/**
+	 * Turn the power off.
+	 * If it's already off, nothing happens.
+	 */
 	public synchronized void simPowerOff() {
-		sim.reset();
-		// TODO stop oscillators
-		signalWorldChange();
+		if (isPowerOn) {
+			isPowerOn = false;
+			sim.reset();
+			signalWorldChange();
+		}
 	}
 	
 	
@@ -84,16 +140,21 @@ public class EditorWorld implements Serializable
 	
 	
 	
-	public void clear() {
+	/**
+	 * Clear everything out of the simulation.
+	 */
+	public synchronized void clear() {
 		grid .clear();
 		ecoms.clear();
 		sim  .clear();
-		// TODO kill osc thread
 	}
 	
 	
 	
-	public boolean isEmpty() {
+	/**
+	 * Check whether there are any components in the simulation.
+	 */
+	public synchronized boolean isEmpty() {
 		return ecoms.isEmpty();
 	}
 	
@@ -102,7 +163,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Paste from the clipboard.
 	 */
-	public void paste( Selection sel ) {
+	public synchronized void paste( Selection sel ) {
 		for (EditorComponent ecom: sel)
 			addInternal( ecom );
 		
@@ -114,7 +175,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Delete a selection.
 	 */
-	public void delete( Selection sel ) {
+	public synchronized void delete( Selection sel ) {
 		for (EditorComponent ecom: sel) {
 			ecom.getComponent().disconnect();
 			removeInternal( ecom );
@@ -128,7 +189,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Add a component to the world.
 	 */
-	public void add( EditorComponent ecom ) {
+	public synchronized void add( EditorComponent ecom ) {
 		addInternal( ecom );
 		simUpdate();
 	}
@@ -140,6 +201,16 @@ public class EditorWorld implements Serializable
 		ecoms.add( ecom );
 		ecom.linkToWorld( this );
 		sim.add( ecom.getComponent() );
+		
+		if (ecom instanceof EditorComponentOscillator)
+			resyncOscillators();
+	}
+	
+	
+	
+	protected synchronized void resyncOscillators() {
+		for (SourceOscillator osc: sim.getOscillators())
+			osc.reset();
 	}
 	
 	
@@ -147,7 +218,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Remove a component from the world.
 	 */
-	public void remove( EditorComponent ecom ) {
+	public synchronized void remove( EditorComponent ecom ) {
 		removeInternal( ecom );
 		simUpdate();
 	}
@@ -193,7 +264,7 @@ public class EditorWorld implements Serializable
 	 * a component orientation or position change.
 	 * EditorComponents should call this method automatically.
 	 */
-	public void onComponentTransform( EditorComponent ecom ) {
+	public synchronized void onComponentTransform( EditorComponent ecom ) {
 		move( ecom );
 	}
 	
@@ -202,7 +273,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Make all graphics un-highlighted and un-selected.
 	 */
-	public void clearGraphicSelectionAndHighlightStates() {
+	public synchronized void clearGraphicSelectionAndHighlightStates() {
 		for (EditorComponent ecom: ecoms) {
 			ecom.getGraphic().setHighlighted( false );
 			ecom.getGraphic().setSelected   ( false );
@@ -217,7 +288,7 @@ public class EditorWorld implements Serializable
 	 * This is the component highlighted or affected by any editor tool.
 	 * Returns null if no component is found.
 	 */
-	public EditorComponent findTopmostAt( Vec2 pos ) {
+	public synchronized EditorComponent findTopmostAt( Vec2 pos ) {
 		List<EditorComponent> list = find( pos );
 		
 		if ( ! list.isEmpty())
@@ -230,7 +301,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Find all components which contain the given position.
 	 */
-	public List<EditorComponent> find( Vec2 pos ) {
+	public synchronized List<EditorComponent> find( Vec2 pos ) {
 		List<EditorComponent> list = new ArrayList<>();
 		
 		for (EditorComponent ecom: grid.findPotentials( pos ))
@@ -245,7 +316,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Find all components which overlap the given bounding box.
 	 */
-	public List<EditorComponent> find( Bbox2 bbox ) {
+	public synchronized List<EditorComponent> find( Bbox2 bbox ) {
 		List<EditorComponent> list = new ArrayList<>(); 
 		
 		for (EditorComponent ecom: grid.findPotentials( bbox ))
@@ -268,7 +339,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Find the closest pin/ecom within the given radius.
 	 */
-	public FindClosestPinResult findClosestPin( Vec2 pos, double radius ) {
+	public synchronized FindClosestPinResult findClosestPin( Vec2 pos, double radius ) {
 		FindClosestPinResult result = new FindClosestPinResult();
 		Bbox2  bbox     = new Bbox2(pos,pos).expand( radius * 2 );
 		double bestDist = Double.MAX_VALUE;
@@ -305,7 +376,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Find the closest trace within the given radius.
 	 */
-	public FindClosestTraceResult findClosestTrace( Vec2 pos, double radius ) {
+	public synchronized FindClosestTraceResult findClosestTrace( Vec2 pos, double radius ) {
 		FindClosestTraceResult result = new FindClosestTraceResult();
 		Bbox2  bbox     = new Bbox2(pos,pos).expand( radius * 2 );
 		double bestDist = Double.MAX_VALUE;
@@ -339,7 +410,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Get a list of all components.
 	 */
-	public List<EditorComponent> getComponents() {
+	public synchronized List<EditorComponent> getComponents() {
 		return ecoms;
 	}
 	
@@ -350,7 +421,7 @@ public class EditorWorld implements Serializable
 	 * This is the union of all component bounding boxes.
 	 * If there are no components a default area is used.
 	 */
-	public Bbox2 getWorldExtent() {
+	public synchronized Bbox2 getWorldExtent() {
 		Bbox2 extent = getExtent( ecoms );
 		
 		if (extent == null)
@@ -381,7 +452,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Returns only the components whose bounding boxes lie within (or close to) the view boundary. 
 	 */
-	public List<EditorComponent> getViewableComponents( Camera cam, double tolerance ) {
+	public synchronized List<EditorComponent> getViewableComponents( Camera cam, double tolerance ) {
 		Bbox2 bbox = cam.getWorldViewArea().expand( new Vec2(tolerance) );
 		
 		List<EditorComponent> list = new ArrayList<>();
@@ -395,7 +466,7 @@ public class EditorWorld implements Serializable
 	
 	
 	
-	public List<Graphic> getViewableComponentGraphics( Camera cam, double tolerance ) {
+	public synchronized List<Graphic> getViewableComponentGraphics( Camera cam, double tolerance ) {
 		List<Graphic> list = new ArrayList<>();
 		
 		for (EditorComponent ecom: getViewableComponents( cam, tolerance ))
@@ -432,7 +503,7 @@ public class EditorWorld implements Serializable
 	
 	
 	
-	public String toString() {
+	public synchronized String toString() {
 		String str = "EditorWorld with " + ecoms.size() + " components:\n";
 		
 		for (EditorComponent ecom: ecoms)
@@ -443,7 +514,7 @@ public class EditorWorld implements Serializable
 	
 	
 	
-	public RepaintListener getSpatialGridDebugRepainter() {
+	public synchronized RepaintListener getSpatialGridDebugRepainter() {
 		return new RepaintListener() {
 			public void draw( Graphics2D g ) {
 				int[][] array = grid.debugGridLevels();
