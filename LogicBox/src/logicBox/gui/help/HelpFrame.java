@@ -77,8 +77,8 @@ public class HelpFrame extends JFrame
 	private static Map<ComponentType, ComponentHelpInfo> getComponentTypeMap() {
 		Map<ComponentType, ComponentHelpInfo> compMap = new HashMap<ComponentType, ComponentHelpInfo>();
 		
-		ComponentHelpInfo andInfo = new ComponentHelpInfo("And Gate", "Description of an And Gate");
-		ComponentHelpInfo orInfo  = new ComponentHelpInfo("OR Gate", "Description of an Or Gate");
+		ComponentHelpInfo andInfo = new ComponentHelpInfo("And Gate", "Description of an And Gate", ComponentType.gateAnd);
+		ComponentHelpInfo orInfo  = new ComponentHelpInfo("OR Gate", "Description of an Or Gate", ComponentType.gateOr);
 		
 		compMap.put(ComponentType.gateAnd, andInfo);
 		compMap.put(ComponentType.gateOr, orInfo);
