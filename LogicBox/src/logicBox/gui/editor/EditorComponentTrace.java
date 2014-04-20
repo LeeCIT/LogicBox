@@ -33,7 +33,9 @@ public class EditorComponentTrace extends EditorComponent
 	
 	
 	public void onWorldChange() {
-		graphic.setPowered( com.getState() );
+		if ( ! graphic.isSelected())
+			graphic.setPowered( com.getState() && getWorldPowerState() );
+		
 		this.graphic.setConnectedSource( com.isSourceConnected() );
 		this.graphic.setConnectedDest  ( com.isDestConnected()   );
 	}
