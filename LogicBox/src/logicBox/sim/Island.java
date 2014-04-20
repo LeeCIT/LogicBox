@@ -18,7 +18,6 @@ import logicBox.util.Util;
 public class Island implements Iterable<ComponentActive>
 {
 	private Set<ComponentActive> set;
-	private boolean              hasLoops;
 	
 	
 	
@@ -36,18 +35,6 @@ public class Island implements Iterable<ComponentActive>
 	
 	public boolean contains( ComponentActive com ) {
 		return set.contains( com );
-	}
-	
-	
-	
-	public void setLoopFlag( boolean hasLoops ) {
-		this.hasLoops = hasLoops;
-	}
-	
-	
-	
-	public boolean hasLoops() {
-		return hasLoops;
 	}
 	
 	
