@@ -19,6 +19,7 @@ import logicBox.gui.GUI;
 import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
+import logicBox.gui.help.HelpFrame;
 import logicBox.sim.Simulation;
 import logicBox.sim.component.SourceOscillator;
 import logicBox.util.Bbox2;
@@ -217,10 +218,25 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
+	private void doWithLoopErrorDetect( Callback cb ) {
+		try {
+			cb.execute();
+		}
+		catch (Simulation.NonLevelisableCircuitException ex) {
+			GUI.showError(
+				getEditorFrame(),
+				"Circuit Contains Loop",
+				"The circuit contains a loop.  This version of LogicBox does not support loops."
+			);
+		}
+	}
+	
+	
+	
 	private CallbackRepeater createBaseClockSignal() {
 		Callback cb = new Callback() {
 			public void execute() {
-				clockAndDraw();
+				sendClockSignalAndRepaint();
 			}
 		};
 		
@@ -233,28 +249,13 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	private void clockAndDraw() {
+	private void sendClockSignalAndRepaint() {
 		if (getWorld().sendClockSignal()) {
 			SwingUtilities.invokeLater( new Runnable() {
 				public void run() {
 					getEditorPanel().repaint();
 				}
 			});
-		}
-	}
-	
-	
-	
-	private void doWithLoopErrorDetect( Callback cb ) {
-		try {
-			cb.execute();
-		}
-		catch (Simulation.NonLevelisableCircuitException ex) {
-			GUI.showError(
-				getEditorFrame(),
-				"Circuit Contains Loop",
-				"The circuit contains a loop.  This version of LogicBox does not support loops."
-			);
 		}
 	}
 	
@@ -364,6 +365,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		try {
 			EditorWorld saveMe = Util.deepCopy( world );
 			saveMe.clearGraphicSelectionAndHighlightStates();
+			saveMe.simPowerOff();
 			
 			Storage.write( circuitFile.getPath(), saveMe ); // TODO compress + version
 			frame.setCircuitName( circuitFile.getName() );
@@ -574,7 +576,11 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getHelpAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				System.out.println( "implement" );
+				HelpFrame helpFrame = HelpFrame.getInstance();
+				
+				if (helpFrame.isVisible())
+					 helpFrame.dispose();
+				else helpFrame.setVisible( true );
 			}
 		};
 	}
