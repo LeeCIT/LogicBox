@@ -42,7 +42,7 @@ public class Simulation implements Serializable
 	/**
 	 * Disconnect all components which are not in the given set.
 	 */
-	public void disconnectAllNotIn( Set<Component> coms ) {
+	public synchronized void disconnectAllNotIn( Set<Component> coms ) {
 		System.out.println( "disconnectAllNotIn()" );
 		
 		for (Island island: findIslands())
@@ -59,7 +59,7 @@ public class Simulation implements Serializable
 	 * Add a component to the simulation.
 	 * At the moment only active components need to be added, though it does no harm to add everything.
 	 */
-	public void add( Component...coms ) {
+	public synchronized void add( Component...coms ) {
 		for (Component com: coms) {
 			comps.add( com );
 			
@@ -79,7 +79,7 @@ public class Simulation implements Serializable
 	 * Remove an element from the simulation.
 	 * You have to disconnect it separately, or the results will not be what you expect.
 	 */
-	public void remove( Component com ) {
+	public synchronized void remove( Component com ) {
 		comps  .remove( com );
 		actives.remove( com );
 		sources.remove( com );
@@ -103,7 +103,7 @@ public class Simulation implements Serializable
 	/**
 	 * Remove all elements from the simulation.
 	 */
-	public void clear() {
+	public synchronized void clear() {
 		comps  .clear();
 		actives.clear();
 		sources.clear();
@@ -114,7 +114,7 @@ public class Simulation implements Serializable
 	/**
 	 * Reset the simulation to its initial state, as if simulate() were never called.
 	 */
-	public void reset() {		
+	public synchronized void reset() {		
 		for (Net net: findNets())
 			for (Component com: net)
 				com.reset();
@@ -128,7 +128,7 @@ public class Simulation implements Serializable
 	/**
 	 * Run the simulation for one time step.
 	 */
-	public void simulate() {
+	public synchronized void simulate() {
 		validateCache();
 		
 		for (Updateable up: cacheUpdateables)
@@ -161,7 +161,7 @@ public class Simulation implements Serializable
 	/**
 	 * Group components into islands - regions of the circuit that aren't connected to one another.
 	 */
-	public List<Island> findIslands() {
+	private List<Island> findIslands() {
 		Map<Pin,Net>         pinMap  = mapPinsToNets( findNets() );
 		List<Island>         islands = new ArrayList<>();
 		Set<ComponentActive> pool    = Util.createIdentityHashSet( actives );
@@ -264,7 +264,7 @@ public class Simulation implements Serializable
 	 * Doesn't test for the presence of memory.
 	 * @return True if there are no feedback loops.
 	 */
-	public boolean isLevelisable() {
+	public synchronized boolean isLevelisable() {
 		for (Island island: findIslands())
 			if ( ! isLevelisable(island))
 				return false;
@@ -278,7 +278,7 @@ public class Simulation implements Serializable
 	 * Test whether an island is levelisable.
 	 * @see #isLevelisable()
 	 */
-	public boolean isLevelisable( Island island ) {
+	private boolean isLevelisable( Island island ) {
 		for (ComponentActive com: island)
 			if (com.hasInputsConnected())
 				for (Pin pin: com.getPinOutputs())
@@ -321,7 +321,7 @@ public class Simulation implements Serializable
 	 * Test whether the circuit can be reduced to a truth table. (both levelisable and combinational)
 	 * This is still infeasible if there are a lot of inputs though.
 	 */
-	public boolean isOptimisable() {
+	public synchronized boolean isOptimisable() {
 		for (ComponentActive com: actives)
 			if ( ! com.isCombinational())
 				return false;
