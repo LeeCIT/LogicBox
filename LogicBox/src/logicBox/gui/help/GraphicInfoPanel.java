@@ -3,6 +3,7 @@
 
 package logicBox.gui.help;
 
+import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -42,7 +43,8 @@ public class GraphicInfoPanel extends JPanel
 	
 	
 	private void setupComponents() {
-		title = new JLabel();
+		title = new JLabel( "_" );
+		title.setFont( new Font( "Ariel", Font.BOLD, 24 ) );
 		
 		graphicPanel = new GraphicPanel();
 		
