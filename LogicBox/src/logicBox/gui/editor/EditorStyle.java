@@ -17,7 +17,7 @@ public abstract class EditorStyle
 {
 	public static Color colBackground            = new Color(  55,  37,  37 );
 	public static Color colGrid                  = new Color(  89,  51,  72 );
-	public static Color colLedOff                = new Color(  81,  70,  35 );
+	public static Color colLedOff                = new Color(  62,  31,   0 );
 	public static Color colLedOn                 = new Color( 248, 229, 104 );
 	public static Color colTraceOff              = new Color(  58, 122,  54 );
 	public static Color colTraceOn               = new Color( 146, 248, 122 );
