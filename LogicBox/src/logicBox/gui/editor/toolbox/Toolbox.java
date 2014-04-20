@@ -165,7 +165,7 @@ public class Toolbox extends JDialog
 			genButton( new SourceFixed(false)  ),
 			genButton( new SourceFixed(true)   ),
 			genButton( new SourceToggle(false) ),
-			genButton( new SourceOscillator(1) )
+			genButton( new SourceOscillator(SourceOscillator.baseFrequencyHz/8) )
 		};
 		
 		addCategory( "Sources", butts );
