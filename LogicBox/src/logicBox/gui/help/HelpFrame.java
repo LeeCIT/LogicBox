@@ -32,12 +32,11 @@ public class HelpFrame extends JFrame
 		pack();
 		setDefaultCloseOperation( DISPOSE_ON_CLOSE );
 		setSize( 720, 480 );
-		setVisible( true );
 	}
 	
 	
 	
-	public HelpFrame getInstance() {
+	public static HelpFrame getInstance() {
 		if (instance == null)
 			instance = new HelpFrame();
 		
@@ -74,6 +73,6 @@ public class HelpFrame extends JFrame
 	
 	public static void main(String[] args) {
 		GUI.setNativeStyle();
-		new HelpFrame();
+		new HelpFrame().setVisible( true );
 	}
 }
