@@ -2,16 +2,20 @@
 
 
 package logicBox.gui.help;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 import net.miginfocom.swing.MigLayout;
 import logicBox.sim.component.*;
 import logicBox.gui.SearchPanel;
 import logicBox.gui.Searchable;
+import logicBox.gui.editor.Graphic;
 
 
 
@@ -25,7 +29,7 @@ public class HelpPanel extends JPanel
 {
 	private ComponentType componentType;
 	private Map<ComponentType,ComponentHelpInfo> componentMap;
-	private JTextPane textPane = new JTextPane();
+	private HelpPane textPane = new HelpPane();
 	private SearchPanel<ComponentType> searchPanel;
 	
 	
@@ -84,7 +88,11 @@ public class HelpPanel extends JPanel
 	
 	
 	
+	public void paintComponent ( Graphics g ) {
+		componentMap.get(componentType).getComponentType().getGraphic();
+	}
 	
+		
 	/**
 	 * Change the help information currently displayed.
 	 * @param compType
@@ -92,10 +100,11 @@ public class HelpPanel extends JPanel
 	public void setDisplayedInfo(ComponentType compType) {
 		this.componentType = compType;
 		displayDescription();
+		textPane.drawComponent(compType);
 	}
 	
 	
-
+	
 	/**
 	 * Return get the JTextArea holding the description
 	 * of the component.
