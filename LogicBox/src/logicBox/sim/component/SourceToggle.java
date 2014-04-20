@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 /**
@@ -30,6 +33,12 @@ public class SourceToggle extends SourceFixed
 	
 	public void toggleState() {
 		setState( ! getState() );
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateSourceToggle();
 	}
 	
 	
