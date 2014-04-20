@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
+import javax.swing.SwingUtilities;
 import logicBox.fileManager.FileManager;
 import logicBox.gui.DialogueAnswer;
 import logicBox.gui.GUI;
@@ -29,8 +30,10 @@ import logicBox.sim.component.GateOr;
 import logicBox.sim.component.GateXnor;
 import logicBox.sim.component.GateXor;
 import logicBox.sim.component.Mux;
+import logicBox.sim.component.SourceOscillator;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
+import logicBox.util.CallbackRepeater;
 import logicBox.util.Evaluator;
 import logicBox.util.Geo;
 import logicBox.util.Storage;
@@ -48,6 +51,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	private EditorFrame                 frame;
 	private Camera                      cam;
 	private EditorWorld                 world;
+	private CallbackRepeater            baseClockSignal;
 	private ToolManager                 toolManager;
 	private HistoryManager<EditorWorld> historyManager;
 	
@@ -58,20 +62,21 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	public EditorController( EditorFrame frame ) {
-		this.frame          = frame;
-		this.world          = new EditorWorld();
-		this.cam            = new Camera();
-		this.historyManager = new HistoryManager<>( this );
-		this.toolManager    = new ToolManager( this );
+		this.frame           = frame;
+		this.world           = new EditorWorld();
+		this.cam             = new Camera();
+		this.historyManager  = new HistoryManager<>( this );
+		this.toolManager     = new ToolManager( this );
+		this.baseClockSignal = createBaseClockSignal();
 		
 		addNeedToSaveCallback();
 		initialiseCircuit( false );
 		
-		addDebugAndDemoStuff();
+		baseClockSignal.unpause();
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Get the frame associated with the controller.
 	 */
@@ -96,6 +101,8 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public void setStateFromHistory( EditorWorld world ) {
 		this.world = world;
 		this.world.clearGraphicSelectionAndHighlightStates();
+		this.world.simPowerOff();
+		
 		getEditorPanel().repaint();
 	}
 	
@@ -181,6 +188,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public void onCloseButtonPressed() {
 		if (canDiscardCircuit()) {
 			// TODO save prefs, cloud sync, etc
+			baseClockSignal.join();
 			System.exit( 0 );
 		}
 	}
@@ -216,6 +224,32 @@ public class EditorController implements HistoryListener<EditorWorld>
 				getEditorPanel().repaint();
 			}
 		});
+	}
+	
+	
+	
+	private CallbackRepeater createBaseClockSignal() {
+		return new CallbackRepeater(
+			(int) Geo.hertzToMillisecs( SourceOscillator.baseFrequencyHz ),
+			true,
+			new Callback() {
+				public void execute() {
+					clockAndDraw();
+				}
+			}
+		);
+	}
+	
+	
+	
+	private void clockAndDraw() {
+		if (getWorld().sendClockSignal()) {
+			SwingUtilities.invokeLater( new Runnable() {
+				public void run() {
+					getEditorPanel().repaint();
+				}
+			});
+		}
 	}
 	
 	
@@ -316,14 +350,17 @@ public class EditorController implements HistoryListener<EditorWorld>
 		
 		if (world != null) {
 			initialiseCircuit( false );
-			isUnsaved = false;
-			
-			circuitFile = file;
-			frame.setCircuitName( circuitFile.getName() );
+			isUnsaved   = false;
+			needsToSave = false;
 			
 			this.world = world;
 			historyManager.clear();
 			historyManager.markChange( "<initial state>" );
+			needsToSave = false;
+			
+			circuitFile = file;
+			frame.setCircuitName( circuitFile.getName() );
+			frame.setCircuitModified( false );
 			
 			recentreCamera();
 			powerOff();
