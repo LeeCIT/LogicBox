@@ -35,7 +35,7 @@ public abstract class Clipboard
 		Set<Component> coms = Util.createIdentityHashSet();
 		Simulation     tsim = new Simulation();
 		
-		for (EditorComponent edCom: sel.ecoms) {
+		for (EditorComponent edCom: copy.ecoms) {
 			edCom.linkToWorld( null );
 			
 			Component simCom = edCom.getComponent();
