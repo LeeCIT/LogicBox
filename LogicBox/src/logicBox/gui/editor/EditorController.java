@@ -218,14 +218,16 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	private CallbackRepeater createBaseClockSignal() {
+		Callback cb = new Callback() {
+			public void execute() {
+				clockAndDraw();
+			}
+		};
+		
 		return new CallbackRepeater(
 			(int) Geo.hertzToMillisecs( SourceOscillator.baseFrequencyHz ),
 			true,
-			new Callback() {
-				public void execute() {
-					clockAndDraw();
-				}
-			}
+			cb
 		);
 	}
 	

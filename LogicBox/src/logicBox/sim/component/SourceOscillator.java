@@ -15,7 +15,7 @@ import logicBox.util.Geo;
  * A clock generator.
  * To make the sim easier to program, its frequency is always a multiple of a common base frequency.
  * All that needs to happen for everything to remain synced properly is for the sim to call
- * sendClockSignal on all oscillators at the given base frequency.
+ * sendClockSignal on all oscillators at the same time at the given base frequency.
  * @author Lee Coakley
  */
 public class SourceOscillator extends Source
