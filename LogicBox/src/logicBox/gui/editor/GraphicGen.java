@@ -462,7 +462,7 @@ public abstract class GraphicGen
 	
 	
 	public static GraphicComActive generateSourceToggle() {
-		
+		return generatePlaceholder();
 	}
 	
 	
