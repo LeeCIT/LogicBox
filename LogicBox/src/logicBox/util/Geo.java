@@ -385,6 +385,15 @@ public abstract class Geo
 	
 	
 	/**
+	 * Convert hertz to milliseconds.
+	 */
+	public static double hertzToMillisecs( double hz ) {		
+		return (1.0 / hz) * 1000;
+	}
+	
+	
+	
+	/**
 	 * Compute the scaling factor needed to fit a given rectangle into another while preserving aspect.
 	 */
 	public static double getAspectScaleFactor( Vec2 size, Vec2 fitIn, boolean inside ) {
