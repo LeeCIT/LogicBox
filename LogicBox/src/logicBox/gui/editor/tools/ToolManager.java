@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
-import logicBox.gui.editor.EditorComponentActive;
-import logicBox.gui.editor.EditorComponentLed;
 import logicBox.gui.editor.EditorController;
 import logicBox.gui.editor.EditorCreationCommand;
 import logicBox.gui.editor.EditorCreationParam;
@@ -16,7 +14,6 @@ import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.sim.component.ComponentActive;
-import logicBox.sim.component.DisplayLed;
 import logicBox.util.Callback;
 import logicBox.util.CallbackParam;
 import logicBox.util.Util;
@@ -141,13 +138,8 @@ public class ToolManager
 			public void execute( EditorCreationParam param ) {
 				ComponentActive  scom = Util.deepCopy( ecc.getComponentPayload() );
 				GraphicComActive gca  = Util.deepCopy( scom.getGraphic() );
-				EditorComponent  ecom;
 				
-				if (scom instanceof DisplayLed)
-					 ecom = new EditorComponentLed   ( (DisplayLed) scom, gca, param.pos, param.angle );
-				else ecom = new EditorComponentActive(              scom, gca, param.pos, param.angle );
-				
-				controller.getWorld().add( ecom );
+				controller.getWorld().add( EditorComponent.create(scom, gca, param) );
 			}
 		});
 	}
