@@ -23,29 +23,36 @@ public class GraphicPanel extends EditorPanel
 	
 	
 	
-	public GraphicPanel( Graphic graphic ) {
+	public GraphicPanel() {
 		super();
 		
-		this.cam     = new Camera();
-		this.graphic = Util.deepCopy( graphic );
-		
+		this.cam = new Camera();
 		setupCamera();
-		setupGraphic();
-		autoZoom();
+		setupEvents();
 	}
 	
 	
 	
-	private void setupGraphic() {
+	public void setGraphic( Graphic graphic ) {
+		this.graphic = Util.deepCopy( graphic );
+		autoZoom();
+		repaint();
+	}
+	
+	
+	
+	private void setupEvents() {
 		addWorldRepaintListener( new RepaintListener() {
 			public void draw( Graphics2D g ) {
-				graphic.draw( g );
+				if (graphic != null)
+					graphic.draw( g );
 			}
 		});
 		
 		addComponentListener( new ComponentAdapter() {
 			public void componentResized( ComponentEvent e ) {
-				autoZoom();
+				if (graphic != null)
+					autoZoom();
 			}
 		});
 	}
@@ -77,7 +84,7 @@ public class GraphicPanel extends EditorPanel
 	public static void main( String[] args ) {
 		JFrame frame = new JFrame();
 		
-		frame.add( new GraphicPanel( GraphicGen.generateGateAnd(2) ) );
+		frame.add( new GraphicPanel() );
 		frame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 		frame.setVisible( true );
 	}
