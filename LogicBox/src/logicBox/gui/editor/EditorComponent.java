@@ -4,6 +4,9 @@
 package logicBox.gui.editor;
 import java.io.Serializable;
 import logicBox.sim.component.Component;
+import logicBox.sim.component.ComponentActive;
+import logicBox.sim.component.DisplayLed;
+import logicBox.sim.component.SourceOscillator;
 import logicBox.util.Vec2;
 
 
@@ -28,18 +31,29 @@ public abstract class EditorComponent implements Serializable
 	
 	
 	
+	public static EditorComponent create( ComponentActive scom, GraphicComActive gca, EditorCreationParam param ) {
+	         if (scom instanceof DisplayLed)       return new EditorComponentLed       ( (DisplayLed)       scom, gca, param.pos, param.angle );
+		else if (scom instanceof SourceOscillator) return new EditorComponentOscillator( (SourceOscillator) scom, gca, param.pos, param.angle );
+		else                                       return new EditorComponentActive    (                    scom, gca, param.pos, param.angle );
+	}
+	
+	
+	
 	public void onMouseClick() {
-		if (getComponent().interactClick())
-			world.simUpdate();
+		synchronized (world) {
+			if (getComponent().interactClick())
+				world.simUpdate();
+		}
 	}
 	
 	
 	
 	/**
 	 * Do something if the world state changes (deleted component or whatever).
+	 * Do not modify the world in this method.
 	 */
 	public void onWorldChange() {
-		
+		// Default impl does nothing
 	}
 	
 	
@@ -104,5 +118,14 @@ public abstract class EditorComponent implements Serializable
 	protected void signalTransformChange() {
 		if (world != null)
 			world.onComponentTransform( this );
+	}
+	
+	
+	
+	protected boolean getWorldPowerState() {
+		if (world == null)
+			return false;
+		
+		return world.isPowerOn();
 	}
 }
