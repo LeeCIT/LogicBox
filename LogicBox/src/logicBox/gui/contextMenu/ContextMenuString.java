@@ -37,7 +37,7 @@ public class ContextMenuString extends ContextMenuItem
 	
 	protected void addTo( final JPopupMenu menu ) {
 		JMenuItem item = new JMenuItem();
-		item.setName( name );
+		item.setText( name );
 		
 		if (icon != null)
 			item.setIcon( icon );
