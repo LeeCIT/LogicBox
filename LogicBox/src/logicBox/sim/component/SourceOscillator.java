@@ -5,6 +5,9 @@ package logicBox.sim.component;
 
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.gui.editor.GraphicGen;
+import logicBox.util.Callback;
+import logicBox.util.CallbackRepeater;
+import logicBox.util.Geo;
 
 
 
@@ -18,7 +21,7 @@ import logicBox.gui.editor.GraphicGen;
 public class SourceOscillator extends Source
 {
 	private static final long serialVersionUID = 1L;
-	public  static final int  baseFrequencyHz  = 200;
+	public  static final int  baseFrequencyHz  = 100;
 	
 	private int cycleCounter;
 	private int frequencyDivisor;
@@ -32,10 +35,20 @@ public class SourceOscillator extends Source
 	
 	
 	
-	public synchronized void sendClockSignal() {
-		if (cycleCounter++ % frequencyDivisor == 0)
+	public boolean sendClockSignal() {
+		cycleCounter++;
+		
+		if (cycleCounter < 0) // Handle signed wrap
+			cycleCounter = 0;
+		
+		if (cycleCounter % frequencyDivisor == 0) {
 			toggleState();
+			return true;
+		}
+		
+		return false;
 	}
+	
 	
 	
 	private void toggleState() {
@@ -45,7 +58,16 @@ public class SourceOscillator extends Source
 	
 	
 	public void setFrequencyDivisor( int frequencyDivisor ) {
+		checkFrequencyDivisor( frequencyDivisor );
 		this.frequencyDivisor = frequencyDivisor;
+	}
+	
+	
+	
+	private void checkFrequencyDivisor( int frequencyDivisor ) {
+		if (frequencyDivisor < 1
+		||  frequencyDivisor > baseFrequencyHz)
+			throw new RuntimeException( "Bad frequency divider: " + frequencyDivisor );
 	}
 	
 	
@@ -58,6 +80,7 @@ public class SourceOscillator extends Source
 	
 	public void reset() {
 		super.reset();
+		setState( false );
 		cycleCounter = 0;
 	}
 	
@@ -76,6 +99,40 @@ public class SourceOscillator extends Source
 	
 	
 	public String getName() {
-		return "Oscillator (" + (baseFrequencyHz * frequencyDivisor) + "hz)";
+		return "Oscillator (" + (baseFrequencyHz / frequencyDivisor) + "hz)";
+	}
+	
+	
+	
+	
+	
+	public static void main( String[] args ) {
+		final SourceOscillator osc = new SourceOscillator( 3 );
+		System.out.println( osc );
+		
+		Callback clockCallback = new Callback() {
+			public void execute() {
+				osc.sendClockSignal();
+				System.out.println( osc.getState() ? "1" : "0" );
+			}
+		};
+		
+		int frequency = (int) Geo.hertzToMillisecs( SourceOscillator.baseFrequencyHz );
+		
+		new CallbackRepeater( frequency, clockCallback );
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
