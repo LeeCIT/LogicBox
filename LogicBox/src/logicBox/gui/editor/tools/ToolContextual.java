@@ -9,7 +9,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Set;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import logicBox.gui.Gfx;
+import logicBox.gui.contextMenu.ContextMenu;
+import logicBox.gui.contextMenu.ContextMenuItem;
+import logicBox.gui.contextMenu.ContextMenuString;
 import logicBox.gui.editor.Clipboard;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorStyle;
@@ -26,7 +31,6 @@ import logicBox.util.Vec2;
  * Handles dragging, rotating and selection.
  * @author Lee Coakley
  * TODO add support for context menus on components
- * TODO allow components to be clicked on (switches need to be toggled, etc)
  */
 public class ToolContextual extends Tool
 {
@@ -157,9 +161,8 @@ public class ToolContextual extends Tool
 			getWorld().delete( selection );
 			selection.clear();
 			markHistoryChange( "Delete" );
+			repaint();
 		}
-		
-		repaint();
 	}
 	
 	
@@ -193,6 +196,7 @@ public class ToolContextual extends Tool
 	public void selectInvert() { // TODO doesn't work
 		Set<EditorComponent> set = Util.createIdentityHashSet( getWorld().getComponents() );
 		set.removeAll( selection.ecoms );
+		selection.clear();
 		selection.set( set );
 		
 		for (EditorComponent ecom: set)
@@ -227,8 +231,10 @@ public class ToolContextual extends Tool
 		Vec2            pos  = getMousePosWorld();
 		EditorComponent ecom = getComponentAt( pos );
 		
-		if (ecom != null)
-			ecom.onMouseClick();
+		if (ecom != null) {
+			if (isLeft (ev)) ecom.onMouseClick();
+			if (isRight(ev)) doContextMenu( ecom );
+		}
 	}
 	
 	
@@ -614,6 +620,41 @@ public class ToolContextual extends Tool
 		
 		if (ecom != null)
 			selection.set( ecom );
+	}
+    
+    
+    
+    private void doContextMenu( EditorComponent ecom ) {
+		if (hasSelection())
+			 doContextMenuSelection();
+		else doContextMenuSingle( ecom );
+	}
+    
+    
+    
+	private void doContextMenuSelection() {
+		System.out.println( "Selection context menu" );
+		
+		ContextMenuItem[] items = {
+			new ContextMenuString( null, "Whatever", (char) 0, null ),
+			new ContextMenuString( null, "Yeah",     (char) 0, null )
+		};
+		
+		ContextMenu cm = new ContextMenu( items );
+		cm.show( getEditorPanel(), getMousePosCom() );
+	}
+	
+	
+	
+	private void doContextMenuSingle( EditorComponent ecom ) {
+		
+	}
+	
+	
+	
+	private ContextMenu buildContextMenu( EditorComponent ecom ) {
+		//ContextMenu cm = new ContextMenu( items );
+		return null;
 	}
 }
 
