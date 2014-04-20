@@ -105,6 +105,17 @@ public class Camera
 	
 	
 	/**
+	 * Get the mouse position in component space.
+	 */
+	public Vec2 getMousePosCom() {
+		Vec2 comPos   = new Vec2( component.getLocationOnScreen() );
+		Vec2 mousePos = getMousePosScreen();
+		return mousePos.subtract( comPos );
+	}
+	
+	
+	
+	/**
 	 * Get the mouse position in screen space.
 	 */
 	public Vec2 getMousePosScreen() {
@@ -118,10 +129,7 @@ public class Camera
 	 * Sub-pixel precision.
 	 */
 	public Vec2 getMousePosWorld() {
-		Vec2 comPos   = new Vec2( component.getLocationOnScreen() );
-		Vec2 mousePos = getMousePosScreen();
-		Vec2 pos      = mousePos.subtract( comPos );
-		return mapScreenToWorld( pos );
+		return mapScreenToWorld( getMousePosCom() );
 	}
 	
 	
