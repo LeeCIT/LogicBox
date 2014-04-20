@@ -446,6 +446,39 @@ public abstract class GraphicGen
 	
 	
 	
+	public static GraphicComActive generateSourceOscillator() {
+		Bbox2 r = getBaseRegion();
+		      r.transform( Geo.createTransform( new Vec2(0), new Vec2(2,1), 0) );
+		      
+		Vec2 br = r.getBottomRight();
+		Vec2 tr = r.getTopRight();
+		Vec2 tl = r.getTopLeft();
+		Vec2 bl = r.getBottomLeft();
+		Vec2 rm = r.getRightMiddle();
+		
+		Line2 pinLine = new Line2( rm, rm.add(pinLength,0) );
+		List<Line2> pinLines = new ArrayList<>();
+		pinLines.add( pinLine );
+		
+		VecPath polySqr = new VecPath();
+		polySqr.moveTo( r.getNorm(-0.25, 1) );
+		polySqr.lineTo( r.getNorm( 0.25, 1) );
+		polySqr.lineTo( r.getNorm( 0.25, 0) );
+		polySqr.lineTo( r.getNorm( 0.75, 0) );
+		polySqr.lineTo( r.getNorm( 0.75, 1) );
+		polySqr.lineTo( r.getNorm( 1.25, 1) );
+		polySqr.transform( Geo.createTransform( new Vec2(0), new Vec2(0.5), 0 ) );
+			
+		return new GraphicComActive(
+			genPolyBody( true, br, tr, tl, bl ),
+			genPolyPins( pinLines ),
+			polySqr,
+			genPinMappings( pinLines, pinLines.size() )
+		);
+	}
+	
+	
+	
 	public static GraphicComActive generateDisplayLed() {
 		Bbox2 r = getBaseRegion();
 		
