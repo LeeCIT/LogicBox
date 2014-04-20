@@ -5,8 +5,6 @@ package logicBox.sim.component;
 
 import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.GraphicGen;
-import logicBox.gui.editor.GraphicJunction;
-import logicBox.util.Vec2;
 
 
 
@@ -102,6 +100,52 @@ public enum ComponentType
 			//case blackBoxPin:      return GraphicGen.;
 			
 			default: return GraphicGen.generatePlaceholder();
+		}
+	}
+	
+	
+	
+	public String getName() {
+		switch (this) {
+			case gateBuffer:       return "Buffer";
+			case gateNot:          return "NOT gate";
+			case gateAnd:          return "AND gate";
+			case gateNand:         return "NAND gate";
+			case gateOr:           return "OR gate";
+			case gateNor:          return "NOR gate";
+			case gateXor:          return "XOR gate";
+			case gateXnor:         return "XNOR gate";
+			
+			case sourceFixed:      return "Fixed source";
+			case sourceToggle:     return "Switchable source";
+			case sourceOscillator: return "Oscillator";
+			
+			case junction:         return "Junction";
+			case trace:            return "Trace";
+			
+			case displayLed:       return "LED";
+			case displaySevenSeg:  return "Seven-segment display";
+			case displayLCD:       return "LCD";
+			
+			case decoder:          return "Decoder";
+			case mux:              return "Multiplexer";
+			case demux:            return "Demultiplexer";
+			
+			case flipFlopD:        return "D flip-flop";
+			case flipFlopJK:       return "JK flip-flop";
+			case flipFlopT:        return "T flip-flop";
+			
+			case comparator:       return "Comparator";
+			case shifter:          return "Shifter";
+			case counter:          return "Counter";
+			
+			case register:         return "Register";
+			case rom:              return "ROM";
+			
+			case blackBox:         return "Black-box";
+			case blackBoxPin:      return "Black-box pin";
+			
+			default: return "<undefined name>";
 		}
 	}
 }
