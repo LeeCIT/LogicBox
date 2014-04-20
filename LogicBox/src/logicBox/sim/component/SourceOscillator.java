@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
+
 
 
 /**
@@ -40,6 +43,12 @@ public class SourceOscillator extends Source
 	
 	public ComponentType getType() {
 		return ComponentType.sourceOscillator;
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateSourceOscillator();
 	}
 	
 	

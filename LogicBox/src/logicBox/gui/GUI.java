@@ -143,8 +143,7 @@ public abstract class GUI
 	 * @param errors
 	 * @param title
 	 */
-	public static void showErrorList(JFrame f, ArrayList<String> errors, String title)
-	{
+	public static void showErrorList(JFrame f, ArrayList<String> errors, String title) {
 		String message = "<html><ul>";
 		
 		for(String error : errors)
