@@ -20,16 +20,6 @@ import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
 import logicBox.sim.Simulation;
-import logicBox.sim.component.Demux;
-import logicBox.sim.component.GateAnd;
-import logicBox.sim.component.GateBuffer;
-import logicBox.sim.component.GateNand;
-import logicBox.sim.component.GateNor;
-import logicBox.sim.component.GateNot;
-import logicBox.sim.component.GateOr;
-import logicBox.sim.component.GateXnor;
-import logicBox.sim.component.GateXor;
-import logicBox.sim.component.Mux;
 import logicBox.sim.component.SourceOscillator;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
@@ -38,7 +28,6 @@ import logicBox.util.Evaluator;
 import logicBox.util.Geo;
 import logicBox.util.Storage;
 import logicBox.util.Util;
-import logicBox.util.Vec2;
 
 
 
@@ -635,33 +624,6 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	private void addDebugAndDemoStuff() {
-		world.add( new EditorComponentActive( new GateBuffer(), GraphicGen.generateGateBuffer(), new Vec2(  0, -128) ) );
-		world.add( new EditorComponentActive( new GateNot(),    GraphicGen.generateGateNot(),    new Vec2(  0, -256) ) );
-		
-		historyManager.markChange( "test" );
-		
-		for (int i=2; i<=4; i++) {
-			double xo = 192 * (i-2);
-			
-			world.add( new EditorComponentActive( new GateAnd(i),  GraphicGen.generateGateAnd(i),  new Vec2(xo, 0)   ) );
-			world.add( new EditorComponentActive( new GateNand(i), GraphicGen.generateGateNand(i), new Vec2(xo, 128) ) );
-			world.add( new EditorComponentActive( new GateOr(i),   GraphicGen.generateGateOr(i),   new Vec2(xo, 256) ) );
-			world.add( new EditorComponentActive( new GateNor(i),  GraphicGen.generateGateNor(i),  new Vec2(xo, 384) ) );
-			world.add( new EditorComponentActive( new GateXor(i),  GraphicGen.generateGateXor(i),  new Vec2(xo, 512) ) );
-			world.add( new EditorComponentActive( new GateXnor(i), GraphicGen.generateGateXnor(i), new Vec2(xo, 640) ) );
-		}
-		
-		historyManager.markChange( "test" );
-		
-		for (int i=2; i<=8; i++) {
-			double xo = 192 * (i-2);
-			
-			world.add( new EditorComponentActive( new Mux(i),   new Mux(i)  .getGraphic(), new Vec2(xo,-512) ) );
-			world.add( new EditorComponentActive( new Demux(i), new Demux(i).getGraphic(), new Vec2(xo,-768) ) );
-		}
-		
-		historyManager.markChange( "test" );
-		
 		addMouseOverTest();
 	}
 	
