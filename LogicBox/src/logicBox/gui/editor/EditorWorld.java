@@ -411,7 +411,7 @@ public class EditorWorld implements Serializable
 	 * Get a list of all components.
 	 */
 	public synchronized List<EditorComponent> getComponents() {
-		return ecoms;
+		return new ArrayList<>( ecoms );
 	}
 	
 	
