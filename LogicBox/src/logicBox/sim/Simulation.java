@@ -40,6 +40,24 @@ public class Simulation implements Serializable
 	
 	
 	/**
+	 * Get all oscillators in the simulation.
+	 * This includes the ones inside sub-simulations in black-boxes.
+	 */
+	public synchronized Set<SourceOscillator> getOscillators() {
+		Set<SourceOscillator> oscs = Util.createIdentityHashSet();
+		
+		for (Source source: sources)
+			if (source instanceof SourceOscillator)
+				oscs.add( (SourceOscillator) source );
+		
+		// TODO get sub-sim oscillators
+		
+		return oscs;
+	}
+	
+	
+	
+	/**
 	 * Disconnect all components which are not in the given set.
 	 */
 	public synchronized void disconnectAllNotIn( Set<Component> coms ) {
