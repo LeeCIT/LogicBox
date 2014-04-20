@@ -148,6 +148,22 @@ public enum ComponentType
 			default: return "<undefined name>";
 		}
 	}
+	
+	
+	
+	public String getDescription() {
+		switch (this) {
+		
+		}
+		
+		return "getDescription() is not implemented yet";
+	}
+	
+	
+	
+	public String toString() {
+		return getName();
+	}
 }
 
 
