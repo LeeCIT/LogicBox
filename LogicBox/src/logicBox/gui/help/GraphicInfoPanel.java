@@ -47,7 +47,6 @@ public class GraphicInfoPanel extends JPanel
 		graphicPanel = new GraphicPanel();
 		
 		textPane = new JTextPane();
-		textPane.setContentType( "text/html" );
 		textPane.setEditable( false );
 		
 		scrollPane = new JScrollPane( textPane );
@@ -56,7 +55,7 @@ public class GraphicInfoPanel extends JPanel
 	
 	
 	private void setupLayout() {
-		setLayout( new MigLayout("debug", "[grow,fill]", "[][grow 20,fill][grow 80,fill]") );
+		setLayout( new MigLayout( "", "[grow,fill]", "[][grow 20,fill][grow 80,fill]") );
 		
 		add( title,        "wrap" );
 		add( graphicPanel, "wrap" );
