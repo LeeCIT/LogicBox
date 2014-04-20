@@ -3,6 +3,8 @@
 
 package logicBox.gui.help;
 
+import logicBox.sim.component.ComponentType;
+
 
 
 /**
@@ -13,12 +15,13 @@ public class ComponentHelpInfo
 {
 	private String compName;
 	private String compDescription;
+	private ComponentType compType;
 	
 	
-	
-	public ComponentHelpInfo( String compName, String compDes ) {
+	public ComponentHelpInfo( String compName, String compDes, ComponentType compType ) {
 		this.compDescription = compDes;
 		this.compName        = compName;
+		this.compType 		 = compType;
 	}
 	
 	
@@ -31,5 +34,10 @@ public class ComponentHelpInfo
 	
 	public String getCompDescription() {
 		return compDescription;
+	}
+	
+	
+	public ComponentType getComponentType() {
+		return compType;
 	}
 }
