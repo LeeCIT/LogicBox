@@ -104,6 +104,18 @@ public abstract class Tool
 	
 	
 	
+	protected Vec2 getMousePosCom() {
+		return getCamera().getMousePosCom();
+	}
+	
+	
+	
+	protected Vec2 getMousePosScreen() {
+		return getCamera().getMousePosScreen();
+	}
+	
+	
+	
 	protected Vec2 getMousePosWorld() {
 		return getCamera().getMousePosWorld();
 	}
