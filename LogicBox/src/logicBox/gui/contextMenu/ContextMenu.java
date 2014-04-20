@@ -3,21 +3,33 @@
 
 package logicBox.gui.contextMenu;
 
-import java.awt.event.*;
+import java.awt.Component;
 import javax.swing.*;
+import logicBox.util.Vec2;
 
 
 
 /**
- * Adds a context menu to a component
- * @author John
+ * A generic context menu.
+ * @author John Murphy
+ * @author Lee Coakley
  */
-public class ContextMenu extends MouseAdapter
+public class ContextMenu
 {
+	private JPopupMenu menu;
+	
+	
+	
 	public ContextMenu( ContextMenuItem...items ) {
-		JPopupMenu menu = new JPopupMenu();
+		this.menu = new JPopupMenu();
 		
 		for (ContextMenuItem item: items)
 			item.addTo( menu );
+	}
+	
+	
+	
+	public void show( Component com, Vec2 pos ) {
+		menu.show( com, (int) pos.x, (int) pos.y );
 	}
 }
