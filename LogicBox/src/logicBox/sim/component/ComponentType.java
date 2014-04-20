@@ -145,17 +145,13 @@ public enum ComponentType
 			case blackBox:         return "Black-box";
 			case blackBoxPin:      return "Black-box pin";
 			
-			default: return "<undefined name>";
+			default: return name();
 		}
 	}
 	
 	
 	
 	public String getDescription() {
-		switch (this) {
-		
-		}
-		
 		return "getDescription() is not implemented yet";
 	}
 	
