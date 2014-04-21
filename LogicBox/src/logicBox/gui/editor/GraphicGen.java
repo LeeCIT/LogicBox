@@ -354,7 +354,7 @@ public abstract class GraphicGen
 		final List<GraphicPinMapping> gpms = genPinMappings( pinLines, pinOutLines.size() );
 		
 		Vec2    arrowPos  = gpms.get(2+1).getPinPosBody();
-		double  arrowOffs = r.getSize().x * 0.2;
+		double  arrowOffs = r.getSize().x * 0.3;
 		VecPath polyArrow = new VecPath();
 		polyArrow.moveTo( arrowPos.add( 2,        -arrowOffs*0.5 ) );
 		polyArrow.lineTo( arrowPos.add( arrowOffs, 0             ) );
@@ -387,7 +387,7 @@ public abstract class GraphicGen
 		GraphicComActive        graphic = generateFlipFlop( 2 );
 		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
 		
-		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "D", "E" ) );		
+		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "D", "" ) );		
 		return graphic;
 	}
 	
@@ -397,7 +397,7 @@ public abstract class GraphicGen
 		GraphicComActive        graphic = generateFlipFlop( 2 );
 		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
 		
-		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "T", "C" ) );
+		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "T", "" ) );
 		return graphic;
 	}
 	
@@ -407,7 +407,7 @@ public abstract class GraphicGen
 		GraphicComActive        graphic = generateFlipFlop( 3 );
 		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
 		
-		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "J", "C", "K" ) );		
+		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "J", "", "K" ) );		
 		return graphic;
 	}
 	
