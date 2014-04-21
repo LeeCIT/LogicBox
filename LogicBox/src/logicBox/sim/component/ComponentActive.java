@@ -5,8 +5,10 @@ package logicBox.sim.component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.gui.editor.GraphicGen;
+import logicBox.util.Util;
 
 
 
@@ -127,6 +129,18 @@ public abstract class ComponentActive extends Component implements Updateable, P
 	public void disconnect() {
 		for (Pin pin: getPins())
 			pin.disconnect();
+	}
+	
+	
+	
+	public Set<Component> getConnectedComponents() {
+		Set<Component> set = Util.createIdentityHashSet();
+		
+		for (Pin pin: getPins())
+			if (pin.hasTrace())
+				set.add( pin.getTrace() );
+		
+		return set;
 	}
 	
 	
