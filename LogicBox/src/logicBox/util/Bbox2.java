@@ -216,6 +216,15 @@ public class Bbox2 implements Transformable, Serializable
 	
 	
 	
+	public boolean contains( Vec2 pos ) {
+		return pos.x >= tl.x
+			&& pos.y >= tl.y
+			&& pos.x <= br.x
+			&& pos.y <= br.y;
+	}
+	
+	
+	
 	public boolean contains( Bbox2 other ) {
 		return other.tl.x >= tl.x
 			&& other.tl.y >= tl.y
