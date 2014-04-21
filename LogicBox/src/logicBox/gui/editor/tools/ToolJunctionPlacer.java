@@ -6,8 +6,8 @@ package logicBox.gui.editor.tools;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import logicBox.gui.Gfx;
 import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.GraphicJunction;
 import logicBox.gui.editor.RepaintListener;
 import logicBox.util.Vec2;
@@ -131,18 +131,25 @@ public class ToolJunctionPlacer extends Tool
 	private void drawPlacementIndicator( Graphics2D g ) {
 		EditorWorld.FindClosestTraceResult result = getWorld().findClosestTrace( getMousePosWorld(), 16 );
 		
-		if (result.foundTrace) {
-			new GraphicJunction( result.closestPos ).draw( g );
-			System.out.println( result.ecom );
+		if (result.foundTrace) {			
+			Graphic graphic = result.ecom.getGraphic();
+			graphic.setHighlighted( true );
+			graphic.draw( g );
+			graphic.setHighlighted( false );
+			
+			Graphic junc = new GraphicJunction( result.closestPos );
+			
+			if (placementArmed)
+				junc.setHighlighted( true );
+			
+			junc.draw( g );
 		}
 	}
 	
 	
 	
 	/**
-	 * Begin placing a component.
-	 * @param createCallback What to do when the placement completes.  Note that it can be cancelled.
-	 * @param graphic The graphic used to show where the component will be placed.
+	 * Begin placing a junction.
 	 */
 	public void placementStart() {
 		placementInitiated = true;
@@ -160,14 +167,15 @@ public class ToolJunctionPlacer extends Tool
 	
 	
 	private void placementComplete() {
-		placementPos = getSnappedMousePos();
+		placementPos   = getSnappedMousePos();
+		placementArmed = false;
 		
-		markHistoryChange( "Create junction" );
+		createJunction();
 		repaint();
 	}
-	
-	
-	
+
+
+
 	private void placementMove() {
 		placementPos = getSnappedMousePos();
 		repaint();
@@ -189,6 +197,13 @@ public class ToolJunctionPlacer extends Tool
 	private Vec2 getSnappedMousePos() {
 		return getMousePosWorld();
 		//return Geo.snapNear( getMousePosWorld(), 16 );
+	}
+	
+	
+	
+	private void createJunction() {
+		System.out.println( "junc create" ); // TODO
+		markHistoryChange( "Create junction" );
 	}
 }
 
