@@ -16,7 +16,7 @@ import logicBox.util.Vec2;
 public class ToolboxButtonJunction extends ToolboxButtonGraphic
 {
 	public ToolboxButtonJunction() {
-		super( makeGraphic(), "Trace" );
+		super( makeGraphic(), "Junction" );
 		setScaleAux( 0.75 );
 	}
 	
