@@ -105,8 +105,11 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	
 	public boolean overlaps( Bbox2 bbox ) {
-		Vec2 size = bbox.getSize();
-		return polyLine.intersects( bbox.tl.x, bbox.tl.y, size.x, size.y );
+		for (Line2 line: lines)
+			if (line.overlaps( bbox ))
+				return true;
+		
+		return false;
 	}
 	
 	
