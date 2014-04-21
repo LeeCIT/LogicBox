@@ -4,6 +4,8 @@
 package logicBox.sim.component;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Set;
+import logicBox.util.Util;
 
 
 
@@ -88,6 +90,18 @@ public class Junction extends ComponentPassive
 			pin.disconnect();
 		
 		vpins.clear();
+	}
+	
+	
+	
+	public Set<Component> getConnectedComponents() {
+		Set<Component> set = Util.createIdentityHashSet();
+		
+		for (Pin pin: getPins())
+			if (pin.hasTrace())
+				set.add( pin.getTrace() );
+		
+		return set;
 	}
 	
 	
