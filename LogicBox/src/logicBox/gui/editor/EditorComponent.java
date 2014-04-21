@@ -39,6 +39,10 @@ public abstract class EditorComponent implements Serializable
 	
 	
 	
+	/**
+	 * Perform some action in response to being clicked on with the left mouse button.
+	 * @return Whether the action changed the state of the component.
+	 */
 	public void onMouseClick() {
 		synchronized (world) {
 			if (getComponent().interactClick())
@@ -101,7 +105,7 @@ public abstract class EditorComponent implements Serializable
 	
 	
 	/**
-	 * Link with a world.  Only one world may be linked.  Only EditorWorld may call this method.
+	 * Link with a world.  Only one world can be linked at any one time. 
 	 */
 	protected void linkToWorld( EditorWorld world ) {
 		this.world = world;
@@ -111,6 +115,12 @@ public abstract class EditorComponent implements Serializable
 	
 	protected void unlinkFromWorld() {
 		this.world = null;
+	}
+	
+	
+	
+	protected EditorWorld getWorld() {
+		return world;
 	}
 	
 	
