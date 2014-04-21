@@ -9,8 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Set;
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import logicBox.gui.Gfx;
 import logicBox.gui.contextMenu.ContextMenu;
 import logicBox.gui.contextMenu.ContextMenuItem;
@@ -232,7 +230,7 @@ public class ToolContextual extends Tool
 		EditorComponent ecom = getComponentAt( pos );
 		
 		if (ecom != null) {
-			if (isLeft (ev)) ecom.onMouseClick();
+			if (isLeft (ev)) ecom.onMouseClick(); // TODO return whether state changed, or give callback that does this
 			if (isRight(ev)) doContextMenu( ecom );
 		}
 	}
