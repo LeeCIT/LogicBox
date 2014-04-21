@@ -186,49 +186,22 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	public void powerOn() {
-		doWithLoopErrorDetect( new Callback() {
-			public void execute() {
-				world.simPowerOn();
-				getEditorPanel().repaint();
-			}
-		});
+		getWorld().simPowerOn();
+		getEditorPanel().repaint();
 	}
 	
 	
 	
 	public void powerReset() {
-		doWithLoopErrorDetect( new Callback() {
-			public void execute() {
-				world.simPowerReset();
-				getEditorPanel().repaint();
-			}
-		});
+		getWorld().simPowerReset();
+		getEditorPanel().repaint();
 	}
 	
 	
 	
 	public void powerOff() {
-		doWithLoopErrorDetect( new Callback() {
-			public void execute() {
-				world.simPowerOff();
-				getEditorPanel().repaint();
-			}
-		});
-	}
-	
-	
-	
-	private void doWithLoopErrorDetect( Callback cb ) {
-		try {
-			cb.execute();
-		}
-		catch (Simulation.NonLevelisableCircuitException ex) {
-			GUI.showError(
-				getEditorFrame(),
-				"Circuit Contains Loop",
-				"The circuit contains a loop.  This version of LogicBox does not support loops."
-			);
-		}
+		getWorld().simPowerOff();
+		getEditorPanel().repaint();
 	}
 	
 	
@@ -249,7 +222,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	private void sendClockSignalAndRepaint() {
+	private void sendClockSignalAndRepaint() { // Never call this manually - must be done by BCS thread
 		if (getWorld().sendClockSignal()) {
 			SwingUtilities.invokeLater( new Runnable() {
 				public void run() {
