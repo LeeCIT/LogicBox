@@ -5,7 +5,6 @@ package logicBox.gui.editor;
 
 import java.util.Set;
 import logicBox.gui.editor.tools.Selection;
-import logicBox.sim.Simulation;
 import logicBox.sim.component.Component;
 import logicBox.util.Util;
 
@@ -31,23 +30,29 @@ public abstract class Clipboard
 			return;
 		}
 		
-		Selection      copy = Util.deepCopy( sel );
-		Set<Component> coms = Util.createIdentityHashSet();
-		Simulation     tsim = new Simulation();
+		Selection selCopy = Util.deepCopy( sel );
 		
-		for (EditorComponent edCom: copy.ecoms) {
-			edCom.linkToWorld( null );
-			
-			Component simCom = edCom.getComponent();
-			simCom.reset();
-			
-			coms.add( simCom );
-			tsim.add( simCom );
+		for (EditorComponent com: selCopy.ecoms) {
+			com.unlinkFromWorld();
+			com.getComponent().reset();
 		}
 		
-		tsim.disconnectAllNotIn( coms );
+		isolateSelection( selCopy );
+		clipboardSelection = selCopy;
+	}
+	
+	
+	
+	private static void isolateSelection( Selection sel ) {
+		Set<Component> coms = Util.createIdentityHashSet();
 		
-		clipboardSelection = copy;
+		for (EditorComponent ecom: sel)
+			coms.add( ecom.getComponent() );
+		
+		for (Component com: coms)
+			for (Component connected: com.getConnectedComponents())
+				if ( ! coms.contains( connected ))
+					connected.disconnect();
 	}
 	
 	
