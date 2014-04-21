@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import logicBox.gui.GUI;
 import logicBox.gui.Gfx;
 import logicBox.gui.editor.tools.Selection;
 import logicBox.sim.Simulation;
@@ -85,9 +86,19 @@ public class EditorWorld implements Serializable
 	 * If unpowered, nothing happens.
 	 */
 	public synchronized void simUpdate() {
-		if (isPowerOn) {
-			sim.simulate();
-			signalWorldChange();
+		try {
+			if (isPowerOn) {
+				sim.simulate();
+				signalWorldChange();
+			}
+		}
+		catch (Simulation.NonLevelisableCircuitException ex) {
+			simPowerOff();
+			GUI.showError(
+				GUI.getMainFrame(),
+				"Circuit Contains Loop",
+				"The circuit contains a feedback loop.  This version of LogicBox does not support loops in circuits."
+			);
 		}
 	}
 	
@@ -122,6 +133,7 @@ public class EditorWorld implements Serializable
 	/**
 	 * Turn the power off.
 	 * If it's already off, nothing happens.
+	 * Does not cause a sim update.
 	 */
 	public synchronized void simPowerOff() {
 		if (isPowerOn) {
@@ -208,6 +220,10 @@ public class EditorWorld implements Serializable
 	
 	
 	
+	/**
+	 * Reset all oscillators to keep them in sync.
+	 * This should be called whenever an oscillator's frequency is changed, or a new one is added.
+	 */
 	protected synchronized void resyncOscillators() {
 		for (SourceOscillator osc: sim.getOscillators())
 			osc.reset();
