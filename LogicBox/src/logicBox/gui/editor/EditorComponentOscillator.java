@@ -3,6 +3,7 @@
 
 package logicBox.gui.editor;
 
+import logicBox.gui.GUI;
 import logicBox.sim.component.SourceOscillator;
 import logicBox.util.Vec2;
 
@@ -36,7 +37,7 @@ public class EditorComponentOscillator extends EditorComponentActive
 	
 	
 	
-	public void onMouseClick() {
-		System.out.println( "osc menu here" ); // TODO make osc menu
+	public void onMouseClick() { // TODO add modify callback
+		new OscillatorDialogue( GUI.getMainFrame(), this, getWorld() );
 	}
 }
