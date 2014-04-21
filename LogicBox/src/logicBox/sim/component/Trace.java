@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import java.util.Set;
+import logicBox.util.Util;
+
 
 
 /**
@@ -90,6 +93,17 @@ public class Trace extends ComponentPassive
 		
 		source = null;
 		dest   = null;
+	}
+	
+	
+	
+	public Set<Component> getConnectedComponents() {
+		Set<Component> set = Util.createIdentityHashSet();
+		
+		if (source != null) set.add( source.getAttachedComponent() );
+		if (dest   != null) set.add( dest  .getAttachedComponent() );
+		
+		return set;
 	}
 	
 	
