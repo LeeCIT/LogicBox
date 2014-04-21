@@ -117,7 +117,8 @@ public class Line2 implements Transformable, Serializable
 	
 	
 	public boolean overlaps( Bbox2 bbox ) {
-		if (getBbox().contains( bbox )) // No intersect, but overlaps
+		if (bbox.contains( a )
+		||  bbox.contains( b ))
 			return true;
 		
 		for (Line2 line: bbox.getLines())
