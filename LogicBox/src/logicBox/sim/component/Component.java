@@ -4,6 +4,7 @@
 package logicBox.sim.component;
 
 import java.io.Serializable;
+import java.util.Set;
 
 
 
@@ -39,6 +40,14 @@ public abstract class Component implements Serializable
 	 * Disconnect from all logically connected components.
 	 */
 	public abstract void disconnect();
+	
+	
+	
+	/**
+	 * Find all components which are directly connected to this one.
+	 * This never includes pins, only normal components.
+	 */
+	public abstract Set<Component> getConnectedComponents();
 	
 	
 	
