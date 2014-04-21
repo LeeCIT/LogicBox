@@ -17,7 +17,13 @@ import logicBox.util.Vec2;
 
 
 
-public class ComponentSnapper extends ComponentAdapter {
+/**
+ * Alters motion of a component so it snaps onto the target edges.
+ * @author John Murphy
+ * @author Lee Coakley
+ */
+public class ComponentSnapper extends ComponentAdapter
+{
 	private boolean   motionInterlock;
 	private Component snapTo; 
 	private int       snapThreshold = 16;
