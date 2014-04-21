@@ -3,6 +3,9 @@
 
 package logicBox.sim.component;
 
+import java.util.Set;
+import logicBox.util.Util;
+
 
 
 /**
@@ -89,6 +92,12 @@ public class Pin extends ComponentPassive
 		}
 		
 		trace = null;
+	}
+	
+	
+	
+	public Set<Component> getConnectedComponents() {
+		throw new UnsupportedOperationException(); // Doesn't make sense for this type
 	}
 	
 	
