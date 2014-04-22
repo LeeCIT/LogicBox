@@ -13,6 +13,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import net.miginfocom.swing.MigLayout;
 import logicBox.sim.component.SourceOscillator;
+import logicBox.util.CallbackParam;
 
 
 
@@ -25,6 +26,7 @@ public class OscillatorDialogue extends JDialog
 	private EditorComponentOscillator osc;
 	private EditorWorld               world;
 	private int                       freqDiv;
+	private CallbackParam<String>     onMod;
 	
 	private JLabel  label;
 	private JSlider slider;
@@ -34,12 +36,13 @@ public class OscillatorDialogue extends JDialog
 	
 	
 	
-	public OscillatorDialogue( EditorFrame parent, EditorComponentOscillator osc, EditorWorld world ) {
+	public OscillatorDialogue( EditorFrame parent, EditorComponentOscillator osc, EditorWorld world, CallbackParam<String> onMod ) {
 		super( parent, "Oscillator Setup", true );
 		
 		this.osc     = osc;
 		this.world   = world;
 		this.freqDiv = osc.getComponent().getFrequencyDivisor();
+		this.onMod   = onMod;
 		
 		setupComponents();
 		setupActions();
@@ -100,7 +103,7 @@ public class OscillatorDialogue extends JDialog
 	protected void applyChanges() {
 		osc.getComponent().setFrequencyDivisor( freqDiv );
 		world.resyncOscillators();
-		// TODO undo/redo
+		onMod.execute( "Change oscillator frequency" );
 	}
 	
 	
