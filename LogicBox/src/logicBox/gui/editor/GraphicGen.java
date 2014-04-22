@@ -591,7 +591,7 @@ public abstract class GraphicGen
 			polyBody,
 			genPolyPins( pinLines ),
 			null,
-			genPinMappings( pinLines, isOutput ? 1 : 0 )
+			genPinMappings( pinLines, isOutput ? 0 : 1 )
 		);
 	}
 	
