@@ -3,34 +3,56 @@
 
 package logicBox.sim.component;
 
+import java.util.Map;
 import logicBox.sim.Simulation;
 
 
 
 /**
  * A component which encapsulates a whole other simulation.
- * // TODO interface with simulation via a new pin class
+ * TODO map pins to sim blackbox pins
  * @author Lee Coakley
  */
 public class BlackBox extends ComponentActive
 {
 	private static final long serialVersionUID = 1L;
 	
-	private Simulation sim;
-	private String     name;
+	private String               name;
+	private Simulation           sim;
+	private Map<Pin,BlackBoxPin> pinMap;
 	
 	
 	
-	public BlackBox( String name, Simulation sim ) {
+	public BlackBox( String name, Simulation sim, Map<Pin,BlackBoxPin> pinMap ) {
 		super();
-		this.sim  = sim;
-		this.name = name;
+		this.name   = name;
+		this.sim    = sim;
+		this.pinMap = pinMap;
+	}
+	
+	
+	
+	public Simulation getSimulation() {
+		return sim;
 	}
 	
 	
 	
 	public void update() {
 		sim.simulate();
+		
+		for (Map.Entry<Pin,BlackBoxPin> entry: pinMap.entrySet()) {
+			Pin         pin   = entry.getKey();
+			BlackBoxPin bbpin = entry.getValue();
+			pin.setState( bbpin.getState() );
+		}
+	}
+	
+	
+	
+	public void reset() {
+		super.reset();
+		sim.reset();
 	}
 	
 	
@@ -42,6 +64,6 @@ public class BlackBox extends ComponentActive
 	
 	
 	public String getName() {
-		return name;
+		return "Black-box: " + name;
 	}
 }
