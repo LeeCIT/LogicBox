@@ -20,9 +20,10 @@ public class Simulation implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
-	private List<Component>       comps;   // All sim components
-	private List<ComponentActive> actives; // Event-generating components
-	private List<Source>          sources; // Primary/const inputs
+	private List<Component>       comps;     // All sim components
+	private List<ComponentActive> actives;   // Event-generating components
+	private List<Source>          sources;   // Primary/const inputs
+	private List<BlackBoxPin>     externals; // Components accessible from outside the sim
 	
 	// Caches are regenerated at deserialisation time.
 	transient private Set<Net>         cacheNets;
@@ -32,16 +33,17 @@ public class Simulation implements Serializable
 	
 	
 	public Simulation() {
-		comps   = new ArrayList<>();
-		actives = new ArrayList<>();
-		sources = new ArrayList<>();
+		comps     = new ArrayList<>();
+		actives   = new ArrayList<>();
+		sources   = new ArrayList<>();
+		externals = new ArrayList<>();
 	}
 	
 	
 	
 	/**
 	 * Get all oscillators in the simulation.
-	 * This includes the ones inside sub-simulations in black-boxes.
+	 * This includes the oscs inside black-boxes, as they all need to be synced.
 	 */
 	public synchronized Set<SourceOscillator> getOscillators() {
 		Set<SourceOscillator> oscs = Util.createIdentityHashSet();
@@ -50,7 +52,9 @@ public class Simulation implements Serializable
 			if (source instanceof SourceOscillator)
 				oscs.add( (SourceOscillator) source );
 		
-		// TODO get sub-sim oscillators
+		for (Component com: comps)
+			if (com instanceof BlackBox)
+				oscs.addAll( ((BlackBox) com).getSimulation().getOscillators() );
 		
 		return oscs;
 	}
@@ -58,17 +62,12 @@ public class Simulation implements Serializable
 	
 	
 	/**
-	 * Disconnect all components which are not in the given set.
+	 * Get all black-box pins in the top-level simulation.
 	 */
-	public synchronized void disconnectAllNotIn( Set<Component> coms ) {
-		System.out.println( "disconnectAllNotIn()" );
-		
-		for (Island island: findIslands())
-			for (ComponentActive coma: island)
-				if ( ! coms.contains( coma ))
-					coma.disconnect();
-		
-		System.out.println( this );
+	public synchronized Set<BlackBoxPin> getBlackboxPins() {
+		Set<BlackBoxPin> bbpins = Util.createIdentityHashSet();
+		bbpins.addAll( externals );
+		return bbpins;
 	}
 	
 	
@@ -81,11 +80,9 @@ public class Simulation implements Serializable
 		for (Component com: coms) {
 			comps.add( com );
 			
-			if (com instanceof ComponentActive)
-				actives.add( (ComponentActive) com );
-			
-			if (com instanceof Source)
-				sources.add( (Source) com );
+			if (com instanceof ComponentActive) actives  .add( (ComponentActive) com );
+			if (com instanceof Source)          sources  .add( (Source)          com );
+			if (com instanceof BlackBoxPin)     externals.add( (BlackBoxPin)     com ); // TODO can be a source... argh
 		}
 		
 		cacheInvalidated = true;
@@ -98,9 +95,10 @@ public class Simulation implements Serializable
 	 * You have to disconnect it separately, or the results will not be what you expect.
 	 */
 	public synchronized void remove( Component com ) {
-		comps  .remove( com );
-		actives.remove( com );
-		sources.remove( com );
+		comps    .remove( com );
+		actives  .remove( com );
+		sources  .remove( com );
+		externals.remove( com );
 		
 		resetIsolatedInputPins();
 		
@@ -410,11 +408,11 @@ public class Simulation implements Serializable
 	 * Remove nets with a level of -1 (they can't affect the simulation).
 	 */
 	private Map<Net,Integer> pruneNets( Map<Net,Integer> netLevels ) { 
-		Map<Net,Integer> prune = new IdentityHashMap<>( netLevels ); 
-		Integer          m1    = -1;
+		Map<Net,Integer> prune   = new IdentityHashMap<>( netLevels ); 
+		Integer          useless = -1;
 		
 		for (Map.Entry<Net,Integer> en: netLevels.entrySet())
-			if (en.getValue().equals( m1 ))
+			if (en.getValue().equals( useless ))
 				prune.remove( en.getKey() );
 		
 		return prune;
