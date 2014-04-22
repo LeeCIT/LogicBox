@@ -22,7 +22,6 @@ public class Simulation implements Serializable
 	
 	private List<Component>       comps;     // All sim components
 	private List<ComponentActive> actives;   // Event-generating components
-	private List<Source>          sources;   // Primary/const inputs
 	private List<BlackBoxPin>     externals; // Components accessible from outside the sim
 	
 	// Caches are regenerated at deserialisation time.
@@ -35,7 +34,6 @@ public class Simulation implements Serializable
 	public Simulation() {
 		comps     = new ArrayList<>();
 		actives   = new ArrayList<>();
-		sources   = new ArrayList<>();
 		externals = new ArrayList<>();
 	}
 	
@@ -48,13 +46,13 @@ public class Simulation implements Serializable
 	public synchronized Set<SourceOscillator> getOscillators() {
 		Set<SourceOscillator> oscs = Util.createIdentityHashSet();
 		
-		for (Source source: sources)
-			if (source instanceof SourceOscillator)
-				oscs.add( (SourceOscillator) source );
-		
-		for (Component com: comps)
+		for (Component com: comps) {
 			if (com instanceof BlackBox)
 				oscs.addAll( ((BlackBox) com).getSimulation().getOscillators() );
+		
+			if (com instanceof SourceOscillator)
+				oscs.add( (SourceOscillator) com );
+		}
 		
 		return oscs;
 	}
@@ -65,9 +63,7 @@ public class Simulation implements Serializable
 	 * Get all black-box pins in the top-level simulation.
 	 */
 	public synchronized Set<BlackBoxPin> getBlackboxPins() {
-		Set<BlackBoxPin> bbpins = Util.createIdentityHashSet();
-		bbpins.addAll( externals );
-		return bbpins;
+		return Util.createIdentityHashSet( externals );
 	}
 	
 	
@@ -81,8 +77,7 @@ public class Simulation implements Serializable
 			comps.add( com );
 			
 			if (com instanceof ComponentActive) actives  .add( (ComponentActive) com );
-			if (com instanceof Source)          sources  .add( (Source)          com );
-			if (com instanceof BlackBoxPin)     externals.add( (BlackBoxPin)     com ); // TODO can be a source... argh
+			if (com instanceof BlackBoxPin)     externals.add( (BlackBoxPin)     com );
 		}
 		
 		cacheInvalidated = true;
@@ -97,7 +92,6 @@ public class Simulation implements Serializable
 	public synchronized void remove( Component com ) {
 		comps    .remove( com );
 		actives  .remove( com );
-		sources  .remove( com );
 		externals.remove( com );
 		
 		resetIsolatedInputPins();
@@ -120,9 +114,9 @@ public class Simulation implements Serializable
 	 * Remove all elements from the simulation.
 	 */
 	public synchronized void clear() {
-		comps  .clear();
-		actives.clear();
-		sources.clear();
+		comps    .clear();
+		actives  .clear();
+		externals.clear();
 	}
 	
 	
