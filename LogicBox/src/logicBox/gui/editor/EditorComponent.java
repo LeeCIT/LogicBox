@@ -7,6 +7,7 @@ import logicBox.sim.component.Component;
 import logicBox.sim.component.ComponentActive;
 import logicBox.sim.component.DisplayLed;
 import logicBox.sim.component.SourceOscillator;
+import logicBox.util.CallbackParam;
 import logicBox.util.Vec2;
 
 
@@ -41,12 +42,13 @@ public abstract class EditorComponent implements Serializable
 	
 	/**
 	 * Perform some action in response to being clicked on with the left mouse button.
-	 * @return Whether the action changed the state of the component.
+	 * onMod is called if the action would cause a sim change (undo/redo)
 	 */
-	public void onMouseClick() {
+	public void onMouseClick( CallbackParam<String> onMod ) {
 		synchronized (world) {
-			if (getComponent().interactClick())
+			if (getComponent().interactClick()) {
 				world.simUpdate();
+			}
 		}
 	}
 	
