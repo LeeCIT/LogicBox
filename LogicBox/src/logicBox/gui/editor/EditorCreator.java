@@ -84,7 +84,7 @@ public class EditorCreator
 				Toolbox toolbox = Toolbox.getInstance();
 				
 				if (toolbox != null)
-					Toolbox.getInstance().setActiveToolManager( ctrl.getToolManager() );
+					toolbox.setActiveToolManager( ctrl.getToolManager() );
 			}
 		});
 		

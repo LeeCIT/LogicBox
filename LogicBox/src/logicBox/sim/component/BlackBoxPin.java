@@ -31,8 +31,20 @@ public class BlackBoxPin extends ComponentActive
 		SimUtil.addPins( (mode==PinIoMode.input) ? pinInputs : pinOutputs, this, mode, 1 );
 		this.pin = getPins().get( 0 );
 		
-		if ( ! isInput() && ! isOutput())
+		if ( ! isInput()
+	    &&   ! isOutput())
 			throw new RuntimeException( "Bad mode: " + mode );
+	}
+	
+	
+	
+	public boolean interactClick() {
+		if (isOutput()) {
+			return false;
+		} else {
+			setState( ! getState() );
+			return true;
+		}
 	}
 	
 	
