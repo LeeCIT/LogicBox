@@ -587,12 +587,17 @@ public abstract class GraphicGen
 		List<Line2> pinLines = new ArrayList<>();
 		pinLines.add( pinLine );
 		
-		return new GraphicComActive(
+		GraphicComActive graphic = new GraphicComActive(
 			polyBody,
 			genPolyPins( pinLines ),
 			null,
 			genPinMappings( pinLines, isOutput ? 0 : 1 )
 		);
+		
+		Vec2 trans = graphic.getBbox().getCentre().negate();
+		graphic.transform( Geo.createTransform(trans,0), true );
+		
+		return graphic; 
 	}
 	
 	
@@ -609,7 +614,6 @@ public abstract class GraphicGen
 		poly.lineTo( r.getNorm( 0  , 0.66 ) );
 		poly.lineTo( r.getNorm( 0.5, 0.66 ) );
 		poly.lineTo( r.getNorm( 0.8, 1    ) );
-		poly.lineTo( r.getNorm( 0.9, 1    ) );
 		poly.lineTo( r.getNorm( 0.9, 1    ) );
 		poly.closePath();
 		
