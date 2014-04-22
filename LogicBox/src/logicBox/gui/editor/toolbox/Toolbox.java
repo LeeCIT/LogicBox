@@ -104,6 +104,7 @@ public class Toolbox extends JDialog
 		addDisplayButtons();
 		addSourceButtons();
 		addComplexButtons();
+		addBlackBoxButtons();
 	}
 	
 	
@@ -184,6 +185,17 @@ public class Toolbox extends JDialog
 		};
 		
 		addCategory( "Components", butts );
+	}
+	
+	
+	
+	private void addBlackBoxButtons() {
+		ToolboxButton[] butts = {
+			genButton( new BlackBoxPin( PinIoMode.input  ) ),
+			genButton( new BlackBoxPin( PinIoMode.output ) ),
+		};
+		
+		addCategory( "Black-box", butts );
 	}
 	
 	
