@@ -61,6 +61,9 @@ public class ToolboxButtonGraphic extends ToolboxButton
 		Vec2    scale      = new Vec2( scaleMul * (1.0 - borderFrac) );
 		Vec2    trans      = sizeComp.multiply( 0.5 ).add( armed ? 1 : 0 );
 		
+		// Centre graphic
+		trans = trans.add( bbox.getCentre().multiply(0.5).negate() );
+		
 		Graphics2D g = (Graphics2D) gx;
 		
 		Gfx.pushMatrix( g );
