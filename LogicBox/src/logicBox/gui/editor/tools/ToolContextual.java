@@ -19,6 +19,7 @@ import logicBox.gui.editor.EditorStyle;
 import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.RepaintListener;
 import logicBox.util.Bbox2;
+import logicBox.util.CallbackParam;
 import logicBox.util.Geo;
 import logicBox.util.Util;
 import logicBox.util.Vec2;
@@ -230,7 +231,7 @@ public class ToolContextual extends Tool
 		EditorComponent ecom = getComponentAt( pos );
 		
 		if (ecom != null) {
-			if (isLeft (ev)) ecom.onMouseClick(); // TODO return whether state changed, or give callback that does this
+			if (isLeft (ev)) doMouseClick( ecom );
 			if (isRight(ev)) doContextMenu( ecom );
 		}
 	}
@@ -619,6 +620,18 @@ public class ToolContextual extends Tool
 		if (ecom != null)
 			selection.set( ecom );
 	}
+    
+    
+    
+    private void doMouseClick( EditorComponent ecom ) {
+    	CallbackParam<String> onMod = new CallbackParam<String>() {
+			public void execute( String str ) {
+				markHistoryChange( str );
+			}
+		};
+    	
+    	ecom.onMouseClick( onMod );
+    }
     
     
     
