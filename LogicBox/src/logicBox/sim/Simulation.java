@@ -127,6 +127,12 @@ public class Simulation implements Serializable
 	
 	
 	
+	public boolean isEmpty() {
+		return comps.isEmpty();
+	}
+	
+	
+	
 	/**
 	 * Reset the simulation to its initial state, as if simulate() were never called.
 	 */
@@ -145,6 +151,9 @@ public class Simulation implements Serializable
 	 * Run the simulation for one time step.
 	 */
 	public synchronized void simulate() {
+		if (isEmpty())
+			return;
+		
 		validateCache();
 		
 		for (Updateable up: cacheUpdateables)
