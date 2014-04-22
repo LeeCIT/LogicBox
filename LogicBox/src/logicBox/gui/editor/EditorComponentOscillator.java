@@ -5,6 +5,7 @@ package logicBox.gui.editor;
 
 import logicBox.gui.GUI;
 import logicBox.sim.component.SourceOscillator;
+import logicBox.util.CallbackParam;
 import logicBox.util.Vec2;
 
 
@@ -37,7 +38,7 @@ public class EditorComponentOscillator extends EditorComponentActive
 	
 	
 	
-	public void onMouseClick() { // TODO add modify callback
-		new OscillatorDialogue( GUI.getMainFrame(), this, getWorld() );
+	public void onMouseClick( CallbackParam<String> onMod ) {
+		new OscillatorDialogue( GUI.getMainFrame(), this, getWorld(), onMod );
 	}
 }
