@@ -3,6 +3,7 @@
 
 package logicBox.gui.editor;
 import java.io.Serializable;
+import logicBox.sim.component.BlackBoxPin;
 import logicBox.sim.component.Component;
 import logicBox.sim.component.ComponentActive;
 import logicBox.sim.component.DisplayLed;
@@ -26,16 +27,17 @@ public abstract class EditorComponent implements Serializable
 	
 	
 	
-	public EditorComponent( Component com ) {
+	protected EditorComponent( Component com ) {
 		this.com = com;
 	}
 	
 	
 	
 	public static EditorComponent create( ComponentActive scom, GraphicComActive gca, EditorCreationParam param ) {
-	         if (scom instanceof DisplayLed)       return new EditorComponentLed       ( (DisplayLed)       scom, gca, param.pos, param.angle );
-		else if (scom instanceof SourceOscillator) return new EditorComponentOscillator( (SourceOscillator) scom, gca, param.pos, param.angle );
-		else                                       return new EditorComponentActive    (                    scom, gca, param.pos, param.angle );
+	         if (scom instanceof DisplayLed)       return new EditorComponentLed        ( (DisplayLed)       scom, gca, param.pos, param.angle );
+		else if (scom instanceof SourceOscillator) return new EditorComponentOscillator ( (SourceOscillator) scom, gca, param.pos, param.angle );
+		else if (scom instanceof BlackBoxPin)      return new EditorComponentBlackboxPin( (BlackBoxPin)      scom, gca, param.pos, param.angle );
+		else                                       return new EditorComponentActive     (                    scom, gca, param.pos, param.angle );
 	}
 	
 	
@@ -43,11 +45,15 @@ public abstract class EditorComponent implements Serializable
 	/**
 	 * Perform some action in response to being clicked on with the left mouse button.
 	 * onMod is called if the action would cause a sim change (undo/redo)
+	 * Returns whether the sim changed as a result.
 	 */
-	public void onMouseClick( CallbackParam<String> onMod ) {
+	public boolean onMouseClick( CallbackParam<String> onMod ) {
 		synchronized (world) {
 			if (getComponent().interactClick()) {
 				world.simUpdate();
+				return true;
+			} else {
+				return false;
 			}
 		}
 	}

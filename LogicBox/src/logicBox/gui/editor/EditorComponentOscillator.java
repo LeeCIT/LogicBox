@@ -38,7 +38,8 @@ public class EditorComponentOscillator extends EditorComponentActive
 	
 	
 	
-	public void onMouseClick( CallbackParam<String> onMod ) {
+	public boolean onMouseClick( CallbackParam<String> onMod ) {
 		new OscillatorDialogue( GUI.getMainFrame(), this, getWorld(), onMod );
+		return false;
 	}
 }
