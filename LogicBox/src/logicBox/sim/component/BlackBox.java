@@ -38,6 +38,12 @@ public class BlackBox extends ComponentActive
 	
 	
 	
+	public Map<Pin,BlackBoxPin> getPinMap() {
+		return pinMap;
+	}
+	
+	
+	
 	public void update() {
 		sim.simulate();
 		

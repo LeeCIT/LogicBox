@@ -127,6 +127,9 @@ public class Simulation implements Serializable
 	
 	
 	
+	/**
+	 * True if the sim contains no components.
+	 */
 	public boolean isEmpty() {
 		return comps.isEmpty();
 	}
