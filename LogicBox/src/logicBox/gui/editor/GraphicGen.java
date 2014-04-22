@@ -462,7 +462,7 @@ public abstract class GraphicGen
 	
 	
 	public static GraphicComActive generateSourceToggle() {
-		return generatePlaceholder();
+		return generateSourceFixed( false );
 	}
 	
 	
@@ -560,6 +560,62 @@ public abstract class GraphicGen
 			null,
 			genPinMappings( pinLines, pinOutLines.size() )
 		);
+	}
+	
+	
+	
+	public static GraphicComActive generateBlackboxPin( boolean isOutput ) {
+		Bbox2 r = getBaseRegion();
+		
+		VecPath polyBody = generateBlackboxSocket();
+		
+		Vec2 pinPos = r.getCentre();
+		if (isOutput) {
+			polyBody.moveTo( r.getNorm( 0.5, 1   ) );
+			polyBody.lineTo( r.getNorm( 0.5, 0   ) );
+			polyBody.lineTo( r.getNorm( 0,   0.5 ) );
+			polyBody.closePath();
+		} else {
+			polyBody.moveTo( pinPos );
+			polyBody.lineTo( r.getNorm( 0, 0 ) );
+			polyBody.lineTo( r.getNorm( 0, 1 ) );
+			polyBody.closePath();
+		}
+		
+		Line2 pinLine = new Line2( pinPos, pinPos.add(pinLength,0) );
+		
+		List<Line2> pinLines = new ArrayList<>();
+		pinLines.add( pinLine );
+		
+		return new GraphicComActive(
+			polyBody,
+			genPolyPins( pinLines ),
+			null,
+			genPinMappings( pinLines, isOutput ? 1 : 0 )
+		);
+	}
+	
+	
+	
+	private static VecPath generateBlackboxSocket() {
+		Bbox2 r = getBaseRegion();
+		
+		VecPath poly = new VecPath();
+		poly.moveTo( r.getNorm( 0.9, 1    ) );
+		poly.lineTo( r.getNorm( 0.9, 0    ) );
+		poly.lineTo( r.getNorm( 0.8, 0    ) );
+		poly.lineTo( r.getNorm( 0.5, 0.33 ) );
+		poly.lineTo( r.getNorm( 0  , 0.33 ) );
+		poly.lineTo( r.getNorm( 0  , 0.66 ) );
+		poly.lineTo( r.getNorm( 0.5, 0.66 ) );
+		poly.lineTo( r.getNorm( 0.8, 1    ) );
+		poly.lineTo( r.getNorm( 0.9, 1    ) );
+		poly.lineTo( r.getNorm( 0.9, 1    ) );
+		poly.closePath();
+		
+		poly.transform( Geo.createTransform( new Vec2(-baseSize,0), 0 ) );
+		
+		return poly;
 	}
 	
 	
