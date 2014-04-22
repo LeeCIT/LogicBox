@@ -3,7 +3,9 @@
 
 package logicBox.sim.component;
 
+import java.util.IdentityHashMap;
 import java.util.Map;
+import logicBox.sim.SimUtil;
 import logicBox.sim.Simulation;
 
 
@@ -20,14 +22,31 @@ public class BlackBox extends ComponentActive
 	private String               name;
 	private Simulation           sim;
 	private Map<Pin,BlackBoxPin> pinMap;
+	private Map<Pin,BlackBoxPin> pinMapIn;
+	private Map<Pin,BlackBoxPin> pinMapOut;
 	
 	
 	
-	public BlackBox( String name, Simulation sim, Map<Pin,BlackBoxPin> pinMap ) {
+	public BlackBox( String name, Simulation sim, int inputPinCount, int outputPinCount ) {
 		super();
-		this.name   = name;
-		this.sim    = sim;
-		this.pinMap = pinMap;
+		this.name = name;
+		this.sim  = sim;
+		
+		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  inputPinCount  );
+		SimUtil.addPins( pinOutputs, this, PinIoMode.output, outputPinCount );
+	}
+	
+	
+	
+	public void setPinMap( Map<Pin,BlackBoxPin> pinMap ) {
+		this.pinMap    = pinMap;
+		this.pinMapIn  = new IdentityHashMap<>();
+		this.pinMapOut = new IdentityHashMap<>();
+		
+		for (Pin pin: pinMap.keySet()) {
+			     if (pin.isInput ()) pinMapIn .put( pin, pinMap.get(pin) );
+			else if (pin.isOutput()) pinMapOut.put( pin, pinMap.get(pin) );
+		}
 	}
 	
 	
@@ -45,12 +64,21 @@ public class BlackBox extends ComponentActive
 	
 	
 	public void update() {
+		applyPinStates( pinMapIn, true );
 		sim.simulate();
-		
-		for (Map.Entry<Pin,BlackBoxPin> entry: pinMap.entrySet()) {
+		applyPinStates( pinMapOut, false );
+	}
+	
+	
+	
+	private void applyPinStates( Map<Pin,BlackBoxPin> map, boolean in ) {
+		for (Map.Entry<Pin,BlackBoxPin> entry: map.entrySet()) {
 			Pin         pin   = entry.getKey();
-			BlackBoxPin bbpin = entry.getValue();
-			pin.setState( bbpin.getState() );
+			BlackBoxPin bbPin = entry.getValue();
+			
+			if (in)
+				 bbPin.setState( pin  .getState() ); 
+			else pin  .setState( bbPin.getState() ); 
 		}
 	}
 	

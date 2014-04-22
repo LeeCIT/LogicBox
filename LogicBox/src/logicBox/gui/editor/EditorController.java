@@ -20,7 +20,6 @@ import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
 import logicBox.gui.help.HelpFrame;
-import logicBox.sim.Simulation;
 import logicBox.sim.component.SourceOscillator;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;

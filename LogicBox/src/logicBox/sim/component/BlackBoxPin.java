@@ -82,7 +82,7 @@ public class BlackBoxPin extends ComponentActive
 	
 	
 	
-	public void update() {	
+	public void update() {
 		if (isOutput())
 			 setState( pin.getState() );
 		else pin.setState( getState() );
