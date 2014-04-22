@@ -3,6 +3,7 @@
 
 package logicBox.sim.component;
 
+import java.util.List;
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.gui.editor.GraphicGen;
 import logicBox.sim.SimUtil;
@@ -20,20 +21,22 @@ public class BlackBoxPin extends ComponentActive
 {
 	private static final long serialVersionUID = 1L;
 	
+	private boolean isInput;
 	private boolean state;
 	private Pin     pin;
 	
 	
 	
-	public BlackBoxPin( PinIoMode mode ) {
+	public BlackBoxPin( boolean isInput ) {
 		super();
 		
-		SimUtil.addPins( (mode==PinIoMode.input) ? pinInputs : pinOutputs, this, mode, 1 );
-		this.pin = getPins().get( 0 );
+		this.isInput = isInput; // An input bbpin has an opposite actual pin mode
 		
-		if ( ! isInput()
-	    &&   ! isOutput())
-			throw new RuntimeException( "Bad mode: " + mode );
+		List<Pin> targetList = isInput ? pinOutputs       : pinInputs;
+		PinIoMode mode       = isInput ? PinIoMode.output : PinIoMode.input;
+		
+		SimUtil.addPins( targetList, this, mode, 1 );
+		this.pin = getPins().get( 0 );
 	}
 	
 	
@@ -49,20 +52,14 @@ public class BlackBoxPin extends ComponentActive
 	
 	
 	
-	public PinIoMode getIoMode() {
-		return pin.getIoMode();
-	}
-	
-	
-	
 	public boolean isInput() {
-		return getIoMode() == PinIoMode.input;
+		return isInput;
 	}
 	
 	
 	
 	public boolean isOutput() {
-		return getIoMode() == PinIoMode.output;
+		return ! isInput();
 	}
 	
 	
@@ -81,7 +78,6 @@ public class BlackBoxPin extends ComponentActive
 	
 	public void reset() {
 		super.reset();
-		setState( false );
 	}
 	
 	
@@ -107,6 +103,11 @@ public class BlackBoxPin extends ComponentActive
 	
 	
 	public String getName() {
-		return "Black-box pin (" + (isOutput() ? "output" : "input") + ")";
+		String str = "Black-box pin (" + (isOutput() ? "output" : "input") + ")";
+		
+		if (isInput())
+			str += " (click to toggle on/off)";
+			
+		return str;
 	}
 }

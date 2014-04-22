@@ -191,8 +191,8 @@ public class Toolbox extends JDialog
 	
 	private void addBlackBoxButtons() {
 		ToolboxButton[] butts = {
-			genButton( new BlackBoxPin( PinIoMode.input  ) ),
-			genButton( new BlackBoxPin( PinIoMode.output ) ),
+			genButton( new BlackBoxPin( true  ) ),
+			genButton( new BlackBoxPin( false ) ),
 		};
 		
 		addCategory( "Black-box", butts );
