@@ -21,7 +21,7 @@ import logicBox.util.Geo;
 public class SourceOscillator extends Source
 {
 	private static final long serialVersionUID = 1L;
-	public  static final int  baseFrequencyHz  = 60;
+	public  static final int  baseFrequencyHz  = 120;
 	
 	private int cycleCounter;
 	private int frequencyDivisor;
