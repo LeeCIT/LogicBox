@@ -6,10 +6,21 @@ package logicBox.gui.editor.tools;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import logicBox.gui.editor.EditorComponentTrace;
 import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.EditorWorld.FindClosestTraceResult;
+import logicBox.gui.editor.EditorComponentJunction;
 import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.GraphicJunction;
+import logicBox.gui.editor.GraphicTrace;
 import logicBox.gui.editor.RepaintListener;
+import logicBox.sim.component.Junction;
+import logicBox.sim.component.Pin;
+import logicBox.sim.component.Trace;
+import logicBox.util.Geo;
+import logicBox.util.Line2;
 import logicBox.util.Vec2;
 
 
@@ -66,6 +77,7 @@ public class ToolJunctionPlacer extends Tool
 	public void reset() {
 		placementInitiated = false;
 		placementArmed     = false;
+		placementPos       = null;
 	}
 	
 	
@@ -129,7 +141,7 @@ public class ToolJunctionPlacer extends Tool
 	
 	
 	private void drawPlacementIndicator( Graphics2D g ) {
-		EditorWorld.FindClosestTraceResult result = getWorld().findClosestTrace( getMousePosWorld(), 16 );
+		EditorWorld.FindClosestTraceResult result = findClosestTrace();
 		
 		if (result.foundTrace) {			
 			Graphic graphic = result.ecom.getGraphic();
@@ -196,16 +208,69 @@ public class ToolJunctionPlacer extends Tool
 	
 	private Vec2 getSnappedMousePos() {
 		return getMousePosWorld();
-		//return Geo.snapNear( getMousePosWorld(), 16 );
+	}
+	
+	
+	
+	private FindClosestTraceResult findClosestTrace() {
+		return getWorld().findClosestTrace( getMousePosWorld(), 16 );
 	}
 	
 	
 	
 	private void createJunction() {
-		System.out.println( "junc create" ); // TODO
-		markHistoryChange( "Create junction" );
+		EditorWorld.FindClosestTraceResult result = findClosestTrace();
+		
+		if (result.foundTrace) {
+			Vec2 pos = result.closestPos;
+			
+			EditorComponentTrace oldEcom = result.ecom;
+			Trace                trace   = oldEcom.getComponent();
+			GraphicTrace         graphic = oldEcom.getGraphic(); 
+			
+			double  thresh  = 16;
+			boolean atStart = Geo.distance(pos, oldEcom.getPosStart()) <= thresh;
+			boolean atEnd   = Geo.distance(pos, oldEcom.getPosEnd()  ) <= thresh;
+			
+			Pin pinSrc = trace.getPinSource();
+			Pin pinDst = trace.getPinDest();
+			
+			Junction junc      = new Junction();
+			Trace    srcToJunc = new Trace( pinSrc,           junc.createPin() );
+			Trace    juncToDst = new Trace( junc.createPin(), pinDst           );
+			
+			
+			// Graphic
+			int         index    = result.lineIndex;
+			List<Line2> lines    = graphic.getLines();
+			List<Vec2>  pointSrc = new ArrayList<>();
+			List<Vec2>  pointDst = new ArrayList<>();
+			
+			pointDst.add( pos.copy() );
+			for (int i=0;     i<=index;       i++) pointSrc.add( lines.get(i).a );
+			for (int i=index; i<lines.size(); i++) pointDst.add( lines.get(i).b );
+			pointSrc.add( pos.copy() );
+			
+			
+			// Ecoms
+			EditorComponentTrace    edTraceSrc = new EditorComponentTrace( srcToJunc, pointSrc );
+			EditorComponentTrace    edTraceDst = new EditorComponentTrace( juncToDst, pointDst );
+			EditorComponentJunction edJunc     = new EditorComponentJunction( junc, pos.copy() );			
+			
+			EditorWorld world = getWorld();
+			world.remove( oldEcom );
+			world.add( edTraceSrc, edTraceDst, edJunc );
+			
+			markHistoryChange( "Create junction" );
+		}
 	}
 }
+
+
+
+
+
+
 
 
 
