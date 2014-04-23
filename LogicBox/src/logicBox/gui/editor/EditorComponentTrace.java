@@ -36,8 +36,8 @@ public class EditorComponentTrace extends EditorComponent
 		if ( ! graphic.isSelected())
 			graphic.setPowered( com.getState() && getWorldPowerState() );
 		
-		this.graphic.setConnectedSource( com.isSourceConnected() );
-		this.graphic.setConnectedDest  ( com.isDestConnected()   );
+		graphic.setConnectedSource( com.isSourceConnected() );
+		graphic.setConnectedDest  ( com.isDestConnected()   );
 	}
 	
 	
@@ -91,13 +91,13 @@ public class EditorComponentTrace extends EditorComponent
 	
 	
 	
-	private Vec2 getPosStart() {
+	public Vec2 getPosStart() {
 		return graphic.getPoints().get(0);
 	}
 	
 	
 	
-	private Vec2 getPosEnd() {
+	public Vec2 getPosEnd() {
 		List<Vec2> points = getGraphic().getPoints();
 		return points.get( points.size() - 1 );
 	}
