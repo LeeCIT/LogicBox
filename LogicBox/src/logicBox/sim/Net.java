@@ -75,6 +75,12 @@ public class Net implements Stateful, Updateable, Serializable, Iterable<Compone
 	
 	
 	
+	public int size() {
+		return all.size();
+	}
+	
+	
+	
 	public boolean contains( ComponentPassive com ) {
 		return all.contains( com );
 	}
