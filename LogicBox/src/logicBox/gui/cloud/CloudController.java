@@ -36,6 +36,7 @@ public class CloudController {
 		EditorMenuBar emb = GUI.getMainFrame().getEditorMenuBar();
 		
 		emb.itemCloudLogin.setVisible(!state);
+		emb.itemCloudRegister.setVisible(!state);
 		emb.itemCloudFiles.setVisible(state);
 		emb.itemCloudLogout.setVisible(state);
 	}
