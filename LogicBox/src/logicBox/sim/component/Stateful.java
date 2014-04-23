@@ -10,8 +10,7 @@ package logicBox.sim.component;
  * Traces, Pins, and Junctions.
  * @author Lee Coakley
  */
-public interface Stateful
-{
+public interface Stateful {
 	public boolean getState();
 	public void    orState ( boolean state );
 	public void    setState( boolean state );

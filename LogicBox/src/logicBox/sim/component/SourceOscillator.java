@@ -105,7 +105,7 @@ public class SourceOscillator extends Source
 	
 	
 	public String getName() {
-		return "Oscillator (" + getFrequency() + "hz)";
+		return "Oscillator (" + getFrequency() + "hz) (click to change frequency)";
 	}
 	
 	
