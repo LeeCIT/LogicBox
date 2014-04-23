@@ -19,7 +19,6 @@ import logicBox.gui.editor.RepaintListener;
 import logicBox.sim.component.Junction;
 import logicBox.sim.component.Pin;
 import logicBox.sim.component.Trace;
-import logicBox.util.Geo;
 import logicBox.util.Line2;
 import logicBox.util.Vec2;
 
@@ -149,13 +148,21 @@ public class ToolJunctionPlacer extends Tool
 			graphic.draw( g );
 			graphic.setHighlighted( false );
 			
-			Graphic junc = new GraphicJunction( result.closestPos );
-			
-			if (placementArmed)
-				junc.setHighlighted( true );
-			
-			junc.draw( g );
+			drawJunction( g, result.closestPos );
+		} else {
+			drawJunction( g, getMousePosWorld() );
 		}
+	}
+	
+	
+	
+	private void drawJunction( Graphics2D g, Vec2 pos ) {
+		Graphic junc = new GraphicJunction( pos );
+		
+		if (placementArmed)
+			junc.setHighlighted( true );
+		
+		junc.draw( g );
 	}
 	
 	
@@ -182,7 +189,13 @@ public class ToolJunctionPlacer extends Tool
 		placementPos   = getSnappedMousePos();
 		placementArmed = false;
 		
-		createJunction();
+		EditorWorld.FindClosestTraceResult result = findClosestTrace();
+		
+		if (result.foundTrace)
+			 createJunctionOnTrace( result );
+		else createJunction( placementPos );
+		
+		markHistoryChange( "Create junction" );
 		repaint();
 	}
 
@@ -218,12 +231,16 @@ public class ToolJunctionPlacer extends Tool
 	
 	
 	
-	private void createJunction() {
-		EditorWorld.FindClosestTraceResult result = findClosestTrace();
+	private void createJunction( Vec2 pos ) {
+		Junction                junc   = new Junction();
+		EditorComponentJunction edJunc = new EditorComponentJunction( junc, pos.copy() );
 		
-		if ( ! result.foundTrace)
-			return;
-		
+		getWorld().add( edJunc );
+	}
+	
+	
+	
+	private void createJunctionOnTrace( EditorWorld.FindClosestTraceResult result ) {
 		Vec2 pos = result.closestPos;
 		
 		EditorComponentTrace oldEcom = result.ecom;
@@ -258,8 +275,6 @@ public class ToolJunctionPlacer extends Tool
 		EditorWorld world = getWorld();
 		world.remove( oldEcom );
 		world.add( edTraceSrc, edTraceDst, edJunc );
-		
-		markHistoryChange( "Create junction" );	
 	}
 }
 
