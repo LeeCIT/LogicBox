@@ -49,7 +49,7 @@ public class GraphicJunction extends Graphic implements GraphicIntersector
 	
 	public boolean contains( Vec2 pos ) {
 		double dist = Geo.distance(this.pos, pos);
-		double ref  = radius + (0.5 * EditorStyle.compThickness); 
+		double ref  = radius + (0.25 * EditorStyle.compThickness); 
 		return dist <= ref;
 	}
 	
