@@ -201,8 +201,10 @@ public class EditorWorld implements Serializable
 	/**
 	 * Add a component to the world.
 	 */
-	public synchronized void add( EditorComponent ecom ) {
-		addInternal( ecom );
+	public synchronized void add( EditorComponent...ecoms ) {
+		for (EditorComponent ecom: ecoms)
+			addInternal( ecom );
+		
 		simUpdate();
 	}
 	
@@ -234,8 +236,10 @@ public class EditorWorld implements Serializable
 	/**
 	 * Remove a component from the world.
 	 */
-	public synchronized void remove( EditorComponent ecom ) {
-		removeInternal( ecom );
+	public synchronized void remove( EditorComponent...ecoms ) {
+		for (EditorComponent ecom: ecoms)
+			removeInternal( ecom );
+		
 		simUpdate();
 	}
 	
