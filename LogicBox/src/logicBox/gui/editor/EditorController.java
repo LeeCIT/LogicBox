@@ -653,7 +653,6 @@ public class EditorController implements HistoryListener<EditorWorld>
 				for (EditorComponent ecom: world.find( cam.getMousePosWorld() )) {
 					GraphicPinMapping gpm = ecom.findPinNear( cam.getMousePosWorld(), 5 );
 					System.out.println();
-					System.out.println( "Ed: " + System.identityHashCode( ecom ) );
 					System.out.println( "Ed: " + ecom.getComponent().getName() );
 					System.out.println( "Ed: " + gpm );
 					
@@ -661,7 +660,6 @@ public class EditorController implements HistoryListener<EditorWorld>
 					if (ecom instanceof EditorComponentActive) {
 						Pin pin = SimMapper.getMappedPin((EditorComponentActive)ecom,gpm);
 						System.out.println( "Ed: " + pin );
-						System.out.println( "Ed: " + System.identityHashCode( pin ) );
 					}
 				}
 			}
