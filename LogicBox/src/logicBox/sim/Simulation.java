@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
-import logicBox.gui.editor.EditorComponent;
 import logicBox.sim.component.*;
 import logicBox.util.Util;
 
@@ -14,7 +13,7 @@ import logicBox.util.Util;
 
 /**
  * Performs the logic simulation.
- * This version uses a levelisation algorithm and works with combinational circuits only.
+ * This version uses a levelisation algorithm which works with combinational circuits only.
  * @author Lee Coakley
  */
 public class Simulation implements Serializable
@@ -194,9 +193,6 @@ public class Simulation implements Serializable
 		
 		cacheUpdateables = sortByEvaluationOrder( comLevelMap, netLevelMap );
 		cacheInvalidated = false;
-		
-		for (Net net: findNets())
-			System.out.println( "\nNet: " + net );
 	}
 	
 	
@@ -591,10 +587,6 @@ public class Simulation implements Serializable
 	
 	public class NonLevelisableCircuitException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
-
-		public NonLevelisableCircuitException() {
-			super();
-		}
 
 		public NonLevelisableCircuitException( String message ) {
 			super( message );
