@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
+import logicBox.gui.editor.EditorComponent;
 import logicBox.sim.component.*;
 import logicBox.util.Util;
 
@@ -573,6 +574,15 @@ public class Simulation implements Serializable
 		if (pinIn  != null) pinIn .connectTrace( trace );
 		
 		return trace;
+	}
+	
+	
+	
+	public static void isolate( Set<Component> coms ) {		
+		for (Component com: coms)
+			for (Component connected: com.getConnectedComponents())
+				if ( ! coms.contains( connected ))
+					connected.disconnect();
 	}
 	
 	
