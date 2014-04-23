@@ -11,26 +11,27 @@ import logicBox.web.*;
 import net.miginfocom.swing.MigLayout;
 
 /**
- * Makes the log in panel
- * @author John, Lee, Robert
+ * Makes the registration panel
+ * @author Robert
  *
  */
-public class LoginPanel extends JDialog implements RequestInterface
+public class RegisterPanel extends JDialog implements RequestInterface
 {
-	private static final long serialVersionUID = 8403323633746161165L;
+	private static final long serialVersionUID = -2847175536208134240L;
 	
 	private JTextField 		txtEmail 			= new JTextField( 16 );
 	private JPasswordField 	txtPassword 		= new JPasswordField( 16 );
-	private JButton 		btnLogin 			= new JButton("Login");
+	private JPasswordField 	txtPasswordConfirm 	= new JPasswordField( 16 );
+	private JButton 		btnRegister 		= new JButton("Register");
 	
-	private Request r = new Request();
+	private Request r = new Request("http://127.0.0.1/");
 	private JFrame parent;
 	
-	private static LoginPanel instance = null;
+	private static RegisterPanel instance = null;
 	
-	public LoginPanel(JFrame frame)
+	public RegisterPanel(JFrame frame)
 	{
-		super(frame, "Login to BoxCloud");
+		super(frame, "Register on BoxCloud");
 		parent = frame;
 		
 		setupComponents();		
@@ -42,29 +43,30 @@ public class LoginPanel extends JDialog implements RequestInterface
 	
 	
 	
-	
 	private void setupComponents() {
 		MigLayout 	layout 	= new MigLayout( "", "128px[][]128px", "128px[][][]128px" );
 		JPanel 		panel 	= new JPanel(layout);
 		
-		panel.add(new JLabel("Email:"), 	"alignx right");
-		panel.add(txtEmail, "wrap");
+		panel.add(new JLabel("Email:"), 			"alignx right");
+		panel.add(txtEmail,    "wrap");
 		
-		panel.add(new JLabel("Password:"), 	"alignx right");
+		panel.add(new JLabel("Password:"), 			"alignx right");
 		panel.add(txtPassword, "wrap");
 		
-		panel.add(btnLogin, "skip 1, alignx right");		
+		panel.add(new JLabel("Confirm Password:"), 	"alignx right");
+		panel.add(txtPasswordConfirm, "wrap");
+		
+		panel.add(btnRegister, "skip 1, alignx right");		
 		setSize( 600, 400 );		
 		add(panel);
 	}
 
 	
 	
-	
-	public static LoginPanel getInstance()
+	public static RegisterPanel getInstance()
 	{
 		if(instance == null)
-			instance = new LoginPanel(GUI.getMainFrame());
+			instance = new RegisterPanel(GUI.getMainFrame());
 		
 		instance.setVisible(true);
 		
@@ -78,23 +80,24 @@ public class LoginPanel extends JDialog implements RequestInterface
 			@Override
 			public void actionPerformed(ActionEvent ae) 
 			{	
-				btnLogin.setEnabled(false);
+				btnRegister.setEnabled(false);
 
-				r.login(
+				r.register(
 						txtEmail.getText(), 
 						String.valueOf(txtPassword.getPassword())
 				);
 			}
 		};
 		
-		btnLogin.addActionListener(al);
+		btnRegister.addActionListener(al);
 		txtEmail.addActionListener(al);
 		txtPassword.addActionListener(al);
+		txtPasswordConfirm.addActionListener(al);
 	}
 	
 	public static void main(String args[])
 	{
-		new LoginPanel(new JFrame());
+		new RegisterPanel(new JFrame());
 	}
 
 	@Override
@@ -105,7 +108,7 @@ public class LoginPanel extends JDialog implements RequestInterface
 		else
 		{
 			if(req.hasErrors())
-				GUI.showErrorList(parent, req.getErrors(), "Login Failure");
+				GUI.showErrorList(parent, req.getErrors(), "Registration Failure");
 			else
 			{
 				CloudController.setAuthState(true);
@@ -114,6 +117,6 @@ public class LoginPanel extends JDialog implements RequestInterface
 			}
 		}
 		
-		btnLogin.setEnabled(true);
+		btnRegister.setEnabled(true);
 	}
 }

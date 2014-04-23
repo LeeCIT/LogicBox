@@ -73,7 +73,9 @@ public class EditorCreator
 		linkAction( ctrl.getHelpAction(),          toolbar.buttHelp,          menubar.itemHelpHelp );
 		linkAction( ctrl.getToolboxToggleAction(), toolbar.buttToggleToolbox, null );
 		
-		linkAction( ctrl.getLoginAction(),	null,	menubar.itemCloudLogin);
+		linkAction( ctrl.getLoginAction	(),		null,	menubar.itemCloudLogin		);
+		linkAction( ctrl.getLogoutAction(), 	null,	menubar.itemCloudLogout		);
+		linkAction( ctrl.getRegisterAction(), 	null, 	menubar.itemCloudRegister	);
 		
 		return frame;
 	}

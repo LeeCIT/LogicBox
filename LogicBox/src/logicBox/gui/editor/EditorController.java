@@ -20,6 +20,7 @@ import logicBox.gui.DialogueAnswer;
 import logicBox.gui.GUI;
 import logicBox.gui.cloud.CloudController;
 import logicBox.gui.cloud.LoginPanel;
+import logicBox.gui.cloud.RegisterPanel;
 import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
@@ -593,6 +594,16 @@ public class EditorController implements HistoryListener<EditorWorld>
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				CloudController.handleLogoutRequest();
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getRegisterAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				RegisterPanel.getInstance();
 			}
 		};
 	}

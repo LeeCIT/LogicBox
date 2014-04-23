@@ -47,6 +47,7 @@ public class EditorMenuBar extends JMenuBar
 	public JMenuItem itemCloudLogin;
 	public JMenuItem itemCloudLogout;
 	public JMenuItem itemCloudFiles;
+	public JMenuItem itemCloudRegister;
 	
 	public JMenu     menuHelp;
 	public JMenuItem itemHelpHelp;
@@ -112,6 +113,7 @@ public class EditorMenuBar extends JMenuBar
 	private void setupCloudMenu() {
 		JMenu m = menuCloud = createMenu( "Cloud", 'C' );
 		itemCloudLogin  = add( m, "Login"       );
+		itemCloudRegister  = add( m, "Register" );
 		itemCloudFiles 	= add( m, "My Circuits" );
 		itemCloudLogout = add( m, "Logout"      );
 		
