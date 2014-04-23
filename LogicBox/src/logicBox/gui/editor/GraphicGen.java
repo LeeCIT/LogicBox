@@ -597,7 +597,10 @@ public abstract class GraphicGen
 		Vec2 trans = graphic.getBbox().getCentre().negate();
 		graphic.transform( Geo.createTransform(trans,0), true );
 		
-		return graphic; 
+		if (isOutput)
+			graphic.transform( Geo.createTransform(new Vec2(0), new Vec2(-1,1), 0), true );
+		
+		return graphic;
 	}
 	
 	
