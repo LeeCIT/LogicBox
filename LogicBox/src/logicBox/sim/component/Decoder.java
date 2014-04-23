@@ -32,12 +32,6 @@ public class Decoder extends ComponentActive
 	
 	
 	
-	public String getName() {
-		return "" + getPinInputCount() + "-to-" + getPinOutputCount() + " Decoder";
-	}
-	
-	
-	
 	public void update() {
 		for (Pin pin: pinOutputs)
 			pin.setState( false );
@@ -56,6 +50,12 @@ public class Decoder extends ComponentActive
 	
 	public GraphicComActive getGraphic() {
 		return GraphicGen.generateDecoder( getPinInputCount(), getPinOutputCount() );
+	}
+	
+	
+	
+	public String getName() {
+		return "" + getPinInputCount() + "-to-" + getPinOutputCount() + " Decoder";
 	}
 	
 	

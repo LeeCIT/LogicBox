@@ -71,19 +71,6 @@ public class BlackBox extends ComponentActive
 	
 	
 	
-	private void applyPinStates( Map<Pin,BlackBoxPin> map, boolean in ) {
-		for (Map.Entry<Pin,BlackBoxPin> entry: map.entrySet()) {
-			Pin         pin   = entry.getKey();
-			BlackBoxPin bbPin = entry.getValue();
-			
-			if (in)
-				 bbPin.setState( pin  .getState() ); 
-			else pin  .setState( bbPin.getState() ); 
-		}
-	}
-	
-	
-	
 	public void reset() {
 		super.reset();
 		sim.reset();
@@ -99,5 +86,18 @@ public class BlackBox extends ComponentActive
 	
 	public String getName() {
 		return "Black-box: " + name;
+	}
+	
+	
+	
+	private void applyPinStates( Map<Pin,BlackBoxPin> map, boolean in ) {
+		for (Map.Entry<Pin,BlackBoxPin> entry: map.entrySet()) {
+			Pin         pin   = entry.getKey();
+			BlackBoxPin bbPin = entry.getValue();
+			
+			if (in)
+				 bbPin.setState( pin  .getState() ); 
+			else pin  .setState( bbPin.getState() ); 
+		}
 	}
 }

@@ -79,7 +79,6 @@ public class Junction extends ComponentPassive
 	
 	public void reset() {
 		super.reset();
-		
 		setState( false );
 	}
 	

@@ -120,7 +120,7 @@ public class Pin extends ComponentPassive
 		if (comp != null)
 			 onWhat = " [attached: " + comp.getName() + "]";
 		
-		return "Pin [mode: " + mode + "] [level: " + (state?1:0) + "]" + onWhat;
+		return "Pin [mode: " + mode + "] [state: " + (state?1:0) + "]" + onWhat;
 	}
 }
 
