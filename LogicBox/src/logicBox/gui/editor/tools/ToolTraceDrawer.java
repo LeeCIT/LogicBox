@@ -14,6 +14,7 @@ import logicBox.gui.Gfx;
 import logicBox.gui.VecPath;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorComponentActive;
+import logicBox.gui.editor.EditorComponentJunction;
 import logicBox.gui.editor.EditorComponentTrace;
 import logicBox.gui.editor.EditorStyle;
 import logicBox.gui.editor.EditorWorld;
@@ -139,12 +140,12 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private void drawPinHighlights( Graphics2D g ) {
-		SnapInfo snapInfo  = getSnapInfo( getMousePosWorld() );
+		PinSnapInfo pinSnapInfo  = getPinSnapInfo( getMousePosWorld() );
 		double   thickness = EditorStyle.compThickness + 2;
 		
 		Gfx.pushColorAndSet( g, EditorStyle.colHighlightStroke );
-			if (snapInfo.snapped)
-				Gfx.drawThickRoundedLine( g, snapInfo.pinInfo.gpm.line, thickness );
+			if (pinSnapInfo.snapped)
+				Gfx.drawThickRoundedLine( g, pinSnapInfo.pinInfo.gpm.line, thickness );
 			
 			if (traceSrc != null)
 				Gfx.drawThickRoundedLine( g, traceSrc.gpm.line, thickness );
@@ -311,24 +312,24 @@ public class ToolTraceDrawer extends Tool
 	 * TODO it's also possible to join a trace onto another trace.
 	 */
 	private boolean doTraceToPinSnapping( Vec2 nextPos ) {
-		SnapInfo snapInfo  = getSnapInfo( nextPos );
-		boolean  completed = false;
+		PinSnapInfo pinSnapInfo = getPinSnapInfo( nextPos );
+		boolean     completed   = false;
 		
-		if (snapInfo.snapped) {
-			boolean dupe = isGpmUsed( snapInfo.pinInfo.gpm );
+		if (pinSnapInfo.snapped) {
+			boolean dupe = isGpmUsed( pinSnapInfo.pinInfo.gpm );
 			
 			if ( ! dupe) {
-				nextPos.setLocation( snapInfo.pos );
+				nextPos.setLocation( pinSnapInfo.pos );
 				
 				boolean hasPoints = traceHasPoints(); 
 				boolean isSource  = (traceChoosingOrigin && traceSrc == null);
 				boolean isDest    = (hasPoints);
 				
 				if (isSource) {
-					traceSrc = snapInfo.pinInfo;
+					traceSrc = pinSnapInfo.pinInfo;
 				} 
 				else if (isDest) {
-					traceDest = snapInfo.pinInfo;
+					traceDest = pinSnapInfo.pinInfo;
 					completed = true;
 				}
 			}
@@ -372,11 +373,20 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private void traceCreate() {
-		SnapInfo siA = getSnapInfo( tracePoints.firstElement() );
-		SnapInfo siB = getSnapInfo( tracePoints.lastElement()  );
+		Vec2 start = tracePoints.firstElement();
+		Vec2 end   = tracePoints.lastElement();
 		
-		Pin   pinA  = getSnappedPin( siA );
-		Pin   pinB  = getSnappedPin( siB );
+		PinSnapInfo siA = getPinSnapInfo( start );
+		PinSnapInfo siB = getPinSnapInfo( end   );
+		
+		Pin pinA  = getSnappedPin( siA );
+		Pin pinB  = getSnappedPin( siB );
+		
+		
+		// Attach to junctions: TODO make it non-shit, add visual indicators, etc
+		if (pinA == null) pinA = createJunctionPin( start );
+		if (pinB == null) pinB = createJunctionPin( end   );
+			
 		Trace trace = Simulation.connectPins( pinA, pinB );
 		
 		EditorComponent ecom = new EditorComponentTrace( trace, tracePoints );
@@ -384,6 +394,19 @@ public class ToolTraceDrawer extends Tool
 		
 		markHistoryChange( "Trace create" );
 		repaint();
+	}
+	
+	
+	
+	private Pin createJunctionPin( Vec2 pos ) {
+		for (EditorComponent ecom: getWorld().find( pos )) {
+			if (ecom instanceof EditorComponentJunction) {
+				EditorComponentJunction junc = (EditorComponentJunction) ecom;
+				return junc.getComponent().createPin();
+			}
+		}
+		
+		return null;
 	}
 	
 	
@@ -415,17 +438,17 @@ public class ToolTraceDrawer extends Tool
 	
 	private Vec2 getNextPos() {
 		Vec2     pos      = getMousePosWorld();
-		SnapInfo snapInfo = getSnapInfo( pos );
-		boolean  useSnap  = snapInfo.snapped && ! isGpmUsed(snapInfo.pinInfo.gpm);
+		PinSnapInfo pinSnapInfo = getPinSnapInfo( pos );
+		boolean  useSnap  = pinSnapInfo.snapped && ! isGpmUsed(pinSnapInfo.pinInfo.gpm);
 		
 		if (useSnap)
-			 return snapInfo.pos;
+			 return pinSnapInfo.pos;
 		else return pos;
 	}
 	
 	
 	
-	private boolean isSnappedPinConnected( SnapInfo si ) {
+	private boolean isSnappedPinConnected( PinSnapInfo si ) {
 		Pin pin = getSnappedPin( si );
 		
 		if (pin == null)
@@ -439,7 +462,7 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
-	private Pin getSnappedPin( SnapInfo si ) {
+	private Pin getSnappedPin( PinSnapInfo si ) {
 		if ( ! si.snapped)
 			return null;
 		
@@ -448,7 +471,7 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
-	private class SnapInfo {
+	private class PinSnapInfo {
 		public boolean snapped; // True if found a pin to snap onto
 		public Vec2    pos;		// Endpoint of the pin, where the trace should attach
 		public EditorWorld.FindClosestPinResult pinInfo;
@@ -456,26 +479,26 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
-	private SnapInfo getSnapInfo( Vec2 pos ) {
+	private PinSnapInfo getPinSnapInfo( Vec2 pos ) {
 		double   snapThresh = 8 / getCamera().getZoom();
-		SnapInfo snapInfo   = new SnapInfo();
+		PinSnapInfo pinSnapInfo   = new PinSnapInfo();
 		EditorWorld.FindClosestPinResult fcpRes = getWorld().findClosestPin( pos, snapThresh );
 		
 		if (fcpRes.foundPin) {
-			snapInfo.snapped = true;
-			snapInfo.pos     = fcpRes.gpm.getPinPosEnd();
-			snapInfo.pinInfo = fcpRes;
+			pinSnapInfo.snapped = true;
+			pinSnapInfo.pos     = fcpRes.gpm.getPinPosEnd();
+			pinSnapInfo.pinInfo = fcpRes;
 			
-			if (isSnappedPinConnected( snapInfo ))
-				return new SnapInfo();
+			if (isSnappedPinConnected( pinSnapInfo ))
+				return new PinSnapInfo();
 		}
 		
-		return snapInfo;
+		return pinSnapInfo;
 	}
 	
 	
 	
-	private Vec2 snap( Vec2 from, Vec2 to ) {
+	private Vec2 angularSnap( Vec2 from, Vec2 to ) {
 		double angle = Geo.angleBetween( from, to );
 		double dist  = Geo.distance    ( from, to );
 		
@@ -489,7 +512,7 @@ public class ToolTraceDrawer extends Tool
 	private List<Vec2> breakLineToFitSnap( Vec2 from, Vec2 to ) {
 		List<Vec2> list = new ArrayList<>();
 		
-		Vec2  snapped     = snap( from, to );
+		Vec2  snapped     = angularSnap( from, to );
 		Line2 lineSnapped = new Line2( from, snapped );
 		Line2.IntersectResult ir = findBestBreakIntersect( lineSnapped, to );
 		
