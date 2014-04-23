@@ -39,6 +39,23 @@ public class Simulation implements Serializable
 	
 	
 	
+	public void checkForDupes() {
+		Set<Pin>       pins = Util.createIdentityHashSet();
+		Set<Component> coms = Util.createIdentityHashSet();
+		
+		for (ComponentActive coma: actives) {
+			if (coms.contains( coma )) System.out.println( "Dupe com: " + coma );
+			coms.add( coma );
+			
+			for (Pin pin: coma.getPins()) {
+				if (pins.contains( pin )) System.out.println( "Dupe pin: " + pin );					
+				pins.add( pin );
+			}
+		}
+	}
+	
+	
+	
 	/**
 	 * Get all oscillators in the simulation.
 	 * This includes the oscs inside black-boxes, as they all need to be synced.
@@ -482,7 +499,7 @@ public class Simulation implements Serializable
 	 */
 	private void readObject( ObjectInputStream in ) throws IOException, ClassNotFoundException {
 		in.defaultReadObject();
-		regenerateCaches();
+		cacheInvalidated = true;
 	}
 	
 	
