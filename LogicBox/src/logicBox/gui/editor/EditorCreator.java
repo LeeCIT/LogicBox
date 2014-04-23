@@ -73,6 +73,8 @@ public class EditorCreator
 		linkAction( ctrl.getHelpAction(),          toolbar.buttHelp,          menubar.itemHelpHelp );
 		linkAction( ctrl.getToolboxToggleAction(), toolbar.buttToggleToolbox, null );
 		
+		linkAction( ctrl.getLoginAction(),	null,	menubar.itemCloudLogin);
+		
 		return frame;
 	}
 	

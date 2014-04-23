@@ -10,12 +10,16 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
+
 import logicBox.fileManager.FileManager;
 import logicBox.gui.DialogueAnswer;
 import logicBox.gui.GUI;
+import logicBox.gui.cloud.CloudController;
+import logicBox.gui.cloud.LoginPanel;
 import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
@@ -569,6 +573,26 @@ public class EditorController implements HistoryListener<EditorWorld>
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				historyAction( false );
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getLoginAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				LoginPanel.getInstance();
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getLogoutAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				CloudController.handleLogoutRequest();
 			}
 		};
 	}

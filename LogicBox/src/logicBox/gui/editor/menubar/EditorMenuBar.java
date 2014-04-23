@@ -114,6 +114,10 @@ public class EditorMenuBar extends JMenuBar
 		itemCloudLogin  = add( m, "Login"       );
 		itemCloudFiles 	= add( m, "My Circuits" );
 		itemCloudLogout = add( m, "Logout"      );
+		
+		itemCloudFiles.setVisible(false);
+		itemCloudLogout.setVisible(false);
+		
 		add( m );
 	}
 	
