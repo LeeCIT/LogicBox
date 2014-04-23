@@ -28,21 +28,19 @@ public class Trace extends ComponentPassive
 	
 	
 	
-	public boolean getState() {
-		boolean state = false;
-		
-		if (source != null && source.isOutput()) state |= source.getState();
-		if (dest   != null && dest  .isOutput()) state |= dest  .getState();
-			
-		return state;
-	}
-	
-	
-	
 	public Trace( Pin source, Pin dest ) {
 		this();
 		this.source = source;
 		this.dest   = dest;
+		
+		if (source != null) source.connectTrace( this );
+		if (dest   != null) dest  .connectTrace( this );
+	}
+	
+	
+	
+	public boolean getState() {
+		return pinPowersMe(source) || pinPowersMe(dest);
 	}
 	
 	
@@ -116,5 +114,16 @@ public class Trace extends ComponentPassive
 
 	public String getName() {
 		return "Trace";
+	}
+	
+	
+	
+	private boolean pinPowersMe( Pin pin ) {
+		if (pin == null)
+			return false;
+		
+		boolean isBiOrOut = pin.isOutput() || pin.isBidirectional();
+		
+		return isBiOrOut && pin.getState();
 	}
 }
