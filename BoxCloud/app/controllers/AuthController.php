@@ -16,7 +16,9 @@ class AuthController extends Controller
         
         $u = User::create($data);
         
-        return $u->toJson();
+        Auth::login($u);
+        
+        return Auth::getUser()->getUserInfo();
     }
     
     function login()

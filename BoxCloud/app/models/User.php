@@ -9,31 +9,16 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	protected $hidden = array('password');
 	
 	protected $fillable = array('email', 'password');
-
-	public function getAuthIdentifier()
-	{
-		return $this->getKey();
-	}
-
-	public function getAuthPassword()
-	{
-		return $this->password;
-	}
 	
 	protected static function boot()
     {
         parent::boot();
 
-        static::creating(function($model)
-        {
-            return mkdir(public_path('files/'.$model->id));
+        User::created(function($model)
+        {	
+            mkdir(public_path('files/'.$model->id));
         });
     }
-
-	public function getReminderEmail()
-	{
-		return $this->email;
-	}
 	
 	public function getFiles()
 	{
@@ -84,5 +69,35 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 			'email' => 'required|email',
 			'password' => 'required'
 		);
+	}
+	
+	public function getAuthIdentifier()
+	{
+		return $this->getKey();
+	}
+
+	public function getAuthPassword()
+	{
+		return $this->password;
+	}
+
+	public function getRememberToken()
+	{
+		return $this->remember_token;
+	}
+
+	public function setRememberToken($value)
+	{
+		$this->remember_token = $value;
+	}
+
+	public function getRememberTokenName()
+	{
+		return 'remember_token';
+	}
+
+	public function getReminderEmail()
+	{
+		return $this->email;
 	}
 }
