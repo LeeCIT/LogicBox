@@ -24,7 +24,7 @@ public class RegisterPanel extends JDialog implements RequestInterface
 	private JPasswordField 	txtPasswordConfirm 	= new JPasswordField( 16 );
 	private JButton 		btnRegister 		= new JButton("Register");
 	
-	private Request r = new Request("http://127.0.0.1/");
+	private Request r = new Request();
 	private JFrame parent;
 	
 	private static RegisterPanel instance = null;
