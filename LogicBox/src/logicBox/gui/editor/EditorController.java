@@ -20,6 +20,7 @@ import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
 import logicBox.gui.help.HelpFrame;
+import logicBox.sim.component.Pin;
 import logicBox.sim.component.SourceOscillator;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
@@ -90,9 +91,14 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	public void setStateFromHistory( EditorWorld world ) {
+		boolean wasPowerOn = this.world.isPowerOn();
+		
 		this.world = world;
 		this.world.clearGraphicSelectionAndHighlightStates();
-		this.world.simPowerOff();
+		
+		if (wasPowerOn)
+			 this.world.simPowerOn();
+		else this.world.simPowerOff();
 		
 		getEditorPanel().repaint();
 	}
@@ -134,22 +140,10 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public Bbox2 getWorldViewArea() {
-		return cam.getWorldViewArea();
-	}
-	
-	
-	
-	public Bbox2 getWorldExtent() {
-		return world.getWorldExtent();
-	}
-	
-	
-	
 	public Evaluator<Bbox2> getWorldExtentEvaluator() {
 		return new Evaluator<Bbox2>() {
 			public Bbox2 evaluate() {
-				return world.getWorldExtent();
+				return getWorld().getWorldExtent();
 			}
 		};
 	}
@@ -159,7 +153,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public Evaluator<Bbox2> getViewExtentEvaluator() {
 		return new Evaluator<Bbox2>() {
 			public Bbox2 evaluate() {
-				return cam.getWorldViewArea();
+				return getCamera().getWorldViewArea();
 			}
 		};
 	}
@@ -169,7 +163,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public Evaluator<List<Graphic>> getViewableGraphicsEvaluator() {
 		return new Evaluator<List<Graphic>>() {
 			public List<Graphic> evaluate() {
-				return world.getViewableComponentGraphics( cam, 64 );
+				return getWorld().getViewableComponentGraphics( cam, 64 );
 			}
 		};
 	}
@@ -658,8 +652,17 @@ public class EditorController implements HistoryListener<EditorWorld>
 			public void mouseMoved( MouseEvent ev ) {
 				for (EditorComponent ecom: world.find( cam.getMousePosWorld() )) {
 					GraphicPinMapping gpm = ecom.findPinNear( cam.getMousePosWorld(), 5 );
+					System.out.println();
+					System.out.println( "Ed: " + System.identityHashCode( ecom ) );
 					System.out.println( "Ed: " + ecom.getComponent().getName() );
-					System.out.println( "Ed: " + gpm );					
+					System.out.println( "Ed: " + gpm );
+					
+					if (gpm != null)
+					if (ecom instanceof EditorComponentActive) {
+						Pin pin = SimMapper.getMappedPin((EditorComponentActive)ecom,gpm);
+						System.out.println( "Ed: " + pin );
+						System.out.println( "Ed: " + System.identityHashCode( pin ) );
+					}
 				}
 			}
 		});
