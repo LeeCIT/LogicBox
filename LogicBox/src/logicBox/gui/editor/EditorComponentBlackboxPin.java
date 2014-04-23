@@ -11,6 +11,10 @@ import logicBox.util.Vec2;
 
 public class EditorComponentBlackboxPin extends EditorComponentActive
 {
+	private static final long serialVersionUID = 1L;
+	
+	
+	
 	public EditorComponentBlackboxPin( BlackBoxPin com, GraphicComActive gca, Vec2 pos, double angle ) {
 		super( com, gca, pos, angle );
 	}
@@ -29,12 +33,22 @@ public class EditorComponentBlackboxPin extends EditorComponentActive
 	
 	
 	
+	public void onWorldChange() {
+		updateGraphic();
+	}
+	
+	
+	
 	public boolean onMouseClick( CallbackParam<String> onMod ) {
 		boolean simChanged = super.onMouseClick( onMod );
-		
+		updateGraphic();
+		return simChanged;
+	}
+	
+	
+	
+	private void updateGraphic() {
 		boolean isPoweredOn = getComponent().getState();
 		getGraphic().setFillOverride( isPoweredOn, EditorStyle.colLedOn );
-		
-		return simChanged;
 	}
 }
