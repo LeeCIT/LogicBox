@@ -37,7 +37,6 @@ public class LoginPanel extends JDialog implements RequestInterface
 		HandleLoginAttempt();
 		r.setRequestInterface(this);		
 		
-		setVisible(true);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 	
@@ -66,6 +65,8 @@ public class LoginPanel extends JDialog implements RequestInterface
 	{
 		if(instance == null)
 			instance = new LoginPanel(GUI.getMainFrame());
+		
+		instance.setVisible(true);
 		
 		return instance;
 	}
