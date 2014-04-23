@@ -104,7 +104,7 @@ public class Simulation implements Serializable
 	
 	/**
 	 * Remove an element from the simulation.
-	 * You have to disconnect it separately, or the results will not be what you expect.
+	 * You have to disconnect it separately beforehand, or the results will not be what you expect.
 	 */
 	public synchronized void remove( Component com ) {
 		comps  .remove( com );
@@ -156,7 +156,7 @@ public class Simulation implements Serializable
 		for (ComponentActive com: actives)
 			for (Pin pin: com.getPinInputs())
 				if ( ! pin.hasTrace())
-					pin.setState( false );
+					pin.reset();
 	}
 	
 	
@@ -193,6 +193,9 @@ public class Simulation implements Serializable
 		
 		cacheUpdateables = sortByEvaluationOrder( comLevelMap, netLevelMap );
 		cacheInvalidated = false;
+		
+		for (Net net: findNets())
+			System.out.println( "\nNet: " + net );
 	}
 	
 	
@@ -428,14 +431,14 @@ public class Simulation implements Serializable
 	
 	
 	/**
-	 * Remove nets with a level of -1 (they can't affect the simulation).
+	 * Remove nets with a level of -1 and size <= 1 (they can't affect the simulation).
 	 */
-	private Map<Net,Integer> pruneNets( Map<Net,Integer> netLevels ) { 
+	private Map<Net,Integer> pruneNets( Map<Net,Integer> netLevels ) {
 		Map<Net,Integer> prune   = new IdentityHashMap<>( netLevels ); 
 		Integer          useless = -1;
 		
 		for (Map.Entry<Net,Integer> en: netLevels.entrySet())
-			if (en.getValue().equals( useless ))
+			if (en.getValue().equals(useless) && en.getKey().size() <= 1)
 				prune.remove( en.getKey() );
 		
 		return prune;
