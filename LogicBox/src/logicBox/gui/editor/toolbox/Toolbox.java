@@ -125,10 +125,10 @@ public class Toolbox extends JDialog
 		ToolboxButton[] butts = {
 			genButtonTrace(),
 			genButtonJunction(),
-			genButtonText()
+			genButtonText() // TODO comment graphic
 		};
 		
-		addCategory( "Tools", butts ); // TODO
+		addCategory( "Tools", butts );
 	}
 
 
@@ -201,7 +201,8 @@ public class Toolbox extends JDialog
 	
 	
 	private ToolboxButton genButtonPowerOn() {
-		final ToolboxButton butt = new ToolboxButton( "Power" );
+		final ToolboxButton butt = new ToolboxButton( "On" );
+		butt.setToolTipText( "Power on the circuit." );
 		
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
@@ -216,6 +217,7 @@ public class Toolbox extends JDialog
 	
 	private ToolboxButton genButtonPowerReset() {
 		final ToolboxButton butt = new ToolboxButton( "RST" );
+		butt.setToolTipText( "Reset the circuit and power it back on." );
 		
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
@@ -230,6 +232,7 @@ public class Toolbox extends JDialog
 	
 	private ToolboxButton genButtonPowerOff() {
 		final ToolboxButton butt = new ToolboxButton( "Off" );
+		butt.setToolTipText( "Power off the circuit." );
 		
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
