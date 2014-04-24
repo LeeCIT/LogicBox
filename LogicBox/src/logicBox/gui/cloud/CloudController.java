@@ -50,7 +50,7 @@ public class CloudController {
 	}
 	
 	public static void syncFile(File f) {
-		new SyncWorker(f, onFileUpload()).start();
+		new SyncWorker(f).start();
 	}
 	
 	public static void setAuthState(boolean state) {
@@ -64,40 +64,22 @@ public class CloudController {
 		if(!state) user = null;
 	}
 	
-	private static RequestInterface onFileUpload() {
-		return new RequestInterface() {
-			@Override
-			public void onRequestResponse(HttpResponse<JsonNode> res, Request req, status stat) {
-				if(stat != status.COMPLETED)
-					GUI.showError(GUI.getMainFrame(), "Couldn't complete request!", "Request Failure");
-				else
-				{	
-					if(req.hasErrors())
-						GUI.showErrorList(GUI.getMainFrame(), req.getErrors(), "Upload Failure");
-					else
-					{
-						GUI.showMessage(GUI.getMainFrame(), "XDD", "File uploaded");
-					}
-				}
-			}
-		};
-	}
-	
 	private static class SyncWorker extends Thread {	
 		File f;
-		RequestInterface ri;
-		
-		public SyncWorker(File f, RequestInterface ri) {
+
+		public SyncWorker(File f) {
 			this.f = f;
-			this.ri = ri;
 		}
 		
 	    public void run() {
 	        Request r = new Request();
 	        
-	        r.setRequestInterface(ri);
-	        
 	        r.upload(f);
+	        
+			if(r.hasErrors()) 
+				GUI.showErrorList(GUI.getMainFrame(), r.getErrors(), "Upload Failure");
+			else
+				GUI.showMessage(GUI.getMainFrame(), "File uploaded", "File was uploaded successfully!");
 	    }
 	}
 }
