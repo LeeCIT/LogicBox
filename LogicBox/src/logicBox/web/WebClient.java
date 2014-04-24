@@ -4,8 +4,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -22,6 +24,28 @@ public class WebClient
 	public WebClient(String url)
 	{
 		this.url = url;
+	}
+	
+	public void download(String request, final String file, final Request req, final DownloadInterface di)
+	{
+		GetRequest r = Unirest.get(url + request + file);
+		
+		r.asStringAsync(new Callback<String>() {
+			@Override
+			public void cancelled() {
+	    		di.onDownloadResponse(null, file, req, RequestInterface.status.CANCELLED);
+			}
+
+			@Override
+			public void completed(HttpResponse<String> response) {
+		    	di.onDownloadResponse(response, file, req, RequestInterface.status.COMPLETED);
+			}
+
+			@Override
+			public void failed(UnirestException arg0) {
+				di.onDownloadResponse(null, file, req, RequestInterface.status.FAILED);
+			}	
+		});
 	}
 	
 	public void post(String request, Map<String, Object> params, final Request req, final RequestInterface ri)

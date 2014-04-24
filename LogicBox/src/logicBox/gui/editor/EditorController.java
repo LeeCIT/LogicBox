@@ -346,7 +346,9 @@ public class EditorController implements HistoryListener<EditorWorld>
 			frame.setCircuitModified( false );
 			isUnsaved   = false;
 			needsToSave = false;
-			// TODO cloud stuff here - sync file in background thread
+			
+			if(CloudController.getUser() != null)
+				CloudController.syncFile(circuitFile.getAbsoluteFile());
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -614,7 +616,10 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getFilesAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				FilePanel.getInstance();
+				File f = FilePanel.openFile();
+				
+				if(f != null)
+					openCircuitFromFile(f);
 			}
 		};
 	}

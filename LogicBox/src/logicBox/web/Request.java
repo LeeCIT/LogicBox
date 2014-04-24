@@ -46,6 +46,10 @@ public class Request
 		wc.get("user/logout", this, ri);
 	}
 	
+	public void download(String name, DownloadInterface di) {
+		wc.download("user/files/", name, this, di);
+	}
+	
 	public void setRequestInterface(RequestInterface ri)
 	{
 		this.ri = ri;

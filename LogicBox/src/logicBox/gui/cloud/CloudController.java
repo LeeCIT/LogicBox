@@ -1,5 +1,7 @@
 package logicBox.gui.cloud;
 
+import java.io.File;
+
 import org.json.JSONObject;
 
 import logicBox.gui.GUI;
@@ -47,6 +49,10 @@ public class CloudController {
 		return user;
 	}
 	
+	public static void syncFile(File f) {
+		new SyncWorker(f, onFileUpload()).start();
+	}
+	
 	public static void setAuthState(boolean state) {
 		EditorMenuBar emb = GUI.getMainFrame().getEditorMenuBar();
 		
@@ -56,5 +62,42 @@ public class CloudController {
 		emb.itemCloudLogout.setVisible(state);
 		
 		if(!state) user = null;
+	}
+	
+	private static RequestInterface onFileUpload() {
+		return new RequestInterface() {
+			@Override
+			public void onRequestResponse(HttpResponse<JsonNode> res, Request req, status stat) {
+				if(stat != status.COMPLETED)
+					GUI.showError(GUI.getMainFrame(), "Couldn't complete request!", "Request Failure");
+				else
+				{	
+					if(req.hasErrors())
+						GUI.showErrorList(GUI.getMainFrame(), req.getErrors(), "Upload Failure");
+					else
+					{
+						GUI.showMessage(GUI.getMainFrame(), "XDD", "File uploaded");
+					}
+				}
+			}
+		};
+	}
+	
+	private static class SyncWorker extends Thread {	
+		File f;
+		RequestInterface ri;
+		
+		public SyncWorker(File f, RequestInterface ri) {
+			this.f = f;
+			this.ri = ri;
+		}
+		
+	    public void run() {
+	        Request r = new Request();
+	        
+	        r.setRequestInterface(ri);
+	        
+	        r.upload(f);
+	    }
 	}
 }
