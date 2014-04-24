@@ -31,7 +31,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         {
 			$filedata = pathinfo($file);
 			
-            if($filedata['extension'] == 'lbx')
+            if(isset($filedata['extension']) && $filedata['extension'] == 'lbx')
                 $circuits[] = $files[$key];
 		}
 		
