@@ -270,7 +270,7 @@ public class ToolJunctionPlacer extends Tool
 		// Ecoms
 		EditorComponentTrace    edTraceSrc = new EditorComponentTrace( srcToJunc, pointSrc );
 		EditorComponentTrace    edTraceDst = new EditorComponentTrace( juncToDst, pointDst );
-		EditorComponentJunction edJunc     = new EditorComponentJunction( junc, pos.copy() );			
+		EditorComponentJunction edJunc     = new EditorComponentJunction( junc, pos.copy() );
 		
 		EditorWorld world = getWorld();
 		world.remove( oldEcom );

@@ -182,6 +182,16 @@ public abstract class Geo
 	
 	
 	/**
+	 * Move a point to the nearest point on the edge of a circle.
+	 */
+	public static Vec2 moveToCircleEdge( Vec2 centre, double radius, Vec2 pos ) {
+		Vec2 norm = normalise( delta(centre, pos) );
+		return centre.add( norm.multiply(radius) );
+	}
+	
+	
+	
+	/**
 	 * Get the length of a vector squared.
 	 */
 	public static double lengthSqr( Vec2 v ) {
