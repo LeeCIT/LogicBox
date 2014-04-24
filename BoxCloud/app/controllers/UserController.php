@@ -4,6 +4,6 @@ class UserController extends Controller
 {
     function index()
     {
-        return Auth::User()->toJson();
+        return Auth::User()->getUserInfo();
     }
 }
