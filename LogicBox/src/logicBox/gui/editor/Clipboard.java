@@ -5,6 +5,7 @@ package logicBox.gui.editor;
 
 import java.util.Set;
 import logicBox.gui.editor.tools.Selection;
+import logicBox.sim.Simulation;
 import logicBox.sim.component.Component;
 import logicBox.util.Util;
 
@@ -49,10 +50,7 @@ public abstract class Clipboard
 		for (EditorComponent ecom: sel)
 			coms.add( ecom.getComponent() );
 		
-		for (Component com: coms)
-			for (Component connected: com.getConnectedComponents())
-				if ( ! coms.contains( connected ))
-					connected.disconnect();
+		Simulation.isolate( coms );
 	}
 	
 	

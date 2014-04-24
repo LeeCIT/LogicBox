@@ -193,6 +193,7 @@ public class EditorWorld implements Serializable
 			removeInternal( ecom );
 		}
 		
+		signalWorldChange();
 		simUpdate();
 	}
 	

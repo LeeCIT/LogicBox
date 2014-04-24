@@ -70,6 +70,12 @@ public class Bbox2 implements Transformable, Serializable
 	
 	
 	
+	public Bbox2 copy() {
+		return new Bbox2( tl, br );
+	}
+	
+	
+	
 	public Bbox2 translate( Vec2 offs ) {
 		return new Bbox2( tl.add(offs), br.add(offs) );
 	}

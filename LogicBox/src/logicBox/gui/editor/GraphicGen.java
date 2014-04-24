@@ -14,6 +14,7 @@ import logicBox.util.Bbox2;
 import logicBox.util.BezierCubic2;
 import logicBox.util.Geo;
 import logicBox.util.Line2;
+import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
@@ -255,6 +256,44 @@ public abstract class GraphicGen
 			gate.setBubble( true, bubblePos, bubbleRadius );
 		
 		return gate;
+	}
+	
+	
+	
+	public static GraphicComActive generateDecoder( int inputCount, int outputCount ) {
+		Bbox2 r = getBaseRegion();
+	  	  	  r.transform( Geo.createTransform( new Vec2(0), new Vec2(1,2), 0) );
+	  	
+	  	applyPinGrowth( r, outputCount );
+		
+		Vec2 tl = r.getTopLeft();
+		Vec2 tr = r.getTopRight();
+		Vec2 bl = r.getBottomLeft();
+		Vec2 br = r.getBottomRight();
+		
+		Line2 leftContact  = new Line2( tl, bl );
+		Line2 rightContact = new Line2( tr, br );
+		
+		Line2 leftTerminal  = leftContact .translate( -pinLength, 0 );
+		Line2 rightTerminal = rightContact.translate( +pinLength, 0 );
+		
+		List<Line2> pinInLines  = genPinLines( leftTerminal,  leftContact,  new Vec2(+1,0), inputCount,  true );
+		List<Line2> pinOutLines = genPinLines( rightTerminal, rightContact, new Vec2(-1,0), outputCount, true );
+		
+		List<Line2> pinLines = new ArrayList<>();
+		pinLines.addAll( pinOutLines );
+		pinLines.addAll( pinInLines  );
+		
+		GraphicComActive graphic = new GraphicComActive(
+			genPolyBody( true, br, tr, tl, bl ),
+			genPolyPins( pinLines ),
+			null,
+			genPinMappings( pinLines, pinOutLines.size() )
+		);
+		
+		recentreGraphic( graphic );
+		
+		return graphic;
 	}
 	
 	
@@ -511,7 +550,7 @@ public abstract class GraphicGen
 		polyBody.curveTo( r.getBottomLeft(),  r.getBottomMiddle() );
 		polyBody.closePath();
 		
-		Vec2 leftMid = r.getLeftMiddle();
+		Vec2  leftMid = r.getLeftMiddle();
 		Line2 pinLine = new Line2( leftMid, leftMid.add(-pinLength,0) );
 		
 		List<Line2> pinLines = new ArrayList<>();
@@ -532,34 +571,86 @@ public abstract class GraphicGen
 	
 	
 	
-	public static GraphicComActive generateDecoder( int inputCount, int outputCount ) {
+	public static GraphicSevenSeg generateDisplaySevenSeg() {
 		Bbox2 r = getBaseRegion();
-	  	  	  r.transform( Geo.createTransform( new Vec2(0), new Vec2(1,2), 0) );
+		  	  r.transform( Geo.createTransform( new Vec2(0), new Vec2(1,1.5), 0) );
 		
 		Vec2 tl = r.getTopLeft();
 		Vec2 tr = r.getTopRight();
 		Vec2 bl = r.getBottomLeft();
 		Vec2 br = r.getBottomRight();
 		
-		Line2 leftContact  = new Line2( tl, bl );
-		Line2 rightContact = new Line2( tr, br );
+		Line2 botContact  = new Line2( bl, br );
+		Line2 botTerminal = botContact.translate( 0, pinLength );
 		
-		Line2 leftTerminal  = leftContact .translate( -pinLength, 0 );
-		Line2 rightTerminal = rightContact.translate( +pinLength, 0 );
+		List<Line2> pinLines = genPinLines( botTerminal, botContact, new Vec2(0,-1), 4, true );
+		Collections.reverse( pinLines );
 		
-		List<Line2> pinInLines  = genPinLines( leftTerminal,  leftContact,  new Vec2(+1,0), inputCount,  true );
-		List<Line2> pinOutLines = genPinLines( rightTerminal, rightContact, new Vec2(-1,0), outputCount, true );
-		
-		List<Line2> pinLines = new ArrayList<>();
-		pinLines.addAll( pinOutLines );
-		pinLines.addAll( pinInLines  );
-		
-		return new GraphicComActive(
+		return new GraphicSevenSeg(
 			genPolyBody( true, br, tr, tl, bl ),
 			genPolyPins( pinLines ),
 			null,
-			genPinMappings( pinLines, pinOutLines.size() )
+			genPinMappings( pinLines, 0 ),
+			genSegs( r )
 		);
+	}
+	
+	
+	
+	private static List<VecPath> genSegs( Bbox2 r ) {
+		r = Util.deepCopy( r );
+		r.transform( Geo.createTransform(new Vec2(0), new Vec2(0.7,0.8), 0) );		
+		
+		List<VecPath> segs = new ArrayList<>();
+		
+		double f    = 0.10;
+		double fi   = 1 - f;
+		double d    = 0.15;
+		double h    = 0.50;
+		double dh   = d * 0.35;
+		Vec2   size = r.getSize();
+		
+		VecPath segTop = new VecPath();
+		segTop.moveTo( r.getNorm(0  , 0)  );
+		segTop.lineTo( r.getNorm(1  , 0)  );
+		segTop.lineTo( r.getNorm(1-d, f)  );
+		segTop.lineTo( r.getNorm(0+d, f)  );
+		segTop.closePath();		
+		
+		
+		VecPath segMid = new VecPath();
+		segMid.moveTo( r.getNorm(f   , h   ) );
+		segMid.lineTo( r.getNorm(f +d, h-dh) );
+		segMid.lineTo( r.getNorm(fi-d, h-dh) );
+		segMid.lineTo( r.getNorm(fi  , h   ) );
+		segMid.lineTo( r.getNorm(fi-d, h+dh) );
+		segMid.lineTo( r.getNorm(f +d, h+dh) );
+		segMid.closePath();
+		
+		VecPath segBot = Util.deepCopy( segTop );
+		segBot.transform( Geo.createTransform( new Vec2(0), 180 ) );
+		
+		VecPath segTL = Util.deepCopy( segTop );
+		segTL.transform( Geo.createTransform( new Vec2(size.x*0.35,size.y*-0.3), new Vec2(1,0.7), 90 ) );
+		
+		VecPath segBL = Util.deepCopy( segTL );
+		segBL.transform( Geo.createTransform( new Vec2(0), new Vec2(1,-1), 0 ) );
+		
+		VecPath segTR = Util.deepCopy( segTL );
+		segTR.transform( Geo.createTransform( new Vec2(0), new Vec2(-1,1), 0 ) );
+		
+		VecPath segBR = Util.deepCopy( segTL );
+		segBR.transform( Geo.createTransform( new Vec2(0), new Vec2(-1,-1), 0 ) );
+		
+		segs.add( segBR  );
+		segs.add( segTR  );
+		segs.add( segTop );
+		segs.add( segTL  );
+		segs.add( segMid );
+		segs.add( segBL  );
+		segs.add( segBot );
+		
+		return segs;
 	}
 	
 	
@@ -594,13 +685,19 @@ public abstract class GraphicGen
 			genPinMappings( pinLines, isOutput ? 0 : 1 )
 		);
 		
-		Vec2 trans = graphic.getBbox().getCentre().negate();
-		graphic.transform( Geo.createTransform(trans,0), true );
+		recentreGraphic( graphic );
 		
 		if (isOutput)
 			graphic.transform( Geo.createTransform(new Vec2(0), new Vec2(-1,1), 0), true );
 		
 		return graphic;
+	}
+	
+	
+	
+	private static void recentreGraphic( GraphicComActive graphic ) {
+		Vec2 trans = graphic.getBbox().getCentre().negate();
+		graphic.transform( Geo.createTransform(trans,0), true );
 	}
 	
 	

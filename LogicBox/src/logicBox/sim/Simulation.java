@@ -13,7 +13,7 @@ import logicBox.util.Util;
 
 /**
  * Performs the logic simulation.
- * This version uses a levelisation algorithm and works with combinational circuits only.
+ * This version uses a levelisation algorithm which works with combinational circuits only.
  * @author Lee Coakley
  */
 public class Simulation implements Serializable
@@ -193,9 +193,6 @@ public class Simulation implements Serializable
 		
 		cacheUpdateables = sortByEvaluationOrder( comLevelMap, netLevelMap );
 		cacheInvalidated = false;
-		
-		for (Net net: findNets())
-			System.out.println( "\nNet: " + net );
 	}
 	
 	
@@ -258,10 +255,7 @@ public class Simulation implements Serializable
 		Map<Pin,Net> map = new IdentityHashMap<>();
 		
 		for (ComponentActive com: actives) {
-			List<Pin> pins = new ArrayList<>();
-			
-			pins.addAll( com.getPinInputs () );
-			pins.addAll( com.getPinOutputs() );
+			List<Pin> pins = com.getPins();
 			
 			for (Pin pin: pins)
 				for (Net net: nets)
@@ -577,14 +571,19 @@ public class Simulation implements Serializable
 	
 	
 	
+	public static void isolate( Set<Component> coms ) {		
+		for (Component com: coms)
+			for (Component connected: com.getConnectedComponents())
+				if ( ! coms.contains( connected ))
+					connected.disconnect();
+	}
+	
+	
+	
 	
 	
 	public class NonLevelisableCircuitException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
-
-		public NonLevelisableCircuitException() {
-			super();
-		}
 
 		public NonLevelisableCircuitException( String message ) {
 			super( message );

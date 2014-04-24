@@ -5,11 +5,15 @@ package logicBox.gui.editor.toolbox;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import javax.swing.JButton;
+import org.gpl.JSplitButton.JSplitButton;
 import logicBox.gui.Gfx;
 import logicBox.gui.editor.Graphic;
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.tools.ToolManager;
 import logicBox.util.Bbox2;
+import logicBox.util.Evaluator;
 import logicBox.util.Geo;
-import logicBox.util.Util;
 import logicBox.util.Vec2;
 
 
@@ -18,17 +22,18 @@ import logicBox.util.Vec2;
  * A button specialised for use in the Toolbox class.
  * @author Lee Coakley
  */
-public class ToolboxButtonGraphic extends ToolboxButton
+public class ToolboxButtonSplit extends JSplitButton implements ButtTargetable
 {
+	private Evaluator<ToolManager> targetEvaluator;
 	private Graphic graphic;
 	private Vec2    scaleAux;
 	
 	
 	
-	public ToolboxButtonGraphic( Graphic gca, String tooltip ) {
+	public ToolboxButtonSplit( GraphicComActive gca, String tooltip ) {
 		super();
 		
-		this.graphic  = Util.deepCopy( gca );
+		this.graphic  = ToolboxButtonCom.makeGraphic( gca );
 		this.scaleAux = new Vec2( 1.0 );
 		
 		setToolTipText( tooltip );
@@ -49,9 +54,9 @@ public class ToolboxButtonGraphic extends ToolboxButton
 		boolean armed      = getModel().isArmed();
 		boolean rollover   = getModel().isRollover();
 		double  borderFrac = 0.15;
-		Bbox2   bbox       = graphic.getBbox();
+		Bbox2   bbox       = graphic.getBbox();		
 		Vec2    sizeBbox   = bbox.getSize();
-		Vec2    sizeComp   = new Bbox2(this).getSize();
+		Vec2    sizeComp   = new Bbox2(this).getSize().subtract( getSplitWidth(), 0 );
 		double  scaleMul   = Geo.getAspectScaleFactor( sizeBbox, sizeComp, true );
 		Vec2    scale      = new Vec2( scaleMul * (1.0 - borderFrac) );
 		Vec2    trans      = sizeComp.multiply( 0.5 ).add( armed ? 1 : 0 );
@@ -68,6 +73,24 @@ public class ToolboxButtonGraphic extends ToolboxButton
 				graphic.draw( g );
 			Gfx.popAntialiasingState( g );
 		Gfx.popMatrix( g );
+	}
+	
+	
+	
+	public void setToolManagerEvaluator( Evaluator<ToolManager> targetEvaluator ) {
+		this.targetEvaluator = targetEvaluator;
+	}
+	
+	
+	
+	public ToolManager getTargetToolManager() {
+		return targetEvaluator.evaluate();
+	}
+	
+	
+	
+	public JButton getButton() {
+		return this;
 	}
 }
 

@@ -56,7 +56,7 @@ public enum ComponentType
 	
 	
 	/**
-	 * Get the default graphic used to represent this 
+	 * Get the default graphic used to represent this type.
 	 * Intended for use with GraphicPanel
 	 */
 	public Graphic getGraphic() {
@@ -78,7 +78,7 @@ public enum ComponentType
 			case trace:            return GraphicGen.generateTrace();
 			
 			case displayLed:       return GraphicGen.generateDisplayLed();
-			//case displaySevenSeg:  return GraphicGen.;
+			case displaySevenSeg:  return GraphicGen.generateDisplaySevenSeg();
 			//case displayLCD:       return GraphicGen.;
 			
 			case decoder:          return GraphicGen.generateDecoder( 2, 4 );
@@ -97,7 +97,7 @@ public enum ComponentType
 			//case rom:              return GraphicGen.;
 			
 			//case blackBox:         return GraphicGen.;
-			//case blackBoxPin:      return GraphicGen.;
+			case blackBoxPin:      return GraphicGen.generateBlackboxPin( false );
 			
 			default: return GraphicGen.generatePlaceholder();
 		}

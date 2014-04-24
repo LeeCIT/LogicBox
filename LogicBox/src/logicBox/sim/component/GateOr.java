@@ -52,7 +52,7 @@ public class GateOr extends Gate
 	
 	
 	public String getName() {
-		return "OR gate";
+		return "" + getPinInputCount() + "-input OR gate";
 	}
 	
 	

@@ -236,7 +236,7 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 	
 	
 	
-	private List<Transformable> getTransformables() {
+	protected List<Transformable> getTransformables() {
 		List<Transformable> trans = new ArrayList<>();
 		
 		trans.add( polyBody );
@@ -257,7 +257,7 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 		Color colStroke = (isInverted()) ? this.colFill   : this.colStroke;
 		Color colFill   = (isInverted()) ? this.colStroke : this.colFill;
 		
-		if (hasFillOverride && !isSelected() && !isHighlighted()) 
+		if (hasFillOverride && !isSelected()) 
 			colFill = colFillOverride;
 			
 		Gfx.pushColorAndSet( g, colStroke );

@@ -104,104 +104,174 @@ public class Toolbox extends JDialog
 		addDisplayButtons();
 		addSourceButtons();
 		addComplexButtons();
+		addFlipFlopButtons();
 		addBlackBoxButtons();
 	}
 	
 	
 	
 	private void addPowerButtons() {
-		ToolboxButton[] butts = {
+		ButtTargetable[] butts = {
 			genButtonPowerOn(),
 			genButtonPowerReset(),
 			genButtonPowerOff()
 		};
 		
-		addCategory( "Power", butts );
+		addCategory( "Power", 3, butts );
 	}
 	
 	
 	
 	private void addToolButtons() {
-		ToolboxButton[] butts = {
+		ButtTargetable[] butts = {
 			genButtonTrace(),
 			genButtonJunction(),
-			genButtonText()
+			genButtonText() // TODO comment graphic
 		};
 		
-		addCategory( "Tools", butts ); // TODO
+		addCategory( "Tools", 3, butts );
 	}
-
-
-
+	
+	
+	
 	private void addGateButtons() {
-		ToolboxButton[] butts = {
-			genButton( new GateBuffer() ),
-			genButton( new GateNot   () ),
-			genButton( new GateAnd   () ),
-			genButton( new GateNand  () ),
-			genButton( new GateOr    () ),
-			genButton( new GateNor   () ),
-			genButton( new GateXor   () ),
-			genButton( new GateXnor  () )
+		ButtTargetable[] butts = {
+			genButton( new GateBuffer()  ),
+			genButton( new GateNot   ()  ),
+			genButton( new GateAnd(2),
+					   new GateAnd(3),
+					   new GateAnd(4),
+					   new GateAnd(5),
+					   new GateAnd(6),
+					   new GateAnd(7),
+					   new GateAnd(8)
+			),
+			genButton( new GateNand(2),
+					   new GateNand(3),
+					   new GateNand(4),
+					   new GateNand(5),
+					   new GateNand(6),
+					   new GateNand(7),
+					   new GateNand(8)
+			),
+			genButton( new GateOr(2),
+					   new GateOr(3),
+					   new GateOr(4),
+					   new GateOr(5),
+					   new GateOr(6),
+					   new GateOr(7),
+					   new GateOr(8)
+			),
+			genButton( new GateNor(2),
+					   new GateNor(3),
+					   new GateNor(4),
+					   new GateNor(5),
+					   new GateNor(6),
+					   new GateNor(7),
+					   new GateNor(8)
+			),
+			genButton( new GateXor(2),
+					   new GateXor(3),
+					   new GateXor(4),
+					   new GateXor(5),
+					   new GateXor(6),
+					   new GateXor(7),
+					   new GateXor(8)
+			),
+			genButton( new GateXnor(2),
+					   new GateXnor(3),
+					   new GateXnor(4),
+					   new GateXnor(5),
+					   new GateXnor(6),
+					   new GateXnor(7),
+					   new GateXnor(8)
+			),
 		};
 		
-		addCategory( "Gates", butts );
+		addCategory( "Gates", 2, butts );
 	}
 	
 	
 	
 	private void addDisplayButtons() {
-		ToolboxButton[] butts = {
+		ButtTargetable[] butts = {
 			genButton( new DisplayLed()      ),
 			genButton( new DisplaySevenSeg() )
 		};
 		
-		addCategory( "Displays", butts );
+		addCategory( "Displays", 3, butts );
 	}
 	
 	
 	
 	private void addSourceButtons() {
-		ToolboxButton[] butts = {
+		ButtTargetable[] butts = {
 			genButton( new SourceFixed(false)  ),
 			genButton( new SourceFixed(true)   ),
 			genButton( new SourceToggle(false) ),
 			genButton( new SourceOscillator(SourceOscillator.baseFrequencyHz/8) )
 		};
 		
-		addCategory( "Sources", butts );
+		addCategory( "Sources", 3, butts );
 	}
 	
 	
 	
 	private void addComplexButtons() {
-		ToolboxButton[] butts = {
-			genButton( new Decoder   (2) ),
-			genButton( new Mux       (2) ),
-			genButton( new Demux     (2) ),
-			genButton( new FlipFlopD ()  ),
-			genButton( new FlipFlopJK()  ),
-			genButton( new FlipFlopT ()  )
+		ButtTargetable[] butts = {
+			genButton( new Decoder(2),
+					   new Decoder(3),
+					   new Decoder(4)
+			),
+			genButton( new Mux(2),
+					   new Mux(3),
+					   new Mux(4),
+					   new Mux(5),
+					   new Mux(6),
+					   new Mux(7),
+					   new Mux(8)
+			),
+			genButton( new Demux(2),
+					   new Demux(3),
+					   new Demux(4),
+					   new Demux(5),
+					   new Demux(6),
+					   new Demux(7),
+					   new Demux(8)
+			)
 		};
 		
-		addCategory( "Components", butts );
+		addCategory( "Components", 2, butts );
+	}
+	
+	
+	
+	private void addFlipFlopButtons() {
+		ButtTargetable[] butts = {
+			genButton( new FlipFlopD () ),
+			genButton( new FlipFlopJK() ),
+			genButton( new FlipFlopT () )
+		};
+		
+		addCategory( "Flip-Flops", 3, butts );
 	}
 	
 	
 	
 	private void addBlackBoxButtons() {
-		ToolboxButton[] butts = {
+		ButtTargetable[] butts = {
 			genButton( new BlackBoxPin( true  ) ),
 			genButton( new BlackBoxPin( false ) ),
 		};
 		
-		addCategory( "Black-box", butts );
+		addCategory( "Black-box", 3, butts );
 	}
 	
 	
 	
 	private ToolboxButton genButtonPowerOn() {
-		final ToolboxButton butt = new ToolboxButton( "Power" );
+		final ToolboxButton butt = new ToolboxButton( "On" );
+		butt.setToolTipText( "Power on the circuit." );
 		
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
@@ -216,6 +286,7 @@ public class Toolbox extends JDialog
 	
 	private ToolboxButton genButtonPowerReset() {
 		final ToolboxButton butt = new ToolboxButton( "RST" );
+		butt.setToolTipText( "Reset the circuit and power it back on." );
 		
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
@@ -230,6 +301,7 @@ public class Toolbox extends JDialog
 	
 	private ToolboxButton genButtonPowerOff() {
 		final ToolboxButton butt = new ToolboxButton( "Off" );
+		butt.setToolTipText( "Power off the circuit." );
 		
 		butt.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
@@ -271,25 +343,58 @@ public class Toolbox extends JDialog
 	
 	
 	private ToolboxButton genButtonText() {
-		return new ToolboxButton( IconLoader.load(IconEnum.editText) );
-	}
-	
-	
-	
-	private ToolboxButton genButton( final ComponentActive com ) {
-		ToolboxButton butt = new ToolboxButtonCom( com.getGraphic(), com.getName() );
-		attachListener( butt, com );
+		ToolboxButton butt = new ToolboxButton( IconLoader.load(IconEnum.editText) );
+		
+		// TODO
+		
 		return butt;
 	}
 	
 	
 	
-	private void attachListener( final ToolboxButton butt, final ComponentActive com ) {
-		butt.addActionListener( new ActionListener() {
+	private ButtTargetable genButton( final ComponentActive...coms ) {
+		ComponentActive first = coms[0];
+		
+		if (coms.length <= 1) {
+			ToolboxButton butt = new ToolboxButtonCom( first.getGraphic(), first.getName() );
+			attachListener( butt, first );
+			return butt;
+		}
+		else {
+			ToolboxButtonSplit butt = new ToolboxButtonSplit( first.getGraphic(), first.getName() );
+			JPopupMenu         menu = new JPopupMenu();
+			
+			for (ComponentActive com: coms)
+				menu.add( genMenuItem(butt, com) );
+			
+			butt.setPopupMenu( menu );
+			return butt;
+		}
+	}
+	
+	
+	
+	private JMenuItem genMenuItem( final ButtTargetable butt, ComponentActive com ) {
+		JMenuItem item = new JMenuItem();
+		item.setText( com.getName() );
+		item.addActionListener( genListener(butt, com) );
+		return item;
+	}
+	
+	
+	
+	private void attachListener( final ButtTargetable butt, final ComponentActive com ) {
+		butt.getButton().addActionListener( genListener(butt,com) );
+	}
+	
+	
+	
+	private ActionListener genListener( final ButtTargetable butt, final ComponentActive com ) {
+		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				butt.getTargetToolManager().initiateComponentCreation( genCommand(com) );
 			}
-		});
+		};
 	}
 	
 	
@@ -303,16 +408,16 @@ public class Toolbox extends JDialog
 	/**
 	 * Add a logical group of buttons.  IE gates, components, etc.
 	 */
-	private void addCategory( String title, ToolboxButton...buttons ) {
+	private void addCategory( String title, int wrapAfter, ButtTargetable...buttons ) {
 		setButtonEvaluators( buttons );
-		JPanel panel = new ToolboxCategoryPanel( title, buttons );
+		JPanel panel = new ToolboxCategoryPanel( title, wrapAfter, buttons );
 		add( panel );
 	}
 	
 	
 	
-	private void setButtonEvaluators( ToolboxButton...buttons ) {
-		for (ToolboxButton butt: buttons)
+	private void setButtonEvaluators( ButtTargetable...buttons ) {
+		for (ButtTargetable butt: buttons)
 			butt.setToolManagerEvaluator( evaluator );
 	}
 }

@@ -23,7 +23,6 @@ public class ToolHighlighter extends Tool
 	private EditorComponent curComponent;
 	private MouseAdapter    eventListener;
 	private RepaintListener repaintListener;
-	private boolean         mouseDown;
 	
 	
 	
@@ -69,20 +68,6 @@ public class ToolHighlighter extends Tool
 	
 	private MouseAdapter createEventListener() {
 		return new MouseAdapter() {
-			public void mousePressed( MouseEvent ev ) {
-				if (isLeft(ev)) {
-					mouseDown = true;
-					repaint();
-				}
-			}
-			
-			public void mouseReleased( MouseEvent ev ) {
-				if (isLeft(ev)) {
-					mouseDown = false;
-					repaint();
-				}
-			}
-			
 			public void mouseMoved( MouseEvent ev ) {
 				doHighlight();
 			}
@@ -98,7 +83,7 @@ public class ToolHighlighter extends Tool
 	private RepaintListener createRepaintListener() {
 		return new RepaintListener() {
 			public void draw( Graphics2D g ) {
-				if (curComponent != null && ! mouseDown) {
+				if (curComponent != null) {
 					Graphic graphic = curComponent.getGraphic();
 					boolean state   = graphic.isHighlighted();
 					

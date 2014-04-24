@@ -53,7 +53,7 @@ public class GateAnd extends Gate
 	
 	
 	public String getName() {
-		return "AND gate";
+		return "" + getPinInputCount() + "-input AND gate";
 	}
 	
 	

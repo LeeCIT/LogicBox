@@ -34,7 +34,7 @@ public class GateXor extends Gate
 	
 	
 	
-	// Source: Digital Logic and Computer Design, p59.
+	// This rule is from Digital Logic and Computer Design, p59.
 	public boolean evaluate() {
 		boolean a     = getPinInputState( 0 );
 		boolean b     = getPinInputState( 1 );
@@ -55,7 +55,7 @@ public class GateXor extends Gate
 	
 	
 	public String getName() {
-		return "XOR gate";
+		return "" + getPinInputCount() + "-input XOR gate";
 	}
 	
 	

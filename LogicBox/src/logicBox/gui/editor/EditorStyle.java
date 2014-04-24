@@ -32,9 +32,10 @@ public abstract class EditorStyle
 	public static Color colHighlightSelectStroke = new Color( 231, 243, 251 );
 	public static Color colHighlightSelectFill   = colSelectionStroke;
 	
-	public static double gridThickness  = 3.0;
-	public static float  compThickness  = 5.0f;
-	public static float  traceThickness = compThickness;
+	public static double gridThickness   = 3.0;
+	public static float  compThickness   = 5.0f;
+	public static float  bubbleThickness = compThickness * 0.5f;
+	public static float  traceThickness  = compThickness;
 	
 	public static Stroke strokeBody       = new BasicStroke( compThickness );
 	public static Stroke strokePin        = new BasicStroke( compThickness, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND );

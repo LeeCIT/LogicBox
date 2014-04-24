@@ -47,7 +47,7 @@ public class GateNand extends GateAnd
 	
 	
 	public String getName() {
-		return "NAND gate";
+		return "" + getPinInputCount() + "-input NAND gate";
 	}
 	
 	

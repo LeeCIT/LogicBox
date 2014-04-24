@@ -47,7 +47,7 @@ public class GateNor extends GateOr
 	
 	
 	public String getName() {
-		return "NOR gate";
+		return "" + getPinInputCount() + "-input NOR gate";
 	}
 	
 	

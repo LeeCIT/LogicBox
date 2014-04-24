@@ -33,18 +33,6 @@ public class DisplayLed extends Display
 	
 	
 	
-	public ComponentType getType() {
-		return ComponentType.displayLed;
-	}
-	
-	
-	
-	public String getName() {
-		return "LED";
-	}
-	
-	
-	
 	public void update() {
 		lit = getPinInputState( 0 );
 	}
@@ -54,6 +42,18 @@ public class DisplayLed extends Display
 	public void reset() {
 		super.reset();
 		lit = false;
+	}
+	
+	
+	
+	public ComponentType getType() {
+		return ComponentType.displayLed;
+	}
+	
+	
+	
+	public String getName() {
+		return "LED";
 	}
 	
 	
