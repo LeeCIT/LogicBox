@@ -19,6 +19,7 @@ import logicBox.fileManager.FileManager;
 import logicBox.gui.DialogueAnswer;
 import logicBox.gui.GUI;
 import logicBox.gui.cloud.CloudController;
+import logicBox.gui.cloud.FilePanel;
 import logicBox.gui.cloud.LoginPanel;
 import logicBox.gui.cloud.RegisterPanel;
 import logicBox.gui.editor.toolbox.Toolbox;
@@ -604,6 +605,16 @@ public class EditorController implements HistoryListener<EditorWorld>
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				RegisterPanel.getInstance();
+			}
+		};
+	}
+	
+	
+	
+	public ActionListener getFilesAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				FilePanel.getInstance();
 			}
 		};
 	}

@@ -54,5 +54,7 @@ public class CloudController {
 		emb.itemCloudRegister.setVisible(!state);
 		emb.itemCloudFiles.setVisible(state);
 		emb.itemCloudLogout.setVisible(state);
+		
+		if(!state) user = null;
 	}
 }

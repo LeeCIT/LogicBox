@@ -76,6 +76,7 @@ public class EditorCreator
 		linkAction( ctrl.getLoginAction	(),		null,	menubar.itemCloudLogin		);
 		linkAction( ctrl.getLogoutAction(), 	null,	menubar.itemCloudLogout		);
 		linkAction( ctrl.getRegisterAction(), 	null, 	menubar.itemCloudRegister	);
+		linkAction( ctrl.getFilesAction(),		null,	menubar.itemCloudFiles		);
 		
 		return frame;
 	}
