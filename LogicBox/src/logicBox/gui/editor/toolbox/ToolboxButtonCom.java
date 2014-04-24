@@ -20,7 +20,7 @@ public class ToolboxButtonCom extends ToolboxButtonGraphic
 	
 	
 	
-	private static GraphicComActive makeGraphic( GraphicComActive graphic ) {
+	protected static GraphicComActive makeGraphic( GraphicComActive graphic ) {
 		GraphicComActive gca = Util.deepCopy( graphic );
 		gca.setInverted( true );
 		gca.setFillAntialias( true );
