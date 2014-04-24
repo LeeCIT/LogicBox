@@ -13,6 +13,6 @@ Route::group(array('before' => 'auth', 'prefix' => 'user'), function()
 	Route::get('', 'UserController@index');
 	Route::get('files', 'FileController@index');
 	Route::get('files/{file}', 'FileController@download');
-	Route::post('files/upload', 'FileController@upload');
+	Route::post('upload', 'FileController@upload');
 	Route::get('logout', 'AuthController@logout');
 });

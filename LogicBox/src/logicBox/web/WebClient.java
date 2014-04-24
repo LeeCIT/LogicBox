@@ -113,7 +113,7 @@ public class WebClient
 		try 
 		{
 			HttpResponse<JsonNode> response = 
-				Unirest.post(url + "user/files/upload")
+				Unirest.post(url + "user/upload")
 				  .field("file", f)
 	              .asJson();
 			
