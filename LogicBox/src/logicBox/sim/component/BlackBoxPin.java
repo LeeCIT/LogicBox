@@ -12,9 +12,6 @@ import logicBox.sim.SimUtil;
 
 /**
  * A special type of component which connects a black-box to the outside world.
- * TODO for usability's sake, the graphic should probably indicate on/off like the LED
- * TODO could use the socket part for that
- * TODO also be toggleable
  * @author Lee Coakley
  */
 public class BlackBoxPin extends ComponentActive
