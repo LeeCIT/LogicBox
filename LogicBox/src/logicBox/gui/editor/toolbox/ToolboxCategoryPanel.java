@@ -11,12 +11,19 @@ import net.miginfocom.swing.MigLayout;
 
 public class ToolboxCategoryPanel extends JPanel
 {
-	public ToolboxCategoryPanel( String title, ToolboxButton...buttons ) {
-		super( new MigLayout( "wrap 3" ) );
+	public ToolboxCategoryPanel( String title, int wrapAfter, ButtTargetable...buttons ) {
+		super( new MigLayout( "wrap " + wrapAfter ) );
 		addCategory(title);
 		
-		for (ToolboxButton butt: buttons)
-			add( butt, "w 48, h 32, wmax 48, hmax 32" );
+		for (ButtTargetable butt: buttons) {
+			int w = 48;
+			int h = 32;
+			
+			if (butt instanceof ToolboxButtonSplit)
+				w += ((ToolboxButtonSplit) butt).getSplitWidth();
+			
+			add( butt.getButton(), "w "+w+", h "+h+" , wmax "+w+", hmax "+h+"" );
+		}
 	}
 	
 	
