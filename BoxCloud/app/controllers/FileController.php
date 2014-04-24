@@ -26,11 +26,26 @@ class FileController extends Controller
 			return Error::data(array('file' => 'A valid file was not uploaded'));
 		
 		$f = Input::file('file');
+
+		if($f->getClientOriginalExtension() !== 'lbx')
+			return Error::data(array('file' => 'File format was not valid.'));
 		
 		$u->addFile($f);
 		
 		return Response::json(array('success' => 'File was uploaded to user\'s account!'));
     }
+	
+	function delete($file)
+	{
+		$f = Auth::getUser()->getFile($file);
+		
+		if(!$f)
+			return Error::data(['file' => 'Valid file was not specified']);
+		
+		$f->delete();
+		
+		return Response::json(['success' => 'The file was deleted.']);
+	}
 	
 	function download($file)
 	{

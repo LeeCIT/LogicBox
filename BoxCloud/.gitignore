@@ -4,6 +4,7 @@
 /app/config/app.php
 /app/config/database.php
 /public/files
+/app/storage/uploads
 composer.phar
 composer.lock
 .env.local.php

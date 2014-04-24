@@ -16,13 +16,13 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 
         User::created(function($model)
         {	
-            mkdir(public_path('files/'.$model->id));
+            mkdir(storage_path('uploads/'.$model->id));
         });
     }
 	
 	public function getFiles()
 	{
-        $path = public_path('files/'.$this->id);
+        $path = storage_path('uploads/'.$this->id);
 		$files = scandir($path);
         
 		$circuits = array();
@@ -40,7 +40,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	
 	public function getFile($file)
 	{
-		$fpath = public_path('files/'.$this->id.'/'.str_replace('../', '', $file));
+		$fpath = storage_path('uploads/'.$this->id.'/'.str_replace('../', '', $file));
 		
 		if(File::exists($fpath)) return $fpath;
 		
@@ -59,9 +59,9 @@ class User extends Eloquent implements UserInterface, RemindableInterface
 	
 	public function addFile($f)
 	{
-		$path = public_path('files/'.$this->id);
+		$path = storage_path('uploads/'.$this->id);
 		
-		$f->move($path, $f->getClientOriginalName());
+		$f->move($path, str_replace('.lbx', '', $f->getClientOriginalName()).'.lbx');
 	}
 	
 	public static function getRegistrationRules()
