@@ -260,6 +260,44 @@ public abstract class GraphicGen
 	
 	
 	
+	public static GraphicComActive generateDecoder( int inputCount, int outputCount ) {
+		Bbox2 r = getBaseRegion();
+	  	  	  r.transform( Geo.createTransform( new Vec2(0), new Vec2(1,2), 0) );
+	  	
+	  	applyPinGrowth( r, outputCount );
+		
+		Vec2 tl = r.getTopLeft();
+		Vec2 tr = r.getTopRight();
+		Vec2 bl = r.getBottomLeft();
+		Vec2 br = r.getBottomRight();
+		
+		Line2 leftContact  = new Line2( tl, bl );
+		Line2 rightContact = new Line2( tr, br );
+		
+		Line2 leftTerminal  = leftContact .translate( -pinLength, 0 );
+		Line2 rightTerminal = rightContact.translate( +pinLength, 0 );
+		
+		List<Line2> pinInLines  = genPinLines( leftTerminal,  leftContact,  new Vec2(+1,0), inputCount,  true );
+		List<Line2> pinOutLines = genPinLines( rightTerminal, rightContact, new Vec2(-1,0), outputCount, true );
+		
+		List<Line2> pinLines = new ArrayList<>();
+		pinLines.addAll( pinOutLines );
+		pinLines.addAll( pinInLines  );
+		
+		GraphicComActive graphic = new GraphicComActive(
+			genPolyBody( true, br, tr, tl, bl ),
+			genPolyPins( pinLines ),
+			null,
+			genPinMappings( pinLines, pinOutLines.size() )
+		);
+		
+		recentreGraphic( graphic );
+		
+		return graphic;
+	}
+	
+	
+	
 	private static GraphicComActive generatePlexer( int inputs, int selects, int outputs, boolean isDemux ) {
 		Bbox2 r = getBaseRegion();
 			  r.transform( Geo.createTransform( new Vec2(0), new Vec2(2,2), 0) );
@@ -613,44 +651,6 @@ public abstract class GraphicGen
 		segs.add( segBot );
 		
 		return segs;
-	}
-	
-	
-	
-	public static GraphicComActive generateDecoder( int inputCount, int outputCount ) {
-		Bbox2 r = getBaseRegion();
-	  	  	  r.transform( Geo.createTransform( new Vec2(0), new Vec2(1,2), 0) );
-	  	
-	  	applyPinGrowth( r, outputCount );
-		
-		Vec2 tl = r.getTopLeft();
-		Vec2 tr = r.getTopRight();
-		Vec2 bl = r.getBottomLeft();
-		Vec2 br = r.getBottomRight();
-		
-		Line2 leftContact  = new Line2( tl, bl );
-		Line2 rightContact = new Line2( tr, br );
-		
-		Line2 leftTerminal  = leftContact .translate( -pinLength, 0 );
-		Line2 rightTerminal = rightContact.translate( +pinLength, 0 );
-		
-		List<Line2> pinInLines  = genPinLines( leftTerminal,  leftContact,  new Vec2(+1,0), inputCount,  true );
-		List<Line2> pinOutLines = genPinLines( rightTerminal, rightContact, new Vec2(-1,0), outputCount, true );
-		
-		List<Line2> pinLines = new ArrayList<>();
-		pinLines.addAll( pinOutLines );
-		pinLines.addAll( pinInLines  );
-		
-		GraphicComActive graphic = new GraphicComActive(
-			genPolyBody( true, br, tr, tl, bl ),
-			genPolyPins( pinLines ),
-			null,
-			genPinMappings( pinLines, pinOutLines.size() )
-		);
-		
-		recentreGraphic( graphic );
-		
-		return graphic;
 	}
 	
 	
