@@ -255,10 +255,7 @@ public class Simulation implements Serializable
 		Map<Pin,Net> map = new IdentityHashMap<>();
 		
 		for (ComponentActive com: actives) {
-			List<Pin> pins = new ArrayList<>();
-			
-			pins.addAll( com.getPinInputs () );
-			pins.addAll( com.getPinOutputs() );
+			List<Pin> pins = com.getPins();
 			
 			for (Pin pin: pins)
 				for (Net net: nets)
