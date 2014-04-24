@@ -13,6 +13,7 @@ import logicBox.util.Util;
 /**
  * Abstracts connective circuitry between active components into a single object.
  * Also useful as an informational structure.
+ * This structure should be considered read-only!
  * @author Lee Coakley
  */
 public class Net implements Stateful, Updateable, Serializable, Iterable<ComponentPassive>
@@ -26,6 +27,9 @@ public class Net implements Stateful, Updateable, Serializable, Iterable<Compone
 	public Set<Pin>              pins;       // All pins, except virtual Junction pins
 	public Set<Pin>              pinInputs;  // Input pins (to components from net)
 	public Set<Pin>              pinOutputs; // Output pins (from components into net)
+	
+	public Set<ComponentActive> fanIn;       // Dependencies for this net
+	public Set<ComponentActive> fanOut;      // Dependencies for this net
 	
 	
 	
@@ -105,12 +109,14 @@ public class Net implements Stateful, Updateable, Serializable, Iterable<Compone
 	 * Find all the active components connected via their input pins from this net (outward edge)
 	 */
 	public Set<ComponentActive> getFanout() {
-		Set<ComponentActive> set = Util.createIdentityHashSet();
+		if (fanOut == null) {
+			fanOut = Util.createIdentityHashSet();
+			
+			for (Pin pin: pinInputs)
+				fanOut.add( (ComponentActive) pin.getAttachedComponent() );
+		}
 		
-		for (Pin pin: pinInputs)
-			set.add( (ComponentActive) pin.getAttachedComponent() );
-		
-		return set;
+		return fanOut;
 	}
 	
 	
@@ -119,12 +125,14 @@ public class Net implements Stateful, Updateable, Serializable, Iterable<Compone
 	 * Find all the active components connected via their outputs pins to this net (inward edge)
 	 */
 	public Set<ComponentActive> getFanin() {
-		Set<ComponentActive> set = Util.createIdentityHashSet();
+		if (fanIn == null) {
+			fanIn = Util.createIdentityHashSet();
+			
+			for (Pin pin: pinOutputs)
+				fanIn.add( (ComponentActive) pin.getAttachedComponent() );
+		}
 		
-		for (Pin pin: pinOutputs)
-			set.add( (ComponentActive) pin.getAttachedComponent() );
-		
-		return set;
+		return fanIn;
 	}
 	
 	
