@@ -42,7 +42,7 @@ class FileController extends Controller
 		if(!$f)
 			return Error::data(['file' => 'Valid file was not specified']);
 		
-		$f->delete();
+		unlink($f);
 		
 		return Response::json(['success' => 'The file was deleted.']);
 	}
