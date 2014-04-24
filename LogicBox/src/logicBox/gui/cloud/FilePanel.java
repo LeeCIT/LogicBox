@@ -17,11 +17,13 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 
 import net.miginfocom.swing.MigLayout;
 import logicBox.gui.GUI;
 import logicBox.web.DownloadInterface;
 import logicBox.web.Request;
+import logicBox.web.RequestInterface;
 import logicBox.web.RequestInterface.status;
 
 public class FilePanel extends JDialog {
@@ -34,6 +36,7 @@ public class FilePanel extends JDialog {
 	
 	private JFrame 						parent;
 	private JList<String> 				listFile			= new JList<String>(files);
+	private JButton 					btnDelete 			= new JButton("Delete");
 	private JButton 					btnOpen 			= new JButton("Open");
 	
 	public FilePanel(JFrame frame)
@@ -70,23 +73,78 @@ public class FilePanel extends JDialog {
 		listFile.setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		panel.add(listFile, "height 85%, width 90%, span 2, wrap");
+		panel.add(btnDelete, "alignx left");
 		panel.add(btnOpen, "alignx right");
 		
+		btnDelete.addActionListener(onDeleteClick());
 		btnOpen.addActionListener(onOpenClick());
 		
 		setSize( 600, 400 );		
 		add(panel);
 	}
 	
+	private ActionListener onDeleteClick() {
+		return new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(listFile.getSelectedIndex() == -1)
+					GUI.showError(parent, "Invalid Index", "Please select a file first!");
+				else
+				{
+					Request r = new Request();
+					
+					btnDelete.setEnabled(false);
+					btnOpen.setEnabled(false);
+					listFile.setEnabled(false);
+					
+					r.setRequestInterface(handleDelete());
+						
+					r.delete(files.elementAt(listFile.getSelectedIndex()));
+				}
+			}
+		};
+	}
+	
 	private ActionListener onOpenClick() {
 		return new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Request r = new Request();
-				
-				btnOpen.setEnabled(false);
-				
-				r.download(files.elementAt(listFile.getSelectedIndex()), handleOpen());
+				if(listFile.getSelectedIndex() == -1)
+					GUI.showError(parent, "Invalid Index", "Please select a file first!");
+				else
+				{
+					Request r = new Request();
+					
+					btnOpen.setEnabled(false);
+					
+					r.download(files.elementAt(listFile.getSelectedIndex()), handleOpen());
+				}
+			}
+		};
+	}
+	
+	private RequestInterface handleDelete() {
+		return new RequestInterface() {
+			@Override
+			public void onRequestResponse(HttpResponse<JsonNode> res, Request req, status stat) {
+				if(stat != status.COMPLETED)
+					GUI.showError(parent, "Could not make request!", "Request Failure");
+				else
+				{
+					if(req.hasErrors())
+						GUI.showErrorList(parent, req.getErrors(), "Deletion Error");
+					else
+					{
+						CloudController.getUser().getFiles().remove(listFile.getSelectedIndex());
+						files.remove(listFile.getSelectedIndex());
+
+						btnDelete.setEnabled(true);
+						btnOpen.setEnabled(true);
+						listFile.setEnabled(true);
+						
+						GUI.showMessage(parent, "File deleted!", "Your file has been deleted!");
+					}
+				}
 			}
 		};
 	}

@@ -46,7 +46,13 @@ public class Request
 		wc.get("user/logout", this, ri);
 	}
 	
-	public void download(String name, DownloadInterface di) {
+	public void delete(String name)
+	{
+		wc.get("user/delete/" + name, this, ri);
+	}
+	
+	public void download(String name, DownloadInterface di) 
+	{
 		wc.download("user/files/", name, this, di);
 	}
 	
