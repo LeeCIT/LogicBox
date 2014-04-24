@@ -12,6 +12,7 @@ import logicBox.web.User;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
 
 public class CloudController {
 	
@@ -30,6 +31,8 @@ public class CloudController {
 				else
 				{
 					setAuthState(false);
+					
+					Unirest.clearDefaultHeaders();
 					
 					GUI.showMessage(GUI.getMainFrame(), "Successfully logged out!", "Logout success");
 				}
@@ -79,7 +82,12 @@ public class CloudController {
 			if(r.hasErrors()) 
 				GUI.showErrorList(GUI.getMainFrame(), r.getErrors(), "Upload Failure");
 			else
+			{
+				if(!user.getFiles().contains(f.getName()))
+					user.getFiles().add(f.getName());
+				
 				GUI.showMessage(GUI.getMainFrame(), "File uploaded", "File was uploaded successfully!");
+			}
 	    }
 	}
 }

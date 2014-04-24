@@ -131,6 +131,7 @@ public class WebClient
 		if(headers.containsKey("set-cookie"))
 		{
 			Unirest.setDefaultHeader("Cookie", headers.get("set-cookie"));
+			Unirest.setDefaultHeader("cookie", headers.get("set-cookie"));
 		}
 	}
 	

@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
 
 import logicBox.gui.GUI;
 import logicBox.web.*;
@@ -82,7 +83,7 @@ public class LoginPanel extends JDialog implements RequestInterface
 			public void actionPerformed(ActionEvent ae) 
 			{	
 				btnLogin.setEnabled(false);
-
+				
 				r.login(
 						txtEmail.getText(), 
 						String.valueOf(txtPassword.getPassword())
