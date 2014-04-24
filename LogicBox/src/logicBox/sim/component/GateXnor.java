@@ -47,7 +47,7 @@ public class GateXnor extends GateXor
 	
 	
 	public String getName() {
-		return "XNOR gate";
+		return "" + getPinInputCount() + "-input XNOR gate";
 	}
 	
 	
