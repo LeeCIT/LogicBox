@@ -16,7 +16,7 @@ public class ToolboxCategoryPanel extends JPanel
 		addCategory(title);
 		
 		for (ToolboxButton butt: buttons)
-			add( butt, "w 48, h 32" );
+			add( butt, "w 48, h 32, wmax 48, hmax 32" );
 	}
 	
 	
