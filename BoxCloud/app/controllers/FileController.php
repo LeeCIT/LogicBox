@@ -31,4 +31,14 @@ class FileController extends Controller
 		
 		return Response::json(array('success' => 'File was uploaded to user\'s account!'));
     }
+	
+	function download($file)
+	{
+		$f = Auth::getUser()->getFile($file);
+		
+		if(!$f)
+			return Error::data(['file' => 'Valid file was not specified']);
+		
+		return Response::Download($f);
+	}
 }

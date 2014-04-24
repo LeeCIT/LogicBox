@@ -31,11 +31,20 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         {
 			$filedata = pathinfo($file);
 			
-            if($filedata['extension'] == 'lb')
+            if($filedata['extension'] == 'lbx')
                 $circuits[] = $files[$key];
 		}
 		
 		return $circuits;
+	}
+	
+	public function getFile($file)
+	{
+		$fpath = public_path('files/'.$this->id.'/'.str_replace('../', '', $file));
+		
+		if(File::exists($fpath)) return $fpath;
+		
+		return null;
 	}
 	
 	public function getUserInfo()
