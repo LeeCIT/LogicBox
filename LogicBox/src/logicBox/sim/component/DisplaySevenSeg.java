@@ -3,6 +3,8 @@
 
 package logicBox.sim.component;
 
+import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.GraphicGen;
 import logicBox.sim.SimUtil;
 
 
@@ -79,6 +81,12 @@ public class DisplaySevenSeg extends Display
 	
 	public String getName() {
 		return "Seven segment display";
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return GraphicGen.generateDisplaySevenSeg();
 	}
 	
 	
