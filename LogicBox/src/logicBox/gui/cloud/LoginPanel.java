@@ -3,9 +3,12 @@ package logicBox.gui.cloud;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.*;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
+
 import logicBox.gui.GUI;
 import logicBox.web.*;
 import net.miginfocom.swing.MigLayout;
@@ -109,6 +112,7 @@ public class LoginPanel extends JDialog implements RequestInterface
 			else
 			{
 				CloudController.setAuthState(true);
+				CloudController.authUser(res.getBody().getObject());
 				
 				dispose();
 			}

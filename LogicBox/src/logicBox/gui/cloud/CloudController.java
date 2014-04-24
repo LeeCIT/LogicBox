@@ -1,14 +1,19 @@
 package logicBox.gui.cloud;
 
+import org.json.JSONObject;
+
 import logicBox.gui.GUI;
 import logicBox.gui.editor.menubar.EditorMenuBar;
 import logicBox.web.Request;
 import logicBox.web.RequestInterface;
+import logicBox.web.User;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 
 public class CloudController {
+	
+	private static User user;
 	
 	public static void handleLogoutRequest() {
 		Request r = new Request();
@@ -30,6 +35,16 @@ public class CloudController {
 		});
 		
 		r.logout();
+	}
+	
+	public static User authUser(JSONObject json) {
+		user = new User(json);
+		
+		return user;
+	}
+	
+	public static User getUser() {
+		return user;
 	}
 	
 	public static void setAuthState(boolean state) {

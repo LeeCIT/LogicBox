@@ -112,6 +112,7 @@ public class RegisterPanel extends JDialog implements RequestInterface
 			else
 			{
 				CloudController.setAuthState(true);
+				CloudController.authUser(res.getBody().getObject());
 				
 				dispose();
 			}
