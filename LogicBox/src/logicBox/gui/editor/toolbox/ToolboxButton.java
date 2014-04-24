@@ -15,7 +15,7 @@ import logicBox.util.Evaluator;
  * A button specialised for use in the Toolbox class.
  * @author Lee Coakley
  */
-public class ToolboxButton extends JButton
+public class ToolboxButton extends JButton implements ButtTargetable
 {
 	private Evaluator<ToolManager> targetEvaluator;
 	
@@ -39,26 +39,26 @@ public class ToolboxButton extends JButton
 	
 	
 	
-	public ToolboxButton( String text, Icon icon ) {
-		super( text, icon );
-	}
-	
-	
-	
 	public ToolboxButton( String text ) {
 		super( text );
 	}
 	
 	
 	
-	protected void setToolManagerEvaluator( Evaluator<ToolManager> targetEvaluator ) {
+	public void setToolManagerEvaluator( Evaluator<ToolManager> targetEvaluator ) {
 		this.targetEvaluator = targetEvaluator;
 	}
 	
 	
 	
-	protected ToolManager getTargetToolManager() {
+	public ToolManager getTargetToolManager() {
 		return targetEvaluator.evaluate();
+	}
+	
+	
+	
+	public JButton getButton() {
+		return this;
 	}
 }
 
