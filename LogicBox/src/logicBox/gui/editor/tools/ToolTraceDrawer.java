@@ -24,6 +24,7 @@ import logicBox.gui.editor.SimMapper;
 import logicBox.sim.Simulation;
 import logicBox.sim.component.Pin;
 import logicBox.sim.component.Trace;
+import logicBox.util.Bbox2;
 import logicBox.util.Geo;
 import logicBox.util.Line2;
 import logicBox.util.Vec2;
@@ -154,9 +155,9 @@ public class ToolTraceDrawer extends Tool
 				Gfx.drawThickRoundedLine( g, traceDest.gpm.line, thickness );
 		Gfx.popColor( g );
 	}
-
-
-
+	
+	
+	
 	private Color getCol( boolean armed ) {
 		return (armed) ? EditorStyle.colHighlightStroke : EditorStyle.colTraceOff;
 	}
@@ -372,45 +373,6 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
-	private void traceCreate() {
-		Vec2 start = tracePoints.firstElement();
-		Vec2 end   = tracePoints.lastElement();
-		
-		PinSnapInfo siA = getPinSnapInfo( start );
-		PinSnapInfo siB = getPinSnapInfo( end   );
-		
-		Pin pinA  = getSnappedPin( siA );
-		Pin pinB  = getSnappedPin( siB );
-		
-		
-		// Attach to junctions: TODO make it non-shit, add visual indicators, etc
-		if (pinA == null) pinA = createJunctionPin( start );
-		if (pinB == null) pinB = createJunctionPin( end   );
-			
-		Trace trace = Simulation.connectPins( pinA, pinB );
-		
-		EditorComponent ecom = new EditorComponentTrace( trace, tracePoints );
-		getWorld().add( ecom );
-		
-		markHistoryChange( "Trace create" );
-		repaint();
-	}
-	
-	
-	
-	private Pin createJunctionPin( Vec2 pos ) {
-		for (EditorComponent ecom: getWorld().find( pos )) {
-			if (ecom instanceof EditorComponentJunction) {
-				EditorComponentJunction junc = (EditorComponentJunction) ecom;
-				return junc.getComponent().createPin();
-			}
-		}
-		
-		return null;
-	}
-	
-	
-	
 	private void traceComplete() {
 		traceCreate();
 		traceFinishCommon();
@@ -437,13 +399,104 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private Vec2 getNextPos() {
-		Vec2     pos      = getMousePosWorld();
+		Vec2        pos         = getMousePosWorld();
 		PinSnapInfo pinSnapInfo = getPinSnapInfo( pos );
-		boolean  useSnap  = pinSnapInfo.snapped && ! isGpmUsed(pinSnapInfo.pinInfo.gpm);
+		boolean     useSnap     = pinSnapInfo.snapped && ! isGpmUsed(pinSnapInfo.pinInfo.gpm);
+		
+		EditorComponentJunction junc = findJunction( pos );
+		if (junc != null)
+			return junc.getPos();
 		
 		if (useSnap)
 			 return pinSnapInfo.pos;
 		else return pos;
+	}
+	
+	
+	
+	private void traceCreate() {
+		Vec2 start = tracePoints.firstElement();
+		Vec2 end   = tracePoints.lastElement();
+		
+		PinSnapInfo siA = getPinSnapInfo( start );
+		PinSnapInfo siB = getPinSnapInfo( end   );
+		
+		Pin pinA = getSnappedPin( siA );
+		Pin pinB = getSnappedPin( siB );
+		
+		
+		// Attach to junctions: TODO make it non-shit, add visual indicators, etc
+		if (pinA == null) pinA = createJunctionPin( start );
+		if (pinB == null) pinB = createJunctionPin( end   );
+			
+		Trace trace = Simulation.connectPins( pinA, pinB );
+		
+		EditorComponent ecom = new EditorComponentTrace( trace, tracePoints );
+		getWorld().add( ecom );
+		
+		markHistoryChange( "Trace create" );
+		repaint();
+	}
+	
+	
+	
+	private Pin createJunctionPin( Vec2 pos ) {
+		EditorComponentJunction junc = findJunction( pos );
+		
+		if (junc != null)
+			return junc.getComponent().createPin();
+		
+		return null;
+	}
+	
+	
+	
+	private EditorComponentJunction findJunction( Vec2 pos ) {
+		double radius = 8;
+		Bbox2  bbox   = new Bbox2( pos.subtract(radius), pos.add(radius) );
+		
+		for (EditorComponent ecom: getWorld().find( bbox )) {
+			if (ecom instanceof EditorComponentJunction)
+				return (EditorComponentJunction) ecom;
+		}
+		
+		return null;
+	}
+	
+	
+	
+	private class FindTraceEndPointResult {
+		public boolean              foundEndPoint;
+		public EditorComponentTrace ecom;
+		public boolean              atStart; // else at end
+		public Vec2                 pos;
+	}
+	
+	
+	
+	private FindTraceEndPointResult findUnconnectedTraceEndpoint( Vec2 pos ) {
+		FindTraceEndPointResult result = new FindTraceEndPointResult();
+		
+		double radius = 8;
+		Bbox2  bbox   = new Bbox2( pos.subtract(radius), pos.add(radius) );
+		
+		for (EditorComponent ecom: getWorld().find( bbox )) {
+			if (ecom instanceof EditorComponentTrace) {
+				EditorComponentTrace trace = (EditorComponentTrace) ecom;
+				
+				Vec2    posStart = trace.getPosStart();
+				Vec2    posEnd   = trace.getPosEnd();
+				boolean atStart  = Geo.distance(posStart, pos) <= radius;
+				boolean atEnd    = Geo.distance(posEnd,   pos) <= radius;
+				
+				result.foundEndPoint = atStart || atEnd;
+				result.ecom          = trace;
+				result.atStart       = atStart;
+				result.pos           = (atStart) ? posStart : posEnd;
+			}
+		}
+		
+		return null;
 	}
 	
 	
@@ -471,6 +524,14 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	
+	private enum SnapType {
+		pin,
+		junction,
+		trace
+	}
+	
+	
+	
 	private class PinSnapInfo {
 		public boolean snapped; // True if found a pin to snap onto
 		public Vec2    pos;		// Endpoint of the pin, where the trace should attach
@@ -480,8 +541,8 @@ public class ToolTraceDrawer extends Tool
 	
 	
 	private PinSnapInfo getPinSnapInfo( Vec2 pos ) {
-		double   snapThresh = 8 / getCamera().getZoom();
-		PinSnapInfo pinSnapInfo   = new PinSnapInfo();
+		double      snapThresh  = 8 / getCamera().getZoom();
+		PinSnapInfo pinSnapInfo = new PinSnapInfo();
 		EditorWorld.FindClosestPinResult fcpRes = getWorld().findClosestPin( pos, snapThresh );
 		
 		if (fcpRes.foundPin) {
