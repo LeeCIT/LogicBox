@@ -718,7 +718,6 @@ public abstract class GraphicGen
 	
 	public static GraphicComActive generateBlackBox( List<PinIoMode> left, List<PinIoMode> right, List<PinIoMode> top, List<PinIoMode> bottom ) {
 		Bbox2 r = getBaseRegion();
-	  	  	  r.transform( Geo.createTransform( new Vec2(0), new Vec2(2,2), 0) );
 	  	
 	  	int maxPinsX = Math.max( top .size(),  bottom.size() );
 	  	int maxPinsY = Math.max( left.size(),  right .size() );
@@ -772,7 +771,7 @@ public abstract class GraphicGen
 			gpms.add( new GraphicPinMapping(line, mode, index) );
 		}
 		
-		GraphicComActive graphic =  new GraphicComActive(
+		GraphicComActive graphic = new GraphicComActive(
 			genPolyBody( true, br, tr, tl, bl ),
 			genPolyPins( pinLines ),
 			null,
