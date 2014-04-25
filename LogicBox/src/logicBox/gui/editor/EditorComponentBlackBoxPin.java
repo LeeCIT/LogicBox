@@ -9,19 +9,19 @@ import logicBox.util.Vec2;
 
 
 
-public class EditorComponentBlackboxPin extends EditorComponentActive
+public class EditorComponentBlackBoxPin extends EditorComponentActive
 {
 	private static final long serialVersionUID = 1L;
 	
 	
 	
-	public EditorComponentBlackboxPin( BlackBoxPin com, GraphicComActive gca, Vec2 pos, double angle ) {
+	public EditorComponentBlackBoxPin( BlackBoxPin com, GraphicComActive gca, Vec2 pos, double angle ) {
 		super( com, gca, pos, angle );
 	}
 	
 	
 	
-	public EditorComponentBlackboxPin( BlackBoxPin com, GraphicComActive gca, Vec2 pos ) {
+	public EditorComponentBlackBoxPin( BlackBoxPin com, GraphicComActive gca, Vec2 pos ) {
 		this( com, gca, pos, gca.getAngle() );
 	}
 	
