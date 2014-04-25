@@ -31,6 +31,11 @@ public class EditorToolbar extends JToolBar
 	public EditorToolBarButton buttCopy;
 	public EditorToolBarButton buttPaste;
 	
+	public EditorToolBarButton buttSelectNone;
+	public EditorToolBarButton buttSelectAll;
+	public EditorToolBarButton buttSelectInvert;
+	public EditorToolBarButton buttSelectBlackBox;
+	
 	public EditorToolBarButton buttToggleGrid;
 	public EditorToolBarButton buttCameraRecentre;
 	public EditorToolBarButton buttToggleToolbox;
@@ -50,23 +55,28 @@ public class EditorToolbar extends JToolBar
 	private void createButtons() {
 		setLayout( new MigLayout( "gap 0, insets 0", "[]", "[]" ) );
 		
-		buttNew            = addButton( IconEnum.newFile,  "New file"         , false );
-		buttOpen           = addButton( IconEnum.openFile, "Open file"        , false );
-		buttSave           = addButton( IconEnum.saveFile, "Save file"        , false );
-		buttPrint          = addButton( IconEnum.print,    "Print file"       , false );
+		buttNew            = addButton( IconEnum.newFile,       "New circuit"      , false );
+		buttOpen           = addButton( IconEnum.openFile,      "Open circuit"     , false );
+		buttSave           = addButton( IconEnum.saveFile,      "Save circuit"     , false );
+		buttPrint          = addButton( IconEnum.print,         "Print circuit"    , false );
+		                                                        
+		buttUndo           = addButton( IconEnum.undo,          "Undo"             , true  );
+		buttRedo           = addButton( IconEnum.redo,          "Redo"             , false );
+		                                                        
+		buttCut            = addButton( IconEnum.cut,           "Cut"              , true  );
+		buttCopy           = addButton( IconEnum.copy,          "Copy"             , false );
+		buttPaste          = addButton( IconEnum.paste,         "Paste"            , false );
 		
-		buttUndo           = addButton( IconEnum.undo,     "Undo"             , true  );
-		buttRedo           = addButton( IconEnum.redo,     "Redo"             , false );
+		buttSelectNone     = addButton( IconEnum.selectNone,    "Select none"      , true  );
+		buttSelectAll      = addButton( IconEnum.selectAll,     "Select all"       , false );
+		buttSelectInvert   = addButton( IconEnum.selectInverse, "Invert selection" , false );
+		buttSelectBlackBox = addButton( IconEnum.selectBlack,   "Create black-box" , false );
 		
-		buttCut            = addButton( IconEnum.cut,      "Cut"              , true  );
-		buttCopy           = addButton( IconEnum.copy,     "Copy"             , false );
-		buttPaste          = addButton( IconEnum.paste,    "Paste"            , false );
-		
-		buttToggleGrid     = addButton( IconEnum.grid,     "Show/hide grid"   , true  );
-		buttCameraRecentre = addButton( IconEnum.camera,   "Centre camera"    , false );
-		buttToggleToolbox  = addButton( IconEnum.toolbox,  "Show/hide toolbox", false );
-		
-		buttHelp           = addButton( IconEnum.help,     "Show help"        , true  );
+		buttToggleGrid     = addButton( IconEnum.grid,          "Show/hide grid"   , true  );
+		buttCameraRecentre = addButton( IconEnum.camera,        "Centre camera"    , false );
+		buttToggleToolbox  = addButton( IconEnum.toolbox,       "Show/hide toolbox", false );
+		                                                        
+		buttHelp           = addButton( IconEnum.help,          "Show help"        , true  );
 	}
 	
 	
