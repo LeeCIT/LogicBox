@@ -346,7 +346,7 @@ public class Toolbox extends JDialog
 	private ToolboxButton genButtonText() {
 		ToolboxButton butt = new ToolboxButton( IconLoader.load(IconEnum.editText) );
 		
-		// TODO
+		// TODO implement
 		
 		return butt;
 	}
@@ -368,7 +368,7 @@ public class Toolbox extends JDialog
 			final ActionListener al = genListener( butt, first );
 			
 			butt.addSplitButtonActionListener( new SplitButtonActionListener() {
-				public void splitButtonClicked( ActionEvent arg0 ) {}
+				public void splitButtonClicked( ActionEvent ev ) {}
 				public void buttonClicked( ActionEvent ev ) {
 					al.actionPerformed( ev );
 				}

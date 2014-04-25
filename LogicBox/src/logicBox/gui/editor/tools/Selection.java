@@ -23,8 +23,8 @@ public class Selection implements Serializable, Iterable<EditorComponent>
 	private static final long serialVersionUID = 1L;
 	
 	public final Set<EditorComponent> ecoms;
-	public 		 Vec2   pivot;
-	public 		 double angle;
+	public 		 Vec2                 pivot;
+	public 		 double               angle;
 	
 	
 	
