@@ -25,14 +25,14 @@ public class FlipFlopT extends FlipFlop
 	
 	
 	
-	public Pin getPinClock() {
-		return getPinInput( 1 );
+	public Pin getPinT() {
+		return getPinInput( 0 );
 	}
 	
 	
 	
-	public Pin getPinT() {
-		return getPinInput( 0 );
+	public Pin getPinClock() {
+		return getPinInput( 1 );
 	}
 	
 	

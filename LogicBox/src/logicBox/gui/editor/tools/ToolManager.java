@@ -5,6 +5,8 @@ package logicBox.gui.editor.tools;
 
 import java.util.ArrayList;
 import java.util.List;
+import logicBox.gui.GUI;
+import logicBox.gui.editor.BlackBoxCreator;
 import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorController;
@@ -72,9 +74,7 @@ public class ToolManager
 	
 	
 	public boolean cut() {
-		if ( ! toolContextual.isAttached())
-			releaseControl();
-		
+		releaseControlIfNotContextual();
 		toolHighlighter.reset(); // Ensure no residual drawing is done
 		return toolContextual.cut();
 	}
@@ -82,18 +82,14 @@ public class ToolManager
 	
 	
 	public boolean copy() {
-		if ( ! toolContextual.isAttached())
-			releaseControl();
-		
+		releaseControlIfNotContextual();
 		return toolContextual.copy();
 	}
 	
 	
 	
 	public void paste() {
-		if ( ! toolContextual.isAttached())
-			releaseControl();
-		
+		releaseControlIfNotContextual();
 		toolContextual.paste();
 		getEditorPanel().repaint();
 	}
@@ -101,9 +97,7 @@ public class ToolManager
 	
 	
 	public void delete() {
-		if ( ! toolContextual.isAttached())
-			releaseControl();
-		
+		releaseControlIfNotContextual();
 		toolHighlighter.reset(); // Ensure no residual drawing is done
 		toolContextual.delete();
 	}
@@ -111,27 +105,44 @@ public class ToolManager
 	
 	
 	public void selectAll() {
-		releaseControl();
+		releaseControlIfNotContextual();
 		toolContextual.selectAll();
 	}
 	
 	
 	
 	public void selectNone() {
-		releaseControl();
+		releaseControlIfNotContextual();
 		toolContextual.selectNone();
 	}
 	
 	
 	
 	public void selectInvert() {
-		releaseControl();
+		releaseControlIfNotContextual();
 		toolContextual.selectInvert();
 	}
 	
 	
 	
+	public void selectCreateBlackBox() {
+		releaseControlIfNotContextual();		
+		initiateComponentCreation( toolContextual.selectBlackBox() );
+	}
+	
+	
+	
+	private void releaseControlIfNotContextual() {
+		if ( ! toolContextual.isAttached())
+			releaseControl();
+	}
+
+
+
 	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
+		if (ecc == null)
+			return;
+		
 		takeExclusiveControl( toolPlacer );
 		
 		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<EditorCreationParam>() {

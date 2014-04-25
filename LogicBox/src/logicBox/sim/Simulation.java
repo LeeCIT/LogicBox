@@ -56,6 +56,22 @@ public class Simulation implements Serializable
 	
 	
 	
+	public void debugConnectivity() {
+		for (ComponentActive com: actives) {
+			System.out.println( "+ " + com.getName() );
+			
+			for (Component connected: com.getConnectedComponents()) {
+				System.out.println( "\t- " + connected.getName() );
+				
+				for (Component connected2: connected.getConnectedComponents()) {
+					System.out.println( "\t\t- " + connected2.getName() );
+				}
+			}
+		}
+	}
+	
+	
+	
 	/**
 	 * Get all oscillators in the simulation.
 	 * This includes the oscs inside black-boxes, as they all need to be synced.
@@ -284,17 +300,6 @@ public class Simulation implements Serializable
 	
 	
 	
-	private <T> Map<T,Integer> genBaseLevelMap( Iterable<T> items ) {
-		Map<T,Integer> map = new IdentityHashMap<>();
-		
-		for (T item: items)
-			map.put( item, -1 );
-		
-		return map;
-	}
-	
-	
-	
 	/**
 	 * Test whether the circuit contains any feedback loops.
 	 * Doesn't test for the presence of memory.
@@ -367,15 +372,32 @@ public class Simulation implements Serializable
 	
 	
 	
+	private <T> Map<T,Integer> genBaseLevelMap( Iterable<T> items ) {
+		Map<T,Integer> map = new IdentityHashMap<>();
+		
+		for (T item: items)
+			map.put( item, -1 );
+		
+		return map;
+	}
+	
+	
+	
 	/**
 	 * Find the evaluation order for each active component.
 	 */
 	private Map<ComponentActive,Integer> leveliseActives( List<ComponentActive> actives ) {
-		if ( ! isLevelisable())
-			throw new NonLevelisableCircuitException( "Can't levelise: circuit contains feedback loops." );
+//		if ( ! isLevelisable()) { // TODO there is a bug in isLevlisable() somewhere which results in false positives.
+//			debugConnectivity();
+//			throw new NonLevelisableCircuitException( "Can't levelise: circuit contains feedback loops." );
+//		}
 		
-		Map<ComponentActive,Integer> levels   = genBaseLevelMap( actives );
-		Deque<ComponentActive>       deferred = new ArrayDeque<>( actives );
+		int sentinel      = 0;
+		int sentinelLimit = 500_000;
+		
+		Map<Pin,Net>                 pinNetMap = mapPinsToNets( cacheNets );
+		Map<ComponentActive,Integer> levels    = genBaseLevelMap( actives );
+		Deque<ComponentActive>       deferred  = new ArrayDeque<>( actives );
 		
 		while ( ! deferred.isEmpty()) {
 			ComponentActive com = deferred.removeFirst();
@@ -384,11 +406,11 @@ public class Simulation implements Serializable
 			int     maxLevel            = -1;
 			
 			for (Pin comPinInput: com.getPinInputs()) {
-				Net net = new Net( comPinInput );
+				Net net = pinNetMap.get( comPinInput );
 				
 				for (ComponentActive comDependency: net.getFanin()) {
 					int comLevel = levels.get( comDependency );
-					maxLevel = Math.max( maxLevel, comLevel );
+					    maxLevel = Math.max( maxLevel, comLevel );
 					allInputsHaveLevels &= (comLevel != -1);
 				}
 			}
@@ -396,6 +418,9 @@ public class Simulation implements Serializable
 			if (allInputsHaveLevels)
 				 levels.put( com, maxLevel + 1 );
 			else deferred.addLast( com );
+			
+			if (++sentinel > sentinelLimit)
+				throw new NonLevelisableCircuitException( "Circuit contains feedback loops." );
 		}
 		
 		return levels;

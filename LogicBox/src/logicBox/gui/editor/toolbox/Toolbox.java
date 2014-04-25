@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.*;
+import org.gpl.JSplitButton.action.SplitButtonActionListener;
 import net.miginfocom.swing.MigLayout;
 import logicBox.gui.IconEnum;
 import logicBox.gui.IconLoader;
@@ -219,10 +220,6 @@ public class Toolbox extends JDialog
 	
 	private void addComplexButtons() {
 		ButtTargetable[] butts = {
-			genButton( new Decoder(2),
-					   new Decoder(3),
-					   new Decoder(4)
-			),
 			genButton( new Mux(2),
 					   new Mux(3),
 					   new Mux(4),
@@ -238,6 +235,10 @@ public class Toolbox extends JDialog
 					   new Demux(6),
 					   new Demux(7),
 					   new Demux(8)
+			),
+			genButton( new Decoder(2),
+					   new Decoder(3),
+					   new Decoder(4)
 			)
 		};
 		
@@ -345,7 +346,7 @@ public class Toolbox extends JDialog
 	private ToolboxButton genButtonText() {
 		ToolboxButton butt = new ToolboxButton( IconLoader.load(IconEnum.editText) );
 		
-		// TODO
+		// TODO implement
 		
 		return butt;
 	}
@@ -363,6 +364,15 @@ public class Toolbox extends JDialog
 		else {
 			ToolboxButtonSplit butt = new ToolboxButtonSplit( first.getGraphic(), first.getName() );
 			JPopupMenu         menu = new JPopupMenu();
+			
+			final ActionListener al = genListener( butt, first );
+			
+			butt.addSplitButtonActionListener( new SplitButtonActionListener() {
+				public void splitButtonClicked( ActionEvent ev ) {}
+				public void buttonClicked( ActionEvent ev ) {
+					al.actionPerformed( ev );
+				}
+			});
 			
 			for (ComponentActive com: coms)
 				menu.add( genMenuItem(butt, com) );

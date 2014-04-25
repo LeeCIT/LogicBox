@@ -12,9 +12,6 @@ import logicBox.sim.SimUtil;
 
 /**
  * A special type of component which connects a black-box to the outside world.
- * TODO for usability's sake, the graphic should probably indicate on/off like the LED
- * TODO could use the socket part for that
- * TODO also be toggleable
  * @author Lee Coakley
  */
 public class BlackBoxPin extends ComponentActive
@@ -52,14 +49,30 @@ public class BlackBoxPin extends ComponentActive
 	
 	
 	
+	/**
+	 * Is the pin flowing into the simulation?
+	 */
 	public boolean isInput() {
 		return isInput;
 	}
 	
 	
 	
+	/**
+	 * Is the pin flowing out of the simulation?
+	 */
 	public boolean isOutput() {
 		return ! isInput();
+	}
+	
+	
+	
+	/**
+	 * Get the IoMode equivalent of isInput()/isOutPut().
+	 * This has NOTHING to do with the Pin object attached to the component.
+	 */
+	public PinIoMode getEquivalentPinIoMode() {
+		return (isInput) ? PinIoMode.input : PinIoMode.output;
 	}
 	
 	

@@ -32,6 +32,14 @@ public abstract class ComponentActive extends Component implements Updateable, P
 	
 	
 	
+	public Pin getPin( PinIoMode mode, int index ) {
+	         if (mode == PinIoMode.input)  return getPinInput ( index );
+		else if (mode == PinIoMode.output) return getPinOutput( index );
+		else 							   return null;
+	}
+	
+	
+	
 	public List<Pin> getPins() {
 		List<Pin> pins = new ArrayList<>();
 		pins.addAll( getPinInputs () );
@@ -109,6 +117,14 @@ public abstract class ComponentActive extends Component implements Updateable, P
 	
 	public int getPinOutputCount() {
 		return getPinOutputs().size();
+	}
+	
+	
+	
+	public String getPinName( PinIoMode mode, int index ) {
+		     if (mode == PinIoMode.input)  return "Pin: input  " + index;
+		else if (mode == PinIoMode.output) return "Pin: output " + index;
+		else 							   return "Pin: <unknown>";
 	}
 	
 	
