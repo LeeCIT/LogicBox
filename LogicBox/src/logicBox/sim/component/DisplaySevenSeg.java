@@ -38,6 +38,19 @@ public class DisplaySevenSeg extends Display
 	
 	
 	
+	public String getPinName( PinIoMode mode, int index ) {
+		String str = super.getPinName( mode, index );
+		
+		if (mode == PinIoMode.input) {
+			if (index == 0)                    str += " (LSB)";
+			if (index == getPinInputCount()-1) str += " (MSB)";
+		}
+		
+		return str;
+	}
+	
+	
+	
 	public boolean[] getSegmentStates() {
 		return segmentStates;
 	}

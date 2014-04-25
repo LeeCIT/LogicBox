@@ -12,7 +12,6 @@ import logicBox.sim.Simulation;
 
 /**
  * A component which encapsulates a whole other simulation.
- * TODO map pins to sim blackbox pins
  * @author Lee Coakley
  */
 public class BlackBox extends ComponentActive

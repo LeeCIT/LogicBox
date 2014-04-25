@@ -32,6 +32,19 @@ public class Decoder extends ComponentActive
 	
 	
 	
+	public String getPinName( PinIoMode mode, int index ) {
+		String str = super.getPinName( mode, index );
+		
+		if (mode == PinIoMode.input) {
+			if (index == 0)                    str += " (LSB)";
+			if (index == getPinInputCount()-1) str += " (MSB)";
+		}
+		
+		return str;
+	}
+	
+	
+	
 	public void update() {
 		for (Pin pin: pinOutputs)
 			pin.setState( false );

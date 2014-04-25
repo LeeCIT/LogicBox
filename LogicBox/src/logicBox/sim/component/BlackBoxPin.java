@@ -49,14 +49,30 @@ public class BlackBoxPin extends ComponentActive
 	
 	
 	
+	/**
+	 * Is the pin flowing into the simulation?
+	 */
 	public boolean isInput() {
 		return isInput;
 	}
 	
 	
 	
+	/**
+	 * Is the pin flowing out of the simulation?
+	 */
 	public boolean isOutput() {
 		return ! isInput();
+	}
+	
+	
+	
+	/**
+	 * Get the IoMode equivalent of isInput()/isOutPut().
+	 * This has NOTHING to do with the Pin object attached to the component.
+	 */
+	public PinIoMode getEquivalentPinIoMode() {
+		return (isInput) ? PinIoMode.input : PinIoMode.output;
 	}
 	
 	
