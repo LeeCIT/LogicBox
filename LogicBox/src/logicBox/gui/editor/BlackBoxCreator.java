@@ -4,6 +4,8 @@
 package logicBox.gui.editor;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +55,14 @@ public abstract class BlackBoxCreator
 		List<EditorComponentBlackboxPin> bbTop    = findFacing( bbPins,  90-45,  90+45 );
 		List<EditorComponentBlackboxPin> bbBottom = findFacing( bbPins, 270-45, 270+45 );
 		
-		bbPins.clear(); // Sort in GPM order
+		// Sort in spatial order
+		sortLeftToRight( bbTop    );
+		sortLeftToRight( bbBottom );
+		sortTopToBottom( bbLeft   );
+		sortTopToBottom( bbRight  );
+		
+		// Sort in GPM order
+		bbPins.clear();
 		bbPins.addAll( bbLeft   );
 		bbPins.addAll( bbRight  );
 		bbPins.addAll( bbTop    );
@@ -122,6 +131,26 @@ public abstract class BlackBoxCreator
 		}
 		
 		return list;
+	}
+	
+	
+	
+	private static void sortLeftToRight( List<EditorComponentBlackboxPin> bbPins ) {
+		Collections.sort( bbPins, new Comparator<EditorComponentBlackboxPin>() {
+			public int compare(EditorComponentBlackboxPin a, EditorComponentBlackboxPin b) {
+				return (a.getPos().x < b.getPos().x) ? -1 : +1;
+			};
+		});
+	}
+	
+	
+	
+	private static void sortTopToBottom( List<EditorComponentBlackboxPin> bbPins ) {
+		Collections.sort( bbPins, new Comparator<EditorComponentBlackboxPin>() {
+			public int compare(EditorComponentBlackboxPin a, EditorComponentBlackboxPin b) {
+				return (a.getPos().y < b.getPos().y) ? -1 : +1;
+			};
+		});
 	}
 	
 	
