@@ -503,6 +503,21 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
+	public ActionListener getSelectBlackBoxAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				try {
+					getToolManager().selectCreateBlackBox();
+				}
+				catch (BlackBoxCreator.NoBlackBoxPinsException ex) {
+					GUI.showError( getEditorFrame(), "Can't Create Black-Box From Selection", "There are no black-box pins in the selection." );
+				}
+			}
+		};
+	}
+	
+	
+	
 	public ActionListener getGridToggleAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
