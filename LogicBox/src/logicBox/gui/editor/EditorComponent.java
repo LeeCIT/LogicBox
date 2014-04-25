@@ -38,7 +38,7 @@ public abstract class EditorComponent implements Serializable
 	         if (scom instanceof DisplayLed)       return new EditorComponentLed        ( (DisplayLed)       scom, gca, param.pos, param.angle );
 	    else if (scom instanceof DisplaySevenSeg)  return new EditorComponentSevenSeg   ( (DisplaySevenSeg)  scom,      param.pos, param.angle );
 		else if (scom instanceof SourceOscillator) return new EditorComponentOscillator ( (SourceOscillator) scom, gca, param.pos, param.angle );
-		else if (scom instanceof BlackBoxPin)      return new EditorComponentBlackboxPin( (BlackBoxPin)      scom, gca, param.pos, param.angle );
+		else if (scom instanceof BlackBoxPin)      return new EditorComponentBlackBoxPin( (BlackBoxPin)      scom, gca, param.pos, param.angle );
 		else                                       return new EditorComponentActive     (                    scom, gca, param.pos, param.angle );
 	}
 	
