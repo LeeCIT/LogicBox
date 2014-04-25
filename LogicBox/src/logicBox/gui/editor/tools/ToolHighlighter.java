@@ -7,8 +7,13 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.EditorStyle;
+import logicBox.gui.editor.EditorWorld.FindClosestPinResult;
 import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.RepaintListener;
+import logicBox.sim.component.Component;
+import logicBox.sim.component.ComponentActive;
+import logicBox.util.Vec2;
 
 
 
@@ -111,11 +116,30 @@ public class ToolHighlighter extends Tool
 		if (curComponent != null) {
 			lastComponent = curComponent;
 			changed = true;
-			setTransHint( curComponent.getComponentName() );
+			setTransHint( curComponent, getMousePosWorld() );
 		}
 		
 		if (changed)
 			repaint();
+	}
+	
+	
+	
+	protected void setTransHint( EditorComponent ecom, Vec2 pos ) {
+		if (ecom == null)
+			return;
+		
+		String               str    = ecom.getComponentName();
+		FindClosestPinResult result = getWorld().findClosestPin( pos, EditorStyle.compThickness * 0.5 );
+		
+		if (result.foundPin) {
+			Component com = ecom.getComponent();
+			
+			if (ecom.getComponent() instanceof ComponentActive)
+				str += "\n" + ((ComponentActive) com).getPinName( result.gpm.mode, result.gpm.index );
+		}
+		
+		setTransHint( str );
 	}
 }
 
