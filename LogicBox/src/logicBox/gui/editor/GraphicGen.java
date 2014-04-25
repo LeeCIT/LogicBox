@@ -180,6 +180,8 @@ public abstract class GraphicGen
 		if (invert)
 			gate.setBubble( true, bubblePos, bubbleRadius );
 		
+		recentreGraphic( gate );
+		
 		return gate;
 	}
 	
@@ -253,6 +255,8 @@ public abstract class GraphicGen
 		
 		if (invert)
 			gate.setBubble( true, bubblePos, bubbleRadius );
+		
+		recentreGraphic( gate );
 		
 		return gate;
 	}
