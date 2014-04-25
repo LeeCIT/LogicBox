@@ -772,12 +772,16 @@ public abstract class GraphicGen
 			gpms.add( new GraphicPinMapping(line, mode, index) );
 		}
 		
-		return new GraphicComActive(
+		GraphicComActive graphic =  new GraphicComActive(
 			genPolyBody( true, br, tr, tl, bl ),
 			genPolyPins( pinLines ),
 			null,
 			gpms
 		);
+		
+		recentreGraphic( graphic );
+		
+		return graphic;
 	}
 	
 	
