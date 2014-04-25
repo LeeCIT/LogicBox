@@ -5,8 +5,10 @@ package logicBox.sim.component;
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import logicBox.gui.editor.GraphicComActive;
 import logicBox.sim.SimUtil;
 import logicBox.sim.Simulation;
+import logicBox.util.Util;
 
 
 
@@ -23,6 +25,7 @@ public class BlackBox extends ComponentActive
 	private Map<Pin,BlackBoxPin> pinMap;
 	private Map<Pin,BlackBoxPin> pinMapIn;
 	private Map<Pin,BlackBoxPin> pinMapOut;
+	private GraphicComActive     graphic; // TODO this is nasty, having a graphic in the sim...
 	
 	
 	
@@ -46,6 +49,12 @@ public class BlackBox extends ComponentActive
 			     if (pin.isInput ()) pinMapIn .put( pin, pinMap.get(pin) );
 			else if (pin.isOutput()) pinMapOut.put( pin, pinMap.get(pin) );
 		}
+	}
+	
+	
+	
+	public void setGraphic( GraphicComActive graphic ) {
+		this.graphic = graphic;
 	}
 	
 	
@@ -85,6 +94,12 @@ public class BlackBox extends ComponentActive
 	
 	public String getName() {
 		return "Black-box: " + name;
+	}
+	
+	
+	
+	public GraphicComActive getGraphic() {
+		return Util.deepCopy( graphic );
 	}
 	
 	
