@@ -67,8 +67,8 @@ public class EditorToolbar extends JToolBar
 		buttCopy           = addButton( IconEnum.copy,          "Copy"             , false );
 		buttPaste          = addButton( IconEnum.paste,         "Paste"            , false );
 		
-		buttSelectNone     = addButton( IconEnum.selectNone,    "Select none"      , true  );
-		buttSelectAll      = addButton( IconEnum.selectAll,     "Select all"       , false );
+		buttSelectAll      = addButton( IconEnum.selectAll,     "Select all"       , true  );
+		buttSelectNone     = addButton( IconEnum.selectNone,    "Select none"      , false );
 		buttSelectInvert   = addButton( IconEnum.selectInverse, "Invert selection" , false );
 		buttSelectBlackBox = addButton( IconEnum.selectBlack,   "Create black-box" , false );
 		
