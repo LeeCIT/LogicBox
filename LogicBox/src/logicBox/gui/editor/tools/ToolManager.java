@@ -5,6 +5,8 @@ package logicBox.gui.editor.tools;
 
 import java.util.ArrayList;
 import java.util.List;
+import logicBox.gui.GUI;
+import logicBox.gui.editor.BlackBoxCreator;
 import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorController;
@@ -123,6 +125,13 @@ public class ToolManager
 	
 	
 	
+	public void selectCreateBlackBox() {
+		releaseControlIfNotContextual();		
+		initiateComponentCreation( toolContextual.selectBlackBox() );
+	}
+	
+	
+	
 	private void releaseControlIfNotContextual() {
 		if ( ! toolContextual.isAttached())
 			releaseControl();
@@ -131,6 +140,9 @@ public class ToolManager
 
 
 	public void initiateComponentCreation( final EditorCreationCommand ecc ) {
+		if (ecc == null)
+			return;
+		
 		takeExclusiveControl( toolPlacer );
 		
 		toolPlacer.placementStart( ecc.getGraphicPreview(), new CallbackParam<EditorCreationParam>() {
