@@ -77,7 +77,6 @@ public abstract class GraphicGen
 	private static final double pinLength       = baseSize * pinLenFrac;
 	private static final double bubbleRadius    = baseSize * bubbleFrac;
 	private static final double thickness       = EditorStyle.compThickness;
-	//private static final Font   font            = EditorStyle.componentFont;
 	
 	
 	
@@ -695,13 +694,6 @@ public abstract class GraphicGen
 	
 	
 	
-	private static void recentreGraphic( GraphicComActive graphic ) {
-		Vec2 trans = graphic.getBbox().getCentre().negate();
-		graphic.transform( Geo.createTransform(trans,0), true );
-	}
-	
-	
-	
 	private static VecPath generateBlackboxSocket() {
 		Bbox2 r = getBaseRegion();
 		
@@ -720,6 +712,79 @@ public abstract class GraphicGen
 		poly.transform( Geo.createTransform( new Vec2(-baseSize,0), 0 ) );
 		
 		return poly;
+	}
+	
+	
+	
+	public static GraphicComActive generateBlackBox( List<PinIoMode> left, List<PinIoMode> right, List<PinIoMode> top, List<PinIoMode> bottom ) {
+		Bbox2 r = getBaseRegion();
+	  	  	  r.transform( Geo.createTransform( new Vec2(0), new Vec2(2,2), 0) );
+	  	
+	  	int maxPinsX = Math.max( top .size(),  bottom.size() );
+	  	int maxPinsY = Math.max( left.size(),  right .size() );
+	  	applyPinGrowth( r, maxPinsX, maxPinsY );
+	
+		Vec2 tl = r.getTopLeft();
+		Vec2 tr = r.getTopRight();
+		Vec2 bl = r.getBottomLeft();
+		Vec2 br = r.getBottomRight();
+		
+		Line2 contactLeft  = new Line2( tl, bl );
+		Line2 contactRight = new Line2( tr, br );
+		Line2 contactTop   = new Line2( tl, tr );
+		Line2 contactBot   = new Line2( bl, br );
+		
+		Line2 terminalLeft  = contactLeft .translate( -pinLength,  0         );
+		Line2 terminalRight = contactRight.translate( +pinLength,  0         );
+		Line2 terminalTop   = contactTop  .translate(  0,         -pinLength );
+		Line2 terminalBot   = contactBot  .translate(  0,         +pinLength );
+		
+		List<Line2> pinLinesLeft  = genPinLines( terminalLeft , contactLeft , new Vec2(+1, 0), left  .size(), true );
+		List<Line2> pinLinesRight = genPinLines( terminalRight, contactRight, new Vec2(-1, 0), right .size(), true );
+		List<Line2> pinLinesTop   = genPinLines( terminalTop  , contactTop  , new Vec2( 0,+1), top   .size(), true );
+		List<Line2> pinLinesBot   = genPinLines( terminalBot  , contactBot  , new Vec2( 0,-1), bottom.size(), true );
+		
+		List<Line2> pinLines = new ArrayList<>();
+		pinLines.addAll( pinLinesLeft  );
+		pinLines.addAll( pinLinesRight );
+		pinLines.addAll( pinLinesTop   );
+		pinLines.addAll( pinLinesBot   );
+		
+		List<PinIoMode> modes = new ArrayList<>();
+		modes.addAll( left   );
+		modes.addAll( right  );
+		modes.addAll( top    );
+		modes.addAll( bottom );
+		
+		List<GraphicPinMapping> gpms = new ArrayList<>();
+		int indexIn  = 0;
+		int indexOut = 0;
+		
+		for (int i=0; i<modes.size(); i++) {
+			Line2     line = pinLines.get( i );
+			PinIoMode mode = modes   .get( i );
+			int       index;
+			
+			if (mode == PinIoMode.input)
+				 index = indexIn ++;
+			else index = indexOut++;
+			
+			gpms.add( new GraphicPinMapping(line, mode, index) );
+		}
+		
+		return new GraphicComActive(
+			genPolyBody( true, br, tr, tl, bl ),
+			genPolyPins( pinLines ),
+			null,
+			gpms
+		);
+	}
+	
+	
+	
+	private static void recentreGraphic( GraphicComActive graphic ) {
+		Vec2 trans = graphic.getBbox().getCentre().negate();
+		graphic.transform( Geo.createTransform(trans,0), true );
 	}
 	
 	
@@ -865,6 +930,13 @@ public abstract class GraphicGen
 	private static void applyPinGrowth( Bbox2 r, int pinCount ) {
 		if (pinCount > pinGrowthThresh)
 			r.br.y += getPinSpacingGrowth() * (pinCount - pinGrowthThresh);
+	}
+	
+	
+	
+	private static void applyPinGrowth( Bbox2 r, int xAxisMaxCount, int yAxisMaxCount ) {
+		if (yAxisMaxCount > pinGrowthThresh) r.br.y += getPinSpacingGrowth() * (yAxisMaxCount - pinGrowthThresh);
+		if (xAxisMaxCount > pinGrowthThresh) r.br.x += getPinSpacingGrowth() * (xAxisMaxCount - pinGrowthThresh);
 	}
 }
 
