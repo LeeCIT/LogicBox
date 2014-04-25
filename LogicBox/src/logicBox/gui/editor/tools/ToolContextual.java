@@ -13,8 +13,11 @@ import logicBox.gui.Gfx;
 import logicBox.gui.contextMenu.ContextMenu;
 import logicBox.gui.contextMenu.ContextMenuItem;
 import logicBox.gui.contextMenu.ContextMenuString;
+import logicBox.gui.editor.BlackBoxCreator;
 import logicBox.gui.editor.Clipboard;
 import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.EditorComponentActive;
+import logicBox.gui.editor.EditorCreationCommand;
 import logicBox.gui.editor.EditorStyle;
 import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.RepaintListener;
@@ -197,6 +200,27 @@ public class ToolContextual extends Tool
 		set.removeAll( selection.ecoms );		
 		selection.set( set );		
 		repaint();
+	}
+	
+	
+	
+	public EditorCreationCommand selectBlackBox() {
+		if ( ! hasSelection())
+			return null;
+		
+		Selection clipPrev = null;
+		
+		if ( ! Clipboard.isEmpty())
+			clipPrev = Clipboard.get();
+		
+		Clipboard.set( selection );
+		Selection bbSrc = Clipboard.get();
+		EditorComponentActive blackBox = BlackBoxCreator.create( bbSrc, new Vec2(0) );
+		
+		if (clipPrev != null)
+			Clipboard.set( clipPrev );
+		
+		return new EditorCreationCommand( blackBox.getComponent(), blackBox.getGraphic() );
 	}
 	
 	
