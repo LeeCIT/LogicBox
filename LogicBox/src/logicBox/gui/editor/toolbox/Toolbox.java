@@ -236,7 +236,8 @@ public class Toolbox extends JDialog
 					   new Demux(7),
 					   new Demux(8)
 			),
-			genButton( new Decoder(2),
+			genButton( new Decoder(1),
+					   new Decoder(2),
 					   new Decoder(3),
 					   new Decoder(4)
 			)
