@@ -36,8 +36,7 @@ public abstract class FlipFlop extends ComponentActive
 		super.reset();
 		lastClock = false;
 		nextQ     = false;
-		getPinQ()   .setState( false );
-		getPinQinv().setState( true  );
+		setQ( false );
 	}
 	
 	
