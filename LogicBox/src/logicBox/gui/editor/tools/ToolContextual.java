@@ -243,7 +243,10 @@ public class ToolContextual extends Tool
 	
 	
 	private void onDragClick( MouseEvent ev ) {
-		if (selectHasLock || dragHasLock)
+		if (ev.isShiftDown()
+		||  ev.isControlDown()
+		||  selectHasLock
+		||  dragHasLock)
 			return;
 		
 		Vec2            pos  = getMousePosWorld();
