@@ -40,4 +40,10 @@ public enum LogicLevel
 	public static boolean isPositiveEdge( boolean prev, boolean cur ) {
 		return edgePos == toLogicLevel( prev, cur );
 	}
+	
+	
+	
+	public static boolean isNegativeEdge( boolean prev, boolean cur ) {
+		return edgeNeg == toLogicLevel( prev, cur );
+	}
 }
