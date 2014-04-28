@@ -11,6 +11,7 @@ import logicBox.sim.SimUtil;
 /**
  * An edge-triggered flip-flop.
  * Can only change state on the rising edge of a clock pulse.
+ * The change is applied to the output pins on the falling edge of the pulse.
  * @author Lee Coakley
  */
 public abstract class FlipFlop extends ComponentActive
@@ -18,6 +19,7 @@ public abstract class FlipFlop extends ComponentActive
 	private static final long serialVersionUID = 1L;
 	
 	private boolean lastClock;
+	private boolean nextQ;
 	
 	
 	
@@ -33,8 +35,8 @@ public abstract class FlipFlop extends ComponentActive
 	public void reset() {
 		super.reset();
 		lastClock = false;
-		getPinQinv().setState( false );
-		getPinQinv().setState( true  );
+		nextQ     = false;
+		setQ( false );
 	}
 	
 	
@@ -55,13 +57,22 @@ public abstract class FlipFlop extends ComponentActive
 	
 	
 	
-	protected boolean updateClock() {
+	public void update() {
 		boolean clock     = getPinClock().getState();
 		boolean isEdgePos = LogicLevel.isPositiveEdge( lastClock, clock );
+		boolean isEdgeNeg = LogicLevel.isNegativeEdge( lastClock, clock );
 		lastClock = clock;
 		
-		return isEdgePos;
+		if (isEdgePos)
+			nextQ = evaluateNextQ();
+		
+		if (isEdgeNeg)
+			setQ( nextQ );
 	}
+	
+	
+	
+	protected abstract boolean evaluateNextQ();
 	
 	
 	

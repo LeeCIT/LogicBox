@@ -3,6 +3,8 @@
 
 package logicBox.gui.editor;
 import javax.swing.JFrame;
+import logicBox.gui.IconEnum;
+import logicBox.gui.IconLoader;
 import logicBox.gui.editor.menubar.EditorMenuBar;
 import logicBox.gui.editor.toolbar.EditorToolbar;
 import net.miginfocom.swing.MigLayout;
@@ -38,6 +40,8 @@ public class EditorFrame extends JFrame
 		this.scrollX = scrollX;
 		this.scrollY = scrollY;
 		
+		setIcon();
+		
 		circuitName       = "New Circuit";
 		isCircuitModified = false;
 		
@@ -46,6 +50,16 @@ public class EditorFrame extends JFrame
 	
 	
 	
+	private void setIcon() {
+		try {
+			setIconImage( IconLoader.load( IconEnum.title ).getImage() );
+		} catch (Exception ex) {
+			// Don't care
+		}
+	}
+
+
+
 	public void setCircuitName( String name ) {
 		circuitName = name;
 		updateTitle();

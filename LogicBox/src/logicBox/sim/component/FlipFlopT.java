@@ -5,6 +5,7 @@ package logicBox.sim.component;
 
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.gui.editor.GraphicGen;
+import logicBox.sim.LogicLevel;
 
 
 
@@ -37,10 +38,11 @@ public class FlipFlopT extends FlipFlop
 	
 	
 	
-	public void update() {
-		if (updateClock())		
-			if (getPinT().getState())
-				setQ( ! getPinQ().getState() );
+	protected boolean evaluateNextQ() {
+		boolean t = getPinT().getState();
+		boolean q = getPinQ().getState();
+		
+		return (t) ? !q : q;
 	}
 	
 	

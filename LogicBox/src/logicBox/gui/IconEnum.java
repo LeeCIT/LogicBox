@@ -32,6 +32,7 @@ public enum IconEnum
 	help,
 	delete,
 	editText,
+	title,
 	;
 	
 	
@@ -60,9 +61,11 @@ public enum IconEnum
 			case help         : return "Help"           + suffix;
 			case delete       : return "Delete"         + suffix;
 			case editText     : return "EditText"       + suffix;
+			case title        : return "Title"          + suffix;
 			
 			default:
 				throw new RuntimeException( "No filename defined for IconEnum " + this + "." );
 		}
 	}
 }
+

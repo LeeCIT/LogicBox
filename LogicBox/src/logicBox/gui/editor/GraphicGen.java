@@ -265,7 +265,6 @@ public abstract class GraphicGen
 	
 	public static GraphicComActive generateDecoder( int inputCount, int outputCount ) {
 		Bbox2 r = getBaseRegion();
-	  	  	  r.transform( Geo.createTransform( new Vec2(0), new Vec2(1,2), 0) );
 	  	
 	  	applyPinGrowth( r, outputCount );
 		

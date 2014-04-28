@@ -54,23 +54,16 @@ public class FlipFlopJK extends FlipFlop
 	
 	
 	
-	public void update() {
-		boolean shouldUpdate = updateClock();
-		
-		if ( ! shouldUpdate)
-			return;
-		
+	protected boolean evaluateNextQ() {
 		boolean j = getPinJ().getState();
 		boolean k = getPinK().getState();
 		
-		if (j || k) {
-			boolean state;
-			
-			if      (j && k) state = ! getPinQ().getState();
-			else if (j)      state = true;
-			else  /* k */    state = false;
-			
-			setQ( state );
+		if ( ! (j || k)) {
+			return false;
+		} else {
+			if      (j && k) return ! getPinQ().getState();
+			else if (j)      return true;
+			else  /* k */    return false;
 		}
 	}
 	
