@@ -114,13 +114,13 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupCloudMenu() {
 		JMenu m = menuCloud = createMenu( "Cloud", 'C' );
-		itemCloudLogin  = add( m, "Login"       );
-		itemCloudRegister  = add( m, "Register" );
-		itemCloudFiles 	= add( m, "My Circuits" );
-		itemCloudLogout = add( m, "Logout"      );
+		itemCloudFiles 	   = add( m, "My Circuits", false, 'C' );
+		itemCloudRegister  = add( m, "Register"   , true,  'R' );
+		itemCloudLogin     = add( m, "Login"      , false, 'L' );
+		itemCloudLogout    = add( m, "Logout"     , false, 'O' );
 		
-		itemCloudFiles.setVisible(false);
-		itemCloudLogout.setVisible(false);
+		itemCloudLogout.setEnabled( false );
+		itemCloudFiles .setEnabled( false );
 		
 		add( m );
 	}

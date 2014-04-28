@@ -59,12 +59,13 @@ public class CloudController {
 	public static void setAuthState(boolean state) {
 		EditorMenuBar emb = GUI.getMainFrame().getEditorMenuBar();
 		
-		emb.itemCloudLogin.setVisible(!state);
-		emb.itemCloudRegister.setVisible(!state);
-		emb.itemCloudFiles.setVisible(state);
-		emb.itemCloudLogout.setVisible(state);
+		emb.itemCloudLogin   .setEnabled(!state);
+		emb.itemCloudRegister.setEnabled(!state);
+		emb.itemCloudFiles   .setEnabled( state);
+		emb.itemCloudLogout  .setEnabled( state);
 		
-		if(!state) user = null;
+		if(!state)
+			user = null;
 	}
 	
 	private static class SyncWorker extends Thread {	
