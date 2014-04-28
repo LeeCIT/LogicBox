@@ -9,6 +9,7 @@ import logicBox.sim.component.ComponentActive;
 import logicBox.sim.component.DisplayLed;
 import logicBox.sim.component.DisplaySevenSeg;
 import logicBox.sim.component.SourceOscillator;
+import logicBox.sim.component.SourceToggle;
 import logicBox.util.CallbackParam;
 import logicBox.util.Vec2;
 
@@ -39,6 +40,7 @@ public abstract class EditorComponent implements Serializable
 	    else if (scom instanceof DisplaySevenSeg)  return new EditorComponentSevenSeg   ( (DisplaySevenSeg)  scom,      param.pos, param.angle );
 		else if (scom instanceof SourceOscillator) return new EditorComponentOscillator ( (SourceOscillator) scom, gca, param.pos, param.angle );
 		else if (scom instanceof BlackBoxPin)      return new EditorComponentBlackboxPin( (BlackBoxPin)      scom, gca, param.pos, param.angle );
+		else if (scom instanceof SourceToggle)     return new EditorComponentToggle     ( (SourceToggle)     scom, gca, param.pos, param.angle );
 		else                                       return new EditorComponentActive     (                    scom, gca, param.pos, param.angle );
 	}
 	
