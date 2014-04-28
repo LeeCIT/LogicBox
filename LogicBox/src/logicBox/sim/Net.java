@@ -3,7 +3,9 @@
 
 package logicBox.sim;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import logicBox.sim.component.*;
 import logicBox.util.Util;
@@ -30,6 +32,9 @@ public class Net implements Stateful, Updateable, Serializable, Iterable<Compone
 	
 	public Set<ComponentActive> fanIn;       // Dependencies for this net
 	public Set<ComponentActive> fanOut;      // Dependencies for this net
+	
+	public Stateful[] updateSrc;
+	public Stateful[] updateDest;
 	
 	
 	
@@ -138,7 +143,22 @@ public class Net implements Stateful, Updateable, Serializable, Iterable<Compone
 	
 	
 	public void update() {
-		setState( getState() );
+		if (updateSrc == null) {
+			updateSrc  = pinOutputs.toArray( new Stateful[0] );
+			updateDest = writeables.toArray( new Stateful[0] );
+		}
+		
+		boolean state = false;
+		
+		for (Stateful s: updateSrc) {
+			if (s.getState()) {
+				state = true;
+				break;
+			}
+		}
+		
+		for (Stateful s: updateDest)
+			s.setState( state );
 	}
 	
 	
