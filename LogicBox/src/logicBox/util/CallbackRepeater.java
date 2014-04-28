@@ -54,6 +54,17 @@ public class CallbackRepeater
 	
 	
 	/**
+	 * Get the duration between calls, in milliseconds.
+	 */
+	public long getInterval( long freqMillis ) {
+		synchronized (thread) {
+			return interval;
+		}
+	}
+	
+	
+	
+	/**
 	 * Change the sleep duration of the repeater.
 	 */
 	public void setInterval( long freqMillis ) {
