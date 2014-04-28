@@ -13,7 +13,7 @@ import logicBox.util.Util;
 
 
 /**
- * A non-interactive version of the editor panel, for showing graphics.
+ * A non-interactive version of the editor panel for showing graphics.
  * @author Lee Coakley
  */
 public class GraphicPanel extends EditorPanel

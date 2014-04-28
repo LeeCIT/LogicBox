@@ -4,6 +4,7 @@
 package logicBox.gui.help;
 
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 
 
 
@@ -14,5 +15,9 @@ import javax.swing.JDialog;
  */
 public class AboutDialogue extends JDialog
 {
-	
+	public AboutDialogue( JFrame parent ) {
+		super( parent );
+		
+		setTitle( "About LogicBox" );
+	}
 }

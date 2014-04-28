@@ -12,6 +12,7 @@ import logicBox.sim.SimUtil;
  * An edge-triggered flip-flop.
  * Can only change state on the rising edge of a clock pulse.
  * The change is applied to the output pins on the falling edge of the pulse.
+ * This isn't technically accurate - in real life the delay is much shorter.
  * @author Lee Coakley
  */
 public abstract class FlipFlop extends ComponentActive
