@@ -12,11 +12,11 @@ package logicBox.util;
  */
 public class CallbackRepeater
 {
-	private Thread   thread;
-	private Callback callback;
-	private long 	 interval;
-	private boolean  threadExecute;
-	private boolean  threadPause;
+	private final Thread   thread;
+	private final Callback callback;
+	private       long     interval;
+	private       boolean  threadExecute;
+	private       boolean  threadPause;
 	
 	
 	
@@ -49,6 +49,17 @@ public class CallbackRepeater
 			pause();
 		
 		threadStart();
+	}
+	
+	
+	
+	/**
+	 * Change the sleep duration of the repeater.
+	 */
+	public void setInterval( long freqMillis ) {
+		synchronized (thread) {
+			this.interval = freqMillis;
+		}
 	}
 
 
