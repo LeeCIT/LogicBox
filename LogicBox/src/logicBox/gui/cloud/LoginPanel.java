@@ -42,6 +42,7 @@ public class LoginPanel extends JDialog implements RequestInterface
 		r.setRequestInterface(this);		
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setLocationRelativeTo( parent );
 	}
 	
 	

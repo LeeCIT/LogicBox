@@ -45,6 +45,7 @@ public class FilePanel extends JDialog {
 		parent = frame;
 		
 		setupComponents();
+		setLocationRelativeTo( parent );
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
