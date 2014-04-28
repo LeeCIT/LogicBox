@@ -65,6 +65,8 @@ public class OscillatorDialogue extends JDialog
 		buttOk     = new JButton( "OK"     );
 		buttCancel = new JButton( "Cancel" );
 		
+		buttApply.setEnabled( false );
+		
 		updateLabelText();
 	}
 	
@@ -75,12 +77,14 @@ public class OscillatorDialogue extends JDialog
 			public void stateChanged( ChangeEvent e ) {
 				freqDiv = SourceOscillator.baseFrequencyHz - slider.getValue();
 				updateLabelText();
+				buttApply.setEnabled( isDifferent(freqDiv) );
 			}
 		});
 		
 		buttApply.addActionListener( new ActionListener() {
 			public void actionPerformed( ActionEvent e ) {
 				applyChanges();
+				buttApply.setEnabled( false );
 			}
 		});
 		
@@ -101,9 +105,18 @@ public class OscillatorDialogue extends JDialog
 	
 	
 	protected void applyChanges() {
-		osc.getComponent().setFrequencyDivisor( freqDiv );
-		world.resyncOscillators();
-		onMod.execute( "Change oscillator frequency" );
+		if (isDifferent( freqDiv )) {		
+			osc.getComponent().setFrequencyDivisor( freqDiv );
+			world.resyncOscillators();
+			onMod.execute( "Change oscillator frequency" );
+		}
+	}
+	
+	
+	
+	private boolean isDifferent( int freqDiv ) {
+		int currentFreqDiv = osc.getComponent().getFrequencyDivisor();
+		return currentFreqDiv != freqDiv;
 	}
 	
 	
