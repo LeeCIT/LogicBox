@@ -411,19 +411,6 @@ public abstract class GraphicGen
 	
 	
 	
-	private static HashMap<GraphicPinMapping,String> genLabelMap( List<GraphicPinMapping> gpms, String...labels ) {
-		HashMap<GraphicPinMapping,String> labelMap = new HashMap<>();
-		
-		for (int i=0; i<labels.length; i++) {
-			String str = labels[i];
-			labelMap.put( gpms.get(i), str );
-		}
-		
-		return labelMap;
-	}
-	
-	
-	
 	public static GraphicComActive generateFlipFlopD() {
 		GraphicComActive        graphic = generateFlipFlop( 2 );
 		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
@@ -477,6 +464,40 @@ public abstract class GraphicGen
 	
 	public static GraphicComActive generateSourceFixed( boolean level ) {
 		Bbox2 r = getBaseRegion();
+		  	  r.transform( Geo.createTransform(new Vec2(0), new Vec2(0.5), 0) );
+		
+		VecPath polyBody = new VecPath();
+		polyBody.moveTo ( r.getBottomMiddle() );
+		polyBody.curveTo( r.getBottomRight(), r.getRightMiddle()  );
+		polyBody.curveTo( r.getTopRight(),    r.getTopMiddle()    );
+		polyBody.curveTo( r.getTopLeft(),     r.getLeftMiddle()   );
+		polyBody.curveTo( r.getBottomLeft(),  r.getBottomMiddle() );
+		polyBody.closePath();
+		
+		Vec2  rightMid = r.getRightMiddle();
+		Line2 pinLine = new Line2( rightMid, rightMid.add(pinLength*0.5,0) );
+		
+		List<Line2> pinLines = new ArrayList<>();
+		pinLines.add( pinLine );
+		
+		List<GraphicPinMapping> gpms = genPinMappings( pinLines, pinLines.size() );
+		
+		GraphicComActive graphic =  new GraphicComActive(
+			polyBody,
+			genPolyPins( pinLines ),
+			null, 
+			gpms
+		);
+		
+		graphic.setPinLabels( genLabelMap(gpms, level ? "1" : "0") );
+		
+		return graphic;
+	}
+	
+	
+	
+	public static GraphicComActive generateSourceToggle() {
+		Bbox2 r = getBaseRegion();
 		Vec2  a = r.getNorm( 0.5, 1.0 );
 		Vec2  b = r.getNorm( 1.0, 0.5 );
 		Vec2  c = r.getNorm( 0.5, 0.0 );
@@ -495,15 +516,7 @@ public abstract class GraphicGen
 			gpms
 		);
 		
-		graphic.setPinLabels( genLabelMap( gpms, level ? "1" : "0" ) );		
-		
 		return graphic;
-	}
-	
-	
-	
-	public static GraphicComActive generateSourceToggle() {
-		return generateSourceFixed( false );
 	}
 	
 	
@@ -841,6 +854,19 @@ public abstract class GraphicGen
 		}
 		
 		return pinMappings;
+	}
+	
+	
+	
+	private static HashMap<GraphicPinMapping,String> genLabelMap( List<GraphicPinMapping> gpms, String...labels ) {
+		HashMap<GraphicPinMapping,String> labelMap = new HashMap<>();
+		
+		for (int i=0; i<labels.length; i++) {
+			String str = labels[i];
+			labelMap.put( gpms.get(i), str );
+		}
+		
+		return labelMap;
 	}
 	
 	
