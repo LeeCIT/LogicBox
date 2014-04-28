@@ -9,7 +9,6 @@ import javax.swing.ImageIcon;
 
 /**
  * Loads icons from the resources.icons package.
- * TODO Doesn't work when exported to JAR
  * @author Lee Coakley
  * @author Robert O'Leary
  */
