@@ -117,6 +117,9 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	
 	public Bbox2 getBbox() {
+		if (bbox == null) // For backwards compatibility
+			bbox = Bbox2.createFromPoints( points ); 
+		
 		return bbox;
 	}
 	
