@@ -33,6 +33,7 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	private boolean     isPowered;
 	private boolean 	connectedSource;
 	private boolean 	connectedDest;
+	private Bbox2       bbox;
 	
 	
 	
@@ -48,6 +49,7 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 		this.points   = new ArrayList<>( points );
 		this.lines    = Line2.toLines( points );
 		this.polyLine = new VecPath( points, false );
+		this.bbox     = Bbox2.createFromPoints( points );
 	}
 	
 	
@@ -115,7 +117,7 @@ public class GraphicTrace extends Graphic implements GraphicIntersector
 	
 	
 	public Bbox2 getBbox() {
-		return Bbox2.createFromPoints( points );
+		return bbox;
 	}
 	
 	
