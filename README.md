@@ -13,5 +13,5 @@ Features:
 * Flip and rotate components and selections
 
 ![Screenshot 1](https://raw.github.com/LeeCIT/LogicBox/master/screenshots/overview.png)
-![Screenshot 2](https://raw.github.com/LeeCIT/LogicBox/master/screenshots/1to2decoder.png)
+![Screenshot 2](https://raw.github.com/LeeCIT/LogicBox/master/screenshots/2to4decoder.png)
 ![Screenshot 3](https://raw.github.com/LeeCIT/LogicBox/master/screenshots/blackboxing.png)
