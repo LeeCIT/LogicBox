@@ -28,6 +28,25 @@ public abstract class Plexer extends ComponentActive
 	
 	
 	
+	public String getPinName( PinIoMode mode, int index ) {
+		String  str      = super.getPinName( mode, index );
+		boolean isSelect = pinSelects.contains( getPin(mode,index) );
+		
+		if (isSelect) {
+			int lowSel  = getPinInputCount() - getPinSelects().size();
+			int highSel = getPinInputCount() - 1;
+			
+			str = "Pin: select " + (index - lowSel);
+			
+			if (index == lowSel)  str += " (LSB)";
+			if (index == highSel) str += " (MSB)";
+		}
+		
+		return str;
+	}
+	
+	
+	
 	protected void createPins( int inputs, int selects, int outputs ) {
 		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  inputs + selects );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, outputs );
