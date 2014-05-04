@@ -43,6 +43,7 @@ public class EditorMenuBar extends JMenuBar
 	public JMenu     menuView;
 	public JMenuItem itemViewGrid;
 	public JMenuItem itemViewCamera;
+	public JMenuItem itemViewToolbox;
 	
 	public JMenu     menuCloud;
 	public JMenuItem itemCloudLogin;
@@ -97,7 +98,7 @@ public class EditorMenuBar extends JMenuBar
 		itemEditSelectAll      = add( m, "Select All"        , true , 'A', "control       A", IconEnum.selectAll     );
 		itemEditSelectNone     = add( m, "Select None"       , false, 'N', "control shift A", IconEnum.selectNone    );
 		itemEditSelectInvert   = add( m, "Invert Selection"  , false, 'I', null             , IconEnum.selectInverse );
-		itemEditSelectBlackBox = add( m, "Blackbox Selection", false,  'B', "control B"      , IconEnum.selectBlack   );
+		itemEditSelectBlackBox = add( m, "Blackbox Selection", false, 'B', "control B"      , IconEnum.selectBlack   );
 		add( m );
 	}
 	
@@ -105,8 +106,9 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupViewMenu() {
 		JMenu m = menuView = createMenu( "View", 'V' );
-		itemViewGrid   = add( m, "Grid On/Off",     false, 'G', "control G", IconEnum.grid   );
-		itemViewCamera = add( m, "Camera Recentre", false, 'C', "control R", IconEnum.camera );
+		itemViewGrid    = add( m, "Grid On/Off",       false, 'G', "control G", IconEnum.grid    );
+		itemViewCamera  = add( m, "Camera Recentre",   false, 'C', "control R", IconEnum.camera  );
+		itemViewToolbox = add( m, "Toolbox Show/Hide", false, 'T', "control T", IconEnum.toolbox );
 		add( m );
 	}
 	
@@ -114,10 +116,10 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupCloudMenu() {
 		JMenu m = menuCloud = createMenu( "Cloud", 'C' );
-		itemCloudFiles 	   = add( m, "My Circuits", false, 'C' );
-		itemCloudRegister  = add( m, "Register"   , true,  'R' );
-		itemCloudLogin     = add( m, "Login"      , false, 'L' );
-		itemCloudLogout    = add( m, "Logout"     , false, 'O' );
+		itemCloudFiles 	   = add( m, "My Circuits", false, 'C', null, IconEnum.title      );
+		itemCloudRegister  = add( m, "Register"   , true,  'R', null, IconEnum.newFile    );
+		itemCloudLogin     = add( m, "Login"      , false, 'L', null, IconEnum.connect    );
+		itemCloudLogout    = add( m, "Logout"     , false, 'O', null, IconEnum.disconnect );
 		
 		itemCloudLogout.setEnabled( false );
 		itemCloudFiles .setEnabled( false );
