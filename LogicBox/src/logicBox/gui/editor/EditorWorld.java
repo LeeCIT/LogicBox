@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 import logicBox.gui.GUI;
 import logicBox.gui.Gfx;
 import logicBox.gui.editor.tools.Selection;
@@ -39,6 +40,8 @@ public class EditorWorld implements Serializable
 	private Simulation                   sim;
 	private boolean                      isPowerOn;
 	
+	private transient Set<SourceOscillator> oscillators;
+	
 	
 	
 	public EditorWorld() {
@@ -58,7 +61,7 @@ public class EditorWorld implements Serializable
 		if (isPowerOn) {
 			boolean simChanged = false;
 			
-			for (SourceOscillator osc: sim.getOscillators())
+			for (SourceOscillator osc: getOscillators())
 				simChanged |= osc.sendClockSignal();
 			
 			if (simChanged)
@@ -68,6 +71,21 @@ public class EditorWorld implements Serializable
 		}
 		
 		return false;
+	}
+	
+	
+	
+	private Set<SourceOscillator> getOscillators() {
+		if (oscillators == null)
+			oscillators = sim.getOscillators();
+		
+		return oscillators;
+	}
+	
+	
+	
+	private void purgeOscillatorCache() {
+		oscillators = null;
 	}
 	
 	
@@ -159,6 +177,7 @@ public class EditorWorld implements Serializable
 		grid .clear();
 		ecoms.clear();
 		sim  .clear();
+		purgeOscillatorCache();
 	}
 	
 	
@@ -216,6 +235,7 @@ public class EditorWorld implements Serializable
 		ecoms.add( ecom );
 		ecom.linkToWorld( this );
 		sim.add( ecom.getComponent() );
+		purgeOscillatorCache();
 		
 		if (ecom instanceof EditorComponentOscillator)
 			resyncOscillators();
@@ -251,6 +271,7 @@ public class EditorWorld implements Serializable
 		grid .remove( ecom );
 		ecom.unlinkFromWorld();
 		sim.remove( ecom.getComponent() );
+		purgeOscillatorCache();
 	}
 	
 	
