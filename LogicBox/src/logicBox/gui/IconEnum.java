@@ -33,6 +33,8 @@ public enum IconEnum
 	delete,
 	editText,
 	title,
+	connect,
+	disconnect
 	;
 	
 	
@@ -62,6 +64,8 @@ public enum IconEnum
 			case delete       : return "Delete"         + suffix;
 			case editText     : return "EditText"       + suffix;
 			case title        : return "Title"          + suffix;
+			case connect      : return "Connect"        + suffix;
+			case disconnect   : return "Disconnect"     + suffix;
 			
 			default:
 				throw new RuntimeException( "No filename defined for IconEnum " + this + "." );
