@@ -569,9 +569,12 @@ public class EditorController implements HistoryListener<EditorWorld>
 			public void actionPerformed( ActionEvent ev ) {
 				HelpFrame helpFrame = HelpFrame.getInstance();
 				
-				if (helpFrame.isVisible())
-					 helpFrame.dispose();
-				else helpFrame.setVisible( true );
+				if (helpFrame.isVisible()) {
+					helpFrame.dispose();
+				} else {
+					helpFrame.setVisible( true );
+					helpFrame.setLocationRelativeTo( getEditorFrame() );
+				}
 			}
 		};
 	}
