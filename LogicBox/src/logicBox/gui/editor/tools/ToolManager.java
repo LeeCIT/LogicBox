@@ -16,6 +16,7 @@ import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorWorld;
 import logicBox.gui.editor.GraphicComActive;
 import logicBox.sim.component.ComponentActive;
+import logicBox.sim.component.ComponentType;
 import logicBox.util.Callback;
 import logicBox.util.CallbackParam;
 import logicBox.util.Util;
@@ -69,6 +70,12 @@ public class ToolManager
 	
 	public void powerOff() {
 		controller.powerOff();
+	}
+	
+	
+	
+	public void showHelpFor( ComponentType type ) {
+		controller.showHelpFor( type );
 	}
 	
 	

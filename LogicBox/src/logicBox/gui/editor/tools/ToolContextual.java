@@ -5,11 +5,16 @@ package logicBox.gui.editor.tools;
 
 import java.awt.Cursor;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Set;
+import javax.swing.Icon;
 import logicBox.gui.Gfx;
+import logicBox.gui.IconEnum;
+import logicBox.gui.IconLoader;
 import logicBox.gui.contextMenu.ContextMenu;
 import logicBox.gui.contextMenu.ContextMenuItem;
 import logicBox.gui.contextMenu.ContextMenuString;
@@ -21,6 +26,7 @@ import logicBox.gui.editor.EditorCreationCommand;
 import logicBox.gui.editor.EditorStyle;
 import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.RepaintListener;
+import logicBox.sim.component.ComponentType;
 import logicBox.util.Bbox2;
 import logicBox.util.CallbackParam;
 import logicBox.util.Geo;
@@ -669,8 +675,8 @@ public class ToolContextual extends Tool
 		System.out.println( "Selection context menu" );
 		
 		ContextMenuItem[] items = {
-			new ContextMenuString( null, "Whatever", (char) 0, null ),
-			new ContextMenuString( null, "Yeah",     (char) 0, null )
+			new ContextMenuString( null, "Test 1", (char) 0, null ),
+			new ContextMenuString( null, "Test 2", (char) 0, null )
 		};
 		
 		ContextMenu cm = new ContextMenu( items );
@@ -680,7 +686,22 @@ public class ToolContextual extends Tool
 	
 	
 	private void doContextMenuSingle( EditorComponent ecom ) {
+		System.out.println( "Single-item context menu" );
 		
+		final ComponentType type = ecom.getComponent().getType();
+		final Icon          icon = IconLoader.load( IconEnum.help );
+		final String		text = "About " + type.getName() + " ...";
+		
+		ActionListener action = new ActionListener() {
+			public void actionPerformed( ActionEvent e ) {
+				getToolManager().showHelpFor( type );
+			}
+		};
+		
+		ContextMenuString item = new ContextMenuString( icon, text, 'H', action );
+		
+		ContextMenu cm = new ContextMenu( item );
+		cm.show( getEditorPanel(), getMousePosCom() );
 	}
 	
 	

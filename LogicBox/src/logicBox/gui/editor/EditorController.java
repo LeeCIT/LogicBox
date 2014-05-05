@@ -26,6 +26,7 @@ import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
 import logicBox.gui.help.HelpFrame;
+import logicBox.sim.component.ComponentType;
 import logicBox.sim.component.Pin;
 import logicBox.sim.component.SourceOscillator;
 import logicBox.util.Bbox2;
@@ -203,6 +204,34 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public void powerOff() {
 		getWorld().simPowerOff();
 		getEditorPanel().repaint();
+	}
+	
+	
+	
+	public void showHelpFor( ComponentType type ) {
+		HelpFrame helpFrame = showHelp();
+		helpFrame.showInfoFor( type );
+	}
+	
+	
+	
+	private HelpFrame showHelp() {
+		HelpFrame helpFrame = HelpFrame.getInstance();
+		
+		helpFrame.setVisible( true );
+		helpFrame.setLocationRelativeTo( getEditorFrame() );
+		
+		return helpFrame;
+	}
+	
+	
+	
+	private void toggleHelp() {
+		HelpFrame helpFrame = HelpFrame.getInstance();
+		
+		if (helpFrame.isVisible())
+			 helpFrame.dispose();
+		else showHelp();
 	}
 	
 	
@@ -567,20 +596,13 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public ActionListener getHelpAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				HelpFrame helpFrame = HelpFrame.getInstance();
-				
-				if (helpFrame.isVisible()) {
-					helpFrame.dispose();
-				} else {
-					helpFrame.setVisible( true );
-					helpFrame.setLocationRelativeTo( getEditorFrame() );
-				}
+				toggleHelp();
 			}
 		};
 	}
-	
-	
-	
+
+
+
 	public ActionListener getUndoAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
