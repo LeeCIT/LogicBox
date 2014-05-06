@@ -671,12 +671,10 @@ public class ToolContextual extends Tool
     
     
     
-	private void doContextMenuSelection() {
-		System.out.println( "Selection context menu" );
-		
+	private void doContextMenuSelection() {	
 		ContextMenuItem[] items = {
-			new ContextMenuString( null, "Test 1", (char) 0, null ),
-			new ContextMenuString( null, "Test 2", (char) 0, null )
+			new ContextMenuString( null, "Selection action 1", (char) 0, null ),
+			new ContextMenuString( null, "Selection action 2", (char) 0, null )
 		};
 		
 		ContextMenu cm = new ContextMenu( items );
@@ -686,8 +684,6 @@ public class ToolContextual extends Tool
 	
 	
 	private void doContextMenuSingle( EditorComponent ecom ) {
-		System.out.println( "Single-item context menu" );
-		
 		final ComponentType type = ecom.getComponent().getType();
 		final Icon          icon = IconLoader.load( IconEnum.help );
 		final String		text = "About " + type.getName() + " ...";
