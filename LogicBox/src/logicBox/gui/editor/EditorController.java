@@ -70,8 +70,6 @@ public class EditorController implements HistoryListener<EditorWorld>
 		initialiseCircuit( false );
 		
 		baseClockSignal.unpause();
-		
-		addDebugAndDemoStuff();
 	}
 
 
