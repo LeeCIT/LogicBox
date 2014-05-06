@@ -33,6 +33,9 @@ public enum IconEnum
 	delete,
 	editText,
 	title,
+	powerOn,
+	powerReset,
+	powerOff,
 	connect,
 	disconnect
 	;
@@ -64,6 +67,9 @@ public enum IconEnum
 			case delete       : return "Delete"         + suffix;
 			case editText     : return "EditText"       + suffix;
 			case title        : return "Title"          + suffix;
+			case powerOn      : return "PowerOn"        + suffix;
+			case powerReset   : return "PowerReset"     + suffix;
+			case powerOff     : return "PowerOff"       + suffix;
 			case connect      : return "Connect"        + suffix;
 			case disconnect   : return "Disconnect"     + suffix;
 			

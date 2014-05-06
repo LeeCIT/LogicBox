@@ -272,7 +272,7 @@ public class Toolbox extends JDialog
 	
 	
 	private ToolboxButton genButtonPowerOn() {
-		final ToolboxButton butt = new ToolboxButton( "On" );
+		final ToolboxButton butt = new ToolboxButton( IconLoader.load(IconEnum.powerOn) );
 		butt.setToolTipText( "Power on the circuit." );
 		
 		butt.addActionListener( new ActionListener() {
@@ -287,7 +287,7 @@ public class Toolbox extends JDialog
 	
 	
 	private ToolboxButton genButtonPowerReset() {
-		final ToolboxButton butt = new ToolboxButton( "RST" );
+		final ToolboxButton butt = new ToolboxButton( IconLoader.load(IconEnum.powerReset) );
 		butt.setToolTipText( "Reset the circuit and power it back on." );
 		
 		butt.addActionListener( new ActionListener() {
@@ -302,7 +302,7 @@ public class Toolbox extends JDialog
 	
 	
 	private ToolboxButton genButtonPowerOff() {
-		final ToolboxButton butt = new ToolboxButton( "Off" );
+		final ToolboxButton butt = new ToolboxButton( IconLoader.load(IconEnum.powerOff) );
 		butt.setToolTipText( "Power off the circuit." );
 		
 		butt.addActionListener( new ActionListener() {
