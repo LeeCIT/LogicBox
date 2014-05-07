@@ -598,6 +598,16 @@ public class EditorController implements HistoryListener<EditorWorld>
 			}
 		};
 	}
+	
+	
+	
+	public ActionListener getAboutAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				new AboutDialogue( getEditorFrame() );
+			}
+		};
+	}
 
 
 

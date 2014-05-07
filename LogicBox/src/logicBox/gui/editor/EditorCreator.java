@@ -72,6 +72,7 @@ public class EditorCreator
 		linkAction( ctrl.getRecentreCameraAction(), toolbar.buttCameraRecentre, menubar.itemViewCamera );
 		
 		linkAction( ctrl.getHelpAction(),          toolbar.buttHelp,          menubar.itemHelpHelp    );
+		linkAction( ctrl.getAboutAction(),         null,          			  menubar.itemHelpAbout   );
 		linkAction( ctrl.getToolboxToggleAction(), toolbar.buttToggleToolbox, menubar.itemViewToolbox );
 		
 		linkAction( ctrl.getLoginAction	(),		null,	menubar.itemCloudLogin		);
