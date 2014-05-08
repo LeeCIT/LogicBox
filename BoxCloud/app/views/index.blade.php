@@ -45,7 +45,7 @@
 				<h4>Awesome logic gate simulation!</h4>
 				<br>
 				<div class="col-lg-12">
-					<a href="#"><img src="/assets/img/p01.png" alt=""></a>
+					<img src="/assets/img/p01.png" alt="">
 				</div>
                 <br>
                 <a href="/download/LogicBox.jar" class="btn btn-lg btn-primary"><i class="fa fa-download"></i> Download LogicBox</a>
