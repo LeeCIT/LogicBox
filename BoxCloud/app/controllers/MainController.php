@@ -20,17 +20,11 @@ class MainController extends Controller
         if($v->fails())
             return Response::json(Error::validator($v));
         
-        $data = [
-            'name' => Input::get('name'),
-            'msg' => Input::get('message'),
-            'email' => Input::get('email')
-        ];
-        
-        Mail::send('emails.welcome', $data, function($msg)
+        Mail::send(Input::get('message'), [], function($msg)
         {
             $msg->from(Input::get('email'), Input::get('name'));
         
-            $msg->to('contact@jatochnietdan.com');
+            $msg->to('contact@logicbox.info');
         });
         
         return Response::json(['success' => true]);
