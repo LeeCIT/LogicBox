@@ -20,7 +20,7 @@ class MainController extends Controller
         if($v->fails())
             return Response::json(Error::validator($v));
         
-        Mail::send(Input::get('message'), [], function($msg)
+        Mail::send('emails.contact', ['msg' => Input::get('message')], function($msg)
         {
             $msg->from(Input::get('email'), Input::get('name'));
         
