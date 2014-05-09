@@ -102,6 +102,12 @@
                       <input type="text" class="form-control" name="name" id="name" placeholder="Your name">
                     </div>
                 </div>
+				<div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">Subject</label>
+                    <div class="col-sm-10">
+                      <input type="text" class="form-control" name="subject" id="name" placeholder="What you're contacting us about">
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="message" class="col-sm-2 control-label">Message</label>
                     <div class="col-sm-10">
