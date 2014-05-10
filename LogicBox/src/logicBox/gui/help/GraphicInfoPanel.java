@@ -50,6 +50,7 @@ public class GraphicInfoPanel extends JPanel
 		
 		textPane = new JTextPane();
 		textPane.setEditable( false );
+		textPane.setContentType( "text/html" );
 		
 		scrollPane = new JScrollPane( textPane );
 	}
