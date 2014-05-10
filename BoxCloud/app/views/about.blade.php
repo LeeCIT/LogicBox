@@ -23,21 +23,21 @@
     <div class="container w">
 		<div class="row centered">
 			<h4>The Team</h4><br>
-			<div class="col-lg-3">
+			<div class="col-lg-4">
 				<h4>Lee Coakley</h4>
                 <b>Github: </b><a href="https://github.com/LeeCIT" target="_blank">https://github.com/LeeCIT</a></p>
 			</div>
-            <div class="col-lg-3">
+            <div class="col-lg-4">
 				<h4>John Murphy</h4>
                 <b>Github: </b><a href="https://github.com/JohnCIT" target="_blank">https://github.com/JohnCIT</a></p>
 			</div>
-            <div class="col-lg-3">
+            <div class="col-lg-4">
 				<h4>Shaun O' Donovan</h4>
                 <b>Github: </b><a href="https://github.com/ShaunodCIT" target="_blank">https://github.com/ShaunodCIT</a></p>
 			</div>
-            <div class="col-lg-3">
+            <div class="col-lg-4">
 				<h4><a href="http://jatochnietdan.com" target="_blank">Robert O' Leary</a></h4>
-                <b>Github: </b><a href="https://github.com/JaTochNietDan" target="_blank">https://github.com/JaTochNietDan</a>
+                <b>Github: </b><a href="https://github.com/JaTochNietDan" target="_blank">https://github.com/JaTochNietDan</a><br>
                 <b>Email: </b><a href="mailto:contact@jatochnietdan.com" target="_blank">contact@jatochnietdan.com</a>
 			</div>
 		</div>
