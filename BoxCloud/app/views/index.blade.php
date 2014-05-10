@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-  <div id="dg">
+	<div id="dg">
 		<div class="container">
 			<div class="row centered">
 				<h4>Awesome logic gate simulation!</h4>
@@ -11,9 +11,9 @@
 				</div>
                 <br>
                 <a href="/download/LogicBox.jar" class="btn btn-lg btn-primary"><i class="fa fa-download"></i> Download LogicBox</a>
-			</div><!-- row -->
-		</div><!-- container -->
-	</div><!-- DG -->
+			</div>
+		</div>
+	</div>
     
 	<div class="container w">
 		<div class="row centered">

@@ -76,3 +76,7 @@
 		<br>
 	</div>
 @stop
+
+@section('title')
+	The awesome features of LogicBox
+@stop

@@ -43,3 +43,7 @@
 		</div>
 	</div>
 @stop
+
+@section('title')
+  About LogicBox, where did it come from?
+@stop
