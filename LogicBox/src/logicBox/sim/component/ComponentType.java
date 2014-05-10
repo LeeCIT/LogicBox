@@ -3,6 +3,10 @@
 
 package logicBox.sim.component;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.GraphicGen;
 
@@ -152,7 +156,16 @@ public enum ComponentType
 	
 	
 	public String getDescription() {
-		return "getDescription() is not implemented yet";
+		String details;
+	
+    	try {
+    		details = new Scanner(ComponentType.class.getClassLoader().getResourceAsStream("resources/help/" + getName() + ".txt"), "UTF-8").useDelimiter("\\A").next();
+    	}
+    	catch(Exception e) {
+    		return "No description for this component yet";
+    	}
+    
+		return details;
 	}
 	
 	
