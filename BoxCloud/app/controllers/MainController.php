@@ -32,4 +32,9 @@ class MainController extends Controller
         
         return Response::json(['success' => true]);
     }
+    
+    function about()
+    {
+        return View::make('about');
+    }
 }

@@ -1,6 +1,8 @@
 <?php
 
 Route::get('/', 'MainController@index');
+Route::get('/about', ['uses' => 'MainController@about', 'as' => 'about']);
+
 Route::post('/contact', ['uses' => 'MainController@contact', 'as' => 'contact']);
 
 Route::post('/register', 'AuthController@register');
