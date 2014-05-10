@@ -1,6 +1,6 @@
 <html>
 	<h3>Description</h3>
-	A buffer gate provides the same output as the input.
+	A NOT gate will reverse the input.
 	<br><br>
 	<hr>
 	<h3>Truth Table</h3>
@@ -11,10 +11,10 @@
 		</tr>
 		<tr>
 			<td>0</td>
-			<td>0</td>
+			<td>1</td>
 		</tr>
 			<td>1</td>
-			<td>1</td>
+			<td>0</td>
 		</tr>
 	</table>
 </html>
