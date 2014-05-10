@@ -42,6 +42,12 @@ public class HelpPanel extends JPanel
 	
 	
 	
+	public void setSelectedComponent( ComponentType type ) {
+		searchPanel.setSelectedItem(type);
+	}
+	
+	
+	
 	private void setupComponents() {
 		createSearchPanel();
 		graphicInfoPanel = new GraphicInfoPanel();

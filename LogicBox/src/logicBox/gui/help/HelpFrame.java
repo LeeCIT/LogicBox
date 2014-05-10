@@ -51,6 +51,12 @@ public class HelpFrame extends JFrame
 	
 	
 	
+	public void setSelectedComponent( ComponentType type ) {
+		helpPanel.setSelectedComponent( type );
+	}
+	
+	
+	
 	private void setHelpIcon() {
 		try {
 			setIconImage( IconLoader.load(IconEnum.help).getImage() );

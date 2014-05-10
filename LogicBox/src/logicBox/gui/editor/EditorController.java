@@ -209,6 +209,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	public void showHelpFor( ComponentType type ) {
 		HelpFrame helpFrame = showHelp();
 		helpFrame.showInfoFor( type );
+		helpFrame.setSelectedComponent( type );
 	}
 	
 	

@@ -159,10 +159,15 @@ public enum ComponentType
 		String details;
 	
     	try {
-    		details = new Scanner(ComponentType.class.getClassLoader().getResourceAsStream("resources/help/" + getName() + ".txt"), "UTF-8").useDelimiter("\\A").next();
+    		details = new Scanner(
+				ComponentType.class.getClassLoader()
+				.getResourceAsStream("resources/help/" + getName() + ".txt"), "UTF-8"
+			)
+			.useDelimiter("\\A")
+			.next();
     	}
     	catch(Exception e) {
-    		return "No description for this component yet";
+    		details = "No description for this component yet";
     	}
     
 		return details;
