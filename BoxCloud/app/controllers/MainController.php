@@ -37,4 +37,9 @@ class MainController extends Controller
     {
         return View::make('about');
     }
+    
+    function features()
+    {
+        return View::make('features');
+    }
 }

@@ -34,6 +34,7 @@
         <div class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
 			<li{{ Request::is('/') ? ' class="active"' : '' }}><a href="/">Home</a></li>
+			<li{{ Request::is('features') ? ' class="active"' : '' }}><a href="{{ route('features') }}">Features</a></li>
 			<li{{ Request::is('about') ? ' class="active"' : '' }}><a href="{{ route('about') }}">About</a></li>
             <li><a data-toggle="modal" data-target="#myModal" href="#myModal"><i class="fa fa-envelope-o"></i> Contact Us</a></li>
           </ul>

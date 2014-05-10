@@ -38,7 +38,7 @@
             <div class="col-lg-3">
 				<h4><a href="http://jatochnietdan.com" target="_blank">Robert O' Leary</a></h4>
                 <b>Github: </b><a href="https://github.com/JaTochNietDan" target="_blank">https://github.com/JaTochNietDan</a>
-                <b>Email: </b><a href="contact@jatochnietdan.com" target="_blank">contact@jatochnietdan.com</a>
+                <b>Email: </b><a href="mailto:contact@jatochnietdan.com" target="_blank">contact@jatochnietdan.com</a>
 			</div>
 		</div>
 	</div>
