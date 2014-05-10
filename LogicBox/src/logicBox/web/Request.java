@@ -13,7 +13,7 @@ public class Request
 	
 	public Request()
 	{
-		this.wc = new WebClient("http://cloud.jatochnietdan.com/");
+		this.wc = new WebClient("http://logicbox.info/");
 	}
 	
 	public Request(String url)
