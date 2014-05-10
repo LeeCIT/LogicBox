@@ -6,7 +6,6 @@ package logicBox.gui.editor;
 import java.awt.Font;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import net.miginfocom.swing.MigLayout;
 
@@ -21,12 +20,24 @@ public class AboutDialogue extends JDialog
 	public AboutDialogue( JFrame parent ) {
 		super( parent, "About LogicBox" );
 		
+		setModalityType( ModalityType.APPLICATION_MODAL );
+		
+		setupComponents();
+		
+		pack();
+		setLocationRelativeTo( parent );
+		setVisible( true );
+	}
+	
+	
+	
+	private void setupComponents() {
 		JTextArea text = new JTextArea(
 			"LogicBox was created by:\n\n" +
 			"Lee Coakley\n" +
 			"John Murphy\n" +
-			"Robert O'Leary\n" +
-			"Shaun O'Donovan"
+			"Robert O' Leary\n" +
+			"Shaun O' Donovan"
 		);
 		
 		text.setEditable( false );
@@ -35,9 +46,5 @@ public class AboutDialogue extends JDialog
 		
 		setLayout( new MigLayout("", "128[]128", "128[]128") );
 		add( text );
-		
-		pack();
-		setLocationRelativeTo( parent );
-		setVisible( true );
 	}
 }
