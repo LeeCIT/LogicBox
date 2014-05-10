@@ -1,9 +1,7 @@
 <?php
 
-Route::get('/', function()
-{
-	return 'Wassup mick?';
-});
+Route::get('/', 'MainController@index');
+Route::post('/contact', ['uses' => 'MainController@contact', 'as' => 'contact']);
 
 Route::post('/register', 'AuthController@register');
 Route::post('/login', 'AuthController@login');
