@@ -3,9 +3,12 @@
 
 package logicBox.sim.component;
 
+import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Set;
 import logicBox.gui.editor.GraphicComActive;
+import logicBox.sim.Optimiser;
 import logicBox.sim.SimUtil;
 import logicBox.sim.Simulation;
 import logicBox.util.Util;
@@ -27,6 +30,8 @@ public class BlackBox extends ComponentActive
 	private Map<Pin,BlackBoxPin> pinMapOut;
 	private GraphicComActive     graphic; // TODO this is nasty, having a graphic in the sim...
 	
+	private boolean[][] lookupTable;
+	
 	
 	
 	public BlackBox( String name, Simulation sim, int inputPinCount, int outputPinCount ) {
@@ -36,6 +41,34 @@ public class BlackBox extends ComponentActive
 		
 		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  inputPinCount  );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, outputPinCount );
+	}
+	
+	
+	
+	/**
+	 * Try to optimise the circuit so it's just a table lookup.
+	 * This can fail, in which case nothing changes.
+	 */
+	public void optimise() {
+		boolean canOptimise = sim.isOptimisable();
+		
+		if (canOptimise) {
+			lookupTable = Optimiser.generateLookupTable( this );
+			sim         = null; // Pretty heavyweight object, so throw it away
+			pinMap      = null;
+			pinMapIn    = null;
+			pinMapOut   = null;
+		}
+	}
+	
+	
+	
+	/**
+	 * Whether the internal simulation has been reduced to a truth table.
+	 * If so, there is no simulation anymore and getSimulation() will return null.
+	 */
+	public boolean isOptimised() {
+		return (lookupTable != null);
 	}
 	
 	
@@ -53,6 +86,12 @@ public class BlackBox extends ComponentActive
 	
 	
 	
+	public Map<Pin,BlackBoxPin> getPinMap() {
+		return pinMap;
+	}
+	
+	
+	
 	public void setGraphic( GraphicComActive graphic ) {
 		this.graphic = graphic;
 	}
@@ -65,13 +104,24 @@ public class BlackBox extends ComponentActive
 	
 	
 	
-	public Map<Pin,BlackBoxPin> getPinMap() {
-		return pinMap;
+	public Set<SourceOscillator> getOscillators() {
+		if (sim != null)
+			sim.getOscillators();
+		
+		return new HashSet<>();
 	}
 	
 	
 	
 	public void update() {
+		if (isOptimised())
+			 updateByTableLookup();
+		else updateBySimulation();
+	}
+	
+	
+	
+	private void updateBySimulation() {
 		applyPinStates( pinMapIn, true );
 		sim.simulate();
 		applyPinStates( pinMapOut, false );
@@ -79,9 +129,21 @@ public class BlackBox extends ComponentActive
 	
 	
 	
+	private void updateByTableLookup() {
+		int       in     = SimUtil.decodePinsToInt( pinInputs );
+		boolean[] states = lookupTable[ in ];
+		
+		for (int i=0; i<states.length; i++)
+			pinOutputs.get(i).setState( states[i] );
+	}
+	
+	
+	
 	public void reset() {
 		super.reset();
-		sim.reset();
+		
+		if (sim != null)
+			sim.reset();
 	}
 	
 	
@@ -100,6 +162,14 @@ public class BlackBox extends ComponentActive
 	
 	public GraphicComActive getGraphic() {
 		return Util.deepCopy( graphic );
+	}
+	
+	
+	
+	public boolean isCombinational() {
+		if (isOptimised())
+			 return true;
+		else return sim.isLevelisable();
 	}
 	
 	
