@@ -50,14 +50,19 @@ public class BlackBox extends ComponentActive
 	 * This can fail, in which case nothing changes.
 	 */
 	public void optimise() {
-		boolean canOptimise = sim.isOptimisable();
+		try {
+			boolean canOptimise = sim.isOptimisable();
 		
-		if (canOptimise) {
-			lookupTable = Optimiser.generateLookupTable( this );
-			sim         = null; // Pretty heavyweight object, so throw it away
-			pinMap      = null;
-			pinMapIn    = null;
-			pinMapOut   = null;
+			if (canOptimise) {
+				lookupTable = Optimiser.generateLookupTable( this );
+				sim         = null; // Pretty heavyweight object, so throw it away
+				pinMap      = null;
+				pinMapIn    = null;
+				pinMapOut   = null;
+			}
+		}
+		catch (Optimiser.NonOptimisableComponentException ex) {
+			// Do nothing.  The BB will just be simulated instead.
 		}
 	}
 	
