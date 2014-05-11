@@ -3,10 +3,7 @@
 
 package logicBox.sim.component;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.Scanner;
-
 import logicBox.gui.editor.Graphic;
 import logicBox.gui.editor.GraphicGen;
 
@@ -129,7 +126,7 @@ public enum ComponentType
 			case junction:         return "Junction";
 			case trace:            return "Trace";
 			
-			case displayLed:       return "LED";
+			case displayLed:       return "Light";
 			case displaySevenSeg:  return "Seven-segment display";
 			case displayLCD:       return "LCD";
 			
@@ -144,7 +141,7 @@ public enum ComponentType
 			
 			case comparator:       return "Comparator";
 			case shifter:          return "Shifter";
-			case counter:          return "Counter";
+			case counter:          return "Up Counter";
 			
 			case register:         return "Register";
 			case rom:              return "ROM";
