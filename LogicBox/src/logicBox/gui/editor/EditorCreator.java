@@ -52,10 +52,18 @@ public class EditorCreator
 			toolbox.setActiveToolManager( ctrl.getToolManager() );
 		}
 		
+		linkMainActions( ctrl, frame, menubar, toolbar );
+		
+		return frame;
+	}
+	
+	
+	
+	private static void linkMainActions( EditorController ctrl, EditorFrame frame, EditorMenuBar menubar, EditorToolbar toolbar ) {
 		linkAction( ctrl.getNewAction   (), toolbar.buttNew,   menubar.itemFileNew    );
 		linkAction( ctrl.getOpenAction  (), toolbar.buttOpen,  menubar.itemFileOpen   );
 		linkAction( ctrl.getSaveAction  (), toolbar.buttSave,  menubar.itemFileSave   );
-		linkAction( ctrl.getSaveAsAction(), null, 			   menubar.itemFileSaveAs );
+		linkAction( ctrl.getSaveAsAction(), null,              menubar.itemFileSaveAs );
 		linkAction( ctrl.getPrintAction (), toolbar.buttPrint, menubar.itemFilePrint  );
 		
 		linkActionUndoRedo( ctrl, menubar, toolbar );
@@ -68,19 +76,17 @@ public class EditorCreator
 		linkAction( ctrl.getSelectInvertAction  (), toolbar.buttSelectInvert,   menubar.itemEditSelectInvert   );
 		linkAction( ctrl.getSelectBlackBoxAction(), toolbar.buttSelectBlackBox, menubar.itemEditSelectBlackBox );
 		
-		linkAction( ctrl.getGridToggleAction    (), toolbar.buttToggleGrid,     menubar.itemViewGrid   );
-		linkAction( ctrl.getRecentreCameraAction(), toolbar.buttCameraRecentre, menubar.itemViewCamera );
+		linkAction( ctrl.getGridToggleAction    (), toolbar.buttToggleGrid,     menubar.itemViewGrid    );
+		linkAction( ctrl.getRecentreCameraAction(), toolbar.buttCameraRecentre, menubar.itemViewCamera  );
+		linkAction( ctrl.getToolboxToggleAction (), toolbar.buttToggleToolbox,  menubar.itemViewToolbox );
 		
-		linkAction( ctrl.getHelpAction(),          toolbar.buttHelp,          menubar.itemHelpHelp    );
-		linkAction( ctrl.getAboutAction(),         null,          			  menubar.itemHelpAbout   );
-		linkAction( ctrl.getToolboxToggleAction(), toolbar.buttToggleToolbox, menubar.itemViewToolbox );
+		linkAction( ctrl.getHelpAction (), toolbar.buttHelp, menubar.itemHelpHelp  );
+		linkAction( ctrl.getAboutAction(), null,             menubar.itemHelpAbout );
 		
-		linkAction( ctrl.getLoginAction	(),		null,	menubar.itemCloudLogin		);
-		linkAction( ctrl.getLogoutAction(), 	null,	menubar.itemCloudLogout		);
-		linkAction( ctrl.getRegisterAction(), 	null, 	menubar.itemCloudRegister	);
-		linkAction( ctrl.getFilesAction(),		null,	menubar.itemCloudFiles		);
-		
-		return frame;
+		linkAction( ctrl.getLoginAction   (), null, menubar.itemCloudLogin    );
+		linkAction( ctrl.getLogoutAction  (), null, menubar.itemCloudLogout   );
+		linkAction( ctrl.getRegisterAction(), null, menubar.itemCloudRegister );
+		linkAction( ctrl.getFilesAction   (), null, menubar.itemCloudFiles    );
 	}
 	
 	
