@@ -1,0 +1,5 @@
+<html>
+	<h3>Description</h3>
+	A switchable source will allow you to switch the output by clicking on the component when
+	it is in your circuit.
+</html>

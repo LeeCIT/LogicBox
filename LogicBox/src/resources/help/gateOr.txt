@@ -1,21 +1,34 @@
 <html>
 	<h3>Description</h3>
-	A NOT gate will reverse the input.
+	An OR gate will output 1 if any input is a 1.
 	<br><br>
 	<hr>
 	<h3>Truth Table</h3>
 	<table border="1">
 		<tr>
-			<th>Input</th>
+			<th>A</th>
+			<th>B</th>
 			<th>Output</th>
 		</tr>
 		<tr>
 			<td>0</td>
+			<td>0</td>
+			<td>0</td>
+		</tr>
+		<tr>
+			<td>0</td>
+			<td>1</td>
 			<td>1</td>
 		</tr>
 		<tr>
 			<td>1</td>
 			<td>0</td>
+			<td>1</td>
+		</tr>
+		<tr>
+			<td>1</td>
+			<td>1</td>
+			<td>1</td>
 		</tr>
 	</table>
 </html>
