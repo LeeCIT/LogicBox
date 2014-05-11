@@ -245,14 +245,19 @@ public class Toolbox extends JDialog
 					   new Demux(7),
 					   new Demux(8)
 			),
-			genButton( new Counter(2 ),
-					   new Counter(4 ),
-					   new Counter(8 ),
+			genButton( new Comparator( 2),
+					   new Comparator( 4),
+					   new Comparator( 8),
+					   new Comparator(16)
+			),
+			genButton( new Counter( 2),
+					   new Counter( 4),
+					   new Counter( 8),
 					   new Counter(16)
 			),
-			genButton( new Register(2 ),
-					   new Register(4 ),
-					   new Register(8 ),
+			genButton( new Register( 2),
+					   new Register( 4),
+					   new Register( 8),
 					   new Register(16)
 			)
 		};
