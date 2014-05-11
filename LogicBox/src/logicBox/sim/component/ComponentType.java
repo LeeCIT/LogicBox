@@ -51,7 +51,7 @@ public enum ComponentType
 	rom,
 	
 	blackBox,
-	blackBoxPin; // Need IoMode and which side of the box they'll be on
+	blackBoxPin;
 	
 	
 	
