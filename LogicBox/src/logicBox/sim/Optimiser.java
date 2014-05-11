@@ -81,7 +81,7 @@ public abstract class Optimiser
 		if (in > maxInputs)
 			throw new NonOptimisableComponentException( "Too many inputs." );
 		
-		if (com.getPinOutputCount() > maxOutputs)
+		if (out > maxOutputs)
 			throw new NonOptimisableComponentException( "Too many outputs." );
 		
 		if (out * getCombinations(in) > maxBytes)

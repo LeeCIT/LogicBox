@@ -89,14 +89,14 @@ public enum ComponentType
 			case flipFlopJK:       return GraphicGen.generateFlipFlopJK();
 			case flipFlopT:        return GraphicGen.generateFlipFlopT();
 			
-			//case comparator:       return GraphicGen.;
-			//case shifter:          return GraphicGen.;
-			//case counter:          return GraphicGen.;
+			case comparator:       return GraphicGen.generateComparator( 4 );
+			case shifter:          return GraphicGen.generateShifter( 4, 2 );
+			case counter:          return GraphicGen.generateCounter( 4 );
 			
-			//case register:         return GraphicGen.;
+			case register:         return GraphicGen.generateRegister( 4 );
 			//case rom:              return GraphicGen.;
 			
-			//case blackBox:         return GraphicGen.;
+			case blackBox:         return GraphicGen.generateGeneric( 3, null, 3, null, 3, null, 3, null );
 			case blackBoxPin:      return GraphicGen.generateBlackboxPin( false );
 			
 			default: return GraphicGen.generatePlaceholder();

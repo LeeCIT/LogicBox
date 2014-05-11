@@ -366,20 +366,25 @@ public abstract class GraphicGen
 	
 	
 	
-	public static GraphicComActive generateRegister( int bits ) {
-		GraphicComActive gca = generateGeneric(
-			2,    PinIoMode.input,
-			0,    null,
-			bits, PinIoMode.input,
-			bits, PinIoMode.output
+	public static GraphicComActive generateDecoder( int inputCount, int outputCount ) {
+		return generateGeneric( inputCount, outputCount );
+	}
+	
+	
+	
+	public static GraphicComActive generateEncoder( int inputCount, int outputCount ) {
+		return generateGeneric( inputCount, outputCount );
+	}
+	
+	
+	
+	public static GraphicComActive generateShifter( int bits, int shiftCount ) {
+		return generateGeneric(
+			shiftCount,	PinIoMode.input,
+			0,          null,
+			bits,       PinIoMode.input,
+			bits,       PinIoMode.output
 		);
-		
-		int               clockIndex = 1;
-		GraphicPinMapping gpm        = gca.getGraphicPinMappings().get( clockIndex );
-		VecPath           polyAux    = genPolyClock( gpm );
-		gca.setPolyAux( polyAux );
-		
-		return gca;
 	}
 	
 	
@@ -391,13 +396,7 @@ public abstract class GraphicGen
 			bits, PinIoMode.input,
 			bits, PinIoMode.input
 		);
-	}
-	
-	
-	
-	public static GraphicComActive generateDecoder( int inputCount, int outputCount ) {
-		return generateGeneric( inputCount, outputCount );
-	}
+	}	
 	
 	
 	
@@ -530,6 +529,29 @@ public abstract class GraphicGen
 		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
 		
 		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "J", "", "K" ) );		
+		return graphic;
+	}
+	
+	
+	
+	public static GraphicComActive generateRegister( int bits ) {
+		GraphicComActive graphic = generateGeneric(
+			2,    PinIoMode.input,
+			0,    null,
+			bits, PinIoMode.input,
+			bits, PinIoMode.output
+		);
+		
+		addPolyClock( graphic, 1 );
+		
+		return graphic;
+	}
+	
+	
+	
+	public static GraphicComActive generateCounter( int bits ) {
+		GraphicComActive graphic = generateGeneric( 1, bits );
+		addPolyClock( graphic, 0 );
 		return graphic;
 	}
 	
@@ -886,6 +908,14 @@ public abstract class GraphicGen
 		poly.lineTo( pos.add( offDown ) );
 		
 		return poly;
+	}
+	
+	
+	
+	private static void addPolyClock( GraphicComActive gca, int gpmIndex ) {
+		GraphicPinMapping gpm     = gca.getGraphicPinMappings().get( gpmIndex );
+		VecPath           polyAux = genPolyClock( gpm );
+		gca.setPolyAux( polyAux );
 	}
 	
 	
