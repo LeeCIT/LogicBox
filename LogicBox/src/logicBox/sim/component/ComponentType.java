@@ -35,6 +35,7 @@ public enum ComponentType
 	displaySevenSeg,
 	displayLCD,
 	
+	encoder,
 	decoder,
 	mux,
 	demux,
@@ -81,6 +82,7 @@ public enum ComponentType
 			case displaySevenSeg:  return GraphicGen.generateDisplaySevenSeg();
 			//case displayLCD:       return GraphicGen.;
 			
+			case encoder:          return GraphicGen.generateEncoder( 4, 2 );
 			case decoder:          return GraphicGen.generateDecoder( 2, 4 );
 			case mux:              return GraphicGen.generateMux  ( 1, 1, 2 );
 			case demux:            return GraphicGen.generateDemux( 2, 1, 1 );
@@ -127,6 +129,7 @@ public enum ComponentType
 			case displaySevenSeg:  return "Seven-segment display";
 			case displayLCD:       return "LCD";
 			
+			case encoder:          return "Priority Encoder";
 			case decoder:          return "Decoder";
 			case mux:              return "Multiplexer";
 			case demux:            return "Demultiplexer";
