@@ -50,9 +50,9 @@ public abstract class Optimiser
 	private static int getCombinations( int ins ) {
 		return (int) Math.pow( 2, ins );
 	}
-
-
-
+	
+	
+	
 	private static void fillArrayFromInt( boolean[] table, int bits ) {
 		for (int i=0; i<table.length; i++)
 			table[i] = 1 == ((bits >> i) & 1);

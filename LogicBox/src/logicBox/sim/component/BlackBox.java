@@ -174,7 +174,7 @@ public class BlackBox extends ComponentActive
 	public boolean isCombinational() {
 		if (isOptimised())
 			 return true;
-		else return sim.isLevelisable();
+		else return sim.isOptimisable();
 	}
 	
 	
