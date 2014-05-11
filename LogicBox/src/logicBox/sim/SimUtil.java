@@ -3,6 +3,7 @@
 
 package logicBox.sim;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import logicBox.sim.component.Component;
 import logicBox.sim.component.Pin;
@@ -44,6 +45,17 @@ public abstract class SimUtil
 				value |= (1 << i);
 		
 		return value;
+	}
+	
+	
+	
+	/**
+	 * Same as SimUtil::decodePinsToInt except the pins are decoded in reverse order.
+	 */
+	public static int decodePinsToIntReverse( List<Pin> pins ) {
+		List<Pin> pinsReverse = new ArrayList<>( pins );
+		Collections.reverse( pinsReverse );
+		return decodePinsToInt( pinsReverse );
 	}
 	
 	
