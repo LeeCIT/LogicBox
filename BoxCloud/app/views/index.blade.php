@@ -10,7 +10,8 @@
 					<img src="/assets/img/p01.png" alt="">
 				</div>
                 <br>
-                <a href="/download/LogicBox.jar" class="btn btn-lg btn-primary"><i class="fa fa-download"></i> Download LogicBox</a>
+                <a href="/download/LogicBox.jar" class="btn btn-lg btn-primary"><i class="fa fa-download"></i> Download LogicBox</a><br><br>
+				or clone our repository from <a href="https://github.com/LeeCIT/LogicBox" class="btn btn-info" target="_blank"><i class="fa fa-github"></i> Github</a>
 			</div>
 		</div>
 	</div>
