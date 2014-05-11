@@ -39,6 +39,7 @@ public enum ComponentType
 	displaySevenSeg,
 	displayLCD,
 	
+	encoder,
 	decoder,
 	mux,
 	demux,
@@ -55,7 +56,7 @@ public enum ComponentType
 	rom,
 	
 	blackBox,
-	blackBoxPin; // Need IoMode and which side of the box they'll be on
+	blackBoxPin;
 	
 	
 	
@@ -85,6 +86,7 @@ public enum ComponentType
 			case displaySevenSeg:  return GraphicGen.generateDisplaySevenSeg();
 			//case displayLCD:       return GraphicGen.;
 			
+			case encoder:          return GraphicGen.generateEncoder( 4, 2 );
 			case decoder:          return GraphicGen.generateDecoder( 2, 4 );
 			case mux:              return GraphicGen.generateMux  ( 1, 1, 2 );
 			case demux:            return GraphicGen.generateDemux( 2, 1, 1 );
@@ -93,14 +95,14 @@ public enum ComponentType
 			case flipFlopJK:       return GraphicGen.generateFlipFlopJK();
 			case flipFlopT:        return GraphicGen.generateFlipFlopT();
 			
-			//case comparator:       return GraphicGen.;
-			//case shifter:          return GraphicGen.;
-			//case counter:          return GraphicGen.;
+			case comparator:       return GraphicGen.generateComparator( 4 );
+			case shifter:          return GraphicGen.generateShifter( 4, 2 );
+			case counter:          return GraphicGen.generateCounter( 4 );
 			
-			//case register:         return GraphicGen.;
+			case register:         return GraphicGen.generateRegister( 4 );
 			//case rom:              return GraphicGen.;
 			
-			//case blackBox:         return GraphicGen.;
+			case blackBox:         return GraphicGen.generateGeneric( 3, null, 3, null, 3, null, 3, null );
 			case blackBoxPin:      return GraphicGen.generateBlackboxPin( false );
 			
 			default: return GraphicGen.generatePlaceholder();
@@ -131,6 +133,7 @@ public enum ComponentType
 			case displaySevenSeg:  return "Seven-segment display";
 			case displayLCD:       return "LCD";
 			
+			case encoder:          return "Priority Encoder";
 			case decoder:          return "Decoder";
 			case mux:              return "Multiplexer";
 			case demux:            return "Demultiplexer";

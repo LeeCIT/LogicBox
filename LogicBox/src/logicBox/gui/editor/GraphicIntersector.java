@@ -30,6 +30,7 @@ public interface GraphicIntersector {
 	
 	/**
 	 * Get the bounding box of the graphic.
+	 * This gets called very often.
 	 */
 	public Bbox2 getBbox();
 }

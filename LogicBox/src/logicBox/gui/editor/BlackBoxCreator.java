@@ -28,6 +28,7 @@ public abstract class BlackBoxCreator
 {
 	/**
 	 * Create the black-box.  Selection should come from the clipboard (isolated and reset).
+	 * @throws NoBlackBoxPinsException
 	 */
 	public static EditorComponentActive create( Selection sel, Vec2 pos ) {
 		List<EditorComponentBlackboxPin> bbPins = new ArrayList<>();
@@ -97,6 +98,7 @@ public abstract class BlackBoxCreator
 		}
 		
 		bbCom.setPinMap( bbMap );
+		bbCom.optimise();
 		
 		return ecom;
 	}
@@ -138,7 +140,8 @@ public abstract class BlackBoxCreator
 	private static void sortLeftToRight( List<EditorComponentBlackboxPin> bbPins ) {
 		Collections.sort( bbPins, new Comparator<EditorComponentBlackboxPin>() {
 			public int compare(EditorComponentBlackboxPin a, EditorComponentBlackboxPin b) {
-				return (a.getPos().x < b.getPos().x) ? -1 : +1;
+				boolean left = (a.getPos().x < b.getPos().x);
+				return left ? -1 : +1;
 			};
 		});
 	}
@@ -148,13 +151,17 @@ public abstract class BlackBoxCreator
 	private static void sortTopToBottom( List<EditorComponentBlackboxPin> bbPins ) {
 		Collections.sort( bbPins, new Comparator<EditorComponentBlackboxPin>() {
 			public int compare(EditorComponentBlackboxPin a, EditorComponentBlackboxPin b) {
-				return (a.getPos().y < b.getPos().y) ? -1 : +1;
+				boolean top = (a.getPos().y < b.getPos().y);
+				return top ? -1 : +1;
 			};
 		});
 	}
 	
 	
 	
+	/**
+	 * Signifies that an attempt to make a black-box failed because there were no IO pins.
+	 */
 	public static class NoBlackBoxPinsException extends RuntimeException {}
 }
 

@@ -263,40 +263,140 @@ public abstract class GraphicGen
 	
 	
 	
-	public static GraphicComActive generateDecoder( int inputCount, int outputCount ) {
+	/**
+	 * Generate a generic box graphic which automatically adapts in size.
+	 * Pins are added from top to bottom and from left to right, in the order provided to the function.
+	 */
+	public static GraphicComActive generateGeneric( List<PinIoMode> left, List<PinIoMode> right, List<PinIoMode> top, List<PinIoMode> bottom ) {
 		Bbox2 r = getBaseRegion();
 	  	
-	  	applyPinGrowth( r, outputCount );
-		
+	  	int maxPinsX = Math.max( top .size(),  bottom.size() );
+	  	int maxPinsY = Math.max( left.size(),  right .size() );
+	  	applyPinGrowth( r, maxPinsX, maxPinsY );
+	
 		Vec2 tl = r.getTopLeft();
 		Vec2 tr = r.getTopRight();
 		Vec2 bl = r.getBottomLeft();
 		Vec2 br = r.getBottomRight();
 		
-		Line2 leftContact  = new Line2( tl, bl );
-		Line2 rightContact = new Line2( tr, br );
+		Line2 contactLeft  = new Line2( tl, bl );
+		Line2 contactRight = new Line2( tr, br );
+		Line2 contactTop   = new Line2( tl, tr );
+		Line2 contactBot   = new Line2( bl, br );
 		
-		Line2 leftTerminal  = leftContact .translate( -pinLength, 0 );
-		Line2 rightTerminal = rightContact.translate( +pinLength, 0 );
+		Line2 terminalLeft  = contactLeft .translate( -pinLength,  0         );
+		Line2 terminalRight = contactRight.translate( +pinLength,  0         );
+		Line2 terminalTop   = contactTop  .translate(  0,         -pinLength );
+		Line2 terminalBot   = contactBot  .translate(  0,         +pinLength );
 		
-		List<Line2> pinInLines  = genPinLines( leftTerminal,  leftContact,  new Vec2(+1,0), inputCount,  true );
-		List<Line2> pinOutLines = genPinLines( rightTerminal, rightContact, new Vec2(-1,0), outputCount, true );
+		List<Line2> pinLinesLeft  = genPinLines( terminalLeft , contactLeft , new Vec2(+1, 0), left  .size(), true );
+		List<Line2> pinLinesRight = genPinLines( terminalRight, contactRight, new Vec2(-1, 0), right .size(), true );
+		List<Line2> pinLinesTop   = genPinLines( terminalTop  , contactTop  , new Vec2( 0,+1), top   .size(), true );
+		List<Line2> pinLinesBot   = genPinLines( terminalBot  , contactBot  , new Vec2( 0,-1), bottom.size(), true );
 		
 		List<Line2> pinLines = new ArrayList<>();
-		pinLines.addAll( pinOutLines );
-		pinLines.addAll( pinInLines  );
+		pinLines.addAll( pinLinesLeft  );
+		pinLines.addAll( pinLinesRight );
+		pinLines.addAll( pinLinesTop   );
+		pinLines.addAll( pinLinesBot   );
+		
+		List<PinIoMode> modes = new ArrayList<>();
+		modes.addAll( left   );
+		modes.addAll( right  );
+		modes.addAll( top    );
+		modes.addAll( bottom );
+		
+		List<GraphicPinMapping> gpms = new ArrayList<>();
+		int indexIn  = 0;
+		int indexOut = 0;
+		
+		for (int i=0; i<modes.size(); i++) {
+			Line2     line = pinLines.get( i );
+			PinIoMode mode = modes   .get( i );
+			int       index;
+			
+			if (mode == PinIoMode.input)
+				 index = indexIn ++;
+			else index = indexOut++;
+			
+			gpms.add( new GraphicPinMapping(line, mode, index) );
+		}
 		
 		GraphicComActive graphic = new GraphicComActive(
 			genPolyBody( true, br, tr, tl, bl ),
 			genPolyPins( pinLines ),
 			null,
-			genPinMappings( pinLines, pinOutLines.size() )
+			gpms
 		);
 		
 		recentreGraphic( graphic );
 		
 		return graphic;
 	}
+	
+	
+	
+	public static GraphicComActive generateGeneric( int lefts, PinIoMode lm, int rights, PinIoMode rm, int tops, PinIoMode tm, int bottoms, PinIoMode bm ) {
+		List<PinIoMode> left   = new ArrayList<>();
+		List<PinIoMode> right  = new ArrayList<>();
+		List<PinIoMode> top    = new ArrayList<>();
+		List<PinIoMode> bottom = new ArrayList<>();
+		
+		for (int i=0; i<lefts;   i++)  left  .add( lm );
+		for (int i=0; i<rights;  i++)  right .add( rm );
+		for (int i=0; i<tops;    i++)  top   .add( tm );
+		for (int i=0; i<bottoms; i++)  bottom.add( bm );
+		
+		return generateGeneric( left, right, top, bottom );
+	}
+	
+	
+	
+	/**
+	 * Generic generic left->right graphic.
+	 */
+	public static GraphicComActive generateGeneric( int inputCount, int outputCount ) {
+		return generateGeneric(
+			inputCount,  PinIoMode.input,
+			outputCount, PinIoMode.output,
+			0, null,
+			0, null
+		);
+	}
+	
+	
+	
+	public static GraphicComActive generateDecoder( int inputCount, int outputCount ) {
+		return generateGeneric( inputCount, outputCount );
+	}
+	
+	
+	
+	public static GraphicComActive generateEncoder( int inputCount, int outputCount ) {
+		return generateGeneric( inputCount, outputCount );
+	}
+	
+	
+	
+	public static GraphicComActive generateShifter( int bits, int shiftCount ) {
+		return generateGeneric(
+			shiftCount,	PinIoMode.input,
+			0,          null,
+			bits,       PinIoMode.input,
+			bits,       PinIoMode.output
+		);
+	}
+	
+	
+	
+	public static GraphicComActive generateComparator( int bits ) {
+		return generateGeneric(
+			0,    null,
+			3,    PinIoMode.output,
+			bits, PinIoMode.input,
+			bits, PinIoMode.input
+		);
+	}	
 	
 	
 	
@@ -392,19 +492,12 @@ public abstract class GraphicGen
 		pinLines.addAll( pinOutLines );
 		pinLines.addAll( pinInLines  );
 		
-		final List<GraphicPinMapping> gpms = genPinMappings( pinLines, pinOutLines.size() );
-		
-		Vec2    arrowPos  = gpms.get(2+1).getPinPosBody();
-		double  arrowOffs = r.getSize().x * 0.3;
-		VecPath polyArrow = new VecPath();
-		polyArrow.moveTo( arrowPos.add( 2,        -arrowOffs*0.5 ) );
-		polyArrow.lineTo( arrowPos.add( arrowOffs, 0             ) );
-		polyArrow.lineTo( arrowPos.add( 2,        +arrowOffs*0.5 ) );
+		List<GraphicPinMapping> gpms = genPinMappings( pinLines, pinOutLines.size() );
 		
 		return new GraphicComActive(
 			genPolyBody( true, br, tr, tl, bl ),
 			genPolyPins( pinLines ),
-			polyArrow,
+			genPolyClock( gpms.get(2+1) ),
 			gpms
 		);
 	}
@@ -436,6 +529,29 @@ public abstract class GraphicGen
 		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
 		
 		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "J", "", "K" ) );		
+		return graphic;
+	}
+	
+	
+	
+	public static GraphicComActive generateRegister( int bits ) {
+		GraphicComActive graphic = generateGeneric(
+			2,    PinIoMode.input,
+			0,    null,
+			bits, PinIoMode.input,
+			bits, PinIoMode.output
+		);
+		
+		addPolyClock( graphic, 1 );
+		
+		return graphic;
+	}
+	
+	
+	
+	public static GraphicComActive generateCounter( int bits ) {
+		GraphicComActive graphic = generateGeneric( 1, bits );
+		addPolyClock( graphic, 0 );
 		return graphic;
 	}
 	
@@ -733,70 +849,7 @@ public abstract class GraphicGen
 	
 	
 	public static GraphicComActive generateBlackBox( List<PinIoMode> left, List<PinIoMode> right, List<PinIoMode> top, List<PinIoMode> bottom ) {
-		Bbox2 r = getBaseRegion();
-	  	
-	  	int maxPinsX = Math.max( top .size(),  bottom.size() );
-	  	int maxPinsY = Math.max( left.size(),  right .size() );
-	  	applyPinGrowth( r, maxPinsX, maxPinsY );
-	
-		Vec2 tl = r.getTopLeft();
-		Vec2 tr = r.getTopRight();
-		Vec2 bl = r.getBottomLeft();
-		Vec2 br = r.getBottomRight();
-		
-		Line2 contactLeft  = new Line2( tl, bl );
-		Line2 contactRight = new Line2( tr, br );
-		Line2 contactTop   = new Line2( tl, tr );
-		Line2 contactBot   = new Line2( bl, br );
-		
-		Line2 terminalLeft  = contactLeft .translate( -pinLength,  0         );
-		Line2 terminalRight = contactRight.translate( +pinLength,  0         );
-		Line2 terminalTop   = contactTop  .translate(  0,         -pinLength );
-		Line2 terminalBot   = contactBot  .translate(  0,         +pinLength );
-		
-		List<Line2> pinLinesLeft  = genPinLines( terminalLeft , contactLeft , new Vec2(+1, 0), left  .size(), true );
-		List<Line2> pinLinesRight = genPinLines( terminalRight, contactRight, new Vec2(-1, 0), right .size(), true );
-		List<Line2> pinLinesTop   = genPinLines( terminalTop  , contactTop  , new Vec2( 0,+1), top   .size(), true );
-		List<Line2> pinLinesBot   = genPinLines( terminalBot  , contactBot  , new Vec2( 0,-1), bottom.size(), true );
-		
-		List<Line2> pinLines = new ArrayList<>();
-		pinLines.addAll( pinLinesLeft  );
-		pinLines.addAll( pinLinesRight );
-		pinLines.addAll( pinLinesTop   );
-		pinLines.addAll( pinLinesBot   );
-		
-		List<PinIoMode> modes = new ArrayList<>();
-		modes.addAll( left   );
-		modes.addAll( right  );
-		modes.addAll( top    );
-		modes.addAll( bottom );
-		
-		List<GraphicPinMapping> gpms = new ArrayList<>();
-		int indexIn  = 0;
-		int indexOut = 0;
-		
-		for (int i=0; i<modes.size(); i++) {
-			Line2     line = pinLines.get( i );
-			PinIoMode mode = modes   .get( i );
-			int       index;
-			
-			if (mode == PinIoMode.input)
-				 index = indexIn ++;
-			else index = indexOut++;
-			
-			gpms.add( new GraphicPinMapping(line, mode, index) );
-		}
-		
-		GraphicComActive graphic = new GraphicComActive(
-			genPolyBody( true, br, tr, tl, bl ),
-			genPolyPins( pinLines ),
-			null,
-			gpms
-		);
-		
-		recentreGraphic( graphic );
-		
-		return graphic;
+		return generateGeneric( left, right, top, bottom ); 
 	}
 	
 	
@@ -833,6 +886,36 @@ public abstract class GraphicGen
 		}
 		
 		return polyPins;
+	}
+	
+	
+	
+	/**
+	 * Generate the poly indicating a positive-edge-triggered device's clock input.
+	 */
+	private static VecPath genPolyClock( GraphicPinMapping gpm ) {
+		Vec2   pos      = gpm.getPinPosBody();
+		Vec2   delta    = Geo.delta( pos, gpm.getPinPosEnd() );
+		Vec2   vec      = Geo.normalise( delta.negate() );
+		double size     = baseSize * 0.15;
+		Vec2   offRight = vec.multiply( size * 2 );
+		Vec2   offDown  = vec.multiply( size ).rotate( 270 ).add( 2, 0 );
+		Vec2   offUp    = vec.multiply( size ).rotate(  90 ).add( 2, 0 );
+		
+		VecPath poly = new VecPath();
+		poly.moveTo( pos.add( offUp   ) );
+		poly.lineTo( pos.add( offRight) );
+		poly.lineTo( pos.add( offDown ) );
+		
+		return poly;
+	}
+	
+	
+	
+	private static void addPolyClock( GraphicComActive gca, int gpmIndex ) {
+		GraphicPinMapping gpm     = gca.getGraphicPinMappings().get( gpmIndex );
+		VecPath           polyAux = genPolyClock( gpm );
+		gca.setPolyAux( polyAux );
 	}
 	
 	

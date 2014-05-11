@@ -40,10 +40,10 @@ public abstract class Graphic implements Serializable, Drawable, GraphicIntersec
 		this.colStrokeSelect          = EditorStyle.colSelectionStroke;
 		this.colStrokeSelectHighlight = EditorStyle.colHighlightSelectStroke;
 		
-		this.colFillNormal            = EditorStyle.colComponentFill;
-		this.colFillHighlight         = EditorStyle.colHighlightFill;
-		this.colFillSelect            = EditorStyle.colSelectionFill;
-		this.colFillSelectHighlight   = EditorStyle.colHighlightSelectFill;
+		this.colFillNormal          = EditorStyle.colComponentFill;
+		this.colFillHighlight       = EditorStyle.colHighlightFill;
+		this.colFillSelect          = EditorStyle.colSelectionFill;
+		this.colFillSelectHighlight = EditorStyle.colHighlightSelectFill;
 		
 		this.colStroke = colStrokeNormal;
 		this.colFill   = colFillNormal;

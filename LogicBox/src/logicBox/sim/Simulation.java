@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
+import java.util.Comparator;
 import logicBox.sim.component.*;
 import logicBox.util.Util;
 
@@ -81,7 +82,7 @@ public class Simulation implements Serializable
 		
 		for (Component com: comps) {
 			if (com instanceof BlackBox)
-				oscs.addAll( ((BlackBox) com).getSimulation().getOscillators() );
+				oscs.addAll( ((BlackBox) com).getOscillators() );
 		
 			if (com instanceof SourceOscillator)
 				oscs.add( (SourceOscillator) com );

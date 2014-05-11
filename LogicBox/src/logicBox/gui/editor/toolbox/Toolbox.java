@@ -220,6 +220,15 @@ public class Toolbox extends JDialog
 	
 	private void addComplexButtons() {
 		ButtTargetable[] butts = {
+			genButton( new Encoder(2),
+					   new Encoder(3),
+					   new Encoder(4)
+			),
+			genButton( new Decoder(1),
+					   new Decoder(2),
+					   new Decoder(3),
+					   new Decoder(4)
+			),
 			genButton( new Mux(2),
 					   new Mux(3),
 					   new Mux(4),
@@ -236,10 +245,15 @@ public class Toolbox extends JDialog
 					   new Demux(7),
 					   new Demux(8)
 			),
-			genButton( new Decoder(1),
-					   new Decoder(2),
-					   new Decoder(3),
-					   new Decoder(4)
+			genButton( new Counter(2 ),
+					   new Counter(4 ),
+					   new Counter(8 ),
+					   new Counter(16)
+			),
+			genButton( new Register(2 ),
+					   new Register(4 ),
+					   new Register(8 ),
+					   new Register(16)
 			)
 		};
 		
