@@ -56,7 +56,7 @@ public class CallbackRepeater
 	/**
 	 * Get the duration between calls, in milliseconds.
 	 */
-	public long getInterval( long freqMillis ) {
+	public long getInterval() {
 		synchronized (thread) {
 			return interval;
 		}
