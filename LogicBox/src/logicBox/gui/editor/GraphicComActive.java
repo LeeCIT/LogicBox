@@ -105,6 +105,15 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 	
 	
 	/**
+	 * Set auxiliary overlay poly.
+	 */
+	public void setPolyAux( VecPath polyAux ) {
+		this.polyAux = polyAux;
+	}
+	
+	
+	
+	/**
 	 * Overrides the internal fill colour.  Inversion-aware
 	 */
 	public void setFillOverride( boolean state, Color col ) {
