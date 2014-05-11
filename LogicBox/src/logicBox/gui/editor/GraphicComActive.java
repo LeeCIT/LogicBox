@@ -52,6 +52,7 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 	private Color   colFillOverride;
 	
 	
+	
 	public GraphicComActive( VecPath polyBody, VecPath polyPins, VecPath polyAux, List<GraphicPinMapping> pinMap ) {
 		super();
 		this.polyBody  = polyBody;
@@ -82,12 +83,19 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 	
 	
 	
+	/**
+	 * Get the pin map.
+	 * Does not return a copy: changes will affect the graphic.
+	 */
 	public List<GraphicPinMapping> getGraphicPinMappings() {
 		return pinMap;
 	}
 	
 	
 	
+	/**
+	 * Enable the negation bubble for inverter type gates.
+	 */
 	public void setBubble( boolean state, Vec2 pos, double radius ) {
 		hasBubble    = state;
 		bubblePos    = pos;
@@ -96,6 +104,9 @@ public class GraphicComActive extends Graphic implements GraphicIntersector
 	
 	
 	
+	/**
+	 * Overrides the internal fill colour.  Inversion-aware
+	 */
 	public void setFillOverride( boolean state, Color col ) {
 		hasFillOverride = state;
 		colFillOverride = col;
