@@ -161,7 +161,7 @@ public enum ComponentType
     	try {
     		details = new Scanner(
 				ComponentType.class.getClassLoader()
-				.getResourceAsStream("resources/help/" + getName() + ".txt"), "UTF-8"
+				.getResourceAsStream("resources/help/" + name() + ".txt"), "UTF-8"
 			)
 			.useDelimiter("\\A")
 			.next();
