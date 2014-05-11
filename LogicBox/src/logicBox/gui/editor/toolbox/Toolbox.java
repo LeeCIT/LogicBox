@@ -240,6 +240,16 @@ public class Toolbox extends JDialog
 					   new Decoder(2),
 					   new Decoder(3),
 					   new Decoder(4)
+			),
+			genButton( new Counter(2 ),
+					   new Counter(4 ),
+					   new Counter(8 ),
+					   new Counter(16)
+			),
+			genButton( new Register(2 ),
+					   new Register(4 ),
+					   new Register(8 ),
+					   new Register(16)
 			)
 		};
 		
