@@ -39,8 +39,9 @@ public abstract class SimUtil
 	 */
 	public static int decodePinsToInt( List<Pin> pins ) {
 		int value = 0;
+		int maxEx = Math.min( pins.size(), 32 );
 		
-		for (int i=0; i<pins.size() && i<32; i++)
+		for (int i=0; i<maxEx; i++)
 			if (pins.get(i).getState())
 				value |= (1 << i);
 		
@@ -65,8 +66,21 @@ public abstract class SimUtil
 	 * There must be <= 32 pins, or the result will be truncated.
 	 * The LSB is assigned to pins[0].
 	 */
-	public static void encodeIntToPins( int x, List<Pin> pins ) {	
-		for (int i=0; i<pins.size(); i++)
-			pins.get(i).setState( i<32 && (((x>>i) & 1) != 0) );
+	public static void encodeIntToPins( int x, List<Pin> pins ) {
+		int maxEx = Math.min( pins.size(), 32 );
+		
+		for (int i=0; i<maxEx; i++) {
+			boolean state = ((x>>i) & 1) == 1;
+			pins.get(i).setState( state );
+		}
 	}
 }
+
+
+
+
+
+
+
+
+
