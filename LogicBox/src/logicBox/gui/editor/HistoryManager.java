@@ -92,7 +92,8 @@ public class HistoryManager<T extends Serializable>
 	
 	/**
 	 * Add a point to the undo/redo timeline.
-	 * Should be called before making the change (so it undoes the change you're about to make)
+	 * Should be called pre-emptively once at the beginning of time.
+	 * After that, call it after a change is made.
 	 */
 	public void markChange() {
 		markChange( "<no name>" );
@@ -102,7 +103,8 @@ public class HistoryManager<T extends Serializable>
 	
 	/**
 	 * Add a point to the undo/redo timeline.
-	 * Should be called before making the change (so it undoes the change you're about to make)
+	 * Should be called pre-emptively once at the beginning of time.
+	 * After that, call it after a change is made.
 	 */
 	public void markChange( String what ) {
 		purgeRedo();
