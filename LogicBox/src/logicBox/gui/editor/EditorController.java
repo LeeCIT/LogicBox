@@ -145,7 +145,27 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public Evaluator<Bbox2> getWorldExtentEvaluator() {
+	/**
+	 * If enabled the sim runs as fast as the CPU can manage.
+	 */
+	public void setSimTurboEnabled( boolean turbo ) {
+		long interval = getBaseClockPeriod();
+		
+		if (turbo)
+			interval = 0;
+		
+		baseClockSignal.setInterval( interval );
+	}
+	
+	
+	
+	public boolean isSimTurboEnabled() {
+		return baseClockSignal.getInterval() == 0;
+	}
+	
+	
+	
+	protected Evaluator<Bbox2> getWorldExtentEvaluator() {
 		return new Evaluator<Bbox2>() {
 			public Bbox2 evaluate() {
 				return getWorld().getWorldExtent();
@@ -155,7 +175,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public Evaluator<Bbox2> getViewExtentEvaluator() {
+	protected Evaluator<Bbox2> getViewExtentEvaluator() {
 		return new Evaluator<Bbox2>() {
 			public Bbox2 evaluate() {
 				return getCamera().getWorldViewArea();
@@ -165,7 +185,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public Evaluator<List<Graphic>> getViewableGraphicsEvaluator() {
+	protected Evaluator<List<Graphic>> getViewableGraphicsEvaluator() {
 		return new Evaluator<List<Graphic>>() {
 			public List<Graphic> evaluate() {
 				return getWorld().getViewableComponentGraphics( cam, 64 );
@@ -243,7 +263,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		};
 		
 		return new CallbackRepeater(
-			(int) Geo.hertzToMillisecs( SourceOscillator.baseFrequencyHz ),
+			getBaseClockPeriod(),
 			true,
 			cb
 		);
@@ -251,6 +271,12 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
+	private long getBaseClockPeriod() {
+		return (int) Geo.hertzToMillisecs( SourceOscillator.baseFrequencyHz );
+	}
+
+
+
 	private void sendClockSignalAndRepaint() { // Never call this manually - must be done by BCS thread
 		if (getWorld().sendClockSignal()) {
 			SwingUtilities.invokeLater( new Runnable() {
@@ -391,7 +417,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getNewAction() {
+	protected ActionListener getNewAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				if ( ! canDiscardCircuit())
@@ -404,7 +430,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getOpenAction() {
+	protected ActionListener getOpenAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				if ( ! canDiscardCircuit())
@@ -421,7 +447,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getSaveAction() {
+	protected ActionListener getSaveAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				if (isUnsaved) { // Redirect to save-as if unsaved
@@ -436,7 +462,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getSaveAsAction() {
+	protected ActionListener getSaveAsAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				FileManager fileManager = new FileManager( frame );
@@ -459,7 +485,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 
 
 
-	public ActionListener getPrintAction() {
+	protected ActionListener getPrintAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				new EditorPrinter( getEditorFrame() );
@@ -469,7 +495,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getCutAction() {
+	protected ActionListener getCutAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				toolManager.cut();
@@ -479,7 +505,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getCopyAction() {
+	protected ActionListener getCopyAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				toolManager.copy();
@@ -489,7 +515,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getPasteAction() {
+	protected ActionListener getPasteAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				toolManager.paste();
@@ -499,7 +525,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getDeleteAction() {
+	protected ActionListener getDeleteAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				getToolManager().delete();
@@ -509,7 +535,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getSelectAllAction() {
+	protected ActionListener getSelectAllAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				getToolManager().selectAll();
@@ -519,7 +545,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getSelectNoneAction() {
+	protected ActionListener getSelectNoneAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				getToolManager().selectNone();
@@ -529,7 +555,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getSelectInvertAction() {
+	protected ActionListener getSelectInvertAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				getToolManager().selectInvert();
@@ -539,7 +565,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getSelectBlackBoxAction() {
+	protected ActionListener getSelectBlackBoxAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				try {
@@ -554,7 +580,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getGridToggleAction() {
+	protected ActionListener getGridToggleAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				EditorPanel panel = getEditorPanel();
@@ -565,7 +591,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getRecentreCameraAction() {
+	protected ActionListener getRecentreCameraAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				recentreCamera();
@@ -575,7 +601,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getToolboxToggleAction() {
+	protected ActionListener getToolboxToggleAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				Toolbox toolbox = Toolbox.getInstance();
@@ -592,7 +618,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getHelpAction() {
+	protected ActionListener getHelpAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				toggleHelp();
@@ -602,7 +628,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getAboutAction() {
+	protected ActionListener getAboutAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				new AboutDialogue( getEditorFrame() );
@@ -612,7 +638,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 
 
 
-	public ActionListener getUndoAction() {
+	protected ActionListener getUndoAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				historyAction( true );
@@ -622,7 +648,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getRedoAction() {
+	protected ActionListener getRedoAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				historyAction( false );
@@ -632,7 +658,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getLoginAction() {
+	protected ActionListener getLoginAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				LoginPanel.getInstance();
@@ -642,7 +668,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getLogoutAction() {
+	protected ActionListener getLogoutAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				CloudController.handleLogoutRequest();
@@ -652,7 +678,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getRegisterAction() {
+	protected ActionListener getRegisterAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				RegisterPanel.getInstance();
@@ -662,7 +688,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	public ActionListener getFilesAction() {
+	protected ActionListener getFilesAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
 				File f = FilePanel.openFile();
