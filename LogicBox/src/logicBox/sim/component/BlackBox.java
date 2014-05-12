@@ -111,9 +111,8 @@ public class BlackBox extends ComponentActive
 	
 	public Set<SourceOscillator> getOscillators() {
 		if (sim != null)
-			sim.getOscillators();
-		
-		return new HashSet<>();
+			 return sim.getOscillators();
+		else return new HashSet<>();
 	}
 	
 	
