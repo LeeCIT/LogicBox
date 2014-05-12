@@ -25,6 +25,7 @@ import logicBox.gui.cloud.RegisterPanel;
 import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
+import logicBox.gui.help.AboutDialogue;
 import logicBox.gui.help.HelpFrame;
 import logicBox.sim.component.ComponentType;
 import logicBox.sim.component.Pin;

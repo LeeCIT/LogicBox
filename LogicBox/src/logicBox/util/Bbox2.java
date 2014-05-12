@@ -282,8 +282,7 @@ public class Bbox2 implements Transformable, Serializable
 	
 	
 	/**
-	 * Get the radius to enclose the bbox from its centre.
-	 * @return
+	 * Get the radius needed to enclose the bbox from its centre.
 	 */
 	public double getEnclosingRadius() {
 		return Geo.distance( getCentre(), getTopRight() );

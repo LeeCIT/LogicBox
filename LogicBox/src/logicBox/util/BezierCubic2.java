@@ -108,12 +108,7 @@ public class BezierCubic2 implements Transformable, Serializable
 	 * A cubic bezier curve always lies inside the convex hull of [A, C1, C2, B].
 	 */
 	public Bbox2 getBbox() {
-		List<Vec2> points = new ArrayList<>();
-		points.add( a  );
-		points.add( c1 );
-		points.add( c2 );
-		points.add( b  );
-		return Bbox2.createFromPoints( points );
+		return Bbox2.createFromPoints( a, c1, c2, b );
 	}
 	
 	

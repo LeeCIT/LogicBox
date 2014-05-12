@@ -11,7 +11,7 @@ import java.util.Arrays;
  * Implements the "Digital Differential Analyser" line traversal algorithm.
  * @author Lee Coakley
  */
-public class LineDDA
+public abstract class LineDDA
 {
 	public static void traverseDdaLine( Vec2 a, Vec2 b, int cellsize, final CallbackParam<int[]> callback ) {
 		final Vec2  va   = a.copy();
