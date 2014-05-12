@@ -126,7 +126,7 @@ public class CallbackRepeater
 				return;
 				
 			threadPause = false;
-			thread.notify();
+			thread.notifyAll();
 		}
 	}
 	
