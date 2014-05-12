@@ -390,12 +390,21 @@ public abstract class GraphicGen
 	
 	
 	public static GraphicComActive generateComparator( int bits ) {
-		return generateGeneric(
+		GraphicComActive graphic = generateGeneric(
 			0,    null,
 			3,    PinIoMode.output,
 			bits, PinIoMode.input,
 			bits, PinIoMode.input
 		);
+		
+		graphic.setPinLabels(
+			genLabelMap(
+				graphic.getGraphicPinMappings(),
+				"<", "=", ">"
+			)
+		);
+		
+		return graphic;
 	}	
 	
 	
