@@ -368,7 +368,7 @@ public class Simulation implements Serializable
 			if ( ! com.isCombinational())
 				return false;
 		
-		return isLevelisable();
+		return true; //isLevelisable(); // isLevelisable is broken
 	}
 	
 	
@@ -388,7 +388,7 @@ public class Simulation implements Serializable
 	 * Find the evaluation order for each active component.
 	 */
 	private Map<ComponentActive,Integer> leveliseActives( List<ComponentActive> actives ) {
-//		if ( ! isLevelisable()) { // TODO there is a bug in isLevlisable() somewhere which results in false positives.
+//		if ( ! isLevelisable()) { // TODO there is a bug in isLevelisable() somewhere which results in false positives.
 //			debugConnectivity();
 //			throw new NonLevelisableCircuitException( "Can't levelise: circuit contains feedback loops." );
 //		}

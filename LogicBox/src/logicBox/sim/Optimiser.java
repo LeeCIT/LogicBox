@@ -22,24 +22,22 @@ public abstract class Optimiser
 	
 	
 	
-	public static boolean[][] generateLookupTable( ComponentActive com ) {
+	public static int[] generateLookupTable( ComponentActive com ) {
 		com = Util.deepCopy( com );
 		
 		checkOptimisability( com );
 		
 		int inCount      = com.getPinInputCount();
-		int outCount     = com.getPinOutputCount();
 		int combinations = getCombinations( inCount );
 		
-		boolean[][] table   = new boolean[combinations][outCount];
-		List<Pin>   inputs  = com.getPinInputs();
-		List<Pin>   outputs = com.getPinOutputs();
+		int[]     table   = new int[combinations];
+		List<Pin> inputs  = com.getPinInputs();
+		List<Pin> outputs = com.getPinOutputs();
 		
 		for (int i=0; i<combinations; i++) {
 			SimUtil.encodeIntToPins( i, inputs );
 			com.update();
-			int pinBits = SimUtil.decodePinsToInt( outputs );
-			fillArrayFromInt( table[i], pinBits );
+			table[i] = SimUtil.decodePinsToInt( outputs );
 		}
 		
 		return table;
@@ -49,13 +47,6 @@ public abstract class Optimiser
 	
 	private static int getCombinations( int ins ) {
 		return (int) Math.pow( 2, ins );
-	}
-	
-	
-	
-	private static void fillArrayFromInt( boolean[] table, int bits ) {
-		for (int i=0; i<table.length; i++)
-			table[i] = 1 == ((bits >> i) & 1);
 	}
 	
 	

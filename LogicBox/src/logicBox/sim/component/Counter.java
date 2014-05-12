@@ -11,7 +11,7 @@ import logicBox.sim.SimUtil;
 
 /**
  * An up counter.
- * Counts up one every clock pulse.
+ * Counts up once every clock pulse.
  * @author Lee Coakley
  */
 public class Counter extends EdgeTriggered

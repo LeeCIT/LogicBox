@@ -30,7 +30,7 @@ public class BlackBox extends ComponentActive
 	private Map<Pin,BlackBoxPin> pinMapOut;
 	private GraphicComActive     graphic; // TODO this is nasty, having a graphic in the sim...
 	
-	private boolean[][] lookupTable;
+	private int[] lookupTable;
 	
 	
 	
@@ -134,11 +134,9 @@ public class BlackBox extends ComponentActive
 	
 	
 	private void updateByTableLookup() {
-		int       in     = SimUtil.decodePinsToInt( pinInputs );
-		boolean[] states = lookupTable[ in ];
-		
-		for (int i=0; i<states.length; i++)
-			pinOutputs.get(i).setState( states[i] );
+		int in     = SimUtil.decodePinsToInt( pinInputs );
+		int states = lookupTable[ in ];
+		SimUtil.encodeIntToPins( states, pinOutputs );
 	}
 	
 	
