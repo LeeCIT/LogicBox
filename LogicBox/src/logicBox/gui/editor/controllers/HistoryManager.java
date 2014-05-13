@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

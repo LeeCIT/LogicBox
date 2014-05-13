@@ -17,7 +17,6 @@ import logicBox.gui.editor.EditorFrame;
 import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorScrollBar;
 import logicBox.gui.editor.EditorWorld;
-import logicBox.gui.editor.HistoryManager;
 import logicBox.gui.editor.graphics.Graphic;
 import logicBox.gui.editor.menubar.EditorMenuBar;
 import logicBox.gui.editor.toolbar.EditorToolbar;
