@@ -3,7 +3,8 @@
 
 package logicBox.sim;
 
-import logicBox.sim.component.*;
+import logicBox.sim.component.connective.*;
+import logicBox.sim.component.simple.*;
 
 
 

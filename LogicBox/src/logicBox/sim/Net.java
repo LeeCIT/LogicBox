@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import logicBox.sim.component.*;
+import logicBox.sim.component.connective.Junction;
+import logicBox.sim.component.connective.Pin;
+import logicBox.sim.component.connective.Trace;
 import logicBox.util.Util;
 
 

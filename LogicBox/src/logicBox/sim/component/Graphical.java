@@ -3,7 +3,7 @@
 
 package logicBox.sim.component;
 
-import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.graphics.GraphicComActive;
 
 
 

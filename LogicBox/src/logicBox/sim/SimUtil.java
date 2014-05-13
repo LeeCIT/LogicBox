@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import logicBox.sim.component.Component;
-import logicBox.sim.component.Pin;
 import logicBox.sim.component.PinIoMode;
+import logicBox.sim.component.connective.Pin;
 
 
 

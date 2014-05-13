@@ -3,6 +3,7 @@
 
 package logicBox.sim.component;
 import java.util.List;
+import logicBox.sim.component.connective.Pin;
 
 
 

@@ -7,16 +7,19 @@ import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Set;
-import logicBox.gui.editor.GraphicComActive;
+import logicBox.gui.editor.graphics.GraphicComActive;
 import logicBox.sim.Optimiser;
 import logicBox.sim.SimUtil;
 import logicBox.sim.Simulation;
+import logicBox.sim.component.connective.Pin;
+import logicBox.sim.component.simple.SourceOscillator;
 import logicBox.util.Util;
 
 
 
 /**
- * A component which encapsulates a whole other simulation.
+ * A special component which encapsulates a whole other simulation.
+ * It can be optimised into a truth table under certain conditions.
  * @author Lee Coakley
  */
 public class BlackBox extends ComponentActive
@@ -51,7 +54,7 @@ public class BlackBox extends ComponentActive
 	 */
 	public void optimise() {
 		try {
-			boolean canOptimise = sim.isOptimisable();
+			boolean canOptimise = (! isOptimised()) && sim.isOptimisable();
 		
 			if (canOptimise) {
 				lookupTable = Optimiser.generateLookupTable( this );

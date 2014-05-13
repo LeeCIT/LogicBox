@@ -4,6 +4,8 @@
 package logicBox.sim;
 
 import logicBox.sim.component.*;
+import logicBox.sim.component.memory.FlipFlopJK;
+import logicBox.sim.component.simple.SourceToggle;
 
 
 

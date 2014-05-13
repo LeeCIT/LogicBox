@@ -6,8 +6,9 @@ package logicBox.sim.component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import logicBox.gui.editor.GraphicComActive;
-import logicBox.gui.editor.GraphicGen;
+import logicBox.gui.editor.graphics.GraphicComActive;
+import logicBox.gui.editor.graphics.GraphicGen;
+import logicBox.sim.component.connective.Pin;
 import logicBox.util.Util;
 
 

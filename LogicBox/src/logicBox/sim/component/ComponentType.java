@@ -4,8 +4,8 @@
 package logicBox.sim.component;
 
 import java.util.Scanner;
-import logicBox.gui.editor.Graphic;
-import logicBox.gui.editor.GraphicGen;
+import logicBox.gui.editor.graphics.Graphic;
+import logicBox.gui.editor.graphics.GraphicGen;
 
 
 

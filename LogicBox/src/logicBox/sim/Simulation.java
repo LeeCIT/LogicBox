@@ -6,8 +6,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.*;
-import java.util.Comparator;
 import logicBox.sim.component.*;
+import logicBox.sim.component.connective.Junction;
+import logicBox.sim.component.connective.Pin;
+import logicBox.sim.component.connective.Trace;
+import logicBox.sim.component.simple.SourceOscillator;
 import logicBox.util.Util;
 
 

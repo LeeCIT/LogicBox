@@ -5,7 +5,8 @@ package logicBox.sim;
 
 import java.util.List;
 import logicBox.sim.component.*;
-import logicBox.sim.component.Pin;
+import logicBox.sim.component.complex.Decoder;
+import logicBox.sim.component.connective.Pin;
 import logicBox.util.Util;
 
 

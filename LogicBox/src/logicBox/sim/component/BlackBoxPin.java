@@ -4,14 +4,16 @@
 package logicBox.sim.component;
 
 import java.util.List;
-import logicBox.gui.editor.GraphicComActive;
-import logicBox.gui.editor.GraphicGen;
+import logicBox.gui.editor.graphics.GraphicComActive;
+import logicBox.gui.editor.graphics.GraphicGen;
 import logicBox.sim.SimUtil;
+import logicBox.sim.component.connective.Pin;
 
 
 
 /**
  * A special type of component which connects a black-box to the outside world.
+ * Incoming pins can be toggled on and off to see what would happen.
  * @author Lee Coakley
  */
 public class BlackBoxPin extends ComponentActive
@@ -39,7 +41,7 @@ public class BlackBoxPin extends ComponentActive
 	
 	
 	public boolean interactClick() {
-		if (isOutput()) {
+		if (isGoingOut()) {
 			return false;
 		} else {
 			setState( ! getState() );
@@ -52,7 +54,7 @@ public class BlackBoxPin extends ComponentActive
 	/**
 	 * Is the pin flowing into the simulation?
 	 */
-	public boolean isInput() {
+	public boolean isComingIn() {
 		return isInput;
 	}
 	
@@ -61,8 +63,8 @@ public class BlackBoxPin extends ComponentActive
 	/**
 	 * Is the pin flowing out of the simulation?
 	 */
-	public boolean isOutput() {
-		return ! isInput();
+	public boolean isGoingOut() {
+		return ! isComingIn();
 	}
 	
 	
@@ -96,7 +98,7 @@ public class BlackBoxPin extends ComponentActive
 	
 	
 	public void update() {
-		if (isOutput())
+		if (isGoingOut())
 			 setState( pin.getState() );
 		else pin.setState( getState() );
 	}
@@ -104,7 +106,7 @@ public class BlackBoxPin extends ComponentActive
 	
 	
 	public GraphicComActive getGraphic() {
-		return GraphicGen.generateBlackboxPin( isOutput() );
+		return GraphicGen.generateBlackboxPin( isGoingOut() );
 	}
 	
 	
@@ -116,9 +118,9 @@ public class BlackBoxPin extends ComponentActive
 	
 	
 	public String getName() {
-		String str = "Black-box pin (" + (isOutput() ? "output" : "input") + ")";
+		String str = "Black-box pin (" + (isGoingOut() ? "output" : "input") + ")";
 		
-		if (isInput())
+		if (isComingIn())
 			str += " (click to toggle on/off)";
 			
 		return str;

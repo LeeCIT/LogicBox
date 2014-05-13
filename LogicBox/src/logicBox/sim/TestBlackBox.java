@@ -7,13 +7,16 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import logicBox.sim.component.BlackBox;
 import logicBox.sim.component.BlackBoxPin;
-import logicBox.sim.component.DisplayLed;
-import logicBox.sim.component.GateNot;
-import logicBox.sim.component.Pin;
-import logicBox.sim.component.SourceToggle;
+import logicBox.sim.component.connective.*;
+import logicBox.sim.component.simple.*;
+import logicBox.sim.component.complex.*;
 
 
 
+/**
+ * Tests the black-box functionality.
+ * @author Lee Coakley
+ */
 public class TestBlackBox
 {
 	public static void main( String[] args ) {
@@ -31,6 +34,11 @@ public class TestBlackBox
 			System.out.println( led.isLit() ? "1": "0" );
 			sim.simulate();
 			tog.toggleState();
+			
+			if (i==7) {
+				inv.optimise();
+				System.out.println( "Opt: " + inv.isOptimised() );
+			}
 		}
 	}
 	
