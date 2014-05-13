@@ -32,7 +32,7 @@ public abstract class Storage
 		try {
 			return decompress( data );
 		}
-		catch (ZipException ex) { // Older files weren't uncompressed.
+		catch (ZipException ex) { // Older files weren't compressed.
 			return readUncompressed( data );
 		}
 	}
