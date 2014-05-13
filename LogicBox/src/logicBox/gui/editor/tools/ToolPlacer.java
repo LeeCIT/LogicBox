@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import logicBox.gui.Gfx;
-import logicBox.gui.editor.controller.EditorCreationParam;
+import logicBox.gui.editor.controllers.EditorCreationParam;
 import logicBox.gui.editor.graphics.EditorStyle;
 import logicBox.gui.editor.graphics.GraphicComActive;
 import logicBox.gui.editor.graphics.RepaintListener;

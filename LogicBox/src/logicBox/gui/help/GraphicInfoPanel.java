@@ -4,6 +4,7 @@
 package logicBox.gui.help;
 
 import java.awt.Font;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -51,6 +52,8 @@ public class GraphicInfoPanel extends JPanel
 		textPane = new JTextPane();
 		textPane.setEditable( false );
 		textPane.setContentType( "text/html" );
+		textPane.putClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES, true  );
+		textPane.setFont( getFont() );
 		
 		scrollPane = new JScrollPane( textPane );
 	}

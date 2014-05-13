@@ -1,19 +1,20 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.components;
 import java.io.Serializable;
-import logicBox.gui.editor.controller.EditorCreationParam;
+import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.controllers.EditorCreationParam;
 import logicBox.gui.editor.graphics.Graphic;
 import logicBox.gui.editor.graphics.GraphicComActive;
 import logicBox.gui.editor.graphics.GraphicPinMapping;
 import logicBox.sim.component.BlackBoxPin;
 import logicBox.sim.component.Component;
 import logicBox.sim.component.ComponentActive;
-import logicBox.sim.component.DisplayLed;
-import logicBox.sim.component.DisplaySevenSeg;
-import logicBox.sim.component.SourceOscillator;
-import logicBox.sim.component.SourceToggle;
+import logicBox.sim.component.complex.DisplayLed;
+import logicBox.sim.component.complex.DisplaySevenSeg;
+import logicBox.sim.component.simple.SourceOscillator;
+import logicBox.sim.component.simple.SourceToggle;
 import logicBox.util.CallbackParam;
 import logicBox.util.Vec2;
 
@@ -123,7 +124,7 @@ public abstract class EditorComponent implements Serializable
 	/**
 	 * Link with a world.  Only one world can be linked at any one time. 
 	 */
-	protected void linkToWorld( EditorWorld world ) {
+	public void linkToWorld( EditorWorld world ) {
 		this.world = world;
 	}
 	

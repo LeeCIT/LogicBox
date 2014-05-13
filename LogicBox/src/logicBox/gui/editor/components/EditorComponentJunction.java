@@ -1,11 +1,11 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.components;
 
 import logicBox.gui.editor.graphics.GraphicJunction;
 import logicBox.gui.editor.graphics.GraphicPinMapping;
-import logicBox.sim.component.Junction;
+import logicBox.sim.component.connective.Junction;
 import logicBox.util.Vec2;
 
 

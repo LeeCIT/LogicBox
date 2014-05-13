@@ -1,7 +1,7 @@
 
 
 
-package logicBox.fileManager;
+package logicBox.gui.editor;
 
 import java.io.File;
 import javax.swing.*;

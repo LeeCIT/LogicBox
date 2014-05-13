@@ -1,10 +1,11 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.controllers;
 
+import logicBox.gui.editor.components.EditorComponentActive;
 import logicBox.gui.editor.graphics.GraphicPinMapping;
-import logicBox.sim.component.Pin;
+import logicBox.sim.component.connective.Pin;
  
 
 

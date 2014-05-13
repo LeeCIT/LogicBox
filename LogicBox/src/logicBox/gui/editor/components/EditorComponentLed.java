@@ -1,12 +1,12 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.components;
 
 import java.awt.Color;
 import logicBox.gui.editor.graphics.EditorStyle;
 import logicBox.gui.editor.graphics.GraphicComActive;
-import logicBox.sim.component.DisplayLed;
+import logicBox.sim.component.complex.DisplayLed;
 import logicBox.util.Vec2;
 
 

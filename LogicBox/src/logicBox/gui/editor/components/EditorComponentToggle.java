@@ -1,11 +1,11 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.components;
 
 import logicBox.gui.editor.graphics.EditorStyle;
 import logicBox.gui.editor.graphics.GraphicComActive;
-import logicBox.sim.component.SourceToggle;
+import logicBox.sim.component.simple.SourceToggle;
 import logicBox.util.CallbackParam;
 import logicBox.util.Vec2;
 

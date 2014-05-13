@@ -258,6 +258,7 @@ public class SearchPanel<T> extends JPanel
 
 	
 	
+	@SuppressWarnings("unchecked")
 	private void setDisplayedItems( List<Searchable<T>> items ) {
 		searchList.setListData( items.toArray( new Searchable[items.size()] ) );
 	}

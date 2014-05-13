@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.components;
 import logicBox.gui.editor.graphics.GraphicComActive;
 import logicBox.gui.editor.graphics.GraphicPinMapping;
 import logicBox.sim.component.ComponentActive;

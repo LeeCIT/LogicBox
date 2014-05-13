@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor.controller;
+package logicBox.gui.editor.controllers;
 
 import logicBox.gui.editor.graphics.GraphicComActive;
 import logicBox.sim.component.ComponentActive;

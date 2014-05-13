@@ -1,11 +1,11 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.components;
 
 import logicBox.gui.editor.graphics.GraphicGen;
 import logicBox.gui.editor.graphics.GraphicSevenSeg;
-import logicBox.sim.component.DisplaySevenSeg;
+import logicBox.sim.component.complex.DisplaySevenSeg;
 import logicBox.util.Vec2;
 
 

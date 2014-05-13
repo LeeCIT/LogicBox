@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor.controller;
+package logicBox.gui.editor.controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
-import logicBox.fileManager.FileManager;
 import logicBox.gui.DialogueAnswer;
 import logicBox.gui.GUI;
 import logicBox.gui.cloud.CloudController;
@@ -23,14 +22,14 @@ import logicBox.gui.cloud.FilePanel;
 import logicBox.gui.cloud.LoginPanel;
 import logicBox.gui.cloud.RegisterPanel;
 import logicBox.gui.editor.Camera;
-import logicBox.gui.editor.EditorComponent;
-import logicBox.gui.editor.EditorComponentActive;
 import logicBox.gui.editor.EditorFrame;
 import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.FileManager;
 import logicBox.gui.editor.HistoryListener;
 import logicBox.gui.editor.HistoryManager;
-import logicBox.gui.editor.SimMapper;
+import logicBox.gui.editor.components.EditorComponent;
+import logicBox.gui.editor.components.EditorComponentActive;
 import logicBox.gui.editor.graphics.Graphic;
 import logicBox.gui.editor.graphics.GraphicPinMapping;
 import logicBox.gui.editor.toolbox.Toolbox;
@@ -39,8 +38,8 @@ import logicBox.gui.edtior.printing.EditorPrinter;
 import logicBox.gui.help.AboutDialogue;
 import logicBox.gui.help.HelpFrame;
 import logicBox.sim.component.ComponentType;
-import logicBox.sim.component.Pin;
-import logicBox.sim.component.SourceOscillator;
+import logicBox.sim.component.connective.Pin;
+import logicBox.sim.component.simple.SourceOscillator;
 import logicBox.util.Bbox2;
 import logicBox.util.Callback;
 import logicBox.util.CallbackRepeater;

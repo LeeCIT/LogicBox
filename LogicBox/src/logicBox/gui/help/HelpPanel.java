@@ -4,7 +4,6 @@
 package logicBox.gui.help;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -12,7 +11,6 @@ import net.miginfocom.swing.MigLayout;
 import logicBox.sim.component.*;
 import logicBox.gui.SearchPanel;
 import logicBox.gui.Searchable;
-import logicBox.gui.editor.GraphicPanel;
 
 
 

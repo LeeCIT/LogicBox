@@ -1,14 +1,14 @@
 
 
 
-package logicBox.gui.editor.graphics;
+package logicBox.gui.editor;
 
 import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import javax.swing.JFrame;
-import logicBox.gui.editor.Camera;
-import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.graphics.Graphic;
+import logicBox.gui.editor.graphics.RepaintListener;
 import logicBox.util.Callback;
 import logicBox.util.Util;
 

@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor.controller;
+package logicBox.gui.editor.controllers;
 
 import logicBox.util.Vec2;
 

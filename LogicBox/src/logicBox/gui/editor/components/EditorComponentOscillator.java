@@ -1,11 +1,12 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.components;
 
 import logicBox.gui.GUI;
+import logicBox.gui.editor.OscillatorDialogue;
 import logicBox.gui.editor.graphics.GraphicComActive;
-import logicBox.sim.component.SourceOscillator;
+import logicBox.sim.component.simple.SourceOscillator;
 import logicBox.util.CallbackParam;
 import logicBox.util.Vec2;
 

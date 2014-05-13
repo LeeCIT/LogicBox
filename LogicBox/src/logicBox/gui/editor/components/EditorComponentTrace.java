@@ -1,12 +1,12 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.components;
 
 import java.util.List;
 import logicBox.gui.editor.graphics.GraphicPinMapping;
 import logicBox.gui.editor.graphics.GraphicTrace;
-import logicBox.sim.component.Trace;
+import logicBox.sim.component.connective.Trace;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 

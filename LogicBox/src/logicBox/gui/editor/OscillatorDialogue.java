@@ -12,7 +12,8 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import net.miginfocom.swing.MigLayout;
-import logicBox.sim.component.SourceOscillator;
+import logicBox.gui.editor.components.EditorComponentOscillator;
+import logicBox.sim.component.simple.SourceOscillator;
 import logicBox.util.CallbackParam;
 
 

@@ -11,8 +11,8 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import logicBox.gui.editor.EditorCreator;
 import logicBox.gui.editor.EditorFrame;
+import logicBox.gui.editor.controllers.EditorCreator;
 import logicBox.gui.editor.toolbox.Toolbox;
 
 

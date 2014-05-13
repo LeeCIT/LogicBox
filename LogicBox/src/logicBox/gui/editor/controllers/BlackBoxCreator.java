@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor.controller;
+package logicBox.gui.editor.controllers;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,10 +10,9 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
-import logicBox.gui.editor.EditorComponent;
-import logicBox.gui.editor.EditorComponentActive;
-import logicBox.gui.editor.EditorComponentBlackboxPin;
-import logicBox.gui.editor.SimMapper;
+import logicBox.gui.editor.components.EditorComponent;
+import logicBox.gui.editor.components.EditorComponentActive;
+import logicBox.gui.editor.components.EditorComponentBlackboxPin;
 import logicBox.gui.editor.graphics.GraphicComActive;
 import logicBox.gui.editor.graphics.GraphicGen;
 import logicBox.gui.editor.graphics.GraphicPinMapping;
@@ -21,8 +20,8 @@ import logicBox.gui.editor.tools.Selection;
 import logicBox.sim.Simulation;
 import logicBox.sim.component.BlackBox;
 import logicBox.sim.component.BlackBoxPin;
-import logicBox.sim.component.Pin;
 import logicBox.sim.component.PinIoMode;
+import logicBox.sim.component.connective.Pin;
 import logicBox.util.Vec2;
 
 

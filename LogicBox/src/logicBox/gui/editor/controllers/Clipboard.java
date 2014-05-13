@@ -1,10 +1,10 @@
 
 
 
-package logicBox.gui.editor.controller;
+package logicBox.gui.editor.controllers;
 
 import java.util.Set;
-import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.components.EditorComponent;
 import logicBox.gui.editor.tools.Selection;
 import logicBox.sim.Simulation;
 import logicBox.sim.component.Component;
