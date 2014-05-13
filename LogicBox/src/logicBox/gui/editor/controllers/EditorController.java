@@ -21,15 +21,9 @@ import logicBox.gui.cloud.CloudController;
 import logicBox.gui.cloud.FilePanel;
 import logicBox.gui.cloud.LoginPanel;
 import logicBox.gui.cloud.RegisterPanel;
-import logicBox.gui.editor.Camera;
-import logicBox.gui.editor.EditorFrame;
-import logicBox.gui.editor.EditorPanel;
-import logicBox.gui.editor.EditorWorld;
-import logicBox.gui.editor.FileManager;
-import logicBox.gui.editor.components.EditorComponent;
-import logicBox.gui.editor.components.EditorComponentActive;
-import logicBox.gui.editor.graphics.Graphic;
-import logicBox.gui.editor.graphics.GraphicPinMapping;
+import logicBox.gui.editor.*;
+import logicBox.gui.editor.components.*;
+import logicBox.gui.editor.graphics.*;
 import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
@@ -43,7 +37,6 @@ import logicBox.util.Callback;
 import logicBox.util.CallbackRepeater;
 import logicBox.util.Evaluator;
 import logicBox.util.Geo;
-import logicBox.util.Storage;
 import logicBox.util.Util;
 
 
@@ -365,7 +358,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		EditorWorld world = null;
 		
 		try {
-			world = Storage.read( file.getPath(), EditorWorld.class );
+			world = Storage.load( file );
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -385,7 +378,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 			this.world = world;
 			historyManager.clear();
 			historyManager.markChange( "<initial state>" );
-			needsToSave = false;
+			needsToSave = false; // Got reset by change marking
 			
 			circuitFile = file;
 			frame.setCircuitName( circuitFile.getName() );
@@ -404,7 +397,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 			saveMe.clearGraphicSelectionAndHighlightStates();
 			saveMe.simPowerOff();
 			
-			Storage.write( circuitFile.getPath(), saveMe ); // TODO compress + version
+			Storage.save( circuitFile, saveMe );
 			frame.setCircuitName( circuitFile.getName() );
 			frame.setCircuitModified( false );
 			isUnsaved   = false;
