@@ -3,8 +3,8 @@
 
 package logicBox.gui.editor.toolbox;
 
-import logicBox.gui.editor.Graphic;
-import logicBox.gui.editor.GraphicJunction;
+import logicBox.gui.editor.graphics.Graphic;
+import logicBox.gui.editor.graphics.GraphicJunction;
 import logicBox.util.Vec2;
 
 

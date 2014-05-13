@@ -4,6 +4,8 @@
 package logicBox.gui.editor;
 
 import java.awt.Color;
+import logicBox.gui.editor.graphics.EditorStyle;
+import logicBox.gui.editor.graphics.GraphicComActive;
 import logicBox.sim.component.DisplayLed;
 import logicBox.util.Vec2;
 

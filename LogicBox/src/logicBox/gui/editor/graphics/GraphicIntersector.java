@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.graphics;
 import logicBox.util.Bbox2;
 import logicBox.util.Vec2;
 

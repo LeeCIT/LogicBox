@@ -4,6 +4,7 @@
 package logicBox.gui.editor;
 
 import logicBox.gui.GUI;
+import logicBox.gui.editor.graphics.GraphicComActive;
 import logicBox.sim.component.SourceOscillator;
 import logicBox.util.CallbackParam;
 import logicBox.util.Vec2;

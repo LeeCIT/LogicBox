@@ -3,6 +3,10 @@
 
 package logicBox.gui.editor;
 import java.io.Serializable;
+import logicBox.gui.editor.controller.EditorCreationParam;
+import logicBox.gui.editor.graphics.Graphic;
+import logicBox.gui.editor.graphics.GraphicComActive;
+import logicBox.gui.editor.graphics.GraphicPinMapping;
 import logicBox.sim.component.BlackBoxPin;
 import logicBox.sim.component.Component;
 import logicBox.sim.component.ComponentActive;
@@ -125,7 +129,7 @@ public abstract class EditorComponent implements Serializable
 	
 	
 	
-	protected void unlinkFromWorld() {
+	public void unlinkFromWorld() {
 		this.world = null;
 	}
 	

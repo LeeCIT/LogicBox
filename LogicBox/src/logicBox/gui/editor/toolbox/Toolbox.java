@@ -12,7 +12,7 @@ import org.gpl.JSplitButton.action.SplitButtonActionListener;
 import net.miginfocom.swing.MigLayout;
 import logicBox.gui.IconEnum;
 import logicBox.gui.IconLoader;
-import logicBox.gui.editor.EditorCreationCommand;
+import logicBox.gui.editor.controller.EditorCreationCommand;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.sim.component.*;
 import logicBox.util.Evaluator;
@@ -229,21 +229,15 @@ public class Toolbox extends JDialog
 					   new Decoder(3),
 					   new Decoder(4)
 			),
-			genButton( new Mux(2),
-					   new Mux(3),
-					   new Mux(4),
-					   new Mux(5),
-					   new Mux(6),
-					   new Mux(7),
-					   new Mux(8)
+			genButton( new Mux( 2),
+					   new Mux( 4),
+					   new Mux( 8),
+					   new Mux(16)
 			),
-			genButton( new Demux(2),
-					   new Demux(3),
-					   new Demux(4),
-					   new Demux(5),
-					   new Demux(6),
-					   new Demux(7),
-					   new Demux(8)
+			genButton( new Demux( 2),
+					   new Demux( 4),
+					   new Demux( 8),
+					   new Demux(16)
 			),
 			genButton( new Comparator( 2),
 					   new Comparator( 4),

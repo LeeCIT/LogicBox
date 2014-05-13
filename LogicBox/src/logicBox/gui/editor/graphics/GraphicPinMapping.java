@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.graphics;
 import java.io.Serializable;
 import logicBox.sim.component.PinIoMode;
 import logicBox.util.Line2;

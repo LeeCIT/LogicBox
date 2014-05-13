@@ -6,7 +6,7 @@ package logicBox.gui.editor.toolbox;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import logicBox.gui.Gfx;
-import logicBox.gui.editor.Graphic;
+import logicBox.gui.editor.graphics.Graphic;
 import logicBox.util.Bbox2;
 import logicBox.util.Geo;
 import logicBox.util.Util;

@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.graphics;
 
 import java.awt.Font;
 import java.awt.Graphics2D;

@@ -2,6 +2,8 @@
 
 
 package logicBox.gui.editor;
+import logicBox.gui.editor.graphics.GraphicComActive;
+import logicBox.gui.editor.graphics.GraphicPinMapping;
 import logicBox.sim.component.ComponentActive;
 import logicBox.util.Vec2;
 

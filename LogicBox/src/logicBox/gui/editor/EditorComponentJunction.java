@@ -3,6 +3,8 @@
 
 package logicBox.gui.editor;
 
+import logicBox.gui.editor.graphics.GraphicJunction;
+import logicBox.gui.editor.graphics.GraphicPinMapping;
 import logicBox.sim.component.Junction;
 import logicBox.util.Vec2;
 

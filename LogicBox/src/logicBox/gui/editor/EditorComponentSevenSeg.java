@@ -3,13 +3,15 @@
 
 package logicBox.gui.editor;
 
+import logicBox.gui.editor.graphics.GraphicGen;
+import logicBox.gui.editor.graphics.GraphicSevenSeg;
 import logicBox.sim.component.DisplaySevenSeg;
 import logicBox.util.Vec2;
 
 
 
 /**
- * Specialised for the LED.
+ * Specialised for the hex display.
  * @author Lee Coakley
  */
 public class EditorComponentSevenSeg extends EditorComponentActive

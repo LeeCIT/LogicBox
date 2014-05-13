@@ -3,7 +3,7 @@
 
 package logicBox.gui.editor.toolbox;
 
-import logicBox.gui.editor.GraphicGen;
+import logicBox.gui.editor.graphics.GraphicGen;
 
 
 

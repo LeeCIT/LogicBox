@@ -10,7 +10,7 @@ import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorComponent;
 import logicBox.gui.editor.EditorPanel;
 import logicBox.gui.editor.EditorWorld;
-import logicBox.gui.editor.GraphicTransHint;
+import logicBox.gui.editor.graphics.GraphicTransHint;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;
 

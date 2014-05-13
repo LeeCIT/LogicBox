@@ -3,6 +3,7 @@
 
 package logicBox.gui.editor;
 
+import logicBox.gui.editor.graphics.GraphicPinMapping;
 import logicBox.sim.component.Pin;
  
 

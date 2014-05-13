@@ -3,6 +3,8 @@
 
 package logicBox.gui.editor;
 
+import logicBox.gui.editor.graphics.EditorStyle;
+import logicBox.gui.editor.graphics.GraphicComActive;
 import logicBox.sim.component.BlackBoxPin;
 import logicBox.util.CallbackParam;
 import logicBox.util.Geo;
@@ -10,6 +12,10 @@ import logicBox.util.Vec2;
 
 
 
+/**
+ * A black-box pin.
+ * @author Lee Coakley
+ */
 public class EditorComponentBlackboxPin extends EditorComponentActive
 {
 	private static final long serialVersionUID = 1L;

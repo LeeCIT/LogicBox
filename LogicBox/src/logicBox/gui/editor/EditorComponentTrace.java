@@ -4,6 +4,8 @@
 package logicBox.gui.editor;
 
 import java.util.List;
+import logicBox.gui.editor.graphics.GraphicPinMapping;
+import logicBox.gui.editor.graphics.GraphicTrace;
 import logicBox.sim.component.Trace;
 import logicBox.util.Geo;
 import logicBox.util.Vec2;

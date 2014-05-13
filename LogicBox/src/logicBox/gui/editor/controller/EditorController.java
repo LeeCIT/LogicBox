@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,6 +22,17 @@ import logicBox.gui.cloud.CloudController;
 import logicBox.gui.cloud.FilePanel;
 import logicBox.gui.cloud.LoginPanel;
 import logicBox.gui.cloud.RegisterPanel;
+import logicBox.gui.editor.Camera;
+import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.EditorComponentActive;
+import logicBox.gui.editor.EditorFrame;
+import logicBox.gui.editor.EditorPanel;
+import logicBox.gui.editor.EditorWorld;
+import logicBox.gui.editor.HistoryListener;
+import logicBox.gui.editor.HistoryManager;
+import logicBox.gui.editor.SimMapper;
+import logicBox.gui.editor.graphics.Graphic;
+import logicBox.gui.editor.graphics.GraphicPinMapping;
 import logicBox.gui.editor.toolbox.Toolbox;
 import logicBox.gui.editor.tools.ToolManager;
 import logicBox.gui.edtior.printing.EditorPrinter;
@@ -72,9 +83,9 @@ public class EditorController implements HistoryListener<EditorWorld>
 		
 		baseClockSignal.unpause();
 	}
-
-
-
+	
+	
+	
 	/**
 	 * Get the frame associated with the controller.
 	 */

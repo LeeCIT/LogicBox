@@ -3,6 +3,8 @@
 
 package logicBox.gui.editor;
 
+import logicBox.gui.editor.graphics.EditorStyle;
+import logicBox.gui.editor.graphics.GraphicComActive;
 import logicBox.sim.component.SourceToggle;
 import logicBox.util.CallbackParam;
 import logicBox.util.Vec2;

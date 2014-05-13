@@ -1,7 +1,7 @@
 
 
 
-package logicBox.gui.editor;
+package logicBox.gui.editor.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +10,13 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import logicBox.gui.editor.EditorComponent;
+import logicBox.gui.editor.EditorComponentActive;
+import logicBox.gui.editor.EditorComponentBlackboxPin;
+import logicBox.gui.editor.SimMapper;
+import logicBox.gui.editor.graphics.GraphicComActive;
+import logicBox.gui.editor.graphics.GraphicGen;
+import logicBox.gui.editor.graphics.GraphicPinMapping;
 import logicBox.gui.editor.tools.Selection;
 import logicBox.sim.Simulation;
 import logicBox.sim.component.BlackBox;
@@ -41,7 +48,7 @@ public abstract class BlackBoxCreator
 				EditorComponentBlackboxPin bbPin = (EditorComponentBlackboxPin) ecom;
 				bbPins.add( bbPin );
 				
-				if (bbPin.getComponent().isInput())
+				if (bbPin.getComponent().isComingIn())
 					 countIn++;
 				else countOut++; 
 			}
@@ -122,7 +129,7 @@ public abstract class BlackBoxCreator
 		for (EditorComponentBlackboxPin ecom: ecoms) {
 			double angle = ecom.getAngle();
 			
-			if (ecom.getComponent().isInput())
+			if (ecom.getComponent().isComingIn())
 				angle += 180;
 			
 			angle %= 360.0;
