@@ -24,7 +24,7 @@ import logicBox.util.StringUtil;
  * I can have my cake and eat it too... with horrible hacks! :D
  * 
  * Another alternative would be to manually rewrite the serialised data at the byte level.
- * The format is fairly simple: {BigE short length} {byte[] name}
+ * The name format is fairly simple: 2-byte BE offset, then name bytes
  * 
  * @author Lee Coakley
  */

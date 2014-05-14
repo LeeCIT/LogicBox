@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
 
+import logicBox.core.Main;
 import logicBox.gui.DialogueAnswer;
 import logicBox.gui.GUI;
 import logicBox.gui.cloud.CloudController;
@@ -355,10 +356,10 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	private void openCircuitFromFile( File file ) {
-		EditorWorld world = null;
+		EditorWorld loadedWorld = null;
 		
 		try {
-			world = Storage.load( file );
+			loadedWorld = Storage.load( file );
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -370,12 +371,12 @@ public class EditorController implements HistoryListener<EditorWorld>
 			);
 		}
 		
-		if (world != null) {
+		if (loadedWorld != null) {
 			initialiseCircuit( false );
 			isUnsaved   = false;
 			needsToSave = false;
 			
-			this.world = world;
+			this.world = loadedWorld;
 			historyManager.clear();
 			historyManager.markChange( "<initial state>" );
 			needsToSave = false; // Got reset by change marking
@@ -386,6 +387,24 @@ public class EditorController implements HistoryListener<EditorWorld>
 			
 			recentreCamera();
 			powerOff();
+		}
+	}
+	
+	
+	
+	/**
+	 * Scan the CLI args for .LBX files and try to open them.
+	 */
+	protected void openCircuitFromCliArgs() {
+		for (String path: Main.cliArgs) {
+			if (path.endsWith( FileManager.fileExtension )) {
+				File file = new File( path );
+				
+				if (file.exists())
+					openCircuitFromFile( file );
+				
+				return;
+			}
 		}
 	}
 	
@@ -403,8 +422,8 @@ public class EditorController implements HistoryListener<EditorWorld>
 			isUnsaved   = false;
 			needsToSave = false;
 			
-			if(CloudController.getUser() != null)
-				CloudController.syncFile(circuitFile.getAbsoluteFile());
+			if (CloudController.getUser() != null)
+				CloudController.syncFile( circuitFile.getAbsoluteFile() );
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();

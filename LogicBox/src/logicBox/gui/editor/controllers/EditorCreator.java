@@ -33,7 +33,12 @@ import logicBox.util.Evaluator;
  */
 public class EditorCreator
 {
-	public static EditorFrame createEditorFrame( boolean createToolbox ) {
+	/**
+	 * Create the main GUI and link all controllers up.
+	 * @param isPrimary Indicates that this is the first frame, and main controller.
+	 * @return The newly created frame.
+	 */
+	public static EditorFrame createEditorFrame( boolean isPrimary ) {
 		EditorPanel     panel   = new EditorPanel();
 		EditorMenuBar   menubar = new EditorMenuBar();
 		EditorToolbar   toolbar = new EditorToolbar();
@@ -53,18 +58,21 @@ public class EditorCreator
 		linkScrollbar( ctrl, scrollX );
 		linkScrollbar( ctrl, scrollY );
 		
-		if (createToolbox) {
+		if (isPrimary) {
 			Toolbox toolbox = new Toolbox( frame );
 			toolbox.setActiveToolManager( ctrl.getToolManager() );
 		}
 		
 		linkMainActions( ctrl, frame, menubar, toolbar );
 		
+		if (isPrimary)
+			ctrl.openCircuitFromCliArgs();
+		
 		return frame;
 	}
-	
-	
-	
+
+
+
 	private static void linkMainActions( EditorController ctrl, EditorFrame frame, EditorMenuBar menubar, EditorToolbar toolbar ) {
 		linkAction( ctrl.getNewAction   (), toolbar.buttNew,   menubar.itemFileNew    );
 		linkAction( ctrl.getOpenAction  (), toolbar.buttOpen,  menubar.itemFileOpen   );
