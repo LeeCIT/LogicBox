@@ -200,7 +200,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	public void onCloseButtonPressed() {
 		if (canDiscardCircuit()) {
-			// TODO save prefs, cloud sync, etc
+			Main.onShutdown();
 			baseClockSignal.join();
 			System.exit( 0 );
 		}

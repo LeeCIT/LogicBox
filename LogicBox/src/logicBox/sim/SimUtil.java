@@ -3,7 +3,6 @@
 
 package logicBox.sim;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import logicBox.sim.component.Component;
 import logicBox.sim.component.PinIoMode;
