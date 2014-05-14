@@ -37,7 +37,10 @@ public enum IconEnum
 	powerReset,
 	powerOff,
 	connect,
-	disconnect
+	disconnect,
+	zoom,
+	zoomIn,
+	zoomOut
 	;
 	
 	
@@ -72,6 +75,9 @@ public enum IconEnum
 			case powerOff     : return "PowerOff"       + suffix;
 			case connect      : return "Connect"        + suffix;
 			case disconnect   : return "Disconnect"     + suffix;
+			case zoom         : return "Zoom"           + suffix;
+			case zoomIn       : return "ZoomIn"         + suffix;
+			case zoomOut      : return "ZoomOut"        + suffix;
 			
 			default:
 				throw new RuntimeException( "No filename defined for IconEnum " + this + "." );

@@ -11,6 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import logicBox.core.Main;
 import logicBox.gui.editor.EditorFrame;
 import logicBox.gui.editor.controllers.EditorCreator;
 import logicBox.gui.editor.toolbox.Toolbox;
@@ -131,12 +132,6 @@ public abstract class GUI
 	
 	
 	
-	private static void constructGUI() {
-		editorFrame = EditorCreator.createEditorFrame( true );
-	}
-	
-	
-	
 	/**
 	 * Print a list of errors
 	 * @param f
@@ -152,6 +147,13 @@ public abstract class GUI
 		message += "</ul></html>";
 		
 		JOptionPane.showMessageDialog(f, message, title, JOptionPane.ERROR_MESSAGE);
+	}
+	
+	
+	
+	private static void constructGUI() {
+		editorFrame = EditorCreator.createEditorFrame( true );
+		Main.onStartup();
 	}
 }
 

@@ -14,7 +14,13 @@ import logicBox.gui.GUI;
  */
 public abstract class Main
 {
+	public static String[] cliArgs;
+	
+	
+	
 	public static void main(String[] args) {
+		cliArgs = args;
+		
 		GUI.setNativeStyle();
 		GUI.create();
 	}

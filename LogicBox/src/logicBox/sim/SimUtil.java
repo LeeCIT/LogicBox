@@ -3,7 +3,6 @@
 
 package logicBox.sim;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import logicBox.sim.component.Component;
 import logicBox.sim.component.PinIoMode;
@@ -38,8 +37,8 @@ public abstract class SimUtil
 	 * The LSB is the pin with the lowest index, the MSB the highest.
 	 */
 	public static int decodePinsToInt( List<Pin> pins ) {
+		int maxEx = getLoopCutoff( pins );
 		int value = 0;
-		int maxEx = Math.min( pins.size(), 32 );
 		
 		for (int i=0; i<maxEx; i++)
 			if (pins.get(i).getState())
@@ -54,9 +53,14 @@ public abstract class SimUtil
 	 * Same as SimUtil::decodePinsToInt except the pins are decoded in reverse order.
 	 */
 	public static int decodePinsToIntReverse( List<Pin> pins ) {
-		List<Pin> pinsReverse = new ArrayList<>( pins );
-		Collections.reverse( pinsReverse );
-		return decodePinsToInt( pinsReverse );
+		int maxEx = getLoopCutoff( pins );
+		int value = 0;
+		
+		for (int i=maxEx-1; i>=0; i--)
+			if (pins.get(i).getState())
+				value |= (1 << i);
+		
+		return value;
 	}
 	
 	
@@ -67,12 +71,18 @@ public abstract class SimUtil
 	 * The LSB is assigned to pins[0].
 	 */
 	public static void encodeIntToPins( int x, List<Pin> pins ) {
-		int maxEx = Math.min( pins.size(), 32 );
+		int maxEx = getLoopCutoff( pins );
 		
 		for (int i=0; i<maxEx; i++) {
 			boolean state = ((x>>i) & 1) == 1;
 			pins.get(i).setState( state );
 		}
+	}
+	
+	
+	
+	private static int getLoopCutoff( List<Pin> pins ) {
+		return Math.min( pins.size(), Integer.SIZE );
 	}
 }
 
