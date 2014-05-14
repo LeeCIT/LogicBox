@@ -90,9 +90,12 @@ public class EditorCreator
 		linkAction( ctrl.getSelectInvertAction  (), toolbar.buttSelectInvert,   menubar.itemEditSelectInvert   );
 		linkAction( ctrl.getSelectBlackBoxAction(), toolbar.buttSelectBlackBox, menubar.itemEditSelectBlackBox );
 		
-		linkAction( ctrl.getGridToggleAction    (), toolbar.buttToggleGrid,     menubar.itemViewGrid    );
-		linkAction( ctrl.getRecentreCameraAction(), toolbar.buttCameraRecentre, menubar.itemViewCamera  );
-		linkAction( ctrl.getToolboxToggleAction (), toolbar.buttToggleToolbox,  menubar.itemViewToolbox );
+		linkAction( ctrl.getGridToggleAction    (), toolbar.buttToggleGrid,     menubar.itemViewGrid      );
+		linkAction( ctrl.getRecentreCameraAction(), toolbar.buttCameraRecentre, menubar.itemViewCamera    );
+		linkAction( ctrl.getToolboxToggleAction (), toolbar.buttToggleToolbox,  menubar.itemViewToolbox   );
+		linkAction( ctrl.getZoomResetAction     (), null,                       menubar.itemViewZoomReset );
+		linkAction( ctrl.getZoomInAction        (), null,                       menubar.itemViewZoomIn    );
+		linkAction( ctrl.getZoomOutAction       (), null,                       menubar.itemViewZoomOut   );
 		
 		linkAction( ctrl.getHelpAction (), toolbar.buttHelp, menubar.itemHelpHelp  );
 		linkAction( ctrl.getAboutAction(), null,             menubar.itemHelpAbout );

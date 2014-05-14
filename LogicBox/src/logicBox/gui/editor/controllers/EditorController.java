@@ -636,6 +636,36 @@ public class EditorController implements HistoryListener<EditorWorld>
 			}
 		};
 	}
+
+	
+	
+	protected ActionListener getZoomResetAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				cam.zoomTo( 1.0 );
+			}
+		};
+	}
+	
+	
+	
+	protected ActionListener getZoomInAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				cam.zoomIn();
+			}
+		};
+	}
+	
+	
+	
+	protected ActionListener getZoomOutAction() {
+		return new ActionListener() {
+			public void actionPerformed( ActionEvent ev ) {
+				cam.zoomOut();
+			}
+		};
+	}
 	
 	
 	
@@ -679,6 +709,30 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
+	private void historyAction( boolean undoing ) {
+		EditorFrame                 frame   = getEditorFrame();
+		HistoryManager<EditorWorld> manager = getHistoryManager();
+		
+		JMenuItem menuUndo = frame.getEditorMenuBar().itemEditUndo;
+		JButton   buttUndo = frame.getEditorToolbar().buttUndo;
+		JMenuItem menuRedo = frame.getEditorMenuBar().itemEditRedo;
+		JButton   buttRedo = frame.getEditorToolbar().buttRedo;
+		
+		if (undoing)
+			 manager.undo();
+		else manager.redo();
+		
+		boolean canUndo = manager.canUndo();
+		boolean canRedo = manager.canRedo();
+		
+		menuUndo.setEnabled( canUndo );
+		buttUndo.setEnabled( canUndo );
+		menuRedo.setEnabled( canRedo );
+		buttRedo.setEnabled( canRedo );
+	}
+	
+	
+	
 	protected ActionListener getLoginAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
@@ -718,30 +772,6 @@ public class EditorController implements HistoryListener<EditorWorld>
 					openCircuitFromFile(f);
 			}
 		};
-	}
-	
-	
-	
-	private void historyAction( boolean undoing ) {
-		EditorFrame                 frame   = getEditorFrame();
-		HistoryManager<EditorWorld> manager = getHistoryManager();
-		
-		JMenuItem menuUndo = frame.getEditorMenuBar().itemEditUndo;
-		JButton   buttUndo = frame.getEditorToolbar().buttUndo;
-		JMenuItem menuRedo = frame.getEditorMenuBar().itemEditRedo;
-		JButton   buttRedo = frame.getEditorToolbar().buttRedo;
-		
-		if (undoing)
-			 manager.undo();
-		else manager.redo();
-		
-		boolean canUndo = manager.canUndo();
-		boolean canRedo = manager.canRedo();
-		
-		menuUndo.setEnabled( canUndo );
-		buttUndo.setEnabled( canUndo );
-		menuRedo.setEnabled( canRedo );
-		buttRedo.setEnabled( canRedo );
 	}
 	
 	

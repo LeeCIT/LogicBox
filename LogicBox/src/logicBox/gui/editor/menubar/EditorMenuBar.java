@@ -42,8 +42,12 @@ public class EditorMenuBar extends JMenuBar
 	
 	public JMenu     menuView;
 	public JMenuItem itemViewGrid;
-	public JMenuItem itemViewCamera;
 	public JMenuItem itemViewToolbox;
+	public JMenuItem itemViewCamera;
+	public JMenuItem itemViewZoomReset;
+	public JMenuItem itemViewZoomIn;
+	public JMenuItem itemViewZoomOut;
+	
 	
 	public JMenu     menuCloud;
 	public JMenuItem itemCloudLogin;
@@ -106,9 +110,12 @@ public class EditorMenuBar extends JMenuBar
 	
 	private void setupViewMenu() {
 		JMenu m = menuView = createMenu( "View", 'V' );
-		itemViewGrid    = add( m, "Grid On/Off",       false, 'G', "control G", IconEnum.grid    );
-		itemViewCamera  = add( m, "Camera Recentre",   false, 'C', "control R", IconEnum.camera  );
-		itemViewToolbox = add( m, "Toolbox Show/Hide", false, 'T', "control T", IconEnum.toolbox );
+		itemViewGrid      = add( m, "Grid On/Off",       false, 'G', "control G",      IconEnum.grid    );
+		itemViewToolbox   = add( m, "Toolbox Show/Hide", false, 'T', "control T",      IconEnum.toolbox );
+		itemViewCamera    = add( m, "Camera Recentre",   true,  'C', "control R",      IconEnum.camera  );
+		itemViewZoomReset = add( m, "Zoom Reset",        false, 'R', "control 0",      IconEnum.zoom    );
+		itemViewZoomIn    = add( m, "Zoom In",           false, 'I', "control EQUALS", IconEnum.zoomIn  );
+		itemViewZoomOut   = add( m, "Zoom Out",          false, 'O', "control MINUS",  IconEnum.zoomOut );
 		add( m );
 	}
 	
