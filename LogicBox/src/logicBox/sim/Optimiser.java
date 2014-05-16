@@ -67,8 +67,9 @@ public abstract class Optimiser
 		if ( ! com.isCombinational())
 			throw new NonOptimisableComponentException( "Not a combinational circuit." );
 		
-		int in  = com.getPinInputCount();
-		int out = com.getPinOutputCount();
+		int in          = com.getPinInputCount();
+		int out         = com.getPinOutputCount();
+		int bytesPerInt = 4;
 		
 		if (in > maxInputs)
 			throw new NonOptimisableComponentException( "Too many inputs." );
@@ -76,7 +77,7 @@ public abstract class Optimiser
 		if (out > maxOutputs)
 			throw new NonOptimisableComponentException( "Too many outputs." );
 		
-		if (out * getCombinations(in) > maxBytes)
+		if (bytesPerInt * getCombinations(in) > maxBytes)
 			throw new NonOptimisableComponentException( "Lookup table would exceed max size." );
 	}
 	
