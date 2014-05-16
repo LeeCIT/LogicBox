@@ -1,6 +1,6 @@
 <html>
 	<h3>Description</h3>
-	An AND gate will output a 0 only if all inputs are 1.
+	An AND gate will output a 1 only if all of the inputs are 1.
 	<br><br>
 	<hr>
 	<h3>Truth Table</h3>
@@ -13,22 +13,22 @@
 		<tr>
 			<td>0</td>
 			<td>0</td>
-			<td>1</td>
+			<td>0</td>
 		</tr>
 		<tr>
 			<td>0</td>
 			<td>1</td>
-			<td>1</td>
+			<td>0</td>
 		</tr>
 		<tr>
 			<td>1</td>
 			<td>0</td>
-			<td>1</td>
+			<td>0</td>
 		</tr>
 		<tr>
 			<td>1</td>
 			<td>1</td>
-			<td>0</td>
+			<td>1</td>
 		</tr>
 	</table>
 </html>
