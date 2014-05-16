@@ -1,6 +1,6 @@
 <html>
 	<h3>Description</h3>
-	An exclusive NOR gate (XNOR) will output 1 if any of the inputs are 1.
+	An xnor gate outputs 1 if both inputs are the same.
 	<br><br>
 	<hr>
 	<h3>Truth Table</h3>
