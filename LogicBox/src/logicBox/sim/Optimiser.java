@@ -46,8 +46,8 @@ public abstract class Optimiser
 	
 	
 	
-	private static int getCombinations( int ins ) {
-		return (int) Math.pow( 2, ins );
+	private static int getCombinations( int inputs ) {
+		return (int) Math.pow( 2, inputs );
 	}
 	
 	
@@ -70,6 +70,7 @@ public abstract class Optimiser
 		int in          = com.getPinInputCount();
 		int out         = com.getPinOutputCount();
 		int bytesPerInt = 4;
+		int bytes       = bytesPerInt * getCombinations( in );
 		
 		if (in > maxInputs)
 			throw new NonOptimisableComponentException( "Too many inputs." );
@@ -77,7 +78,7 @@ public abstract class Optimiser
 		if (out > maxOutputs)
 			throw new NonOptimisableComponentException( "Too many outputs." );
 		
-		if (bytesPerInt * getCombinations(in) > maxBytes)
+		if (bytes > maxBytes)
 			throw new NonOptimisableComponentException( "Lookup table would exceed max size." );
 	}
 	

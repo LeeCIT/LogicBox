@@ -77,4 +77,31 @@ public class FileManager
 		
 		return null;
 	}
+	
+	
+	
+	public static boolean hasFileExtension( String path ) {
+		return path.toLowerCase().endsWith( FileManager.fileExtension.toLowerCase() );
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -62,33 +62,32 @@ public class RemappableObjectInputStream extends ObjectInputStream
 		
 		addSimComponents( map );
 		addEdComponents( map );		
-		debugMap( map, false );
+		debugMap( map, true );
 		
 		return map;
 	}
-
-
-
+	
+	
+	
 	private static void debugMap( Map<String, Class<?>> map, boolean enable ) {
 		if ( ! enable)
 			return;
 		
-		String align = "\u00FF";
+		String align = " -> ";
 		String str   = "";
 		
 		for (Map.Entry<String,Class<?>> en: map.entrySet()) {
-			str += en.getKey() + align + " -> " + align;
+			str += en.getKey() + align;
 			str += en.getValue().getCanonicalName() + "\n";
 		}
 		
 		str = StringUtil.align( str, align );
-		str = str.replace( align, "" );
 		
 		System.out.println( "Map:\n\n" + str );
 	}
-
-
-
+	
+	
+	
 	private static void add( Map<String,Class<?>> map, String oldPackage, Class<?>...classes ) throws ClassNotFoundException {
 		for (Class<?> c: classes) {
 			String oldName = oldPackage + "." + nameOf( c );

@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.SwingUtilities;
+import net.iharder.dnd.FileDrop;
 
 import logicBox.core.Main;
 import logicBox.gui.DialogueAnswer;
@@ -397,7 +398,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	 */
 	protected void openCircuitFromCliArgs() {
 		for (String path: Main.cliArgs) {
-			if (path.endsWith( FileManager.fileExtension )) {
+			if (FileManager.hasFileExtension( path )) {
 				File file = new File( path );
 				
 				if (file.exists())
@@ -410,7 +411,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
-	private void saveToCircuitFile() {
+	private void saveCircuitToCurrentFile() {
 		try {
 			EditorWorld saveMe = Util.deepCopy( world );
 			saveMe.clearGraphicSelectionAndHighlightStates();
@@ -468,15 +469,28 @@ public class EditorController implements HistoryListener<EditorWorld>
 	
 	
 	
+	protected FileDrop.Listener getOpenByDragAndDropFilesAction() {
+		return new FileDrop.Listener() {
+			public void filesDropped( File[] files ) {
+				if ( ! canDiscardCircuit())
+					return;
+				
+				File file = files[0]; // Ignore others
+				
+				if (FileManager.hasFileExtension( file.getPath() ))
+					openCircuitFromFile( file );
+			}
+		};
+	}
+	
+	
+	
 	protected ActionListener getSaveAction() {
 		return new ActionListener() {
 			public void actionPerformed( ActionEvent ev ) {
-				if (isUnsaved) { // Redirect to save-as if unsaved
-					getSaveAsAction().actionPerformed( ev );
-					return;
-				}
-				
-				saveToCircuitFile();
+				if (isUnsaved)// Redirect to save-as if unsaved
+					 getSaveAsAction().actionPerformed( ev );
+				else saveCircuitToCurrentFile();
 			}
 		};
 	}
@@ -490,7 +504,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 				File        file        = fileManager.saveFile();
 				
 				if (file != null) {
-					if ( ! file.getPath().endsWith( FileManager.fileExtension ))
+					if ( ! FileManager.hasFileExtension( file.getPath() ))
 						file = new File( file + FileManager.fileExtension );
 					
 					if (file.exists())
@@ -498,7 +512,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 						return;
 					
 					circuitFile = file;
-					saveToCircuitFile();
+					saveCircuitToCurrentFile();
 				}
 			}
 		};
@@ -768,7 +782,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 			public void actionPerformed( ActionEvent ev ) {
 				File f = FilePanel.openFile();
 				
-				if(f != null)
+				if (f != null)
 					openCircuitFromFile(f);
 			}
 		};

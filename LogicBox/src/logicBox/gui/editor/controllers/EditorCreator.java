@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JScrollBar;
+import net.iharder.dnd.FileDrop;
 import logicBox.gui.editor.Camera;
 import logicBox.gui.editor.EditorFrame;
 import logicBox.gui.editor.EditorPanel;
@@ -64,15 +65,22 @@ public class EditorCreator
 		}
 		
 		linkMainActions( ctrl, frame, menubar, toolbar );
+		linkDragAndDropActions( ctrl, panel );
 		
 		if (isPrimary)
 			ctrl.openCircuitFromCliArgs();
 		
 		return frame;
 	}
-
-
-
+	
+	
+	
+	private static void linkDragAndDropActions( EditorController ctrl, EditorPanel panel ) {
+		new FileDrop( panel, ctrl.getOpenByDragAndDropFilesAction() );
+	}
+	
+	
+	
 	private static void linkMainActions( EditorController ctrl, EditorFrame frame, EditorMenuBar menubar, EditorToolbar toolbar ) {
 		linkAction( ctrl.getNewAction   (), toolbar.buttNew,   menubar.itemFileNew    );
 		linkAction( ctrl.getOpenAction  (), toolbar.buttOpen,  menubar.itemFileOpen   );
