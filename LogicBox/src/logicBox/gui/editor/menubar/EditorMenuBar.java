@@ -48,7 +48,6 @@ public class EditorMenuBar extends JMenuBar
 	public JMenuItem itemViewZoomIn;
 	public JMenuItem itemViewZoomOut;
 	
-	
 	public JMenu     menuCloud;
 	public JMenuItem itemCloudLogin;
 	public JMenuItem itemCloudLogout;
