@@ -3,6 +3,13 @@
 
 package logicBox.gui.editor.controllers;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.Set;
 import logicBox.gui.editor.components.EditorComponent;
 import logicBox.gui.editor.tools.Selection;
@@ -19,7 +26,7 @@ import logicBox.util.Util;
  */
 public abstract class EditorClipboard
 {
-	private static Selection clipboardSelection;
+	private static TransferOwner transOwner = new TransferOwner();
 	
 	
 	
@@ -41,7 +48,42 @@ public abstract class EditorClipboard
 		}
 		
 		isolateSelection( selCopy );
-		clipboardSelection = selCopy;
+		
+		byte[]   raw   = Util.serialize( selCopy );
+		Transfer trans = new Transfer( raw );
+		transOwner.setContents( trans );
+	}
+	
+	
+	
+	/**
+	 * Get a copy of the clipboard selection.
+	 */
+	public static Selection get() {
+		byte[]    raw = transOwner.getContents();
+		Selection sel = Util.deserialize( raw );
+		
+		return sel;
+	}
+	
+	
+	
+	public static void clear() {
+		Selection blank = new Selection();
+		byte[]    raw   = Util.serialize( blank );
+		Transfer  trans = new Transfer( raw );
+		transOwner.setContents( trans );
+	}
+	
+	
+	
+	public static boolean isEmpty() {
+		try {
+			return get().isEmpty();
+		}
+		catch (Exception ex) {
+			return true;
+		}
 	}
 	
 	
@@ -57,25 +99,86 @@ public abstract class EditorClipboard
 	
 	
 	
-	/**
-	 * Get a copy of the clipboard selection.
-	 */
-	public static Selection get() {
-		if (isEmpty())
-			throw new RuntimeException( "Clipboard is empty!" );
+	
+	
+	private static class TransferOwner implements ClipboardOwner
+	{
+		private   static final Clipboard  clip   = Toolkit.getDefaultToolkit().getSystemClipboard();
+		protected static final DataFlavor flavor = new DataFlavor( byte[].class, "lbx/selection" );
 		
-		return Util.deepCopy( clipboardSelection );
+		
+		
+		public void lostOwnership( Clipboard clipboard, Transferable contents ) {
+			// ???
+		}
+		
+		
+		
+		public void setContents( Transfer trans ) {
+			clip.setContents( trans, this );
+		}
+		
+		
+		
+		public byte[] getContents() {
+			Clipboard    clip  = Toolkit.getDefaultToolkit().getSystemClipboard();
+			Transferable trans = clip.getContents( null );
+			
+			try {
+				return (byte[]) trans.getTransferData( flavor );
+			}
+			catch (IOException | UnsupportedFlavorException ex) {
+				return null;
+			}
+		}
 	}
 	
 	
 	
-	public static void clear() {
-		clipboardSelection = null;
-	}
 	
 	
-	
-	public static boolean isEmpty() {
-		return clipboardSelection == null;
+	private static class Transfer implements Transferable
+	{
+		private byte[] contents; 
+		
+		
+		
+		public Transfer( byte[] contents ) {
+			this.contents = contents;
+		}
+		
+		
+		
+		public DataFlavor[] getTransferDataFlavors() {
+			return new DataFlavor[] { TransferOwner.flavor };
+		}
+		
+		
+		
+		public boolean isDataFlavorSupported( DataFlavor flavor ) {
+			return flavor.isMimeTypeEqual( TransferOwner.flavor );
+		}
+		
+		
+		
+		public Object getTransferData( DataFlavor flavor ) throws UnsupportedFlavorException, IOException {
+			if (isDataFlavorSupported( flavor ))
+				return contents;
+			else throw new UnsupportedFlavorException( flavor );
+		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
