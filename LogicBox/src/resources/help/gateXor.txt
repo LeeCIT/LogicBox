@@ -1,6 +1,6 @@
 <html>
 	<h3>Description</h3>
-	An exclusive OR gate (XOR) will output 1 if only one of the inputs is 1.
+	An exclusive OR gate outputs 1 if only one of the inputs is 1.
 	<br><br>
 	<hr>
 	<h3>Truth Table</h3>

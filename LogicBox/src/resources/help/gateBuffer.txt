@@ -1,6 +1,7 @@
 <html>
 	<h3>Description</h3>
-	A buffer gate provides the same output as the input.
+	Buffers duplicate their inputs.
+	They basically have no effect on the operation of a circuit and are listed only for completeness.
 	<br><br>
 	<hr>
 	<h3>Truth Table</h3>

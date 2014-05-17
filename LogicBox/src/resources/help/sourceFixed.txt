@@ -1,5 +1,4 @@
 <html>
 	<h3>Description</h3>
-	A Fixed Source will provide a fixed input to a component depending on which
-	one you pick.
+	Outputs a constant 0 or 1.
 </html>

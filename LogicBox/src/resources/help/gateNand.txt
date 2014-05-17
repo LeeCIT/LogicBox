@@ -1,6 +1,6 @@
 <html>
 	<h3>Description</h3>
-	An AND gate will output a 0 only if all inputs are 1.
+	A NAND gate is an inverted AND gate.  It outputs 0 when all its inputs are 1.
 	<br><br>
 	<hr>
 	<h3>Truth Table</h3>

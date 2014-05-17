@@ -1,6 +1,7 @@
 <html>
 	<h3>Description</h3>
 	An xnor gate outputs 1 if both inputs are the same.
+	More generally, it outputs 1 if there are an even number of input bits. 
 	<br><br>
 	<hr>
 	<h3>Truth Table</h3>
