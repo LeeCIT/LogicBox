@@ -15,6 +15,8 @@ import logicBox.sim.component.connective.Pin;
 /**
  * An up counter.
  * Counts up once every clock pulse.
+ * Can be made count down by inverting the outputs.
+ * 
  * @author Lee Coakley
  */
 public class Counter extends EdgeTriggered
@@ -28,7 +30,7 @@ public class Counter extends EdgeTriggered
 	public Counter( int bits ) {
 		super();
 		
-		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  1    );
+		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  2    );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, bits );
 	}
 	
@@ -47,8 +49,17 @@ public class Counter extends EdgeTriggered
 	
 	
 	
+	public Pin getPinReset() {
+		return getPinInput( 1 ); 
+	}
+	
+	
+	
 	protected void onPositiveEdge() {
 		nextState++;
+		
+		if (getPinReset().getState())
+			nextState = 0;
 	}
 	
 	

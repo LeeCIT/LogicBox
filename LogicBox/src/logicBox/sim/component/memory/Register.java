@@ -32,7 +32,7 @@ public class Register extends EdgeTriggered
 		
 		pinReads = new ArrayList<>();
 		
-		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  2    );
+		SimUtil.addPins( pinInputs,  this, PinIoMode.input,  3    );
 		SimUtil.addPins( pinReads,   this, PinIoMode.input,  bits );
 		SimUtil.addPins( pinOutputs, this, PinIoMode.output, bits );
 		pinInputs.addAll( pinReads );
@@ -59,9 +59,18 @@ public class Register extends EdgeTriggered
 	
 	
 	
+	public Pin getPinReset() {
+		return getPinInput( 2 );
+	}
+	
+	
+	
 	protected void onPositiveEdge() {
 		if (getPinWrite().getState())
 			nextState = SimUtil.decodePinsToInt( pinReads );
+		
+		if (getPinReset().getState())
+			nextState = 0;
 	}
 	
 	
