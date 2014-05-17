@@ -62,6 +62,54 @@ public abstract class Util
 			return null;
 		}
 	}
+	
+	
+	
+	/**
+	 * Serialise an object.
+	 * If it fails the returned array will be null.
+	 */
+	public static byte[] serialize( Serializable ser ) {
+		try {
+			ByteArrayOutputStream osByte = new ByteArrayOutputStream();
+			ObjectOutputStream    osObj  = new ObjectOutputStream( osByte );
+			
+			osObj.writeObject( ser );
+			byte[] bytes = osByte.toByteArray();
+			
+			osByte.close();
+			osObj .close();
+			
+			return bytes;
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	
+	
+	/**
+	 * Deserialise a byte array back to an object.
+	 * If it fails the returned object will be null.
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T extends Serializable> T deserialize( byte[] bytes ) {
+		try {
+			ByteArrayInputStream isByte = new ByteArrayInputStream( bytes );
+			ObjectInputStream    isObj  = new ObjectInputStream( isByte );
+			
+			isByte.close();
+			isObj .close();
+			
+			return (T) isObj.readObject();
+		}
+		catch (Exception ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
 }
 
 
