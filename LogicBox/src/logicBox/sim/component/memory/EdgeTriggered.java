@@ -27,7 +27,6 @@ public abstract class EdgeTriggered extends ComponentActive
 	
 	public EdgeTriggered() {
 		super();
-		reset();
 	}
 	
 	
