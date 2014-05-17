@@ -14,9 +14,10 @@ import logicBox.util.Util;
 
 /**
  * The global clipboard.
+ * TODO Use the system clipboard so you can copy between editors.
  * @author Lee Coakley
  */
-public abstract class Clipboard
+public abstract class EditorClipboard
 {
 	private static Selection clipboardSelection;
 	

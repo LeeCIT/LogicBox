@@ -24,7 +24,7 @@ import logicBox.gui.editor.EditorWorld;
  * Employs class name remapping for backwards compatibility.
  * @author Lee Coakley
  */
-public abstract class Storage
+public abstract class EditorStorage
 {
 	public static EditorWorld load( File file ) throws ClassNotFoundException, IOException {
 		byte[] data = readBytes( file );

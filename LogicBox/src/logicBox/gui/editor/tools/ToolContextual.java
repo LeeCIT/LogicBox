@@ -21,7 +21,7 @@ import logicBox.gui.contextMenu.ContextMenuString;
 import logicBox.gui.editor.components.EditorComponent;
 import logicBox.gui.editor.components.EditorComponentActive;
 import logicBox.gui.editor.controllers.BlackBoxCreator;
-import logicBox.gui.editor.controllers.Clipboard;
+import logicBox.gui.editor.controllers.EditorClipboard;
 import logicBox.gui.editor.controllers.EditorCreationCommand;
 import logicBox.gui.editor.graphics.EditorStyle;
 import logicBox.gui.editor.graphics.Graphic;
@@ -115,14 +115,14 @@ public class ToolContextual extends Tool
 	
 	public boolean cut() {	
 		if ( ! selection.isEmpty()) {
-			Clipboard.set( selection );
+			EditorClipboard.set( selection );
 			getWorld().delete( selection );
 			selection.clear();
 			markHistoryChange( "Cut" );
 			repaint();
 			return true;
 		} else {
-			Clipboard.clear();
+			EditorClipboard.clear();
 			return false;
 		}
 	}
@@ -131,10 +131,10 @@ public class ToolContextual extends Tool
 	
 	public boolean copy() {
 		if (hasSelection()) {
-			Clipboard.set( selection );
+			EditorClipboard.set( selection );
 			return true;
 		} else {
-			Clipboard.clear();
+			EditorClipboard.clear();
 			return false;
 		}
 	}
@@ -142,10 +142,10 @@ public class ToolContextual extends Tool
 	
 	
 	public void paste() {
-		if (Clipboard.isEmpty())
+		if (EditorClipboard.isEmpty())
 			return;
 		
-		Selection sel = Clipboard.get();
+		Selection sel = EditorClipboard.get();
 		sel.setPos( getMousePosWorld() );
 		getWorld().paste( sel );
 		
@@ -216,15 +216,15 @@ public class ToolContextual extends Tool
 		
 		Selection clipPrev = null;
 		
-		if ( ! Clipboard.isEmpty())
-			clipPrev = Clipboard.get();
+		if ( ! EditorClipboard.isEmpty())
+			clipPrev = EditorClipboard.get();
 		
-		Clipboard.set( selection );
-		Selection bbSrc = Clipboard.get();
+		EditorClipboard.set( selection );
+		Selection bbSrc = EditorClipboard.get();
 		EditorComponentActive blackBox = BlackBoxCreator.create( bbSrc, new Vec2(0) );
 		
 		if (clipPrev != null)
-			Clipboard.set( clipPrev );
+			EditorClipboard.set( clipPrev );
 		
 		return new EditorCreationCommand( blackBox.getComponent(), blackBox.getGraphic() );
 	}

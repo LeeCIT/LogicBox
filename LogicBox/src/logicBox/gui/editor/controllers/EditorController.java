@@ -360,7 +360,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 		EditorWorld loadedWorld = null;
 		
 		try {
-			loadedWorld = Storage.load( file );
+			loadedWorld = EditorStorage.load( file );
 		}
 		catch (Exception ex) {
 			ex.printStackTrace();
@@ -417,7 +417,7 @@ public class EditorController implements HistoryListener<EditorWorld>
 			saveMe.clearGraphicSelectionAndHighlightStates();
 			saveMe.simPowerOff();
 			
-			Storage.save( circuitFile, saveMe );
+			EditorStorage.save( circuitFile, saveMe );
 			frame.setCircuitName( circuitFile.getName() );
 			frame.setCircuitModified( false );
 			isUnsaved   = false;
