@@ -242,7 +242,8 @@ public class Toolbox extends JDialog
 					   new Demux( 8),
 					   new Demux(16)
 			),
-			genButton( new Comparator( 2),
+			genButton( new Comparator( 1),
+					   new Comparator( 2),
 					   new Comparator( 4),
 					   new Comparator( 8),
 					   new Comparator(16)
@@ -252,7 +253,8 @@ public class Toolbox extends JDialog
 					   new Counter( 8),
 					   new Counter(16)
 			),
-			genButton( new Register( 2),
+			genButton( new Register( 1),
+					   new Register( 2),
 					   new Register( 4),
 					   new Register( 8),
 					   new Register(16)
