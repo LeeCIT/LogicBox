@@ -40,6 +40,27 @@ public class EditorMenuBar extends JMenuBar
 	public JMenuItem itemEditSelectInvert;
 	public JMenuItem itemEditSelectBlackBox;
 	
+	public JMenu     menuSim;
+	public JMenuItem itemSimPowerOn;
+	public JMenuItem itemSimPowerReset;
+	public JMenuItem itemSimPowerOff;
+	
+	public JMenu     menuComp;
+	public JMenu     menuCompGates;
+	public JMenuItem itemCompGatesBuffer;
+	public JMenuItem itemCompGatesNot;
+	public JMenu     menuCompGatesAnd;
+	public JMenu     menuCompGatesNand;
+	public JMenu     menuCompGatesOr;
+	public JMenu     menuCompGatesNor;
+	public JMenu     menuCompGatesXor;
+	public JMenu     menuCompGatesXnor;
+	public JMenu menuCompSources;
+	public JMenu menuCompDisplays;
+	public JMenu menuCompCombinational;
+	public JMenu menuCompArithmetic;
+	public JMenu menuCompMemory;
+	
 	public JMenu     menuView;
 	public JMenuItem itemViewGrid;
 	public JMenuItem itemViewToolbox;

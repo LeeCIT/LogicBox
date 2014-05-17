@@ -22,7 +22,6 @@ import logicBox.util.Vec2;
 
 /**
  * An object which can be manipulated by the editor.
- * Not sure if traces will be classified this way.  They may be a special case.
  * @author Lee Coakley
  */
 public abstract class EditorComponent implements Serializable
