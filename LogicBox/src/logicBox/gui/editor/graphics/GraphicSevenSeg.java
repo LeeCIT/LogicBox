@@ -40,6 +40,7 @@ public class GraphicSevenSeg extends GraphicComActive
 	public void draw( Graphics2D g ) {
 		super.draw( g );
 		
+		if (segStates != null)
 		for (int i=0; i<segStates.length; i++) {
 			boolean powered = segStates[i];
 			Color   col     = (powered) ? EditorStyle.colLedOn : EditorStyle.colLedOff;
