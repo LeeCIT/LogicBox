@@ -15,7 +15,7 @@ import logicBox.sim.component.connective.Pin;
 
 
 /**
- * A register.
+ * A register which stores between 1 and 32 bits.
  * @author Lee Coakley
  */
 public class Register extends EdgeTriggered
@@ -81,9 +81,9 @@ public class Register extends EdgeTriggered
 	public GraphicComActive getGraphic() {
 		return GraphicGen.generateRegister( getPinOutputCount() );
 	}
-
-
-
+	
+	
+	
 	public String getName() {
 		return "" + pinOutputs.size() + "-bit Register";
 	}
