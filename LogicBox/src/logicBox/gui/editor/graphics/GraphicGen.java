@@ -537,7 +537,7 @@ public abstract class GraphicGen
 		GraphicComActive        graphic = generateFlipFlop( 3 );
 		List<GraphicPinMapping> gpms    = graphic.getGraphicPinMappings();
 		
-		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "J", "", "K" ) );		
+		graphic.setPinLabels( genLabelMap( gpms, "Q", "!Q", "J", "", "K" ) );
 		return graphic;
 	}
 	
@@ -545,7 +545,7 @@ public abstract class GraphicGen
 	
 	public static GraphicComActive generateRegister( int bits ) {
 		GraphicComActive graphic = generateGeneric(
-			2,    PinIoMode.input,
+			3,    PinIoMode.input,
 			0,    null,
 			bits, PinIoMode.input,
 			bits, PinIoMode.output
@@ -553,14 +553,27 @@ public abstract class GraphicGen
 		
 		addPolyClock( graphic, 1 );
 		
+		List<GraphicPinMapping> gpms = graphic.getGraphicPinMappings();
+		graphic.setPinLabels( genLabelMap( gpms, "W", "", "R" ) );
+		
 		return graphic;
 	}
 	
 	
 	
 	public static GraphicComActive generateCounter( int bits ) {
-		GraphicComActive graphic = generateGeneric( 1, bits );
+		GraphicComActive graphic = generateGeneric(
+			2,    PinIoMode.input,
+			bits, PinIoMode.output,
+			0,    null,
+			0,    null
+		);
+		
 		addPolyClock( graphic, 0 );
+		
+		List<GraphicPinMapping> gpms = graphic.getGraphicPinMappings();
+		graphic.setPinLabels( genLabelMap( gpms, "", "R" ) );
+		
 		return graphic;
 	}
 	
