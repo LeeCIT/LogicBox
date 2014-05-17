@@ -62,7 +62,7 @@ public class RemappableObjectInputStream extends ObjectInputStream
 		
 		addSimComponents( map );
 		addEdComponents( map );		
-		debugMap( map, true );
+		debugMap( map, false );
 		
 		return map;
 	}
