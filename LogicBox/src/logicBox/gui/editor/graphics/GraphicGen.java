@@ -411,7 +411,6 @@ public abstract class GraphicGen
 	
 	private static GraphicComActive generatePlexer( int inputs, int selects, int outputs, boolean isDemux ) {
 		Bbox2 r = getBaseRegion();
-			  r.transform( Geo.createTransform( new Vec2(0), new Vec2(2,2), 0) );
 		
 		applyPinGrowth( r, Math.max(inputs,outputs) );
 		
