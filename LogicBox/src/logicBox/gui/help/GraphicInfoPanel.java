@@ -52,7 +52,7 @@ public class GraphicInfoPanel extends JPanel
 		textPane = new JTextPane();
 		textPane.setEditable( false );
 		textPane.setContentType( "text/html" );
-		textPane.putClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES, true  );
+		textPane.putClientProperty( JEditorPane.HONOR_DISPLAY_PROPERTIES, true );
 		textPane.setFont( getFont() );
 		
 		scrollPane = new JScrollPane( textPane );
@@ -61,11 +61,11 @@ public class GraphicInfoPanel extends JPanel
 	
 	
 	private void setupLayout() {
-		setLayout( new MigLayout( "", "[grow,fill]", "[][grow 20,fill][grow 80,fill]") );
+		setLayout( new MigLayout( "wrap 1", "[grow,fill]", "[][grow,fill][grow,fill]") );
 		
-		add( title,        "wrap" );
-		add( graphicPanel, "wrap" );
-		add( scrollPane,   ""     );
+		add( title,        "height 10%" );
+		add( graphicPanel, "height 25%" );
+		add( scrollPane,   "height 65%" );
 	}
 }
 
