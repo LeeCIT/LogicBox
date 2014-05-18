@@ -21,7 +21,6 @@ import logicBox.util.Util;
 
 /**
  * The global clipboard.
- * TODO Use the system clipboard so you can copy between editors.
  * @author Lee Coakley
  */
 public abstract class EditorClipboard
@@ -79,7 +78,10 @@ public abstract class EditorClipboard
 	
 	public static boolean isEmpty() {
 		try {
-			return get().isEmpty();
+			Selection sel = get();
+			
+			return sel == null
+				|| sel.isEmpty();
 		}
 		catch (Exception ex) {
 			return true;
