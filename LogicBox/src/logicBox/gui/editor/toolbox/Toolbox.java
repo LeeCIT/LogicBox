@@ -258,6 +258,10 @@ public class Toolbox extends JDialog
 					   new Register( 4),
 					   new Register( 8),
 					   new Register(16)
+			),
+			genButton( new RAM( 4,  16),
+					   new RAM( 8, 256),
+					   new RAM(16,4096)
 			)
 		};
 		
