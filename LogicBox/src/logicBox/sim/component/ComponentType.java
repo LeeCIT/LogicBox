@@ -51,6 +51,7 @@ public enum ComponentType
 	
 	register,
 	rom,
+	ram,
 	
 	blackBox,
 	blackBoxPin;
@@ -98,6 +99,7 @@ public enum ComponentType
 			
 			case register:         return GraphicGen.generateRegister( 4 );
 			//case rom:              return GraphicGen.;
+			case ram:              return GraphicGen.generateRam( 8, 4 );
 			
 			case blackBox:         return GraphicGen.generateGeneric( 3, null, 3, null, 3, null, 3, null );
 			case blackBoxPin:      return GraphicGen.generateBlackboxPin( false );
@@ -145,6 +147,7 @@ public enum ComponentType
 			
 			case register:         return "Register";
 			case rom:              return "ROM";
+			case ram:              return "RAM";
 			
 			case blackBox:         return "Black-box";
 			case blackBoxPin:      return "Black-box pin";
