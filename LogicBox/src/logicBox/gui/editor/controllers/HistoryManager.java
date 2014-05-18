@@ -20,6 +20,7 @@ import logicBox.util.Vec2;
 /**
  * Manages compressed undo/redo states arranged on a timeline.
  * It can apply changes to the associated history listener.
+ * TODO make the last 10 changes or so uncompressed for better performance
  * @author Lee Coakley
  */
 public class HistoryManager<T extends Serializable>
