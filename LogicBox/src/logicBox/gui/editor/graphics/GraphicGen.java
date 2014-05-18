@@ -560,6 +560,24 @@ public abstract class GraphicGen
 	
 	
 	
+	public static GraphicComActive generateRam( int wordBits, int addressBits ) {
+		GraphicComActive graphic = generateGeneric(
+			3,           PinIoMode.input,
+			addressBits, PinIoMode.input,
+			wordBits,    PinIoMode.input,
+			wordBits,    PinIoMode.output
+		);
+		
+		addPolyClock( graphic, 1 );
+		
+		List<GraphicPinMapping> gpms = graphic.getGraphicPinMappings();
+		graphic.setPinLabels( genLabelMap( gpms, "W", "", "R" ) );
+		
+		return graphic;
+	}
+	
+	
+	
 	public static GraphicComActive generateCounter( int bits ) {
 		GraphicComActive graphic = generateGeneric(
 			2,    PinIoMode.input,
