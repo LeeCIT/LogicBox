@@ -428,8 +428,10 @@ public class Camera
 	private void setupActions() {
 		component.addMouseWheelListener( new MouseWheelListener() {
 			public void mouseWheelMoved( MouseWheelEvent ev ) {
-				interpolateStop(); // Never override user input; always listen
-				zoomLogarithmic( ev.getPreciseWheelRotation(), true );
+				if ( ! panningActive) {
+					interpolateStop(); // Never override user input; always listen
+					zoomLogarithmic( ev.getPreciseWheelRotation(), true );
+				}
 			}
 		});
 		
