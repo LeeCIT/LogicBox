@@ -453,7 +453,7 @@ public abstract class GraphicGen
 		List<Line2> pinSelLines = genPinLines( pinSelTerminal, pinSelContact, pinSelUV, selects, true );
 		List<Line2> pinOutLines = genPinLines( pinOutTerminal, pinOutContact, pinOutUV, outputs, true );
 		
-		if (isDemux)
+		if ( ! isDemux)
 			Collections.reverse( pinSelLines );
 		
 		List<Line2> pinLines = new ArrayList<>();
