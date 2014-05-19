@@ -51,8 +51,8 @@ public class RAM extends EdgeTriggered
 		SimUtil.addPins( pinAddress, this, PinIoMode.input,  addressBits );
 		SimUtil.addPins( pinWordIn,  this, PinIoMode.input,  wordBits    );
 		SimUtil.addPins( pinWordOut, this, PinIoMode.output, wordBits    );
-		pinInputs .addAll( pinWordIn  );
 		pinInputs .addAll( pinAddress );
+		pinInputs .addAll( pinWordIn  );
 		pinOutputs.addAll( pinWordOut );
 	}
 	
