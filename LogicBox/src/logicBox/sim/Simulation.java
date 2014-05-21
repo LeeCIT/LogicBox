@@ -43,6 +43,18 @@ public class Simulation implements Serializable
 	
 	
 	
+	public Simulation( List<Component> coms ) {
+		super();
+		
+		for (Component com: coms)
+			add( com );
+	}
+	
+	
+	
+	/**
+	 * Check for duplicate pins in the simulation.
+	 */
 	public void checkForDupes() {
 		Set<Pin>       pins = Util.createIdentityHashSet();
 		Set<Component> coms = Util.createIdentityHashSet();
@@ -59,7 +71,10 @@ public class Simulation implements Serializable
 	}
 	
 	
-	
+
+	/**
+	 * Print out a bunch of connectivity info.
+	 */
 	public void debugConnectivity() {
 		for (ComponentActive com: actives) {
 			System.out.println( "+ " + com.getName() );
@@ -72,6 +87,12 @@ public class Simulation implements Serializable
 				}
 			}
 		}
+	}
+	
+	
+	
+	public List<Component> debugDeepCopyComponents() {
+		return Util.deepCopy( (ArrayList<Component>) comps );
 	}
 	
 	
